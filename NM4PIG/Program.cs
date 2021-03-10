@@ -18,7 +18,6 @@ namespace NM4PIG
 
             Console.WriteLine("Green component: " + purple.g);
 
-
           
 
             Console.WriteLine("Green product component: " + purple.g);
