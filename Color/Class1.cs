@@ -16,6 +16,11 @@ namespace Color
             this.b = Blue;
         }
 
-        // Add, Mul, Scalar, Diff da fare
+        public static Colore operator* (Colore a, double alfa)
+            => new Colore (a.r * alfa, a.g * alfa, a.b *alfa);
+
+        public static Colore operator* (double alfa, Colore a)
+            => new Colore (a.r * alfa, a.g * alfa, a.b *alfa);
+        
     }
 }
