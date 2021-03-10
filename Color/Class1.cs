@@ -43,15 +43,15 @@ namespace Color
 
         // are close method
 
-        public bool is_close (double a, double b)
+        public bool isClose (double a, double b)
         {
             double epsilon = 1e-8;
             return Math.Abs(a - b) < epsilon;
         }
 
-        public bool are_close (Colore A)
+        public bool isClose (Colore A)
         {
-            return is_close(A.r, this.r) && is_close(A.b, this.b) && is_close(A.g, this.g); 
+            return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g); 
         }   
 
     }
