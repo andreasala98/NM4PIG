@@ -1,12 +1,13 @@
 using System;
 using Xunit;
+using Color;
 
-namespace Color.test
+namespace Color.Test
 {
-    public class UnitTest1
+    public class ColorTest
     {
         [Fact]
-        public void Test1()
+        public void Prodtest()
         {
             // da capire
         }
