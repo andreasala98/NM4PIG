@@ -17,5 +17,20 @@ namespace Color
         }
 
         // Add, Mul, Scalar, Diff da fare
+
+
+
+        //Product of two colores
+
+        public static Colore operator* (Colore A, Colore B)
+        {
+            return new Colore(A.r * B.r, A.g * B.g, A.b * B.b);
+        }
+
+
+
+
+
+
     }
 }
