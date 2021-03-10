@@ -2,8 +2,20 @@
 
 namespace Color
 {
-    public struct Color
+    public struct Colore
     {
-        // bla bla bla
+        public double r;
+        public double g;
+        public double b;
+
+
+        public Colore (double Red, double Green, double Blue)
+        {
+            this.r = Red;
+            this.g = Green;
+            this.b = Blue;
+        }
+
+        // Add, Mul, Scalar, Diff da fare
     }
 }
