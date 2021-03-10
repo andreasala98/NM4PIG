@@ -49,9 +49,9 @@ namespace Color
             return Math.Abs(a - b) < epsilon;
         }
 
-        public bool are_close (Colore A, Colore B)
+        public bool is_close (Colore A)
         {
-            return is_close(A.r, B.r) && is_close(A.b, B.b) && is_close(A.g, B.g); 
+            return is_close(this.r, A.r) && is_close(this.b, A.b) && is_close(this.g, A.g); 
         }   
 
     }
