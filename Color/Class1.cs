@@ -41,5 +41,18 @@ namespace Color
             return new Colore(A.r * B.r, A.g * B.g, A.b * B.b);
         }
 
+        // are close method
+
+        public bool is_close (double a, double b)
+        {
+            double epsilon = 1e-8;
+            return Math.Abs(a - b) < epsilon;
+        }
+
+        public bool are_close (Colore A, Colore B)
+        {
+            return is_close(A.r, B.r) && is_close(A.b, B.b) && is_close(A.g, B.g); 
+        }   
+
     }
 }
