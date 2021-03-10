@@ -16,13 +16,30 @@ namespace Color
             this.b = Blue;
         }
 
+        //Sum of two colores
         public static Colore operator +(Colore col1, Colore col2){
             return new Colore(col1.r+col2.r, col1.g+col2.g, col1.b+col2.b);
         }
 
+        //Difference of two colores
         public static Colore operator -(Colore col1, Colore col2){
             return new Colore(col1.r-col2.r, col1.g-col2.g, col1.b-col2.b);
         }
-        // Add, Mul, Scalar, Diff da fare
+        
+        // Scalar product
+        public static Colore operator* (Colore a, double alfa)
+            => new Colore (a.r * alfa, a.g * alfa, a.b *alfa);
+
+        public static Colore operator* (double alfa, Colore a)
+            => new Colore (a.r * alfa, a.g * alfa, a.b *alfa);
+        
+
+        //Product of two colores
+
+        public static Colore operator* (Colore A, Colore B)
+        {
+            return new Colore(A.r * B.r, A.g * B.g, A.b * B.b);
+        }
+
     }
 }
