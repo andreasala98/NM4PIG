@@ -4,3 +4,4 @@ This repository contains a project for the course _Numerical Methods for Photore
 
 Università degli Studi di Milano, March-June 2021
 
+Contributors: T. Armadillo - P. Klausner - A. Sala
