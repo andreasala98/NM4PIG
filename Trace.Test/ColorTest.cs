@@ -52,6 +52,13 @@ namespace Trace.Test
         HdrImage DummyImage = new HdrImage(7, 4);
 
         [Fact]
+        public void TestImageCreation()
+        {
+            Assert.True(DummyImage.width == 7);
+            Assert.True(DummyImage.height == 4);
+        }
+
+        [Fact]
         public void TestValidCoords()
         {
             
@@ -80,13 +87,13 @@ namespace Trace.Test
         }
 
 
-        [Fact]
+        /*[Fact]
         public void TestPfm()
         {
             var MyImg = //Still needs to be finished.
 
 
-        }
+        }*/
 
     }
 }
