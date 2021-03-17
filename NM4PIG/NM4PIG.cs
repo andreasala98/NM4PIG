@@ -11,10 +11,14 @@ namespace NM4PIG
         {
             var img = new HdrImage(7, 4);
 
+            igm.setPixel(0, 1, Color(3, 3, 3));
+
             using (Stream fileStream = File.OpenWrite("file.pfm"))
             {
                 img.savePfm(fileStream);
             }
+
+            Console.WriteLine("Saved file.pfm")
         }
     }
 }

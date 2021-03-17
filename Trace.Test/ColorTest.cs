@@ -50,7 +50,6 @@ namespace Trace.Test
     {
 
         HdrImage DummyImage = new HdrImage(7, 4);
-        Color t = new Color(5.0, 6.0, 7.0);
 
         [Fact]
         public void TestValidCoords()
@@ -74,8 +73,18 @@ namespace Trace.Test
         [Fact]
         public void TestGetSetPixel()
         {
-            DummyImage.setPixel(3, 2, t);
-            Assert.True(DummyImage.getPixel(3, 2).isClose(t));
+            var appo = new Color(5.0, 6.0, 7.0);
+            DummyImage.setPixel(3, 2, appo);
+            Assert.True(DummyImage.getPixel(3, 2).isClose(appo));
+
+        }
+
+
+        [Fact]
+        public void TestPfm()
+        {
+            var MyImg = //Still needs to be finished.
+
 
         }
 
