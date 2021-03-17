@@ -4,12 +4,12 @@ namespace Trace
 {
     public struct Color
     {
-        public double r;
-        public double g;
-        public double b;
+        public float r;
+        public float g;
+        public float b;
 
 
-        public Color (double Red, double Green, double Blue)
+        public Color (float Red, float Green, float Blue)
         {
             this.r = Red;
             this.g = Green;
@@ -27,10 +27,10 @@ namespace Trace
         }
         
         // Scalar product
-        public static Color operator* (Color a, double alfa)
+        public static Color operator* (Color a, float alfa)
             => new Color (a.r * alfa, a.g * alfa, a.b *alfa);
 
-        public static Color operator* (double alfa, Color a)
+        public static Color operator* (float alfa, Color a)
             => new Color (a.r * alfa, a.g * alfa, a.b *alfa);
         
 
@@ -43,9 +43,9 @@ namespace Trace
 
         // are close method
 
-        public bool isClose (double a, double b)
+        public bool isClose (float a, float b)
         {
-            double epsilon = 1e-8;
+            float epsilon = 1e-8F;
             return Math.Abs(a - b) < epsilon;
         }
 
