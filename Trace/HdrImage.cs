@@ -74,7 +74,7 @@ namespace Trace
 
         public void savePfm(Stream outputStream)
         {
-            var endiannessValue = BitConverter.IsLittleEndian;
+            var endiannessValue = BitConverter.IsLittleEndian ? "-1.0" : "1.0";
             var header = Encoding.ASCII.GetBytes($"PF\n{this.width} {this.height}\n{endiannessValue}\n");
             var img = new HdrImage(7, 4);
 
