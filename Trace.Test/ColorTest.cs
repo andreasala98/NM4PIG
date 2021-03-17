@@ -50,7 +50,7 @@ namespace Trace.Test
     {
 
         HdrImage DummyImage = new HdrImage(7, 4);
-        Color t = new Color(5., 6., 7.);
+        Color t = new Color(5.0, 6.0, 7.0);
 
         [Fact]
         public void TestValidCoords()
@@ -68,7 +68,7 @@ namespace Trace.Test
         public void TestPixelOffset()
         {
             Assert.True(DummyImage.pixelOffset(3, 2) == 17);
-            Assert.True(DummyImage.pixelOffset(2, 3) == 24);
+            Assert.True(DummyImage.pixelOffset(2, 3) == 23);
         }
 
         [Fact]
