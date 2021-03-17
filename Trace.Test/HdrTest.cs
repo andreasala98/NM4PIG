@@ -26,6 +26,13 @@ namespace Trace.Test
         }
 
         [Fact]
+        public void TestImageCreation()
+        {
+            Assert.True(DummyImage.width == 7);
+            Assert.True(DummyImage.height == 4);
+        }
+
+        [Fact]
         public void TestPixelOffset()
         {
             Assert.True(DummyImage.pixelOffset(3, 2) == 17);
