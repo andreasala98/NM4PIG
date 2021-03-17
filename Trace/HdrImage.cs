@@ -29,13 +29,13 @@ namespace Trace
 
         public Color getPixel(int x, int y)
         {
-            assert validCoordinates(x, y);
+            assert validCoords(x, y);
             return pixel[pixelOffset(x,y)];
         }
 
         public void setPixel(int x, int y, Color a)
         {
-            assert validCoordinates(x,y);
+            assert validCoords(x,y);
             pixel[pixelOffset(x,y)] = a;
 
         }
