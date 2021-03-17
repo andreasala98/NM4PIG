@@ -7,8 +7,13 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World! I love colors");
+            var img = new HdrImage(7, 4);
 
+            using (Stream fileStream = File.OpenWrite("file.pfm"))
+            {
+                img.SavePfm(fileStream);
+            }
         }
     }
 }
+    
