@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Trace;
 
 namespace NM4PIG
@@ -11,7 +12,7 @@ namespace NM4PIG
 
             using (Stream fileStream = File.OpenWrite("file.pfm"))
             {
-                img.SavePfm(fileStream);
+                img.savePfm(fileStream);
             }
         }
     }

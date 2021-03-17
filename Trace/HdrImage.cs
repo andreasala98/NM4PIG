@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-
+using System.Text;
 
 namespace Trace
 {
@@ -80,7 +80,7 @@ namespace Trace
 
             for(int x=0; x<this.height; x++){
                 for(int y=0; y<this.width;y++){
-                    Color col = this.getPixel(this.height-1-x, y);
+                    Color col = this.getPixel(y, this.height-1-x);
                     _writeFloat(outputStream, col.r);
                     _writeFloat(outputStream, col.g);
                     _writeFloat(outputStream, col.b);
