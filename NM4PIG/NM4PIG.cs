@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Trace;
+using System.IO;
 
 namespace NM4PIG
 {
