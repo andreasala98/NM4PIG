@@ -4,6 +4,9 @@ using Trace;
 
 namespace Trace.Test
 {
+
+    // Color testing
+
     public class ColorTest
     {
         
@@ -38,6 +41,43 @@ namespace Trace.Test
             Assert.True(new Color(4.0,10.0,18.0).isClose(col1 * col2),"Product between colours Test failed!");
         }
 
+
+    }
+
+    // HDR Testing
+
+    public class HDRImageTest
+    {
+
+        HdrImage DummyImage = new HdrImage(7, 4);
+        Color t = new Color(5., 6., 7.);
+
+        [Fact]
+        public void TestValidCoords()
+        {
+            
+            Assert.True(DummyImage.validCoords(0, 0));
+            Assert.True(DummyImage.validCoords(6, 3));
+
+            Assert.False(DummyImage.validCoords(-1, 0));
+            Assert.False(DummyImage.validCoords(6, 4));
+
+        }
+
+        [Fact]
+        public void TestPixelOffset()
+        {
+            Assert.True(DummyImage.pixelOffset(3, 2) == 17);
+            Assert.True(DummyImage.pixelOffset(2, 3) == 24);
+        }
+
+        [Fact]
+        public void TestGetSetPixel()
+        {
+            DummyImage.setPixel(3, 2, t);
+            Assert.True(DummyImage.getPixel(3, 2).isClose(t));
+
+        }
 
     }
 }
