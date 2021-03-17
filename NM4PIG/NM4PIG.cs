@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Trace;
-using System.IO;
 
 namespace NM4PIG
 {
@@ -9,16 +8,31 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-            var img = new HdrImage(7, 4);
+            var MyImg = new HdrImage(3, 2);
 
-            igm.setPixel(0, 1, Color(3, 3, 3));
+            MyImg.setPixel(0, 0, new Color(10.0f, 20.0f, 30.0f));
+            MyImg.setPixel(1, 0, new Color(40.0f, 50.0f, 60.0f));
+            MyImg.setPixel(2, 0, new Color(70.0f, 80.0f, 90.0f));
+            MyImg.setPixel(0, 1, new Color(100.0f, 200.0f, 300.0f));
+            MyImg.setPixel(1, 1, new Color(400.0f, 500.0f, 600.0f));
+            MyImg.setPixel(2, 1, new Color(700.0f, 800.0f, 900.0f));
 
-            using (Stream fileStream = File.OpenWrite("file.pfm"))
+            string fileName = "file.pfm";
+
+            using (FileStream fileStream = File.OpenWrite(fileName))
             {
-                img.savePfm(fileStream);
+                MyImg.savePfm(fileStream);
             }
 
-            Console.WriteLine("Saved file.pfm")
+            using (MemoryStream memStream = new MemoryStream(84))
+            {
+                MyImg.savePfm(memStream);
+                Console.WriteLine("Buffer:");
+                Console.WriteLine(BitConverter.ToString(memStream.ToArray()));
+
+            }
+
+                Console.WriteLine($"Saved {fileName}");
         }
     }
 }
