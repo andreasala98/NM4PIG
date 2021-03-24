@@ -51,7 +51,7 @@ namespace Trace.Test
 
 
         [Fact]
-        public void TestPfm()
+        public void TestSavePfm()
         {
             var MyImg = new HdrImage(3, 2);
 
@@ -80,16 +80,18 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void TestLineReade()
-        {       
-                byte[] byteArray = Encoding.UTF8.GetBytes("hello\nworld");
+        public void TestReadLine()
+        {
+            byte[] byteArray = Encoding.ASCII.GetBytes("hello\nworld");
 
-                MemoryStream line = new MemoryStream (byteArray);
-                Assert.True(HdrImage.LineRead(line) == "hello");
-                Assert.True(HdrImage.LineRead(line) == "world");
-                Assert.True(HdrImage.LineRead(line) == "");
+            MemoryStream line = new MemoryStream(byteArray);
+            Assert.True(HdrImage.readLine(line) == "hello");
+            Assert.True(HdrImage.readLine(line) == "world");
+            Assert.True(HdrImage.readLine(line) == "");
+        }
 
-        public void testIsLittleEndian()
+        [Fact]
+        public void TestIsLittleEndian()
         {
             Assert.True(HdrImage.isLittleEndian("1.0") == false);
             Assert.True(HdrImage.isLittleEndian("-1.0") == true);
@@ -98,12 +100,51 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void testParseImageSize()
+        public void TestParseImageSize()
         {
             Assert.True(HdrImage.parseImageSize("3 2").SequenceEqual(new List<int>() { 3, 2 }));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("-1 2"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("1 -2"));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("3 2 1"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("3"));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("a b"));
+        }
+
+        [Fact]
+        public void TestReadPfm()
+        {
+            var MyImg = new HdrImage(3, 2);
+
+
+            using (FileStream fs = File.OpenRead("../../../reference_le.pfm"))
+            {
+                MyImg.readPfm(fs);
+            }
+
+            Assert.True(MyImg.width == 3);
+            Assert.True(MyImg.height == 2);
+            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)));
+            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)));
+            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)));
+            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)));
+            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)));
+            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)));
+
+
+            using (FileStream fs = File.OpenRead("../../../reference_be.pfm"))
+            {
+                MyImg.readPfm(fs);
+            }
+
+            Assert.True(MyImg.width == 3);
+            Assert.True(MyImg.height == 2);
+            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)));
+            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)));
+            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)));
+            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)));
+            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)));
+            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)));
+
         }
     }
 }

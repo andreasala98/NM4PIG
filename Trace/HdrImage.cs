@@ -14,25 +14,6 @@ namespace Trace
         public int height;
         public List<Color> pixel;
 
-        /*private void readPfm(Stream inputStream)
-        {
-            // string magic = LineRead(inputStream);
-            // if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
-
-            // string sizeLine = LineRead(inputStream);
-            // List<int> w_h = new List<int>(parseImageSize(sizeLine));
-            // this.width = w_h[0];
-            // this.height = w_h[1];
-
-            // string endianLine = LineRead(inputStream);
-
-            // bool lEnd = isLittleEndian(endianLine);
-
-            // still need to read the raster
-        }*/
-
-
-
         // Constructor with pixel number
         public HdrImage(int x, int y)
         {
@@ -51,22 +32,22 @@ namespace Trace
             }
         }
 
-        /*
+        
         // Constructor passing a stream
-        public HdrImage(Stream inputStream)
+        public HdrImage(Stream inputStream) : this()
         {
             readPfm(inputStream);
         }
 
         // Constructor passing a string (fileName)
-        public HdrImage(string fileName)
+        public HdrImage(string fileName) : this()
         {
             using (FileStream fileStream = File.OpenRead(fileName))
             {
                 readPfm(fileStream);
             }
         }
-*/
+
 
 
         // Checking if (x,y) is in range
@@ -141,15 +122,15 @@ namespace Trace
             return;
         }   
 
-         // READ FUNCTIONS SET-UP
+        // Reading functions
 
-        public static string LineRead(Stream s)  // CURRENTLY NOT WORKING
+        public static string readLine(Stream s)  // CURRENTLY NOT WORKING
         {
             string result = "";
 
             while (true)
             {
-                var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream. curByte needs then to be a var type
+                var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream
 
                 if (curByte == -1 || curByte == '\n') 
                 {
@@ -183,18 +164,17 @@ namespace Trace
 
         }
 
-        public static float _readFloat(Stream inputStream, bool lEnd)
+        public static float readFloat(Stream inputStream, bool lEnd)
         {
 
-            byte[] bytes;
+            byte[] bytes = new byte[4];
 
             try
             {
-
-                using (BinaryReader br = new BinaryReader(inputStream))
-                {
-                    bytes = br.ReadBytes(4);
-                }
+                bytes[0] = (byte)inputStream.ReadByte();
+                bytes[1] = (byte)inputStream.ReadByte();
+                bytes[2] = (byte)inputStream.ReadByte();
+                bytes[3] = (byte)inputStream.ReadByte();
 
             }
             catch
@@ -204,12 +184,12 @@ namespace Trace
 
             if (lEnd)
             {
-                return BitConverter.ToSingle(bytes);
+                return BitConverter.ToSingle(bytes,0);
             }
             else
             {
                 Array.Reverse(bytes);
-                return BitConverter.ToSingle(bytes);
+                return BitConverter.ToSingle(bytes,0);
             }
         }
 
@@ -226,12 +206,44 @@ namespace Trace
             }
             catch
             {
-                throw new InvalidPfmFileFormat("Invalid width/height (not numbers)");
+                throw new InvalidPfmFileFormat("Invalid width/height (not integers)");
             }
 
             if (widthHeight[0] < 0 || widthHeight[1] < 0) throw new InvalidPfmFileFormat("Invalid width/height (negative values)");
 
             return widthHeight;
+        }
+
+        public void readPfm(Stream inputStream)
+        {
+            string magic = readLine(inputStream);
+            if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
+
+            string whLine = readLine(inputStream);
+            List<int> w_h = new List<int>(parseImageSize(whLine));
+            this.width = w_h[0];
+            this.height = w_h[1];
+
+            if (width < 0 || height < 0) throw new InvalidPfmFileFormat("Invalid width/height!");
+
+  
+
+            string endianLine = readLine(inputStream);
+
+            bool lEnd = isLittleEndian(endianLine);
+            Color temp;
+
+            for (int i=0; i<this.height; i++)
+            {
+                for (int j = 0; j < this.width; j++)
+                {
+                    temp.r = readFloat(inputStream, lEnd);
+                    temp.g = readFloat(inputStream, lEnd);
+                    temp.b = readFloat(inputStream, lEnd);
+                    pixel[pixelOffset(height-i-1, j)] = temp;
+                }
+            }
+
         }
 
 

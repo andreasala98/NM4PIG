@@ -11,6 +11,18 @@ namespace NM4PIG
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, world!");
+
+            HdrImage MyImg = new HdrImage("blackFile.pfm");
+
+            MyImg.setPixel(0, 0, new Color(0f, 0f, 100f));
+            string fName = "outFile.pfm";
+
+            using (FileStream fs = File.OpenWrite(fName))
+            {
+                MyImg.savePfm(fs);
+            }
+
+            Console.WriteLine($"File {fName} correctly saved.");
         }
     }
 }
