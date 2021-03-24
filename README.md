@@ -1,6 +1,6 @@
 # NM4PIG
 
-This is a rayTracer library written in C# developed for the course _Numerical Methods for Photorealistic Image Generation_ hold by Prof. Maurizio Tomasi at Università degli Studi di Milano during March-June 2021.
+This is a rayTracer library called written in C# developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. Maurizio Tomasi at Università degli Studi di Milano during March-June 2021.
 
 The contibutors to the project are T. Armadillo - P. Klausner - A. Sala
 
