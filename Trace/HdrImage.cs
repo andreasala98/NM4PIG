@@ -2,29 +2,31 @@ using System;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Trace
 {
-    
+
     public struct HdrImage
     {
         public int width;
         public int height;
-        public Color[] pixel;
+        public List<Color> pixel;
 
         /*private void readPfm(Stream inputStream)
         {
-            string magic = LineRead(inputStream);
-            if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
+            // string magic = LineRead(inputStream);
+            // if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
 
-            string sizeLine = LineRead(inputStream);
-            int[] w_h = parseImageSize(sizeLine);
-            this.width = w_h[0];
-            this.height = w_h[1];
+            // string sizeLine = LineRead(inputStream);
+            // List<int> w_h = new List<int>(parseImageSize(sizeLine));
+            // this.width = w_h[0];
+            // this.height = w_h[1];
 
-            string endianLine = LineRead(inputStream);
+            // string endianLine = LineRead(inputStream);
 
-            bool lEnd = isLittleEndian(endianLine);
+            // bool lEnd = isLittleEndian(endianLine);
 
             // still need to read the raster
         }*/
@@ -37,24 +39,41 @@ namespace Trace
             // x = COLS, y = ROWS
             this.width = x;
             this.height = y;
-            this.pixel= new Color[6];
-            
+
             // Initializing all pixels to black.
-            this.pixel = new Color[x * y];
+            this.pixel = new List<Color>(x * y);
             for (int nrow = 0; nrow < y; nrow++)
             {
                 for (int ncol = 0; ncol < x; ncol++)
                 {
-                    this.pixel [nrow * width + ncol] = new Color(0f, 0f, 0f);
+                    this.pixel.Add(new Color(0f, 0f, 0f));
                 }
             }
         }
+
+        /*
+        // Constructor passing a stream
+        public HdrImage(Stream inputStream)
+        {
+            readPfm(inputStream);
+        }
+
+        // Constructor passing a string (fileName)
+        public HdrImage(string fileName)
+        {
+            using (FileStream fileStream = File.OpenRead(fileName))
+            {
+                readPfm(fileStream);
+            }
+        }
+*/
+
 
         // Checking if (x,y) is in range
         public bool validCoords(int x, int y)
         {
             return (x >= 0) & (x < this.width) & (y >= 0) & (y < this.height);
-    
+
         }
 
         // Flattening the image into 1D array
@@ -69,21 +88,21 @@ namespace Trace
 
             if (validCoords(x, y))
             {
-                return pixel[pixelOffset(x,y)];
+                return pixel[pixelOffset(x, y)];
             }
-            else 
+            else
             {
                 Console.WriteLine($"Pixel ({x},{y}) out of range!");
-                return new Color(0f,0f,0f);
+                return new Color(0f, 0f, 0f);
             }
         }
 
 
         public void setPixel(int x, int y, Color a)
         {
-            if (validCoords(x,y))
+            if (validCoords(x, y))
             {
-                pixel[pixelOffset(x,y)] = a;
+                pixel[pixelOffset(x, y)] = a;
             }
             else
             {
@@ -100,10 +119,12 @@ namespace Trace
 
 
 
-            for (int x=0; x<this.height; x++){
-                for(int y=0; y<this.width;y++){
+            for (int x = 0; x < this.height; x++)
+            {
+                for (int y = 0; y < this.width; y++)
+                {
                     // Bottom left to top right
-                    Color col = this.getPixel(y, this.height-1-x);
+                    Color col = this.getPixel(y, this.height - 1 - x);
                     _writeFloat(outputStream, col.r);
                     _writeFloat(outputStream, col.g);
                     _writeFloat(outputStream, col.b);
@@ -111,7 +132,7 @@ namespace Trace
             }
             return;
         }
-       
+
         private static void _writeFloat(Stream outputStream, float rgb)
         {
             var buffer = BitConverter.GetBytes(rgb);
@@ -141,6 +162,27 @@ namespace Trace
             } 
         }
 
+        public static bool isLittleEndian(string line)
+        {
+            float value;
+            try
+            {
+                value = float.Parse(line, CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                throw new InvalidPfmFileFormat("Missing endianness specification");
+            }
+
+            if (value == 1.0f)
+                return false;
+            else if (value == -1.0f)
+                return true;
+            else
+                throw new InvalidPfmFileFormat($"Invalid endianness specification: {value}");
+
+        }
+
         public static float _readFloat(Stream inputStream, bool lEnd)
         {
 
@@ -162,26 +204,43 @@ namespace Trace
 
             if (lEnd)
             {
-                 return BitConverter.ToSingle(bytes);
+                return BitConverter.ToSingle(bytes);
             }
             else
             {
-                 Array.Reverse(bytes);
-                 return BitConverter.ToSingle(bytes);
+                Array.Reverse(bytes);
+                return BitConverter.ToSingle(bytes);
+            }
+        }
+
+        public static List<int> parseImageSize(string line)
+        {
+            List<string> linePieces = new List<string>(line.Split(' ').ToList());
+            if (linePieces.Count != 2) throw new InvalidPfmFileFormat("Invalid image size specification");
+
+            List<int> widthHeight = new List<int>();
+            try
+            {
+                widthHeight.Add(Int32.Parse(linePieces[0]));
+                widthHeight.Add(Int32.Parse(linePieces[1]));
+            }
+            catch
+            {
+                throw new InvalidPfmFileFormat("Invalid width/height (not numbers)");
             }
 
-            
+            if (widthHeight[0] < 0 || widthHeight[1] < 0) throw new InvalidPfmFileFormat("Invalid width/height (negative values)");
 
+            return widthHeight;
         }
-    
+
+
     }
 
-
-
-    
 }
 
-    
 
-    
+
+
+
 

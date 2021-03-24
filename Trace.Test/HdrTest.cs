@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using Xunit;
-// 'using Trace;' is unnecessary
 
 namespace Trace.Test
 {
@@ -89,7 +89,21 @@ namespace Trace.Test
                 Assert.True(HdrImage.LineRead(line) == "world");
                 Assert.True(HdrImage.LineRead(line) == "");
 
+        public void testIsLittleEndian()
+        {
+            Assert.True(HdrImage.isLittleEndian("1.0") == false);
+            Assert.True(HdrImage.isLittleEndian("-1.0") == true);
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("2.0"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("abc"));
         }
 
+        [Fact]
+        public void testParseImageSize()
+        {
+            Assert.True(HdrImage.parseImageSize("3 2").SequenceEqual(new List<int>() { 3, 2 }));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("-1 2"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("3 2 1"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("a b"));
+        }
     }
 }

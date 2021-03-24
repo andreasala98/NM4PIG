@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using Trace;
+using System.Collections.Generic;
 
 namespace NM4PIG
 {
@@ -8,23 +10,8 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-
-            var MyImg = new HdrImage(4, 4);
-
-           
-            string fileName = "blackFile.pfm";
-
-            using (FileStream fileStream = File.OpenWrite(fileName))
-            {
-                MyImg.savePfm(fileStream);
-            }
-
-            Console.WriteLine($"{fileName} correctly saved!");
-
             Console.WriteLine("Hello, world!");
-
-
-
         }
     }
+}
 
