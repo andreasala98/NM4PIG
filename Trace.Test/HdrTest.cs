@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Xunit;
+// 'using Trace;' is unnecessary
 
 namespace Trace.Test
 {
@@ -76,7 +77,6 @@ namespace Trace.Test
 
             }
         }
-
 
         [Fact]
         public void testParseEndiannes()

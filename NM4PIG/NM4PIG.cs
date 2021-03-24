@@ -9,9 +9,20 @@ namespace NM4PIG
         static void Main(string[] args)
         {
 
-            Console.WriteLine(HdrImage.isLittleEndian("1.0"));
-            Console.WriteLine(HdrImage.isLittleEndian("-1.0"));
-            Console.WriteLine("OK");
+            var MyImg = new HdrImage(4, 4);
+
+
+            string fileName = "blackFile.pfm";
+
+            using (FileStream fileStream = File.OpenWrite(fileName))
+            {
+                MyImg.savePfm(fileStream);
+            }
+
+            Console.WriteLine($"{fileName} correctly saved!");
+
+            Console.WriteLine("Hello, world!");
+
         }
     }
 }
