@@ -11,6 +11,13 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
+        private void readPfm(Stream inputStream)
+        {
+            // Needs to be filled with 'little functions'
+        }
+
+
+        // Constructor with pixel number
         public HdrImage(int x, int y)
         {
             // x = COLS, y = ROWS
@@ -28,6 +35,23 @@ namespace Trace
                 }
             }
         }
+
+        // Constructor passing a stream
+        public HdrImage(Stream inputStream)
+        {
+            readPfm(inputStream);
+        }
+
+        // Constructor passing a string (fileName)
+        public HdrImage(string fileName)
+        {
+            using (FileStream fileStream = File.OpenRead(fileName))
+            {
+                readPfm(fileStream);
+            }
+        }
+
+
 
         // Checking if (x,y) is in range
         public bool validCoords(int x, int y)
