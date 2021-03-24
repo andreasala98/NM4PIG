@@ -8,7 +8,7 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-<<<<<<< HEAD
+
             var MyImg = new HdrImage(4, 4);
 
            
@@ -20,11 +20,11 @@ namespace NM4PIG
             }
 
             Console.WriteLine($"{fileName} correctly saved!");
-=======
+
             Console.WriteLine("Hello, world!");
 
 
->>>>>>> 88ef4f121677235374a66458f387612e2e0279a2
+
         }
     }
 
