@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Xunit;
 // 'using Trace;' is unnecessary
 
@@ -78,13 +79,16 @@ namespace Trace.Test
             }
         }
 
+        [Fact]
         public void TestLineReade()
-        {
-            string linea = "hello\nworld";
-            byte line = System.Text.Encoding.ASCII.GetString(linea);
-            Assert.True(LineRead(line) == "hello");
-            Assert.True(LineRead(line) == "world");
-            Assert.True(LineRead(line) == "");
+        {       
+                byte[] byteArray = Encoding.UTF8.GetBytes("hello\nworld");
+
+                MemoryStream line = new MemoryStream (byteArray);
+                Assert.True(HdrImage.LineRead(line) == "hello");
+                Assert.True(HdrImage.LineRead(line) == "world");
+                Assert.True(HdrImage.LineRead(line) == "");
+
         }
 
     }

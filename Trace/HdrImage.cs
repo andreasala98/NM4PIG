@@ -12,7 +12,7 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
-        private void readPfm(Stream inputStream)
+        /*private void readPfm(Stream inputStream)
         {
             string magic = LineRead(inputStream);
             if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
@@ -27,7 +27,7 @@ namespace Trace
             bool lEnd = isLittleEndian(endianLine);
 
             // still need to read the raster
-        }
+        }*/
 
 
 
@@ -122,36 +122,21 @@ namespace Trace
 
          // READ FUNCTIONS SET-UP
 
-        public string LineRead(Stream s)
+        public static string LineRead(Stream s)  // CURRENTLY NOT WORKING
         {
-            byte[] result = Convert.FromBase64String("");
-            byte[] vuoto = Convert.FromBase64String("");
-            byte[] aCapo = Convert.FromBase64String("\n");
-            //Encoding.ASCII.GetBytes(acapo);
-
+            string result = "";
 
             while (true)
             {
-                byte[] curByte;
-                using (BinaryReader br = new BinaryReader(s)) { curByte = br.ReadBytes(1); }
-                byte[] result;
-                if (curByte == vuoto) 
+                var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream. curByte needs then to be a var type
+
+                if (curByte == -1 || curByte == '\n') 
                 {
-                    return System.Text.Encoding.ASCII.GetString(curByte);
-                }
-                else if (curByte == aCapo)
-                {
-                   return System.Text.Encoding.ASCII.GetString(curByte);
+                    return result;
                 }
                 else 
                 {
-                    List<byte> list = new List<byte>();
-                    list.AddRange(result);
-                    list.AddRange(curByte);
-
-                    result= list.ToArray();
-                    
-                    //result = addByteToArray(result, curByte);
+                    result += Convert.ToChar(curByte); 
                 }
             } 
         }
