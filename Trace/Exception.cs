@@ -23,7 +23,7 @@ namespace Trace
         try
         {
             //Something
-        }catch (InvalidPfmFileFormat ex)
+        } catch (InvalidPfmFileFormat ex)
         {
             Console.WriteLine(ex.Message);
         }
