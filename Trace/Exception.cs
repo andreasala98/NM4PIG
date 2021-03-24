@@ -10,4 +10,23 @@ namespace Trace
         public InvalidPfmFileFormat(string message) : base(message) { }
     }
 
+    /*
+        Example:
+
+        For throwing exception:
+
+        throw new InvalidPfmFileFormat();
+        throw new InvalidPfmFileFormat("Message Error");
+
+        For catching exceptions
+
+        try
+        {
+            //Something
+        }catch (InvalidPfmFileFormat ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    */
+
 }
