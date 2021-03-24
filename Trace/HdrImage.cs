@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 
 namespace Trace
@@ -10,21 +12,21 @@ namespace Trace
     {
         public int width;
         public int height;
-        public Color[] pixel;
+        public List<Color> pixel;
 
         private void readPfm(Stream inputStream)
         {
-            string magic = LineRead(inputStream);
-            if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
+            // string magic = LineRead(inputStream);
+            // if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
 
-            string sizeLine = LineRead(inputStream);
-            int[] w_h = parseImageSize(sizeLine);
-            this.width = w_h[0];
-            this.height = w_h[1];
+            // string sizeLine = LineRead(inputStream);
+            // List<int> w_h = new List<int>(parseImageSize(sizeLine));
+            // this.width = w_h[0];
+            // this.height = w_h[1];
 
-            string endianLine = LineRead(inputStream);
+            // string endianLine = LineRead(inputStream);
 
-            bool lEnd = isLittleEndian(endianLine);
+            // bool lEnd = isLittleEndian(endianLine);
 
             // still need to read the raster
         }
@@ -37,15 +39,14 @@ namespace Trace
             // x = COLS, y = ROWS
             this.width = x;
             this.height = y;
-            this.pixel = new Color[6];
 
             // Initializing all pixels to black.
-            this.pixel = new Color[x * y];
+            this.pixel = new List<Color>(x * y);
             for (int nrow = 0; nrow < y; nrow++)
             {
                 for (int ncol = 0; ncol < x; ncol++)
                 {
-                    this.pixel[nrow * width + ncol] = new Color(0f, 0f, 0f);
+                    this.pixel.Add(new Color(0f, 0f, 0f));
                 }
             }
         }
@@ -153,17 +154,11 @@ namespace Trace
             }
 
             if (value == 1.0f)
-            {
                 return false;
-            }
             else if (value == -1.0f)
-            {
                 return true;
-            }
             else
-            {
                 throw new InvalidPfmFileFormat($"Invalid endianness specification: {value}");
-            }
 
         }
 
@@ -195,10 +190,29 @@ namespace Trace
                 Array.Reverse(bytes);
                 return BitConverter.ToSingle(bytes);
             }
-
-
-
         }
+
+        public static List<int> parseImageSize(string line)
+        {
+            List<string> linePieces = new List<string>(line.Split(' ').ToList());
+            if (linePieces.Count != 2) throw new InvalidPfmFileFormat("Invalid image size specification");
+
+            List<int> widthHeight = new List<int>();
+            try
+            {
+                widthHeight.Add(Int32.Parse(linePieces[0]));
+                widthHeight.Add(Int32.Parse(linePieces[1]));
+            }
+            catch
+            {
+                throw new InvalidPfmFileFormat("Invalid width/height (not numbers)");
+            }
+
+            if (widthHeight[0] < 0 || widthHeight[1] < 0) throw new InvalidPfmFileFormat("Invalid width/height (negative values)");
+
+            return widthHeight;
+        }
+
 
     }
 
