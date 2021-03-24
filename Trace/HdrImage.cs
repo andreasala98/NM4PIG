@@ -11,7 +11,7 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
-        private void readPfm(Stream inputStream)
+        private void _readPfm(Stream inputStream)
         {
             // Needs to be filled with 'little functions'
         }
@@ -121,7 +121,40 @@ namespace Trace
             outputStream.Write(buffer, 0, buffer.Length);
 
             return;
-        }   
+        }
+
+        public static float _readFloat(Stream inputStream, bool lEnd)
+        {
+
+            byte[] bytes;
+
+            try
+            {
+
+                using (BinaryReader br = new BinaryReader(inputStream))
+                {
+                    bytes = br.ReadBytes(4);
+                }
+
+            }
+            catch
+            {
+                throw new InvalidPfmFileFormat("Unable to read float!");
+            }
+
+            if (lEnd)
+            {
+                 return BitConverter.ToSingle(bytes);
+            }
+            else
+            {
+                 Array.Reverse(bytes);
+                 return BitConverter.ToSingle(bytes);
+            }
+
+            
+
+        }
     
     }
   

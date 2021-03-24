@@ -7,7 +7,7 @@ namespace Trace
     public class InvalidPfmFileFormat : Exception
     {
         public InvalidPfmFileFormat() : base() { }
-        public InvalidPfmFileFormat(string message) : base(message) { }
+        public InvalidPfmFileFormat(string Message) : base(Message) { }
     }
 
     /*
