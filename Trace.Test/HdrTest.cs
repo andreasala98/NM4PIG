@@ -77,5 +77,14 @@ namespace Trace.Test
             }
         }
 
+        public void TestLineReade()
+        {
+            string linea = "hello\nworld";
+            byte line = System.Text.Encoding.ASCII.GetString(linea);
+            Assert.True(LineRead(line) == "hello");
+            Assert.True(LineRead(line) == "world");
+            Assert.True(LineRead(line) == "");
+        }
+
     }
 }

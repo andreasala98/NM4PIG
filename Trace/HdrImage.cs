@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace Trace
 {
@@ -11,13 +12,6 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
-        private void readPfm(Stream inputStream)
-        {
-            // Needs to be filled with 'little functions'
-        }
-
-
-        // Constructor with pixel number
         public HdrImage(int x, int y)
         {
             // x = COLS, y = ROWS
@@ -35,23 +29,6 @@ namespace Trace
                 }
             }
         }
-
-        // Constructor passing a stream
-        public HdrImage(Stream inputStream)
-        {
-            readPfm(inputStream);
-        }
-
-        // Constructor passing a string (fileName)
-        public HdrImage(string fileName)
-        {
-            using (FileStream fileStream = File.OpenRead(fileName))
-            {
-                readPfm(fileStream);
-            }
-        }
-
-
 
         // Checking if (x,y) is in range
         public bool validCoords(int x, int y)
@@ -122,9 +99,46 @@ namespace Trace
 
             return;
         }   
+
+         // READ FUNCTIONS SET-UP
+
+        public string LineRead(Stream s)
+        {
+            byte[] result = Convert.FromBase64String("");
+            byte[] vuoto = Convert.FromBase64String("");
+            byte[] aCapo = Convert.FromBase64String("\n");
+            //Encoding.ASCII.GetBytes(acapo);
+
+
+            while (true)
+            {
+                byte[] curByte;
+                using (BinaryReader br = new BinaryReader(s)) { curByte = br.ReadBytes(1); }
+                byte[] result;
+                if (curByte == vuoto) 
+                {
+                    return System.Text.Encoding.ASCII.GetString(curByte);
+                }
+                else if (curByte == aCapo)
+                {
+                   return System.Text.Encoding.ASCII.GetString(curByte);
+                }
+                else 
+                {
+                    List<byte> list = new List<byte>();
+                    list.AddRange(result);
+                    list.AddRange(curByte);
+
+                    result= list.ToArray();
+                    
+                    //result = addByteToArray(result, curByte);
+                }
+            } 
+        }
     
     }
-  
+
+
 
     
 }
