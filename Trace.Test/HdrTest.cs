@@ -77,5 +77,14 @@ namespace Trace.Test
             }
         }
 
+
+        [Fact]
+        public void testParseEndiannes()
+        {
+            Assert.True(HdrImage.isLittleEndian("1.0") == false);
+            Assert.True(HdrImage.isLittleEndian("-1.0") == true);
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("2.0"));
+            Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("abc"));
+        }
     }
 }
