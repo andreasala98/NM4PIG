@@ -11,10 +11,23 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
-        private void _readPfm(Stream inputStream)
+        private void readPfm(Stream inputStream)
         {
-            // Needs to be filled with 'little functions'
+            string magic = LineRead(inputStream);
+            if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
+
+            string sizeLine = LineRead(inputStream);
+            int[] w_h = parseImageSize(sizeLine);
+            this.width = w_h[0];
+            this.height = w_h[1];
+
+            string endianLine = LineRead(inputStream);
+
+            bool lEnd = isLittleEndian(endianLine);
+
+            // still need to read the raster
         }
+
 
 
         // Constructor with pixel number
