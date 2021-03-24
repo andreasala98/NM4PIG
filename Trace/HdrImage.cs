@@ -12,6 +12,26 @@ namespace Trace
         public int height;
         public Color[] pixel;
 
+        private void readPfm(Stream inputStream)
+        {
+            string magic = LineRead(inputStream);
+            if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
+
+            string sizeLine = LineRead(inputStream);
+            int[] w_h = parseImageSize(sizeLine);
+            this.width = w_h[0];
+            this.height = w_h[1];
+
+            string endianLine = LineRead(inputStream);
+
+            bool lEnd = isLittleEndian(endianLine);
+
+            // still need to read the raster
+        }
+
+
+
+        // Constructor with pixel number
         public HdrImage(int x, int y)
         {
             // x = COLS, y = ROWS
@@ -134,6 +154,39 @@ namespace Trace
                     //result = addByteToArray(result, curByte);
                 }
             } 
+        }
+
+        public static float _readFloat(Stream inputStream, bool lEnd)
+        {
+
+            byte[] bytes;
+
+            try
+            {
+
+                using (BinaryReader br = new BinaryReader(inputStream))
+                {
+                    bytes = br.ReadBytes(4);
+                }
+
+            }
+            catch
+            {
+                throw new InvalidPfmFileFormat("Unable to read float!");
+            }
+
+            if (lEnd)
+            {
+                 return BitConverter.ToSingle(bytes);
+            }
+            else
+            {
+                 Array.Reverse(bytes);
+                 return BitConverter.ToSingle(bytes);
+            }
+
+            
+
         }
     
     }
