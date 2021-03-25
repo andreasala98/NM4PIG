@@ -32,7 +32,7 @@ namespace Trace
             }
         }
 
-        
+
         // Constructor passing a stream
         public HdrImage(Stream inputStream) : this()
         {
@@ -120,7 +120,7 @@ namespace Trace
             outputStream.Write(buffer, 0, buffer.Length);
 
             return;
-        }   
+        }
 
         // Reading functions
 
@@ -132,15 +132,15 @@ namespace Trace
             {
                 var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream
 
-                if (curByte == -1 || curByte == '\n') 
+                if (curByte == -1 || curByte == '\n')
                 {
                     return result;
                 }
-                else 
+                else
                 {
-                    result += Convert.ToChar(curByte); 
+                    result += Convert.ToChar(curByte);
                 }
-            } 
+            }
         }
 
         public static bool isLittleEndian(string line)
@@ -184,12 +184,12 @@ namespace Trace
 
             if (lEnd)
             {
-                return BitConverter.ToSingle(bytes,0);
+                return BitConverter.ToSingle(bytes, 0);
             }
             else
             {
                 Array.Reverse(bytes);
-                return BitConverter.ToSingle(bytes,0);
+                return BitConverter.ToSingle(bytes, 0);
             }
         }
 
@@ -226,21 +226,21 @@ namespace Trace
 
             if (width < 0 || height < 0) throw new InvalidPfmFileFormat("Invalid width/height!");
 
-  
+
 
             string endianLine = readLine(inputStream);
 
             bool lEnd = isLittleEndian(endianLine);
-            Color temp;
+            Color temp = new Color();
 
-            for (int i=0; i<this.height; i++)
+            for (int i = 0; i < this.height; i++)
             {
                 for (int j = 0; j < this.width; j++)
                 {
                     temp.r = readFloat(inputStream, lEnd);
                     temp.g = readFloat(inputStream, lEnd);
                     temp.b = readFloat(inputStream, lEnd);
-                    pixel[pixelOffset(height-i-1, j)] = temp;
+                    pixel[pixelOffset(j, this.height - 1 - i)] = temp;
                 }
             }
 
