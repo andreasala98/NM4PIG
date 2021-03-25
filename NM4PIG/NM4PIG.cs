@@ -10,7 +10,6 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, world!");
 
             HdrImage MyImg = new HdrImage("blackFile.pfm");
 

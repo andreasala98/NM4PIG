@@ -220,19 +220,14 @@ namespace Trace
             if (magic != "PF") throw new InvalidPfmFileFormat("Invalid magic PFM line!");
 
             string whLine = readLine(inputStream);
-            List<int> w_h = new List<int>(parseImageSize(whLine));
-            this.width = w_h[0];
-            this.height = w_h[1];
+            List<int> w_h = parseImageSize(whLine);
 
-            if (width < 0 || height < 0) throw new InvalidPfmFileFormat("Invalid width/height!");
-
-
+            this = new HdrImage(w_h[0], w_h[1]);
 
             string endianLine = readLine(inputStream);
-
             bool lEnd = isLittleEndian(endianLine);
-            Color temp = new Color();
 
+            Color temp = new Color();
             for (int i = 0; i < this.height; i++)
             {
                 for (int j = 0; j < this.width; j++)
@@ -243,7 +238,6 @@ namespace Trace
                     pixel[pixelOffset(j, this.height - 1 - i)] = temp;
                 }
             }
-
         }
 
 
