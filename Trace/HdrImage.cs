@@ -289,7 +289,9 @@ namespace Trace
             return;
         }
 
+
         public void writeLdrImage(string outputFile, string format, float gamma)
+
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
 
@@ -314,6 +316,7 @@ namespace Trace
                         bitmap.SaveAsPng(outputFile);
                         break;
                     case "jpeg":
+                    case "jpg":
                         bitmap.SaveAsJpeg(outputFile);
                         break;
                     default:
