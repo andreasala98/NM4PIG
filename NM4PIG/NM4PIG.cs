@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using System.Linq;
 using Trace;
-using System.Collections.Generic;
 
 namespace NM4PIG
 {
@@ -11,18 +9,90 @@ namespace NM4PIG
         static void Main(string[] args)
         {
 
-            HdrImage MyImg = new HdrImage("blackFile.pfm");
-
-            MyImg.setPixel(0, 0, new Color(0f, 0f, 100f));
-            string fName = "outFile.pfm";
-
-            using (FileStream fs = File.OpenWrite(fName))
+            if (args.Length != 4)
             {
-                MyImg.savePfm(fs);
+
+                Console.WriteLine("Wrong number of parameters. 4 parameters are required.");
+                return;
+
             }
 
-            Console.WriteLine($"File {fName} correctly saved.");
-        }
+
+            string inputPfmFileName = "", outputFileName = "";
+            float factor = 1f, gamma = 1f;
+            HdrImage myImg = new HdrImage();
+
+            try
+            {
+
+                inputPfmFileName = args[0];
+                outputFileName = args[3];
+
+                try { factor = System.Convert.ToSingle(args[1]); }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Factor argument is not a float. It will be set to 1");
+                    factor = 1f;
+                }
+
+                try { gamma = System.Convert.ToSingle(args[2]); }
+                catch (CommandLineException)
+                {
+                    Console.WriteLine("Gamma argument is not a float. It will be set to 1");
+                    gamma = 1f;
+                }
+
+            }
+            catch (CommandLineException)
+            {
+                Console.WriteLine("Invalid arguments specified.");
+                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.yourformat>");
+            }
+
+
+            try
+            {
+                using (FileStream inputStream = File.OpenRead(inputPfmFileName))
+                {
+                    myImg.readPfm(inputStream);
+                    Console.WriteLine($"File {inputPfmFileName} correctly read from disk.");
+                }
+
+            }
+            catch (CommandLineException)
+            {
+                Console.WriteLine("File or directory not found");
+            }
+
+
+            myImg.normalizeImage(factor);
+            myImg.clampImage();
+
+            try
+            {
+                using (FileStream outputStream = File.OpenWrite(outputFileName))
+                {
+                    myImg.writeLdrImage(outputStream, gamma);
+                }
+                Console.WriteLine($"File {outputFileName} correctly written to disk.");
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch(ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (NotSupportedException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+
+
+            return;
+        }    
     }
 }
 

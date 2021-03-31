@@ -265,8 +265,8 @@ namespace Trace
             return (float) avarage;
         }
 
-
         public void normalizeImage(float factor, float? luminosity = null)
+
         {
             var lum = luminosity ?? averageLumi();
 
@@ -318,7 +318,6 @@ namespace Trace
                         break;
                     default:
                         throw new CommandLineException($"{format} is not a valid format");
-                        //throw new Exception($"{format} is not a valid format");
                 }
             }
             return;
