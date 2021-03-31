@@ -177,7 +177,39 @@ namespace Trace.Test
             img.setPixel(0, 0, new Color(5.0f, 10.0f, 15.0f));
             img.setPixel(1, 0, new Color(500.0f, 1000.0f, 1500.0f));
             Console.WriteLine(img.averageLumi());
-            Assert.True(HdrImage.isClose(img.averageLumi(), 100.0));
+            Assert.True(Color.isClose(img.averageLumi(), 100.0f));
+        }
+
+        [Fact]
+        public void TestNormalizeImage()
+        {
+            var img = new HdrImage(2, 1);
+
+            img.setPixel(0, 0, new Color(0.5e1f, 1.0e1f, 1.5e1f));
+            img.setPixel(1, 0, new Color(0.5e3f, 1.0e3f, 1.5e3f));
+
+            img.normalizeImage(factor: 1000.0f, luminosity: 100.0f);
+            Assert.True(img.getPixel(0, 0).isClose(new Color(0.5e2f, 1.0e2f, 1.5e2f)));
+            Assert.True(img.getPixel(1, 0).isClose(new Color(0.5e4f, 1.0e4f, 1.5e4f)));
+        }
+
+        [Fact]
+        public void TestClampImage()
+        {
+            var img = new HdrImage(2, 1);
+
+            img.setPixel(0, 0, new Color(0.5e1f, 1.0e1f, 1.5e1f));
+            img.setPixel(1, 0, new Color(0.5e3f, 1.0e3f, 1.5e3f));
+
+            img.clampImage();
+
+            foreach (var curPixel in img.pixel)
+            {
+                Assert.True((curPixel.r >= 0) && (curPixel.r <= 1));
+                Assert.True((curPixel.g >= 0) && (curPixel.g <= 1));
+                Assert.True((curPixel.b >= 0) && (curPixel.b <= 1));
+            }
+
         }
     }
 }

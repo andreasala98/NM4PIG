@@ -47,8 +47,8 @@ namespace Trace.Test
         {
             Color col1 = new Color(1.0f, 2.0f, 3.0f);
             Color col2 = new Color(9.0f, 5.0f, 7.0f);
-            Assert.True(col1.Luminosity() == 2.0, "Pixel Luminosity Test failed!");
-            Assert.True(col2.Luminosity() == 7.0, "Pixel Luminosity Test failed!");
+            Assert.True(col1.Luminosity() == 2.0f, "Pixel Luminosity Test failed!");
+            Assert.True(col2.Luminosity() == 7.0f, "Pixel Luminosity Test failed!");
         }
 
 
