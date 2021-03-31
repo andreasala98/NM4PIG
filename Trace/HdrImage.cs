@@ -17,7 +17,7 @@ namespace Trace
         // Constructor with pixel number
         public HdrImage(int x, int y)
         {
-            // x = COLS, y = ROWS
+            // x = COLS, y = ROWS (larghezza x altezza)
             this.width = x;
             this.height = y;
 
@@ -240,11 +240,30 @@ namespace Trace
             }
         }
 
-        public float averageLumi() {
-            return 0;
+        public static bool isClose(double a, double b)
+        {
+            var epsilon = 1e-8F;
+            return Math.Abs(a - b) < epsilon;
         }
 
-        public void normalizeImage()
+        public double averageLumi(double? Delta = null) {
+            
+            double delta = Delta ?? 1e-10;
+            double avarage = 0.0;
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    avarage = avarage + (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
+                }
+            }
+            
+            avarage = Math.Pow(10, avarage / (width * height));
+            return avarage;
+        }
+
+        /*public void normalizeImage()
         {
             // etc
             return;
@@ -258,7 +277,7 @@ namespace Trace
         public void writeLdrImage()
         {
             return;
-        }
+        }*/
     }
 
 }

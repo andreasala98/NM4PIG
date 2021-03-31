@@ -45,7 +45,7 @@ namespace Trace
 
         private bool isClose(float a, float b)
         {
-            float epsilon = 1e-8F;
+            var epsilon = 1e-8F;
             return Math.Abs(a - b) < epsilon;
         }
 
@@ -54,8 +54,9 @@ namespace Trace
             return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g);
         }
 
-        public float Luminosity() {
-            return 0;
+        public double Luminosity() {
+            double luminosity = (Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
+            return luminosity;
         }
 
     }
