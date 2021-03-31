@@ -46,9 +46,10 @@ namespace NM4PIG
             catch (CommandLineException)
             {
                 Console.WriteLine("Invalid arguments specified.");
-                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.yourformat>");
+                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
             }
 
+            string fmt = outputFileName.Substring(outputFileName.Length-3,3);
 
             try
             {
@@ -71,7 +72,7 @@ namespace NM4PIG
             try
             {
 
-                myImg.writeLdrImage(outputFileName, "jpg", gamma);
+                myImg.writeLdrImage(outputFileName, fmt, gamma);
 
                 Console.WriteLine($"File {outputFileName} correctly written to disk.");
             }
