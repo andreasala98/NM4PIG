@@ -247,11 +247,8 @@ namespace Trace
             return 0;
         }
 
-<<<<<<< HEAD
-        public void normalizeImage(float f)
-=======
         public void normalizeImage(float factor, float? luminosity = null)
->>>>>>> 67acafbb03a8a5b27cc1f4b87c9db78713f32cf6
+
         {
             var lum = luminosity ?? averageLuminosity();
 
@@ -274,11 +271,9 @@ namespace Trace
             return;
         }
 
-<<<<<<< HEAD
-        public void writeLdrImage(Stream outStream, float g)
-=======
+
         public void writeLdrImage(string outputFile, string format, float gamma)
->>>>>>> 67acafbb03a8a5b27cc1f4b87c9db78713f32cf6
+
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
 
@@ -303,6 +298,7 @@ namespace Trace
                         bitmap.SaveAsPng(outputFile);
                         break;
                     case "jpeg":
+                    case "jpg":
                         bitmap.SaveAsJpeg(outputFile);
                         break;
                     default:
