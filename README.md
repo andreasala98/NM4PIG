@@ -24,7 +24,7 @@ To check that the code works as expected, you can run a set of tests using the f
 To run the console application:
 
     cd NM4PIG
-    dotnet run
+    dotnet run <args>
 
 ## License
 
