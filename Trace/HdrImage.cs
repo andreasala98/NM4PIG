@@ -294,30 +294,29 @@ namespace Trace
 
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
-
-            for (int x = 0; x < this.height; x++)
+            
+            for (int x = 0; x < this.width; x++)
             {
-                for (int y = 0; y < this.width; y++)
+                for (int y = 0; y < this.height; y++)
                 {
-                    var curColor = this.pixel[pixelOffset(y, this.height - 1 - x)];
+                    var curColor = this.getPixel(x,y);
                     var red = (int)(255 * Math.Pow(curColor.r, 1 / gamma));
                     var green = (int)(255 * Math.Pow(curColor.g, 1 / gamma));
                     var blue = (int)(255 * Math.Pow(curColor.b, 1 / gamma));
-
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
                 }
             }
-
+            
             using (Stream fileStream = File.OpenWrite(outputFile))
             {
                 switch (format)
                 {
                     case "png":
-                        bitmap.SaveAsPng(outputFile);
+                        bitmap.SaveAsPng(fileStream);
                         break;
                     case "jpeg":
                     case "jpg":
-                        bitmap.SaveAsJpeg(outputFile);
+                        bitmap.SaveAsJpeg(fileStream);
                         break;
                     default:
                         throw new CommandLineException($"{format} is not a valid format");
