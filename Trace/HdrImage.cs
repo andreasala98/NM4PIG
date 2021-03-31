@@ -240,7 +240,25 @@ namespace Trace
             }
         }
 
+        public float averageLumi() {
+            return 0;
+        }
 
+        public void normalizeImage()
+        {
+            // etc
+            return;
+        }
+
+        public void clampImage()
+        {
+            return;
+        }
+
+        public void writeLdrImage()
+        {
+            return;
+        }
     }
 
 }
