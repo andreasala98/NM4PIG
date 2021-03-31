@@ -11,17 +11,45 @@ namespace NM4PIG
         static void Main(string[] args)
         {
 
-            HdrImage MyImg = new HdrImage("blackFile.pfm");
+            if (args.Length != 4) throw new ArgumentException("Wrong number of parameters!");
 
-            MyImg.setPixel(0, 0, new Color(0f, 0f, 100f));
-            string fName = "outFile.pfm";
+            string inputPfmFileName="", outputFileName="";
+            float factor, gamma;
+            HdrImage myImg = new HdrImage();
 
-            using (FileStream fs = File.OpenWrite(fName))
+            try
             {
-                MyImg.savePfm(fs);
+                inputPfmFileName = args[0];
+                factor = System.Convert.ToSingle(args[1]);
+                gamma = System.Convert.ToSingle(args[2]);
+                outputFileName = args[3];
             }
 
-            Console.WriteLine($"File {fName} correctly saved.");
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Invalid arguments specified.");
+                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.yourformat>");
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine("Hello world!");
+
+            using (FileStream inputStream = File.OpenRead(inputPfmFileName))
+            {
+                myImg.readPfm(inputStream);
+            }
+
+            Console.WriteLine($"File {inputPfmFileName} correctly read from disk.");
+            myImg.normalizeImage(factor);
+            myImg.clampImage();
+
+            using (FileStream outputStream = File.OpenWrite(outputFileName))
+            {
+                myImg.writeLdrImage(outputStream);
+            }
+            Console.WriteLine($"File {outputFileName} correctly written to disk.");
+
+
         }
     }
 }
