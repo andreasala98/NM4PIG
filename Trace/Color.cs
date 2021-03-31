@@ -54,6 +54,10 @@ namespace Trace
             return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g);
         }
 
+        public float Luminosity() {
+            return 0;
+        }
+
     }
 
 }
