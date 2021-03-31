@@ -70,17 +70,16 @@ namespace NM4PIG
 
             try
             {
-                using (FileStream outputStream = File.OpenWrite(outputFileName))
-                {
-                    myImg.writeLdrImage(outputStream, gamma);
-                }
+
+                myImg.writeLdrImage(outputFileName, "jpg", gamma);
+
                 Console.WriteLine($"File {outputFileName} correctly written to disk.");
             }
             catch (UnauthorizedAccessException e)
             {
                 Console.WriteLine(e.Message);
             }
-            catch(ArgumentException e)
+            catch (ArgumentException e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -92,7 +91,7 @@ namespace NM4PIG
 
 
             return;
-        }    
+        }
     }
 }
 
