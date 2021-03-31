@@ -4,6 +4,8 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Trace
 {
@@ -240,23 +242,74 @@ namespace Trace
             }
         }
 
-        public float averageLumi() {
+        public float averageLuminosity()
+        {
             return 0;
         }
 
+<<<<<<< HEAD
         public void normalizeImage(float f)
+=======
+        public void normalizeImage(float factor, float? luminosity = null)
+>>>>>>> 67acafbb03a8a5b27cc1f4b87c9db78713f32cf6
         {
-            // etc
+            var lum = luminosity ?? averageLuminosity();
+
+            for (int i = 0; i < this.pixel.Count; i++)
+            {
+                this.pixel[i] = (factor / lum) * this.pixel[i];
+            }
             return;
         }
+
+        private float _clamp(float x)
+            => x / (1 + x);
 
         public void clampImage()
         {
+            for (int i = 0; i < pixel.Count; i++)
+            {
+                pixel[i] = new Color(_clamp(pixel[i].r), _clamp(pixel[i].g), _clamp(pixel[i].b));
+            }
             return;
         }
 
+<<<<<<< HEAD
         public void writeLdrImage(Stream outStream, float g)
+=======
+        public void writeLdrImage(string outputFile, string format, float gamma)
+>>>>>>> 67acafbb03a8a5b27cc1f4b87c9db78713f32cf6
         {
+            var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
+
+            for (int x = 0; x < this.height; x++)
+            {
+                for (int y = 0; y < this.width; y++)
+                {
+                    var curColor = this.pixel[pixelOffset(y, this.height - 1 - x)];
+                    var red = (int)(255 * Math.Pow(curColor.r, 1 / gamma));
+                    var green = (int)(255 * Math.Pow(curColor.g, 1 / gamma));
+                    var blue = (int)(255 * Math.Pow(curColor.b, 1 / gamma));
+
+                    bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
+                }
+            }
+
+            using (Stream fileStream = File.OpenWrite(outputFile))
+            {
+                switch (format)
+                {
+                    case "png":
+                        bitmap.SaveAsPng(outputFile);
+                        break;
+                    case "jpeg":
+                        bitmap.SaveAsJpeg(outputFile);
+                        break;
+                    default:
+                        throw new CommandLineException($"{format} is not a valid format");
+                        //throw new Exception($"{format} is not a valid format");
+                }
+            }
             return;
         }
     }
