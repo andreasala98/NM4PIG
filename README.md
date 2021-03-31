@@ -5,10 +5,10 @@ This is a rayTracer library called NM4PIG written in C#. It was developed for th
 The contibutors to the project are [T. Armadillo][2] - [P. Klausner][3] - [A. Sala][4]
 
 ## Prerequisites
-This library has been developed and tested with .NET version 5.0.103. It is possible to download the latest version from [here](https://dotnet.microsoft.com/download).
+This library has been developed and tested with .NET version 5.0.103. It is possible to download the latest version [here](https://dotnet.microsoft.com/download).
 
 It is also necessary to install the following packages:
-- ImageSharp `dotnet add package SixLabors.ImageSharp`
+- [ImageSharp][5] `dotnet add package SixLabors.ImageSharp`
 
 ## Usage
 
@@ -35,3 +35,4 @@ The code is released under a MIT license. See the file [LICENSE.md](./LICENSE.md
 [2]: https://github.com/TommasoArmadillo
 [3]: https://github.com/PietroKlausner
 [4]: https://github.com/andreasala98
+[5]: https://docs.sixlabors.com/articles/imagesharp/index.html?tabs=tabid-1
