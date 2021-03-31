@@ -10,6 +10,13 @@ namespace Trace
         public InvalidPfmFileFormat(string Message) : base(Message) { }
     }
 
+    [Serializable]
+    public class CommandLineException : Exception
+    {
+        public CommandLineException() : base() { }
+        public CommandLineException(string Message) : base(Message) { }
+    }
+
     /*
         Example:
 

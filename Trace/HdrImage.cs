@@ -244,7 +244,7 @@ namespace Trace
             return 0;
         }
 
-        public void normalizeImage()
+        public void normalizeImage(float f)
         {
             // etc
             return;
@@ -255,7 +255,7 @@ namespace Trace
             return;
         }
 
-        public void writeLdrImage()
+        public void writeLdrImage(Stream outStream, float g)
         {
             return;
         }
