@@ -7,6 +7,9 @@ The contibutors to the project are [T. Armadillo][2] - [P. Klausner][3] - [A. Sa
 ## Prerequisites
 This library has been developed and tested with .NET version 5.0.103. It is possible to download the latest version from [here](https://dotnet.microsoft.com/download).
 
+It is also necessary to install the following packages:
+- ImageSharp `dotnet add package SixLabors.ImageSharp`
+
 ## Usage
 
 In order to use the library you can clone the repository:
