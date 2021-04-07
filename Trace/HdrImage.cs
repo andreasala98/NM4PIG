@@ -126,13 +126,13 @@ namespace Trace
 
         // Reading functions
 
-        public static string readLine(Stream s)  // CURRENTLY NOT WORKING
+        public static string readLine(Stream s)
         {
             string result = "";
 
             while (true)
             {
-                var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream
+                var curByte = s.ReadByte(); // ReadByte returns -1 at the end of stream
 
                 if (curByte == -1 || curByte == '\n')
                 {
@@ -252,18 +252,20 @@ namespace Trace
         {
 
             double delta = Delta ?? 1e-10;
-            double avarage = 0.0;
+            double av = 0.0;
 
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    avarage = avarage + (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
+                    av += (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
                 }
             }
 
-            avarage = Math.Pow(10, avarage / (width * height));
-            return (float)avarage;
+            return (float)Math.Pow(10, av / (width * height));
+
+
+
         }
 
         public void normalizeImage(float factor, float? luminosity = null)
@@ -278,8 +280,7 @@ namespace Trace
             return;
         }
 
-        private float _clamp(float x)
-            => x / (1 + x);
+        private float _clamp(float x) => x / (1f + x);
 
         public void clampImage()
         {
@@ -301,10 +302,20 @@ namespace Trace
                 for (int y = 0; y < this.height; y++)
                 {
                     var curColor = this.getPixel(x, y);
-                    var red = (int)(255.0 * Math.Pow(curColor.r, 1.0 / gamma));
-                    var green = (int)(255.0 * Math.Pow(curColor.g, 1.0 / gamma));
-                    var blue = (int)(255.0 * Math.Pow(curColor.b, 1.0 / gamma));
+                    var red = (int)(255 * Math.Pow(curColor.r, 1.0f / gamma));
+                    var green = (int)(255 * Math.Pow(curColor.g, 1.0f / gamma));
+                    var blue = (int)(255 * Math.Pow(curColor.b, 1.0f / gamma));
+
+                    if (red > 255 || red < 0) Console.WriteLine("Errore red");
+                    if (green > 255 || green < 0) Console.WriteLine("Errore g");
+                    if (blue > 255 || blue < 0) Console.WriteLine("Errore b");
+
+                    // var red = (int)(255 * curColor.r);
+                    // var green = (int)(255 * curColor.g);
+                    // var blue = (int)(255 * curColor.b);
+
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
+
                 }
             }
 

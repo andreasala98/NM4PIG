@@ -10,9 +10,11 @@ namespace NM4PIG
         {
 
             Parameters readParam = new Parameters();
+
             try
             {
                 readParam.parseCommandLine(args);
+
             }
             catch (CommandLineException e)
             {
@@ -95,6 +97,7 @@ namespace NM4PIG
                 {
                     throw new CommandLineException("Factor or gamma argument is not a float. Please enter some numbers");
                 }
+
 
                 this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
 
