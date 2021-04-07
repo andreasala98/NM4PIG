@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Trace;
+using System.Globalization;
 
 namespace NM4PIG
 {
@@ -10,7 +11,6 @@ namespace NM4PIG
         {
 
             Parameters readParam = new Parameters();
-
             try
             {
                 readParam.parseCommandLine(args);
@@ -90,8 +90,8 @@ namespace NM4PIG
 
                 try
                 {
-                    this.factor = System.Convert.ToSingle(args[1]);
-                    this.gamma = System.Convert.ToSingle(args[2]);
+                    this.factor = float.Parse(args[1], CultureInfo.InvariantCulture);
+                    this.gamma = float.Parse(args[2], CultureInfo.InvariantCulture);
                 }
                 catch
                 {

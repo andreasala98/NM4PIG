@@ -296,7 +296,6 @@ namespace Trace
 
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
-
             for (int x = 0; x < this.width; x++)
             {
                 for (int y = 0; y < this.height; y++)
@@ -305,20 +304,12 @@ namespace Trace
                     var red = (int)(255 * Math.Pow(curColor.r, 1.0f / gamma));
                     var green = (int)(255 * Math.Pow(curColor.g, 1.0f / gamma));
                     var blue = (int)(255 * Math.Pow(curColor.b, 1.0f / gamma));
-
-                    if (red > 255 || red < 0) Console.WriteLine("Errore red");
-                    if (green > 255 || green < 0) Console.WriteLine("Errore g");
-                    if (blue > 255 || blue < 0) Console.WriteLine("Errore b");
-
-                    // var red = (int)(255 * curColor.r);
-                    // var green = (int)(255 * curColor.g);
-                    // var blue = (int)(255 * curColor.b);
-
+                    
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
-
                 }
             }
 
+            
             using (Stream fileStream = File.OpenWrite(outputFile))
             {
                 switch (format)
