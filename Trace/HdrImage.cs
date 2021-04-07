@@ -248,8 +248,9 @@ namespace Trace
             return Math.Abs(a - b) < epsilon;
         }
 
-        public float averageLumi(double? Delta = null) {
-            
+        public float averageLumi(double? Delta = null)
+        {
+
             double delta = Delta ?? 1e-10;
             double avarage = 0.0;
 
@@ -260,9 +261,9 @@ namespace Trace
                     avarage = avarage + (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
                 }
             }
-            
+
             avarage = Math.Pow(10, avarage / (width * height));
-            return (float) avarage;
+            return (float)avarage;
         }
 
         public void normalizeImage(float factor, float? luminosity = null)
@@ -294,19 +295,19 @@ namespace Trace
 
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
-            
+
             for (int x = 0; x < this.width; x++)
             {
                 for (int y = 0; y < this.height; y++)
                 {
-                    var curColor = this.getPixel(x,y);
-                    var red = (int)(255 * Math.Pow(curColor.r, 1 / gamma));
-                    var green = (int)(255 * Math.Pow(curColor.g, 1 / gamma));
-                    var blue = (int)(255 * Math.Pow(curColor.b, 1 / gamma));
+                    var curColor = this.getPixel(x, y);
+                    var red = (int)(255.0 * Math.Pow(curColor.r, 1.0 / gamma));
+                    var green = (int)(255.0 * Math.Pow(curColor.g, 1.0 / gamma));
+                    var blue = (int)(255.0 * Math.Pow(curColor.b, 1.0 / gamma));
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
                 }
             }
-            
+
             using (Stream fileStream = File.OpenWrite(outputFile))
             {
                 switch (format)
