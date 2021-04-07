@@ -126,13 +126,13 @@ namespace Trace
 
         // Reading functions
 
-        public static string readLine(Stream s)  // CURRENTLY NOT WORKING
+        public static string readLine(Stream s) 
         {
             string result = "";
 
             while (true)
             {
-                var curByte = s.ReadByte(); // ReadByte returns -1 as the end of stream
+                var curByte = s.ReadByte(); // ReadByte returns -1 at the end of stream
 
                 if (curByte == -1 || curByte == '\n')
                 {
@@ -248,8 +248,9 @@ namespace Trace
             return Math.Abs(a - b) < epsilon;
         }
 
-        public float averageLumi(double? Delta = null) {
-            
+        public float averageLumi(double? Delta = null)
+        {
+
             double delta = Delta ?? 1e-10;
             double av = 0.0;
 
@@ -262,6 +263,9 @@ namespace Trace
             }
            
             return (float) Math.Pow(10, av / (width * height));
+
+
+
         }
 
         public void normalizeImage(float factor, float? luminosity = null)
@@ -292,7 +296,7 @@ namespace Trace
 
         {
             var bitmap = new Image<Rgb24>(Configuration.Default, this.width, this.height);
-            
+
             for (int x = 0; x < this.width; x++)
             {
                 for (int y = 0; y < this.height; y++)
@@ -304,11 +308,12 @@ namespace Trace
                     // var red = (int)(255 * curColor.r);
                     // var green = (int)(255 * curColor.g);
                     // var blue = (int)(255 * curColor.b);
+
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
                   
                 }
             }
-            
+
             using (Stream fileStream = File.OpenWrite(outputFile))
             {
                 switch (format)

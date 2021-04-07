@@ -9,87 +9,103 @@ namespace NM4PIG
         static void Main(string[] args)
         {
 
-            if (args.Length != 4)
-            {
 
-                Console.WriteLine("Wrong number of parameters. 4 parameters are required.");
-                return;
-
-            }
-
-
-            string inputPfmFileName = args[0], outputFileName = args[3];
-            float factor = 1f, gamma = 1f;
             HdrImage myImg = new HdrImage();
+            Parameters readParam = new Parameters();
 
             try
             {
-
-                try { factor = System.Convert.ToSingle(args[1]); }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Factor argument is not a float. It will be set to 1");
-                    factor = 1f;
-                }
-
-                try { gamma = System.Convert.ToSingle(args[2]); }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Gamma argument is not a float. It will be set to 1");
-                    gamma = 1f;
-                }
+                readParam.parseCommandLine(args);
 
             }
-            catch (CommandLineException)
+            catch (CommandLineException e)
             {
-                Console.WriteLine("Invalid arguments specified.");
-                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <NormFactor> <Gamma> <outputFile.png/jpg>");
+                Console.WriteLine(e.Message);
+                return;
             }
 
-            string fmt = outputFileName.Substring(outputFileName.Length-3,3);
+            string inputPfmFileName = readParam.inputPfmFileName;
+            float factor = readParam.factor;
+            float gamma = readParam.gamma;
+            string outputFileName = readParam.outputFileName;
+            string fmt = readParam.outputFormat;
 
             try
             {
                 using (FileStream inputStream = File.OpenRead(inputPfmFileName))
                 {
                     myImg.readPfm(inputStream);
-                    Console.WriteLine($"File {inputPfmFileName} correctly read from disk.");
+                    Console.WriteLine($"File {inputPfmFileName} has been correctly read from disk.");
                 }
 
             }
-            catch (CommandLineException)
+            catch (Exception e)
             {
-                Console.WriteLine("File or directory not found");
+                Console.WriteLine(e.Message);
+                return;
             }
-
-
-            myImg.normalizeImage(factor);
-            myImg.clampImage();
 
             try
             {
-
+                myImg.normalizeImage(factor);
+                myImg.clampImage();
                 myImg.writeLdrImage(outputFileName, fmt, gamma);
 
-                Console.WriteLine($"File {outputFileName} correctly written to disk.");
+                Console.WriteLine($"File {outputFileName} has been correctly written to disk.");
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return;
             }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            catch (NotSupportedException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-
-
             return;
         }
+
+        class Parameters
+        {
+            public string inputPfmFileName;
+            public float factor;
+            public float gamma;
+            public string outputFileName;
+            public string outputFormat;
+
+            public Parameters()
+            {
+                this.inputPfmFileName = "";
+                this.factor = 0.2f;
+                this.gamma = 1.0f;
+                this.outputFileName = "";
+                this.outputFormat = "";
+            }
+
+            public void parseCommandLine(string[] args)
+            {
+                if (args.Length != 4)
+                {
+                    throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
+                }
+
+                this.inputPfmFileName = args[0];
+                this.outputFileName = args[3];
+
+                try
+                {
+                    this.factor = System.Convert.ToSingle(args[1]);
+                    this.gamma = System.Convert.ToSingle(args[2]);
+                }
+                catch
+                {
+                    throw new CommandLineException("Factor or gamma argument is not a float. Please enter some numbers");
+                }
+                
+
+                this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
+
+            }
+
+        }
+
     }
 }
+
 
