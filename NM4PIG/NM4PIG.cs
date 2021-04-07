@@ -9,9 +9,7 @@ namespace NM4PIG
         static void Main(string[] args)
         {
 
-            HdrImage myImg = new HdrImage();
             Parameters readParam = new Parameters();
-
             try
             {
                 readParam.parseCommandLine(args);
@@ -27,6 +25,8 @@ namespace NM4PIG
             float gamma = readParam.gamma;
             string outputFileName = readParam.outputFileName;
             string fmt = readParam.outputFormat;
+
+            HdrImage myImg = new HdrImage();
 
             try
             {
@@ -91,7 +91,7 @@ namespace NM4PIG
                     this.factor = System.Convert.ToSingle(args[1]);
                     this.gamma = System.Convert.ToSingle(args[2]);
                 }
-                catch (FormatException)
+                catch
                 {
                     throw new CommandLineException("Factor or gamma argument is not a float. Please enter some numbers");
                 }
