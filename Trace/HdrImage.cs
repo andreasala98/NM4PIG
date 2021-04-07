@@ -251,18 +251,17 @@ namespace Trace
         public float averageLumi(double? Delta = null) {
             
             double delta = Delta ?? 1e-10;
-            double avarage = 0.0;
+            double av = 0.0;
 
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    avarage = avarage + (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
+                    av += (Math.Log(delta + this.getPixel(i, j).Luminosity(), 10));
                 }
             }
-            
-            avarage = Math.Pow(10, avarage / (width * height));
-            return (float) avarage;
+           
+            return (float) Math.Pow(10, av / (width * height));
         }
 
         public void normalizeImage(float factor, float? luminosity = null)
@@ -277,8 +276,7 @@ namespace Trace
             return;
         }
 
-        private float _clamp(float x)
-            => x / (1 + x);
+        private float _clamp(float x) => x / (1f + x);
 
         public void clampImage()
         {
@@ -298,12 +296,16 @@ namespace Trace
             for (int x = 0; x < this.width; x++)
             {
                 for (int y = 0; y < this.height; y++)
-                {
+                {   
                     var curColor = this.getPixel(x,y);
                     var red = (int)(255 * Math.Pow(curColor.r, 1 / gamma));
                     var green = (int)(255 * Math.Pow(curColor.g, 1 / gamma));
                     var blue = (int)(255 * Math.Pow(curColor.b, 1 / gamma));
+                    // var red = (int)(255 * curColor.r);
+                    // var green = (int)(255 * curColor.g);
+                    // var blue = (int)(255 * curColor.b);
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
+                  
                 }
             }
             

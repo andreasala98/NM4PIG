@@ -18,15 +18,12 @@ namespace NM4PIG
             }
 
 
-            string inputPfmFileName = "", outputFileName = "";
+            string inputPfmFileName = args[0], outputFileName = args[3];
             float factor = 1f, gamma = 1f;
             HdrImage myImg = new HdrImage();
 
             try
             {
-
-                inputPfmFileName = args[0];
-                outputFileName = args[3];
 
                 try { factor = System.Convert.ToSingle(args[1]); }
                 catch (FormatException)
@@ -36,7 +33,7 @@ namespace NM4PIG
                 }
 
                 try { gamma = System.Convert.ToSingle(args[2]); }
-                catch (CommandLineException)
+                catch (FormatException)
                 {
                     Console.WriteLine("Gamma argument is not a float. It will be set to 1");
                     gamma = 1f;
@@ -46,7 +43,7 @@ namespace NM4PIG
             catch (CommandLineException)
             {
                 Console.WriteLine("Invalid arguments specified.");
-                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
+                Console.WriteLine("Usage: dotnet run <inputFile.pfm> <NormFactor> <Gamma> <outputFile.png/jpg>");
             }
 
             string fmt = outputFileName.Substring(outputFileName.Length-3,3);

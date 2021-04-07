@@ -54,10 +54,11 @@ namespace Trace
             return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g);
         }
 
-        public float Luminosity() {
-            float luminosity = (Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
-            return luminosity;
-        }
+        public float Luminosity()
+            => (float) (Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
+          
+      
+        
 
     }
 
