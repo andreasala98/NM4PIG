@@ -26,7 +26,7 @@ To run the console application:
     cd NM4PIG
     dotnet run <args>
     
-To clean NM4PIG directory from generated samples, execute  `clean.sh` . If you want to keep an inamge, make sure to add a 'G' before the format (e.g. SampleG.jpg). This will prevent your image from being deleted.
+To clean NM4PIG directory from generated samples, execute  `clean.sh` . If you want to keep an image, make sure to add a 'G' before the format (e.g. SampleG.jpg). This will prevent your image from being deleted.
 
 
 ## License
