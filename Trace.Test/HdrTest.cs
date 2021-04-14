@@ -176,7 +176,6 @@ namespace Trace.Test
 
             img.setPixel(0, 0, new Color(5.0f, 10.0f, 15.0f));
             img.setPixel(1, 0, new Color(500.0f, 1000.0f, 1500.0f));
-            Console.WriteLine(img.averageLumi());
             Assert.True(Color.isClose(img.averageLumi(), 100.0f));
         }
 
