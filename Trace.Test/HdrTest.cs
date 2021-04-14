@@ -188,7 +188,7 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void TestAvarageLumi()
+        public void TestAverageLumi()
         {
             HdrImage img = new HdrImage(2, 1);
 
