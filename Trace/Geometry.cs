@@ -43,7 +43,10 @@ namespace Trace
         public static Vec operator *(float alfa, Vec a)
             => new Vec (a.x * alfa, a.y * alfa, a.z * alfa);
 
-        public static Vec operator /(float alfa, Vec a){
+        public static Vec operator *(Vec a, float alfa)
+            => new Vec (a.x * alfa, a.y * alfa, a.z * alfa);
+
+        public static Vec operator /(Vec a, float alfa){
             if (alfa==0) throw new Exception("DivisionByZero Error");
             return new Vec (a.x / alfa, a.y / alfa, a.z / alfa);
         }
@@ -52,10 +55,10 @@ namespace Trace
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
-        public static Vec crossProd (Vec a, Vec b)
-           => new Vec (x = a.y * b.z - a.z * b.y, 
-                       y = a.z * b.x - a.x * b.z,
-                       z = a.x * b.y - a.y * b.x);
+        public static Vec crossProd (Vec b)
+           => new Vec (x = this.y * b.z - this.z * b.y, 
+                       y = this.z * b.x - this.x * b.z,
+                       z = this.x * b.y - this.y * b.x);
 
         // Squared norm and norm
         public float getSquaredNorm ()
