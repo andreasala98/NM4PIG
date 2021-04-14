@@ -35,8 +35,8 @@ namespace Trace.Test
             Assert.True( b.crossProd(a) == new Vec (2.0f, -4.0f, 2.0f), "TestVectorOperation failed in cross product (2/2)");
 
             Assert.True(a.getSquaredNorm()== 14.0f, "TestVectorOperation failed in getSquaredNorm");
-            Assert.True(a.getNorm()== sqrt(14.0f), "TestVectorOperation failed in getNorm");
-            Asset.True(c.Normalize() == new Vec (0.6f, 0.0f, 0.8f));
+            Assert.True(a.getNorm()== Math.Sqrt(14.0f), "TestVectorOperation failed in getNorm");
+            Asset.True(c.Normalize() == new Vec (0.6f, 0.0f, 0.8f), "TestVectorOperation failed in Normalize");
 
 
         }

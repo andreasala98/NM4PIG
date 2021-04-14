@@ -86,20 +86,20 @@ namespace Trace
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
         public static Vec crossProd (Vec b)
-           => new Vec (x = this.y * b.z - this.z * b.y, 
-                       y = this.z * b.x - this.x * b.z,
-                       z = this.x * b.y - this.y * b.x);
+           => new Vec (y * b.z - z * b.y, 
+                       z * b.x - x * b.z,
+                       x * b.y - y * b.x);
 
         // Squared norm and norm
         public float getSquaredNorm ()
             => this * this;
 
         public float getNorm ()
-            => sqrt(this.getSquaredNorm());
+            => (float Math.Sqrt(this.getSquaredNorm()));
 
         // Normalize vector
         public Vec Normalize()
-            => this/norm;
+            => this/this.getNorm();
         
         //Method for debugging
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
