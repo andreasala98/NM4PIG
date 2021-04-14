@@ -85,29 +85,18 @@ namespace Trace
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
-<<<<<<< HEAD
-        public static Vec crossProd (Vec b)
-           => new Vec (y * b.z - z * b.y, 
-                       z * b.x - x * b.z,
-                       x * b.y - y * b.x);
-=======
         public Vec crossProd (Vec b){
            return new Vec (this.y * b.z - this.z * b.y, 
                        this.z * b.x - this.x * b.z,
                        this.x * b.y - this.y * b.x);
         }
->>>>>>> 079dcd020c41f0bf9a140092cbde0309d6d5df3f
 
         // Squared norm and norm
         public float getSquaredNorm ()
             => this * this;
 
         public float getNorm ()
-<<<<<<< HEAD
-            => (float Math.Sqrt(this.getSquaredNorm()));
-=======
             => (float)Math.Sqrt(this.getSquaredNorm());
->>>>>>> 079dcd020c41f0bf9a140092cbde0309d6d5df3f
 
         // Normalize vector
         public Vec Normalize()
