@@ -7,14 +7,14 @@ namespace Trace.Test
 
     public class GeometryTest
     {
-
+        // Vec tests
         [Fact]
-        public void TestIsClose()
+        public void TestIsCloseVec()
         {
             Vec a = new Vec(1.0f, 2.0f, 3.0f);
             Vec b = new Vec(4.0f, 6.0f, 8.0f);
-            Assert.True(a.isClose(a), "TestIsClose failed! Assert 1/2");
-            Assert.False(a.isClose(b), "TestIsClose failed! Assert 2/2");
+            Assert.True(a.isClose(a), "TestIsCloseVec failed! Assert 1/2");
+            Assert.False(a.isClose(b), "TestIsCloseVec failed! Assert 2/2");
         }
 
         [Fact]
@@ -29,6 +29,28 @@ namespace Trace.Test
 
         }
 
+        // Point tests
+        [Fact]
+        public void TestIsClosePoint()
+        {
+            Point a = new Point(1.0f, 2.0f, 3.0f);
+            Point b = new Point(4.0f, 6.0f, 8.0f);
+
+            Assert.True(a.isClose(a), "TesteisClosePoint failed! Assert 1/2");
+            Assert.False(b.isClose(a), "TesteisClosePoint failed! Assert 2/2");
+        }
+
+        [Fact]
+        public void TestPointOperations()
+        {
+             Point a = new Point(1.0f, 2.0f, 3.0f);
+             Point b = new Point(4.0f, 6.0f, 8.0f);
+             Vec c = new Vec(4.0f, 6.0f, 8.0f);
+
+             Assert.True((a + c).isClose(new Point(5.0f, 8.0f, 11.0f)), "TestPointOperations failed for Point + Vec operation");
+             Assert.True((a - c).isClose(new Point(-3.0f, -4.0f, -5.0f)), "TestPointOperations failed for Point - Vec operation");
+             Assert.True((b - a).isClose(new Vec(3.0f, 4.0f, 5.0f)),"TestPointOperations failed for Point - Point operation");
+        }
     }
 
 }

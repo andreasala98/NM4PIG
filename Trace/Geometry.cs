@@ -4,10 +4,12 @@ namespace Trace
 {
     public struct Point
     {
+        // data members
         public float x;
         public float y;
         public float z;
 
+        // constructor
         public Point(float x, float y, float z)
         {
             this.x = x;
@@ -35,11 +37,11 @@ namespace Trace
             => new Point(p.x + v.x, p.y + v.y, p.z + v.z);
 
         // difference between Point and Vector, which gives back a Point
-        public static Point operator +(Point p, Vec v) 
+        public static Point operator -(Point p, Vec v) 
             => new Point(p.x - v.x, p.y - v.y, p.z - v.z);
             
         // difference between two Points, which gives back a Vector
-        public static Point operator -(Point p, Point v) 
+        public static Vec operator -(Point p, Point v) 
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
     }
