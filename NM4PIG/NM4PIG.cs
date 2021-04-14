@@ -9,7 +9,6 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
-
             Parameters readParam = new Parameters();
             try
             {
