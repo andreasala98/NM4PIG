@@ -36,29 +36,25 @@ namespace Trace
         }
 
         // convert to string
-        public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
+        public override string ToString() => $"Point(x={this.x}, y={this.y}, z={this.z})";
 
         // isClose method to Tests purposes
-        public static bool isClose(float a, float b)
-        {
-            var epsilon = 1e-8F;
-            return Math.Abs(a - b) < epsilon;
-        }
+        private static bool isClose(float a, float b, float? epsilon = 1e-8f)
+            => Math.Abs(a - b) < epsilon;
 
         public bool isClose(Point A)
-        {
-            return isClose(this.x, A.x) && isClose(this.y, A.y) && isClose(this.z, A.z);
-        }
+           => isClose(this.x, A.x) && isClose(this.y, A.y) && isClose(this.z, A.z);
+        
 
-        // sum between Point and Vector, which gives back a Point
+        // sum between Point and Vec, which gives back a Point
         public static Point operator +(Point p, Vec v) 
             => new Point(p.x + v.x, p.y + v.y, p.z + v.z);
 
-        // difference between Point and Vector, which gives back a Point
+        // difference between Point and Vec, which gives back a Point
         public static Point operator -(Point p, Vec v) 
             => new Point(p.x - v.x, p.y - v.y, p.z - v.z);
             
-        // difference between two Points, which gives back a Vector
+        // difference between two Points, which gives back a Vec
         public static Vec operator -(Point p, Point v) 
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
@@ -94,8 +90,9 @@ namespace Trace
         public static Vec operator *(Vec a, float alfa)
             => new Vec (a.x * alfa, a.y * alfa, a.z * alfa);
 
-        public static Vec operator /(Vec a, float alfa){
-            if (alfa==0) throw new Exception("DivisionByZero Error");
+        public static Vec operator /(Vec a, float alfa)
+        {
+            if (alfa==0) throw new DivideByZeroException("You cannot divide a vector by zero!");
             return new Vec (a.x / alfa, a.y / alfa, a.z / alfa);
         }
 
@@ -103,11 +100,11 @@ namespace Trace
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
-        public Vec crossProd (Vec b){
-           return new Vec (this.y * b.z - this.z * b.y, 
+        public Vec crossProd (Vec b)
+          => new Vec ( this.y * b.z - this.z * b.y, 
                        this.z * b.x - this.x * b.z,
-                       this.x * b.y - this.y * b.x);
-        }
+                       this.x * b.y - this.y * b.x );
+        
 
         // Squared norm and norm
         public float getSquaredNorm ()

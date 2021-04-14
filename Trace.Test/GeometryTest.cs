@@ -22,7 +22,7 @@ using System;
 namespace Trace.Test
 {
 
-    // Color testing
+    // Vec and Point testing
 
     public class GeometryTest
     {
@@ -66,8 +66,8 @@ namespace Trace.Test
             Point a = new Point(1.0f, 2.0f, 3.0f);
             Point b = new Point(4.0f, 6.0f, 8.0f);
 
-            Assert.True(a.isClose(a), "TesteisClosePoint failed! Assert 1/2");
-            Assert.False(b.isClose(a), "TesteisClosePoint failed! Assert 2/2");
+            Assert.True(a.isClose(a), "TestIsClosePoint failed! Assert 1/2");
+            Assert.False(b.isClose(a), "TestIsClosePoint failed! Assert 2/2");
         }
 
         [Fact]
