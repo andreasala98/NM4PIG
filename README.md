@@ -1,8 +1,15 @@
-# NM4PIG 🐷
+ <h1 align="center">  NM4PIG 🐷 </h1> <br>
 
 This is a rayTracer library called NM4PIG written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano during March-June 2021.
 
 The contibutors to the project are [T. Armadillo][2] - [P. Klausner][3] - [A. Sala][4]
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Usage](#usage)
+- [License](#license)
+
 
 ## Prerequisites
 This library has been developed and tested with .NET version 5.0.103. It is possible to download the latest version [here](https://dotnet.microsoft.com/download).
