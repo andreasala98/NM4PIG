@@ -116,6 +116,10 @@ namespace Trace
         // Normalize vector
         public Vec Normalize()
             => this/this.getNorm();
+
+        // This could be useful for debugging
+        public bool isNormalized()
+            => this.getNorm() == 1.0f;
         
         //Method for debugging
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";

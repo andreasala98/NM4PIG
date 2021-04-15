@@ -59,6 +59,16 @@ namespace Trace.Test
 
         }
 
+        [Fact]
+        public void isNormalizedTest()
+        {
+            Vec a = new Vec(0.0f, 0.8f, 0.6f);
+            Vec b = new Vec(4.0f, -2.5f, 3.9f);
+
+            Assert.True(a.isNormalized(), "Test isNormalized Failed! Assert 1/2");
+            Assert.False(b.isNormalized(), "Test isNormalized Failed! Assert 1/2");
+        }
+
         // Point tests
         [Fact]
         public void TestIsClosePoint()
