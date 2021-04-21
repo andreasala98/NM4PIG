@@ -17,7 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
+using System.Numerics;
 
 namespace Trace
 {
@@ -142,8 +142,22 @@ namespace Trace
 
     public struct Transformation
     {
-        List<List<float>> M;
-        List<List<float>> Minv;
+        Matrix4x4 M;
+        Matrix4x4 Minv;
+
+        Transformation()
+        {
+           this.M = System.Numerics.Matrix4x4.Identity;
+           this.Minv = this.M;
+        }
+
+        Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
+        {
+            this.M = myMat;
+            this.Minv = myInvMat;
+        }
+
+
     }
 
 }
