@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using Trace;
 using System.Globalization;
+using System.Numerics;
 
 namespace NM4PIG
 {
@@ -79,9 +80,8 @@ namespace NM4PIG
             }
             */
 
-            
-            Transformation T = new Transformation();
-            Console.WriteLine(T.M.M11 + " " + T.M.M12 + " " + T.M.M13);
+
+
             return;
         }
 
