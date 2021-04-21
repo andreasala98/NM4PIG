@@ -59,6 +59,12 @@ namespace Trace
         public static Vec operator -(Point p, Point v) 
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
+        public static Point operator /(Point a, float alfa)
+        {
+            if (alfa==0) throw new DivideByZeroException("You cannot divide a point by zero!");
+            return new Point (a.x / alfa, a.y / alfa, a.z / alfa);
+        }
+
     }
 
     public struct Vec
@@ -137,27 +143,66 @@ namespace Trace
 
     public struct Normal
     {
-        float x, y, z;
+        public float x, y, z;
+
+        public Normal (float ax, float ay, float az)
+        {
+            this.x = ax;
+            this.y = ay;
+            this.z = az;
+        }
     }
 
     public struct Transformation
     {
-        Matrix4x4 M;
-        Matrix4x4 Minv;
+        public Matrix4x4 M;
+        public Matrix4x4 Minv;
 
-        Transformation()
+        public Transformation(int a)
         {
            this.M = System.Numerics.Matrix4x4.Identity;
            this.Minv = this.M;
         }
 
-        Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
+        public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
         {
             this.M = myMat;
             this.Minv = myInvMat;
         }
+        
+        public static Transformation operator * (Transformation A, Transformation B)
+            => new Transformation(Matrix4x4.Multiply(A.M, B.M) , Matrix4x4.Multiply(B.Minv, A.Minv));
+        
+
+        public static Point operator * (Transformation A, Point p)
+        {
+            Point pnew = new Point (p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13 + A.M.M14,
+                                    p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23 + A.M.M24,
+                                    p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 + A.M.M34 );
+
+            float w = p.x * A.M.M41 + p.y * A.M.M42 + p.z * A.M.M43 + A.M.M44;
+
+            if (w == 1.0) return pnew;
+            else return pnew / w;
+        }
+
+        public static Vec operator * (Transformation A, Vec p)
+            => new Vec ( p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
+                         p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
+                         p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 );
+
+        
+         public static Normal operator * (Transformation A, Normal p)
+         
+             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M12 + p.z * A.Minv.M13,
+                             p.x * A.Minv.M21 + p.y * A.Minv.M22 + p.z * A.Minv.M23,
+                             p.x * A.Minv.M31 + p.y * A.Minv.M32 + p.z * A.Minv.M33 );
+         
+        
 
 
     }
+
+    
 
 }

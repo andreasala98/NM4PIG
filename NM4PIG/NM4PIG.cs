@@ -27,6 +27,8 @@ namespace NM4PIG
     {
         static void Main(string[] args)
         {
+
+            /*
             Parameters readParam = new Parameters();
             try
             {
@@ -75,6 +77,11 @@ namespace NM4PIG
                 Console.WriteLine(e.Message);
                 return;
             }
+            */
+
+            
+            Transformation T = new Transformation();
+            Console.WriteLine(T.M.M11 + " " + T.M.M12 + " " + T.M.M13);
             return;
         }
 
@@ -117,6 +124,8 @@ namespace NM4PIG
 
 
                 this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
+
+
 
             }
 
