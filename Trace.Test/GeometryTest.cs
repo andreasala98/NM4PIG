@@ -122,8 +122,59 @@ namespace Trace.Test
         [Fact]
         public void TestMatrixProducts()
         {
-            // insert code here
+            Transformation T1 = new Transformation (new Matrix4x4(  1.0f, 2.0f, 3.0f, 4.0f,
+                                                                    5.0f, 6.0f, 7.0f, 8.0f,
+                                                                    9.0f, 9.0f, 8.0f, 7.0f,
+                                                                    6.0f, 5.0f, 4.0f, 1.0f),
+                                                    new Matrix4x4(  -3.750f,  2.750f, -1.0f, 0.00f,
+                                                                    4.3750f, -3.875f, 2.00f, -0.5f,
+                                                                    0.5000f,  0.500f, -1.0f, 1.00f,
+                                                                    -1.375f,  0.875f, 0.00f, -0.5f));
 
+            Transformation T2 = new Transformation (new Matrix4x4(   2.0f,  1.0f,  0.0f, -1.0f,
+                                                                     1.0f,  1.0f, -1.0f,  1.0f,
+                                                                     2.0f,  2.0f,  2.0f,  2.0f,
+                                                                    -1.0f, -1.0f,  1.0f,  1.0f),
+                                                    new Matrix4x4(   1.0f,  0.5f, -0.25f, 1.00f,
+                                                                    -1.0f, -0.5f,  0.5f, -1.5f,
+                                                                     0.0f, -0.5f, 0.25f, 0.00f,
+                                                                     0.0f,  0.5f, 0.00f, 0.5f));                                                        
+
+
+            Vec v = new Vec (3.0f, -1.0f, 4.0f);
+            Normal n = new Normal (1.0f, -1.0f, 1.0f);
+            Point p = new Point (0.0f, 1.0f, 1.0f);
+
+            Assert.True( (T1 * T2).areClose(new Matrix4x4( 6f, 5f, 8f, 11f,
+                                                           22f, 17f, 16f, 23f,
+                                                           36f, 27f, 14f,  23f,
+                                                           24f, 18f, 4f, 8f ) ) ) ;
+
+            Assert.True ((T1 * v).isClose (new Vec (13f,37f,50f)));
+
+            Console.WriteLine((T2*n).ToString());
+            Assert.True ((T2 * n).isClose (new Normal (2.0f, 0.5f, -0.5f)));
+            Assert.True ( (T2 * p).isClose (new Point (0.0f, 1.0f, 6.0f)) );
+
+           
+        }
+
+
+        [Fact]
+        public void TestGetInverse()
+        {
+            Transformation T1 = new Transformation (new Matrix4x4(  1.0f, 2.0f, 3.0f, 4.0f,
+                                                                    5.0f, 6.0f, 7.0f, 8.0f,
+                                                                    9.0f, 9.0f, 8.0f, 7.0f,
+                                                                    6.0f, 5.0f, 4.0f, 1.0f),
+                                                    new Matrix4x4(  -3.750f,  2.750f, -1.0f, 0.00f,
+                                                                    4.3750f, -3.875f, 2.00f, -0.5f,
+                                                                    0.5000f,  0.500f, -1.0f, 1.00f,
+                                                                    -1.375f,  0.875f, 0.00f, -0.5f));
+
+             Transformation T1_inv = T1.getInverse();
+
+             Assert.True (T1_inv.areClose(T1.Minv));                                                        
         }
 
 

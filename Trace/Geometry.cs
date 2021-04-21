@@ -151,6 +151,14 @@ namespace Trace
             this.y = ay;
             this.z = az;
         }
+
+        public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
+
+        private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
+            => Math.Abs(a - b) < epsilon;
+
+        public bool isClose(Normal vector)
+            => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
     }
 
     public struct Transformation
@@ -171,13 +179,21 @@ namespace Trace
             this.M = myMat;
             this.Minv = myInvMat;
         }
+
+
+        public Transformation getInverse ()
+        {
+            return new Transformation (this.Minv, this.M);
+        }
+
+
         private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
             => Math.Abs(a - b) < epsilon;
 
         public bool areClose(Matrix4x4 a)
             => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) && 
                _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) && 
-               _isClose(this.M.M31, a.M13) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
+               _isClose(this.M.M31, a.M31) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
                _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
 
         public bool isConsistent()
@@ -234,7 +250,7 @@ namespace Trace
         
          public static Normal operator * (Transformation A, Normal p)
              => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
-                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M23,
+                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
                              p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
          
         
