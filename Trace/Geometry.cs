@@ -59,6 +59,12 @@ namespace Trace
         public static Vec operator -(Point p, Point v)
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
+        public static Point operator /(Point a, float alfa)
+        {
+            if (alfa==0) throw new DivideByZeroException("You cannot divide a point by zero!");
+            return new Point (a.x / alfa, a.y / alfa, a.z / alfa);
+        }
+
     }
 
     public struct Vec
@@ -137,7 +143,14 @@ namespace Trace
 
     public struct Normal
     {
-        float x, y, z;
+        public float x, y, z;
+
+        public Normal (float ax, float ay, float az)
+        {
+            this.x = ax;
+            this.y = ay;
+            this.z = az;
+        }
     }
 
     public struct Transformation
@@ -145,12 +158,19 @@ namespace Trace
         public Matrix4x4 M;
         public Matrix4x4 Minv;
 
+
+        public Transformation(int a)
+        {
+            this.M = Matrix4x4.Identity;
+            this.Minv = Matrix4x4.Identity;
+        }
+
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
+
         {
             this.M = myMat;
             this.Minv = myInvMat;
         }
-
         private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
             => Math.Abs(a - b) < epsilon;
 
@@ -162,7 +182,6 @@ namespace Trace
                  _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
              
 
-       
         public bool isConsistent()
         {
             Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
@@ -171,19 +190,24 @@ namespace Trace
 
         public static Transformation Translation(Vec a)
         {
-            return new Transformation(  Matrix4x4.CreateTranslation(a.x, a.y, a.z),
-                                        Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z));
-            /*new Transformation( new Matrix4x4(  1.0f, 0f, 0f, a.x,
-                                                0f, 1.0f, 0f, a.y,
-                                                0f, 0f, 1.0f, a.z,
-                                                0f, 0f,  0f, 1.0f),
-                                new Matrix4x4(  1.0f, 0f, 0f, -a.x,
-                                                0f, 1.0f, 0f, -a.y,
-                                                0f, 0f, 1.0f, -a.z,
-                                                0f, 0f,  0f, 1.0f));*/
-
+            return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+                                        Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
         }
 
+
+        public static Transformation Scaling(Vec a)
+        {
+            Transformation b = new Transformation(1);
+            b.M.M11 = a.x;
+            b.M.M22 = a.y;
+            b.M.M33 = a.z;
+
+            b.Minv.M11 = 1.0f/a.x;
+            b.Minv.M22 = 1.0f/a.y;
+            b.Minv.M33 = 1.0f/a.z;
+            
+            return b;
+        }
 
         public static Transformation rotationX(float theta)
         {
@@ -192,11 +216,6 @@ namespace Trace
                 Matrix4x4.CreateRotationX(-theta)
             );
         }
-
-        /*public Transformation Scaling(float a)
-        {
-            new Transformation (this.M.Multiply(M, a), this.Minv.Multiply(Minv, a));
-        }*/
 
         public static Transformation rotationY(float theta)
         {
@@ -213,6 +232,38 @@ namespace Trace
                 Matrix4x4.CreateRotationZ(-theta)
             );
         }
-    }
+        
+        public static Transformation operator * (Transformation A, Transformation B)
+            => new Transformation(Matrix4x4.Multiply(A.M, B.M) , Matrix4x4.Multiply(B.Minv, A.Minv));
+        
 
-}
+        public static Point operator * (Transformation A, Point p)
+        {
+            Point pnew = new Point (p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13 + A.M.M14,
+                                    p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23 + A.M.M24,
+                                    p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 + A.M.M34 );
+
+            float w = p.x * A.M.M41 + p.y * A.M.M42 + p.z * A.M.M43 + A.M.M44;
+
+            if (w == 1.0) return pnew;
+            else return pnew / w;
+        }
+
+        public static Vec operator * (Transformation A, Vec p)
+            => new Vec ( p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
+                         p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
+                         p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 );
+
+        
+         public static Normal operator * (Transformation A, Normal p)
+             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M23,
+                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
+         
+        
+
+        
+    } // end of Transformation
+
+
+} // end of Geometry
