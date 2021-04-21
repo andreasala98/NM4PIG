@@ -99,24 +99,16 @@ namespace Trace.Test
                                                                     5.0f, 6.0f, 7.0f, 8.0f,
                                                                     9.0f, 9.0f, 8.0f, 7.0f,
                                                                     6.0f, 5.0f, 4.0f, 1.0f),
-                                                    new Matrix4x4(  -3.75f, -2.75f, -1.0f, 0.0f,
-                                                                    4.375f, -3.875f, 2.0f, -0.5f,
-                                                                    0.5f, 0.5f, -1.0f, 1.0f,
-                                                                    -1.375f, 0.875f, 0.0f, -0.5f));
+                                                    new Matrix4x4(  -3.750f,  2.750f, -1.0f, 0.00f,
+                                                                    4.3750f, -3.875f, 2.00f, -0.5f,
+                                                                    0.5000f,  0.500f, -1.0f, 1.00f,
+                                                                    -1.375f,  0.875f, 0.00f, -0.5f));
 
             Assert.True(m1.isConsistent());
 
             Transformation m2  = new Transformation(m1.M, m1.Minv);
             Assert.True(m1.areClose(m2.M));
 
-<<<<<<< HEAD
-        [Fact]
-        public void TestMatrixProducts()
-        {
-            Transformation A = new Transformation();
-        }
-
-=======
             Transformation m3  = new Transformation(m1.M, m1.Minv);
             m3.M.M22 = m3.M.M22 + 1.0f;
             Assert.False(m1.areClose(m3.M));
@@ -126,7 +118,15 @@ namespace Trace.Test
             Assert.False(m1.areClose(m3.Minv));
 
         }
->>>>>>> 8d224dfc4ff948ff436887ffe00aae0da027b942
-    }
 
-}
+        [Fact]
+        public void TestMatrixProducts()
+        {
+            // insert code here
+
+        }
+
+
+    } // end of Geometry test
+
+} //end of namespace Trace.Test

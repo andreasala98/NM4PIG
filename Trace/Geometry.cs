@@ -182,9 +182,9 @@ namespace Trace
 
         public bool isConsistent()
         {
-            return (this.M * this.Minv).areClose(Matrix4x4.Identity);
+            Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
+            return a.areClose(Matrix4x4.Identity);
         }
-
 
         public static Transformation rotationX(float theta)
         {
