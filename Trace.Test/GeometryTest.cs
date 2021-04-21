@@ -91,6 +91,34 @@ namespace Trace.Test
              Assert.True((a - c).isClose(new Point(-3.0f, -4.0f, -5.0f)), "TestPointOperations failed for Point - Vec operation");
              Assert.True((b - a).isClose(new Vec(3.0f, 4.0f, 5.0f)),"TestPointOperations failed for Point - Point operation");
         }
+        [Fact]
+        public void TestAreClose()
+        {
+            Transformation m1 = new Transformation (new Matrix4x4(  1.0f, 2.0f, 3.0f, 4.0f,
+                                                                    5.0f, 6.0f, 7.0f, 8.0f,
+                                                                    9.0f, 9.0f, 8.0f, 7.0f,
+                                                                    6.0f, 5.0f, 4.0f, 1.0f),
+                                                    new Matrix4x4(  -3.75f, -2.75f, -1.0f, 0.0f,
+                                                                    4.375f, -3.875f, 2.0f, -0.5f,
+                                                                    0.5f, 0.5f, -1.0f, 1.0f,
+                                                                    -1.375f, 0.875f, 0.0f, -0.5f));
+
+            Assert.True(m1.isConsistent());
+
+            Transformation m2  = new Transformation(m1.M, m1.Minv);
+            Assert.True(m1.areClose(m2));
+
+            Transformation m3  = new Transformation(m1.M, m1.Minv);
+            m3.M.M22 = m3.M.M22 + 1.0f;
+            Assert.False(m1.areClose(m3));
+
+            Transformation m4  = new Transformation(m1.M, m1.Minv);
+            m4.Minv22 = m3.Minv22 + 1.0f;
+            Assert.False(m1.areClose(m3));
+
+
+
+        }
     }
 
 }
