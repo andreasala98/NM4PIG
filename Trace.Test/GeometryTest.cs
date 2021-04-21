@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System;
+using System.Numerics;
 
 namespace Trace.Test
 {
@@ -106,17 +107,15 @@ namespace Trace.Test
             Assert.True(m1.isConsistent());
 
             Transformation m2  = new Transformation(m1.M, m1.Minv);
-            Assert.True(m1.areClose(m2));
+            Assert.True(m1.areClose(m2.M));
 
             Transformation m3  = new Transformation(m1.M, m1.Minv);
             m3.M.M22 = m3.M.M22 + 1.0f;
-            Assert.False(m1.areClose(m3));
+            Assert.False(m1.areClose(m3.M));
 
             Transformation m4  = new Transformation(m1.M, m1.Minv);
-            m4.Minv22 = m3.Minv22 + 1.0f;
-            Assert.False(m1.areClose(m3));
-
-
+            m4.Minv.M22 = m3.Minv.M22 + 1.0f;
+            Assert.False(m1.areClose(m3.Minv));
 
         }
     }
