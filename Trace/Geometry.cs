@@ -155,10 +155,12 @@ namespace Trace
             => Math.Abs(a - b) < epsilon;
 
         public bool areClose(Matrix4x4 a)
-            => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) && 
-               _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) && 
-               _isClose(this.M.M31, a.M13) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
-               _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44); 
+            => 
+                 _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) && 
+                 _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) && 
+                 _isClose(this.M.M31, a.M31) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
+                 _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
+             
 
        
         public bool isConsistent()
@@ -166,6 +168,22 @@ namespace Trace
             Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
             return a.areClose(Matrix4x4.Identity);
         }
+
+        public static Transformation Translation(Vec a)
+        {
+            return new Transformation(  Matrix4x4.CreateTranslation(a.x, a.y, a.z),
+                                        Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z));
+            /*new Transformation( new Matrix4x4(  1.0f, 0f, 0f, a.x,
+                                                0f, 1.0f, 0f, a.y,
+                                                0f, 0f, 1.0f, a.z,
+                                                0f, 0f,  0f, 1.0f),
+                                new Matrix4x4(  1.0f, 0f, 0f, -a.x,
+                                                0f, 1.0f, 0f, -a.y,
+                                                0f, 0f, 1.0f, -a.z,
+                                                0f, 0f,  0f, 1.0f));*/
+
+        }
+
 
         public static Transformation rotationX(float theta)
         {
@@ -175,20 +193,7 @@ namespace Trace
             );
         }
 
-        /*public Transformation Translation(Vec a)
-        {
-            new Transformation( new Matrix4x4(  1.0f, 0f, 0f, a.x,
-                                                0f, 1.0f, 0f, a.y,
-                                                0f, 0f, 1.0f, a.z,
-                                                0f, 0f,  0f, 1.0f),
-                                new Matrix4x4(  1.0f, 0f, 0f, -a.x,
-                                                0f, 1.0f, 0f, -a.y,
-                                                0f, 0f, 1.0f, -a.z,
-                                                0f, 0f,  0f, 1.0f));
-
-        }
-
-        public Transformation Scaling(float a)
+        /*public Transformation Scaling(float a)
         {
             new Transformation (this.M.Multiply(M, a), this.Minv.Multiply(Minv, a));
         }*/

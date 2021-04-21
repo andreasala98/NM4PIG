@@ -99,10 +99,12 @@ namespace Trace.Test
                                                                     5.0f, 6.0f, 7.0f, 8.0f,
                                                                     9.0f, 9.0f, 8.0f, 7.0f,
                                                                     6.0f, 5.0f, 4.0f, 1.0f),
-                                                    new Matrix4x4(  -3.75f, -2.75f, -1.0f, 0.0f,
+                                                    new Matrix4x4(  -3.75f, 2.75f, -1.0f, 0.0f,
                                                                     4.375f, -3.875f, 2.0f, -0.5f,
                                                                     0.5f, 0.5f, -1.0f, 1.0f,
                                                                     -1.375f, 0.875f, 0.0f, -0.5f));
+            
+            
 
             Assert.True(m1.isConsistent());
 
@@ -117,6 +119,22 @@ namespace Trace.Test
             m4.Minv.M22 = m3.Minv.M22 + 1.0f;
             Assert.False(m1.areClose(m3.Minv));
 
+        }
+
+        [Fact]
+        public void TestTransformationTranslation()
+        {
+            Transformation tr1 = Transformation.Translation(new Vec(1.0f, 2.0f, 3.0f));
+            Assert.True(tr1.isConsistent());
+
+            Transformation tr2 = Transformation.Translation(new Vec(4.0f, 6.0f, 8.0f));
+            Assert.True(tr2.isConsistent());
+
+            Transformation prod = tr1 * tr2;
+            Assert.True(prod.isConsistent());
+
+            Transformation expected = Trasformation.Translation(new Vec(5.0f, 8..0f, 11.0f));
+            Assert.True(prod.areClose(expected.M));
         }
     }
 
