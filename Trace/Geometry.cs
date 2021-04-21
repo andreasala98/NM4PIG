@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace Trace
 {
@@ -132,6 +133,17 @@ namespace Trace
             => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
 
        
+    }
+
+    public struct Normal
+    {
+        float x, y, z;
+    }
+
+    public struct Transformation
+    {
+        List<List<float>> M;
+        List<List<float>> Minv;
     }
 
 }
