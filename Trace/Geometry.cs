@@ -45,18 +45,18 @@ namespace Trace
 
         public bool isClose(Point A)
            => isClose(this.x, A.x) && isClose(this.y, A.y) && isClose(this.z, A.z);
-        
+
 
         // sum between Point and Vec, which gives back a Point
-        public static Point operator +(Point p, Vec v) 
+        public static Point operator +(Point p, Vec v)
             => new Point(p.x + v.x, p.y + v.y, p.z + v.z);
 
         // difference between Point and Vec, which gives back a Point
-        public static Point operator -(Point p, Vec v) 
+        public static Point operator -(Point p, Vec v)
             => new Point(p.x - v.x, p.y - v.y, p.z - v.z);
-            
+
         // difference between two Points, which gives back a Vec
-        public static Vec operator -(Point p, Point v) 
+        public static Vec operator -(Point p, Point v)
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
         public static Point operator /(Point a, float alfa)
@@ -81,8 +81,8 @@ namespace Trace
             this.y = y;
             this.z = z;
         }
-        
-         //Sum of two vectors
+
+        //Sum of two vectors
         public static Vec operator +(Vec a, Vec b)
             => new Vec(a.x + b.x, a.y + b.y, a.z + b.z);
 
@@ -92,42 +92,42 @@ namespace Trace
 
         // Product and division for a scalar    
         public static Vec operator *(float alfa, Vec a)
-            => new Vec (a.x * alfa, a.y * alfa, a.z * alfa);
+            => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
 
         public static Vec operator *(Vec a, float alfa)
-            => new Vec (a.x * alfa, a.y * alfa, a.z * alfa);
+            => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
 
         public static Vec operator /(Vec a, float alfa)
         {
-            if (alfa==0) throw new DivideByZeroException("You cannot divide a vector by zero!");
-            return new Vec (a.x / alfa, a.y / alfa, a.z / alfa);
+            if (alfa == 0) throw new DivideByZeroException("You cannot divide a vector by zero!");
+            return new Vec(a.x / alfa, a.y / alfa, a.z / alfa);
         }
 
         // Scalar and cross product
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
-        public Vec crossProd (Vec b)
-          => new Vec ( this.y * b.z - this.z * b.y, 
+        public Vec crossProd(Vec b)
+          => new Vec(this.y * b.z - this.z * b.y,
                        this.z * b.x - this.x * b.z,
-                       this.x * b.y - this.y * b.x );
-        
+                       this.x * b.y - this.y * b.x);
+
 
         // Squared norm and norm
-        public float getSquaredNorm ()
+        public float getSquaredNorm()
             => this * this;
 
-        public float getNorm ()
+        public float getNorm()
             => (float)Math.Sqrt(this.getSquaredNorm());
 
         // Normalize vector
         public Vec Normalize()
-            => this/this.getNorm();
+            => this / this.getNorm();
 
         // This could be useful for debugging
         public bool isNormalized()
             => this.getNorm() == 1.0f;
-        
+
         //Method for debugging
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
@@ -138,7 +138,7 @@ namespace Trace
         public bool isClose(Vec vector)
             => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
 
-       
+
     }
 
     public struct Normal
@@ -158,16 +158,48 @@ namespace Trace
         public Matrix4x4 M;
         public Matrix4x4 Minv;
 
+
         public Transformation(int a)
         {
-           this.M = System.Numerics.Matrix4x4.Identity;
-           this.Minv = this.M;
+            this.M = Matrix4x4.Identity;
+            this.Minv = Matrix4x4.Identity;
         }
 
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
+
         {
             this.M = myMat;
             this.Minv = myInvMat;
+        }
+
+
+        public bool isConsistent()
+        {
+            return (this.M * this.Minv).isClose(Matrix4x4.Identity);
+        }
+
+        public static Transformation rotationX(float theta)
+        {
+            return new Transformation(
+                Matrix4x4.CreateRotationX(theta),
+                Matrix4x4.CreateRotationX(-theta)
+            );
+        }
+
+        public static Transformation rotationY(float theta)
+        {
+            return new Transformation(
+                Matrix4x4.CreateRotationY(theta),
+                Matrix4x4.CreateRotationY(-theta)
+            );
+        }
+
+        public static Transformation rotationZ(float theta)
+        {
+            return new Transformation(
+                Matrix4x4.CreateRotationZ(theta),
+                Matrix4x4.CreateRotationZ(-theta)
+            );
         }
         
         public static Transformation operator * (Transformation A, Transformation B)
@@ -193,16 +225,14 @@ namespace Trace
 
         
          public static Normal operator * (Transformation A, Normal p)
-         
-             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M12 + p.z * A.Minv.M13,
-                             p.x * A.Minv.M21 + p.y * A.Minv.M22 + p.z * A.Minv.M23,
-                             p.x * A.Minv.M31 + p.y * A.Minv.M32 + p.z * A.Minv.M33 );
+             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
+                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
          
         
 
+        
+    } // end of Transformation
 
-    }
 
-    
-
-}
+} // end of Geometry
