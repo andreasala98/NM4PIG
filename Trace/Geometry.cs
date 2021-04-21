@@ -157,6 +157,7 @@ namespace Trace
     {
         public Matrix4x4 M;
         public Matrix4x4 Minv;
+<<<<<<< HEAD
 
 
         public Transformation(int a)
@@ -164,6 +165,8 @@ namespace Trace
             this.M = Matrix4x4.Identity;
             this.Minv = Matrix4x4.Identity;
         }
+=======
+>>>>>>> 8d224dfc4ff948ff436887ffe00aae0da027b942
 
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
 
@@ -172,10 +175,24 @@ namespace Trace
             this.Minv = myInvMat;
         }
 
+<<<<<<< HEAD
 
+=======
+        private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
+            => Math.Abs(a - b) < epsilon;
+
+        public bool areClose(Matrix4x4 a)
+            => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) && 
+               _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) && 
+               _isClose(this.M.M31, a.M13) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
+               _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44); 
+
+       
+>>>>>>> 8d224dfc4ff948ff436887ffe00aae0da027b942
         public bool isConsistent()
         {
-            return (this.M * this.Minv).isClose(Matrix4x4.Identity);
+            Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
+            return a.areClose(Matrix4x4.Identity);
         }
 
         public static Transformation rotationX(float theta)
@@ -185,6 +202,24 @@ namespace Trace
                 Matrix4x4.CreateRotationX(-theta)
             );
         }
+
+        /*public Transformation Translation(Vec a)
+        {
+            new Transformation( new Matrix4x4(  1.0f, 0f, 0f, a.x,
+                                                0f, 1.0f, 0f, a.y,
+                                                0f, 0f, 1.0f, a.z,
+                                                0f, 0f,  0f, 1.0f),
+                                new Matrix4x4(  1.0f, 0f, 0f, -a.x,
+                                                0f, 1.0f, 0f, -a.y,
+                                                0f, 0f, 1.0f, -a.z,
+                                                0f, 0f,  0f, 1.0f));
+
+        }
+
+        public Transformation Scaling(float a)
+        {
+            new Transformation (this.M.Multiply(M, a), this.Minv.Multiply(Minv, a));
+        }*/
 
         public static Transformation rotationY(float theta)
         {
