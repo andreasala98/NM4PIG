@@ -61,8 +61,8 @@ namespace Trace
 
         public static Point operator /(Point a, float alfa)
         {
-            if (alfa==0) throw new DivideByZeroException("You cannot divide a point by zero!");
-            return new Point (a.x / alfa, a.y / alfa, a.z / alfa);
+            if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
+            return new Point(a.x / alfa, a.y / alfa, a.z / alfa);
         }
 
     }
@@ -132,7 +132,7 @@ namespace Trace
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
         //Method for checking closeness in tests
-        private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
+        private static bool _isClose(float a, float b, float? epsilon = 1e-7f)
             => Math.Abs(a - b) < epsilon;
 
         public bool isClose(Vec vector)
@@ -145,7 +145,7 @@ namespace Trace
     {
         public float x, y, z;
 
-        public Normal (float ax, float ay, float az)
+        public Normal(float ax, float ay, float az)
         {
             this.x = ax;
             this.y = ay;
@@ -191,8 +191,8 @@ namespace Trace
             => Math.Abs(a - b) < epsilon;
 
         public bool areClose(Matrix4x4 a)
-            => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) && 
-               _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) && 
+            => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) &&
+               _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) &&
                _isClose(this.M.M31, a.M31) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
                _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
 
@@ -205,36 +205,36 @@ namespace Trace
         public static Transformation rotationX(float theta)
         {
             return new Transformation(
-                Matrix4x4.CreateRotationX(theta),
-                Matrix4x4.CreateRotationX(-theta)
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationX(theta)),
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationX(-theta))
             );
         }
 
         public static Transformation rotationY(float theta)
         {
             return new Transformation(
-                Matrix4x4.CreateRotationY(theta),
-                Matrix4x4.CreateRotationY(-theta)
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationY(theta)),
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationY(-theta))
             );
         }
 
         public static Transformation rotationZ(float theta)
         {
             return new Transformation(
-                Matrix4x4.CreateRotationZ(theta),
-                Matrix4x4.CreateRotationZ(-theta)
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(theta)),
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(-theta))
             );
         }
-        
-        public static Transformation operator * (Transformation A, Transformation B)
-            => new Transformation(Matrix4x4.Multiply(A.M, B.M) , Matrix4x4.Multiply(B.Minv, A.Minv));
-        
 
-        public static Point operator * (Transformation A, Point p)
+        public static Transformation operator *(Transformation A, Transformation B)
+            => new Transformation(Matrix4x4.Multiply(A.M, B.M), Matrix4x4.Multiply(B.Minv, A.Minv));
+
+
+        public static Point operator *(Transformation A, Point p)
         {
-            Point pnew = new Point (p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13 + A.M.M14,
+            Point pnew = new Point(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13 + A.M.M14,
                                     p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23 + A.M.M24,
-                                    p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 + A.M.M34 );
+                                    p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 + A.M.M34);
 
             float w = p.x * A.M.M41 + p.y * A.M.M42 + p.z * A.M.M43 + A.M.M44;
 
@@ -242,11 +242,10 @@ namespace Trace
             else return pnew / w;
         }
 
-        public static Vec operator * (Transformation A, Vec p)
-            => new Vec ( p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
+        public static Vec operator *(Transformation A, Vec p)
+            => new Vec(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
                          p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
-                         p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33 );
-
+                         p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
         
          public static Normal operator * (Transformation A, Normal p)
              => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
@@ -255,7 +254,6 @@ namespace Trace
          
         
 
-        
     } // end of Transformation
 
 

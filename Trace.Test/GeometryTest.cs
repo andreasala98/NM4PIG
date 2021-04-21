@@ -46,17 +46,17 @@ namespace Trace.Test
             Assert.True((a + b).isClose(new Vec(5.0f, 8.0f, 11.0f)), "TestVectorOperations failed for addition of two Vec");
             Assert.True((b - a).isClose(new Vec(3.0f, 4.0f, 5.0f)), "TestVectorOperations failed for subtraction of two Vec");
 
-            Assert.True( (a * 3.0f).isClose(new Vec (3.0f, 6.0f, 9.0f)), "TestVectorOperation failed in product with a scalar");
-            Assert.True( (3.0f * a).isClose(new Vec (3.0f, 6.0f, 9.0f)), "TestVectorOperation failed in product with a scalar");
-            Assert.True( (b / 2.0f).isClose(new Vec (2.0f, 3.0f, 4.0f)), "TestVectorOperation failed in division for a scalar");
+            Assert.True((a * 3.0f).isClose(new Vec(3.0f, 6.0f, 9.0f)), "TestVectorOperation failed in product with a scalar");
+            Assert.True((3.0f * a).isClose(new Vec(3.0f, 6.0f, 9.0f)), "TestVectorOperation failed in product with a scalar");
+            Assert.True((b / 2.0f).isClose(new Vec(2.0f, 3.0f, 4.0f)), "TestVectorOperation failed in division for a scalar");
 
-            Assert.True( (a*b) == (40.0f), "TestVectorOperation failed in scalar product");
-            Assert.True( (a.crossProd(b)).isClose( new Vec (-2.0f, 4.0f, -2.0f)), "TestVectorOperation failed in cross product (1/2)");
-            Assert.True( (b.crossProd(a)).isClose(new Vec (2.0f, -4.0f, 2.0f)), "TestVectorOperation failed in cross product (2/2)");
+            Assert.True((a * b) == (40.0f), "TestVectorOperation failed in scalar product");
+            Assert.True((a.crossProd(b)).isClose(new Vec(-2.0f, 4.0f, -2.0f)), "TestVectorOperation failed in cross product (1/2)");
+            Assert.True((b.crossProd(a)).isClose(new Vec(2.0f, -4.0f, 2.0f)), "TestVectorOperation failed in cross product (2/2)");
 
-            Assert.True(c.getSquaredNorm()== 625f, "TestVectorOperation failed in getSquaredNorm");
-            Assert.True(c.getNorm()== 25.0f, "TestVectorOperation failed in getNorm");
-            Assert.True(c.Normalize().isClose(new Vec (0.6f, 0.0f, 0.8f)));
+            Assert.True(c.getSquaredNorm() == 625f, "TestVectorOperation failed in getSquaredNorm");
+            Assert.True(c.getNorm() == 25.0f, "TestVectorOperation failed in getNorm");
+            Assert.True(c.Normalize().isClose(new Vec(0.6f, 0.0f, 0.8f)));
 
         }
 
@@ -84,40 +84,57 @@ namespace Trace.Test
         [Fact]
         public void TestPointOperations()
         {
-             Point a = new Point(1.0f, 2.0f, 3.0f);
-             Point b = new Point(4.0f, 6.0f, 8.0f);
-             Vec c = new Vec(4.0f, 6.0f, 8.0f);
+            Point a = new Point(1.0f, 2.0f, 3.0f);
+            Point b = new Point(4.0f, 6.0f, 8.0f);
+            Vec c = new Vec(4.0f, 6.0f, 8.0f);
 
-             Assert.True((a + c).isClose(new Point(5.0f, 8.0f, 11.0f)), "TestPointOperations failed for Point + Vec operation");
-             Assert.True((a - c).isClose(new Point(-3.0f, -4.0f, -5.0f)), "TestPointOperations failed for Point - Vec operation");
-             Assert.True((b - a).isClose(new Vec(3.0f, 4.0f, 5.0f)),"TestPointOperations failed for Point - Point operation");
+            Assert.True((a + c).isClose(new Point(5.0f, 8.0f, 11.0f)), "TestPointOperations failed for Point + Vec operation");
+            Assert.True((a - c).isClose(new Point(-3.0f, -4.0f, -5.0f)), "TestPointOperations failed for Point - Vec operation");
+            Assert.True((b - a).isClose(new Vec(3.0f, 4.0f, 5.0f)), "TestPointOperations failed for Point - Point operation");
         }
         [Fact]
         public void TestAreClose()
         {
-            Transformation m1 = new Transformation (new Matrix4x4(  1.0f, 2.0f, 3.0f, 4.0f,
+            Transformation m1 = new Transformation(new Matrix4x4(1.0f, 2.0f, 3.0f, 4.0f,
                                                                     5.0f, 6.0f, 7.0f, 8.0f,
                                                                     9.0f, 9.0f, 8.0f, 7.0f,
                                                                     6.0f, 5.0f, 4.0f, 1.0f),
-                                                    new Matrix4x4(  -3.750f,  2.750f, -1.0f, 0.00f,
+                                                    new Matrix4x4(-3.750f, 2.750f, -1.0f, 0.00f,
                                                                     4.3750f, -3.875f, 2.00f, -0.5f,
-                                                                    0.5000f,  0.500f, -1.0f, 1.00f,
-                                                                    -1.375f,  0.875f, 0.00f, -0.5f));
+                                                                    0.5000f, 0.500f, -1.0f, 1.00f,
+                                                                    -1.375f, 0.875f, 0.00f, -0.5f));
 
-            Assert.True(m1.isConsistent());
+            Assert.True(m1.isConsistent(), "TestAreClose failed! - Assert 1/4");
 
-            Transformation m2  = new Transformation(m1.M, m1.Minv);
-            Assert.True(m1.areClose(m2.M));
+            Transformation m2 = new Transformation(m1.M, m1.Minv);
+            Assert.True(m1.areClose(m2.M), "TestAreClose failed! - Assert 2/4");
 
-            Transformation m3  = new Transformation(m1.M, m1.Minv);
+            Transformation m3 = new Transformation(m1.M, m1.Minv);
             m3.M.M22 = m3.M.M22 + 1.0f;
-            Assert.False(m1.areClose(m3.M));
+            Assert.False(m1.areClose(m3.M), "TestAreClose failed! - Assert 3/4");
 
-            Transformation m4  = new Transformation(m1.M, m1.Minv);
+            Transformation m4 = new Transformation(m1.M, m1.Minv);
             m4.Minv.M22 = m3.Minv.M22 + 1.0f;
-            Assert.False(m1.areClose(m3.Minv));
+            Assert.False(m1.areClose(m3.Minv), "TestAreClose failed! - Assert 4/4");
 
         }
+
+        [Fact]
+        public void TestRotations()
+        {
+            Vec VEC_X = new Vec(1.0f, 0.0f, 0.0f);
+            Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
+            Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
+
+            Assert.True(Transformation.rotationX(0.1f).isConsistent(), "TestRotation failed - Assert 1/6");
+            Assert.True(Transformation.rotationY(0.1f).isConsistent(), "TestRotation failed - Assert 2/6");
+            Assert.True(Transformation.rotationZ(0.1f).isConsistent(), "TestRotation failed - Assert 3/6");
+
+            Assert.True((Transformation.rotationX((float)Math.PI / 2.0f) * VEC_Y).isClose(VEC_Z), "TestRotation failed - Assert 4/6");
+            Assert.True((Transformation.rotationY((float)Math.PI / 2.0f) * VEC_Z).isClose(VEC_X), "TestRotation failed - Assert 5/6");
+            Assert.True((Transformation.rotationZ((float)Math.PI / 2.0f) * VEC_X).isClose(VEC_Y), "TestRotation failed - Assert 6/6");
+        }
+
 
         [Fact]
         public void TestMatrixProducts()
