@@ -1,7 +1,5 @@
+ <img align="right" width="300" src="https://github.com/andreasala98/NM4PIG/blob/master/logo/Pig_mirror.png">
  <h1 align="center">  NM4PIG 🐷 </h1> <br>
- 
- <img align="right" width="300" src="https://github.com/andreasala98/NM4PIG/logo/Pig_mirror.png">
-
  
  [![Unit tests](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml/badge.svg)](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml)
 
