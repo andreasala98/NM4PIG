@@ -22,7 +22,7 @@ using System.Numerics;
 namespace Trace
 {
     /// <summary>
-    /// Type to represent a point in 3D space.
+    /// Value type to represent a point in 3D space.
     /// </summary>
     public struct Point
     {
@@ -50,29 +50,58 @@ namespace Trace
             this.z = z;
         }
 
-        // convert to string
+        /// <summary>
+        /// Converts a Point to a string for printing.
+        /// </summary>
+        /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Point(x={this.x}, y={this.y}, z={this.z})";
 
         // isClose method to Tests purposes
         private static bool isClose(float a, float b, float? epsilon = 1e-8f)
             => Math.Abs(a - b) < epsilon;
 
+        /// <summary>
+        /// Boolean to check if two Points are close enough
+        /// </summary>
+        /// <param name="A"> The other Point</param>
+        /// <returns>True if the Points are close</returns> 
         public bool isClose(Point A)
            => isClose(this.x, A.x) && isClose(this.y, A.y) && isClose(this.z, A.z);
 
 
-        // sum between Point and Vec, which gives back a Point
+        /// <summary>
+        /// Adds a point and a vec
+        /// </summary>
+        /// <param name="p"> A <see cref="Point"/> object</param>
+        /// <param name="v"> A <see cref="Vec"/> object</param>
+        /// <returns> A <see cref="Point"/> object</returns>
         public static Point operator +(Point p, Vec v)
             => new Point(p.x + v.x, p.y + v.y, p.z + v.z);
 
-        // difference between Point and Vec, which gives back a Point
+        /// <summary>
+        /// Subtracts a vec from a point.
+        /// </summary>
+        /// <param name="p"> A <see cref="Point"/> object.</param>
+        /// <param name="v"> A <see cref="Vec"/> object.</param>
+        /// <returns> A <see cref="Point"/> object.</returns>
         public static Point operator -(Point p, Vec v)
             => new Point(p.x - v.x, p.y - v.y, p.z - v.z);
 
-        // difference between two Points, which gives back a Vec
+        /// <summary>
+        /// Calculate the vector connecting two Points
+        /// </summary>
+        /// <param name="p"> A <see cref="Point"/> object.</param>
+        /// <param name="v"> A <see cref="Point"/> object.</param>
+        /// <returns> A <see cref="Vec"/> object.</returns>
         public static Vec operator -(Point p, Point v)
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
+        /// <summary>
+        /// Divide a Point by a scaling factor.
+        /// </summary>
+        /// <param name="a"> The point.</param>
+        /// <param name="alfa"> Scaling factor. </param>
+        /// <returns> The scaled Point.</returns>
         public static Point operator /(Point a, float alfa)
         {
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
@@ -81,14 +110,30 @@ namespace Trace
 
     }
 
+    /// <summary>
+    ///  Value type to represent a vector in a 3D space.
+    /// </summary>
     public struct Vec
     {
-        //Data members
+        /// <summary>
+        ///  x coordinate of the vector.
+        /// </summary>
         public float x;
+        /// <summary>
+        ///  y coordinate of the vector.
+        /// </summary>
         public float y;
+        /// <summary>
+        ///  z coordinate of the vector.
+        /// </summary>
         public float z;
 
-        //Constructor
+        /// <summary>
+        /// Default constructor for Vec
+        /// </summary>
+        /// <param name="x"> x coord </param>
+        /// <param name="y"> y coord </param>
+        /// <param name="z"> z coord </param>
         public Vec(float x, float y, float z)
         {
             this.x = x;
@@ -96,38 +141,74 @@ namespace Trace
             this.z = z;
         }
 
-        //Sum of two vectors
+        /// <summary>
+        /// Sum of two vectors
+        /// </summary>
+        /// <param name="a"> First vector</param>
+        /// <param name="b"> Second vector</param>
+        /// <returns> A vector sum </returns>
         public static Vec operator +(Vec a, Vec b)
             => new Vec(a.x + b.x, a.y + b.y, a.z + b.z);
 
-        //Difference of two vectors
+        /// <summary>
+        /// Difference of two vectors
+        /// </summary>
+        /// <param name="a"> First vector</param>
+        /// <param name="b"> Second vector</param>
+        /// <returns> A vector difference </returns>
         public static Vec operator -(Vec a, Vec b)
             => new Vec(a.x - b.x, a.y - b.y, a.z - b.z);
-
-        // Product and division for a scalar    
+   
+        /// <summary>
+        /// Multiplication vector - scalar
+        /// </summary>
+        /// <param name="a">  Vector</param>
+        /// <param name="alfa">  Scaling factor </param>
+        /// <returns> A scaled vector. </returns>
         public static Vec operator *(float alfa, Vec a)
             => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
-
+        /// <summary>
+        /// Multiplication vector - scalar
+        /// </summary>
+        /// <param name="a">  Vector</param>
+        /// <param name="alfa">  Scaling factor </param>
+        /// <returns> A scaled vector. </returns>
         public static Vec operator *(Vec a, float alfa)
             => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
 
+        /// <summary>
+        /// Divide a Vec by a scaling factor.
+        /// </summary>
+        /// <param name="a"> The Vec.</param>
+        /// <param name="alfa"> Scaling factor. </param>
+        /// <returns> The scaled Vec.</returns>
         public static Vec operator /(Vec a, float alfa)
         {
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a vector by zero!");
             return new Vec(a.x / alfa, a.y / alfa, a.z / alfa);
         }
 
-        // Scalar and cross product
+        /// <summary>
+        ///  Euclidean scalar product between two vectors.
+        /// </summary>
+        /// <param name="a"> First vector </param>
+        /// <param name="b"> Second vector</param>
+        /// <returns> Scalar product in float format.</returns>
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
+        /// <summary>
+        ///  Cross product between two 3D vectors.
+        /// </summary>
+        /// <param name="a"> First vector </param>
+        /// <param name="b"> Second vector</param>
+        /// <returns> Cross product in Vec format.</returns>
         public Vec crossProd(Vec b)
-          => new Vec(this.y * b.z - this.z * b.y,
+          => new Vec  (this.y * b.z - this.z * b.y,
                        this.z * b.x - this.x * b.z,
                        this.x * b.y - this.y * b.x);
 
 
-        // Squared norm and norm
         public float getSquaredNorm()
             => this * this;
 
@@ -142,13 +223,21 @@ namespace Trace
         public bool isNormalized()
             => this.getNorm() == 1.0f;
 
-        //Method for debugging
+        /// <summary>
+        /// Converts a Vec to a string for printing.
+        /// </summary>
+        /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
         //Method for checking closeness in tests
-        public static bool _isClose(float a, float b, float? epsilon = 1e-7f)
+        private static bool _isClose(float a, float b, float? epsilon = 1e-7f)
             => Math.Abs(a - b) < epsilon;
 
+        /// <summary>
+        /// Boolean to check if two Vec are close enough
+        /// </summary>
+        /// <param name="vector"> The other Vec</param>
+        /// <returns>True if the Vecs are close</returns> 
         public bool isClose(Vec vector)
             => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
 
@@ -195,9 +284,9 @@ namespace Trace
         }
 
 
-        public Transformation getInverse()
+        public Transformation getInverse ()
         {
-            return new Transformation(this.Minv, this.M);
+            return new Transformation (this.Minv, this.M);
         }
 
 
@@ -218,7 +307,7 @@ namespace Trace
 
         public static Transformation Translation(Vec a)
         {
-            return new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+            return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
                                         Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
         }
 
@@ -230,10 +319,10 @@ namespace Trace
             b.M.M22 = a.y;
             b.M.M33 = a.z;
 
-            b.Minv.M11 = 1.0f / a.x;
-            b.Minv.M22 = 1.0f / a.y;
-            b.Minv.M33 = 1.0f / a.z;
-
+            b.Minv.M11 = 1.0f/a.x;
+            b.Minv.M22 = 1.0f/a.y;
+            b.Minv.M33 = 1.0f/a.z;
+            
             return b;
         }
 
@@ -281,13 +370,13 @@ namespace Trace
             => new Vec(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
                          p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
                          p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
-
-        public static Normal operator *(Transformation A, Normal p)
-            => new Normal(p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
-                            p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
-                            p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33);
-
-
+        
+         public static Normal operator * (Transformation A, Normal p)
+             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
+                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
+         
+        
 
     } // end of Transformation
 
