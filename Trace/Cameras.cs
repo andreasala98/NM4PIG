@@ -20,14 +20,45 @@ using System;
 
 namespace Trace
 {
+    /// <summary>
+    /// An efficient type representing a ray to be fired.
+    /// </summary>
+  
     public struct Ray
     {
+        /// <summary>
+        /// The origin point, where the observer lies.
+        /// </summary>
         public Point origin;
+        /// <summary>
+        /// The vector orthogonally connecting the observer to the center of the screen 
+        /// </summary>
         public Vec dir;
+        /// <summary>
+        /// Minimum travelling distance of the ray. <br/>
+        /// Default setting: 1e-5
+        /// </summary>
         public float tmin;
+        /// <summary>
+        /// Minimum travelling distance of the ray. <br/>
+        /// Default setting: Infinity
+        /// 
+        /// </summary>
         public float tmax;
-        public int depth;
+        /// <summary>
+        /// Number of reflections allowed <br/>
+        /// Default setting: 0
+        /// </summary>
 
+                public int depth;
+      /// <summary>
+      ///  Default constructor for Ray.
+      /// </summary>
+      /// <param name="or"> Origin point (observer) </param>
+      /// <param name="d"> Vector direction </param>
+      /// <param name="tm"> Minimum distance </param>
+      /// <param name="tM"> Maximum distance </param>
+      /// <param name="dep"> Number of reflections </param>
         public Ray(Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
         {
             this.origin = or;
@@ -37,15 +68,28 @@ namespace Trace
             this.depth = (int)dep;
         }
 
+        /// <summary>
+        /// Calculate ray position at origin + dir*t.
+        /// </summary>
+        /// <param name="t"> Running paramter between tmin and tmax.</param>
+        /// <returns> A <see cref="Point"/> object </returns>
         public Point at(float t)
             => this.origin + (this.dir * t);
 
-
+        /// <summary>
+        ///  Boolean to check if two rays are equal.
+        /// </summary>
+        /// <param name="r"> The other ray.</param>
+        /// <returns> True if rays are close enough.</returns>
         public bool isClose(Ray r)
         {
             return this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
         }
-
+        /// <summary>
+        /// Apply affine transformation to the ray.
+        /// </summary>
+        /// <param name="T"> A <see cref="Transformation"/> object. </param>
+        /// <returns> The transformed ray.</returns>
         public Ray Transform(Transformation T) 
             => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
         
@@ -71,7 +115,7 @@ namespace Trace
         /// Fire a ray through the camera.<br/>
         /// This is an abstract method. It has been redefined in derived classes.
         /// Fire a ray that goes through the screen at the position (u, v). The exact meaning
-        /// of these coordinates depend on the projection used by the camera.
+        /// of these coordinates depends on the projection used by the camera.
         /// </summary>
         public abstract Ray fireRay(float u, float v);
     }
