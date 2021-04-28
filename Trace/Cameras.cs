@@ -113,6 +113,9 @@ namespace Trace
         /// </summary>
         public Transformation transformation;
 
+        /// <summary>
+        /// Create a new camera. This is a constructor for an abstract class and so cannot be used. Use instead constructor for OrthogonalCamera and PerspectiveCamera
+        /// </summary>
         public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
             this.aspectRatio = aspectRatio ?? 1.0f;
@@ -178,7 +181,7 @@ namespace Trace
         /// <param name="aspectRatio">The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
         /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
         /// used in modern monitors.</param>
-        /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
+        /// <param name="transformation">It is an instance of the struct <see cref="Transformation"/>.</param>
         public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { this.screenDistance = screenDistance ?? 1.0f; }
 
         /// <summary>
