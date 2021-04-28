@@ -38,12 +38,12 @@ namespace Trace
         }
 
 
-    /// <summary>
-    /// Element-wise sum of two Colors.
-    /// </summary>
-    /// <param name="col1"> The first Color</param>
-    /// <param name="col2"> The second Color</param>
-    /// <returns> A new color.</returns>
+        /// <summary>
+        /// Element-wise sum of two Colors.
+        /// </summary>
+        /// <param name="col1"> The first Color</param>
+        /// <param name="col2"> The second Color</param>
+        /// <returns> A new color.</returns>
 
 
         public static Color operator +(Color col1, Color col2)
@@ -89,7 +89,7 @@ namespace Trace
             => new Color(A.r * B.r, A.g * B.g, A.b * B.b);
 
 
-                public static bool isClose(float a, float b)
+        public static bool isClose(float a, float b)
         {
             var epsilon = 1e-8F;
             return Math.Abs(a - b) < epsilon;
