@@ -116,7 +116,8 @@ namespace Trace
         public Transformation transformation;
 
         /// <summary>
-        /// Create a new camera. This is a constructor for an abstract class and so cannot be used. Use instead constructor for OrthogonalCamera and PerspectiveCamera
+        /// Create a new camera. This is a constructor for an abstract class and so it cannot be used.
+        /// Use instead constructors for OrthogonalCamera and PerspectiveCamera
         /// </summary>
         public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
@@ -172,7 +173,9 @@ namespace Trace
     public class PerspectiveCamera : Camera
     {
         /// <summary>
-        /// It tells how much far from the eye of the observer is the screen, and it influences the so-called «aperture» (the field-of-view angle along the horizontal direction).
+        /// It tells how much far from the eye of the observer is the screen, 
+        /// and it influences the so-called «aperture» 
+        /// (the field-of-view angle along the horizontal direction).
         /// </summary>
         public float screenDistance;
 
