@@ -17,6 +17,8 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
+using System;
+using Trace;
 
 namespace Trace.Test
 {
@@ -41,6 +43,17 @@ namespace Trace.Test
             Assert.True( ray4.at(0.0f).isClose(ray4.origin) );
             Assert.True( ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)) );
             Assert.True( ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)) );
+        }
+
+        [Fact]
+        public void TestTransform()
+         {
+            Ray ray5 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(6.0f, 5.0f, 4.0f));
+            Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.rotationX( (float)System.Math.PI / 2.0f );
+
+            Ray transf = ray5.Transform(T);
+            Assert.True(transf.origin.isClose(new Point(11.0f, 8.0f, 14.0f)));
+            Assert.True(transf.dir.isClose(new Vec(6.0f, -4.0f, 5.0f)));
         }
 
     }

@@ -46,6 +46,11 @@ namespace Trace
         {
             return this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
         }
+
+        public Ray Transform(Transformation T) 
+            => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
+        
+
     }
 
 
