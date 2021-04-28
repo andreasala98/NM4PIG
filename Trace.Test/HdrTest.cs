@@ -26,7 +26,6 @@ using Xunit;
 namespace Trace.Test
 {
     // HDR Testing
-
     public class HDRImageTest
     {
 
@@ -36,26 +35,26 @@ namespace Trace.Test
         public void TestValidCoords()
         {
 
-            Assert.True(DummyImage.validCoords(0, 0));
-            Assert.True(DummyImage.validCoords(6, 3));
+            Assert.True(DummyImage.validCoords(0, 0), "TestValidCoords failed - Assert 1/4");
+            Assert.True(DummyImage.validCoords(6, 3), "TestValidCoords failed - Assert 2/4");
 
-            Assert.False(DummyImage.validCoords(-1, 0));
-            Assert.False(DummyImage.validCoords(6, 4));
+            Assert.False(DummyImage.validCoords(-1, 0), "TestValidCoords failed - Assert 3/4");
+            Assert.False(DummyImage.validCoords(6, 4), "TestValidCoords failed - Assert 4/4");
 
         }
 
         [Fact]
         public void TestImageCreation()
         {
-            Assert.True(DummyImage.width == 7);
-            Assert.True(DummyImage.height == 4);
+            Assert.True(DummyImage.width == 7, "TestImageCreation failed - Assert 1/2");
+            Assert.True(DummyImage.height == 4, "TestImageCreation failed - Assert 2/2");
         }
 
         [Fact]
         public void TestPixelOffset()
         {
-            Assert.True(DummyImage.pixelOffset(3, 2) == 17);
-            Assert.True(DummyImage.pixelOffset(2, 3) == 23);
+            Assert.True(DummyImage.pixelOffset(3, 2) == 17, "TestPixelOffset failed - Assert 1/2");
+            Assert.True(DummyImage.pixelOffset(2, 3) == 23, "TestPixelOffset failed - Assert 2/2");
         }
 
         [Fact]
@@ -63,10 +62,8 @@ namespace Trace.Test
         {
             var appo = new Color(5.0f, 6.0f, 7.0f);
             DummyImage.setPixel(3, 2, appo);
-            Assert.True(DummyImage.getPixel(3, 2).isClose(appo));
-
+            Assert.True(DummyImage.getPixel(3, 2).isClose(appo), "TestGetSetPixel failed - Assert 1/1");
         }
-
 
         [Fact]
         public void TestSavePfm()
@@ -92,8 +89,7 @@ namespace Trace.Test
             using (MemoryStream memSt = new MemoryStream(84))
             {
                 MyImg.savePfm(memSt);
-                Assert.True(memSt.GetBuffer().SequenceEqual(ref_bytes));
-
+                Assert.True(memSt.GetBuffer().SequenceEqual(ref_bytes), "TestSavePfm failed - Assert 1/1");
             }
         }
 
@@ -103,16 +99,16 @@ namespace Trace.Test
             byte[] byteArray = Encoding.ASCII.GetBytes("hello\nworld");
 
             MemoryStream line = new MemoryStream(byteArray);
-            Assert.True(HdrImage.readLine(line) == "hello");
-            Assert.True(HdrImage.readLine(line) == "world");
-            Assert.True(HdrImage.readLine(line) == "");
+            Assert.True(HdrImage.readLine(line) == "hello", "TestReadLine failed - Assert 1/3");
+            Assert.True(HdrImage.readLine(line) == "world", "TestReadLine failed - Assert 2/3");
+            Assert.True(HdrImage.readLine(line) == "", "TestReadLine failed - Assert 3/3");
         }
 
         [Fact]
         public void TestIsLittleEndian()
         {
-            Assert.True(HdrImage.isLittleEndian("1.0") == false);
-            Assert.True(HdrImage.isLittleEndian("-1.0") == true);
+            Assert.False(HdrImage.isLittleEndian("1.0"), "TestIsLittleEndian failed - Assert 1/4");
+            Assert.True(HdrImage.isLittleEndian("-1.0"), "TestIsLittleEndian failed - Assert 2/4");
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("2.0"));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.isLittleEndian("abc"));
         }
@@ -120,7 +116,7 @@ namespace Trace.Test
         [Fact]
         public void TestParseImageSize()
         {
-            Assert.True(HdrImage.parseImageSize("3 2").SequenceEqual(new List<int>() { 3, 2 }));
+            Assert.True(HdrImage.parseImageSize("3 2").SequenceEqual(new List<int>() { 3, 2 }), "TestParseImageSize failed - Assert 1/6");
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("-1 2"));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("1 -2"));
             Assert.Throws<InvalidPfmFileFormat>(() => HdrImage.parseImageSize("3 2 1"));
@@ -150,14 +146,14 @@ namespace Trace.Test
                 MyImg.readPfm(memSt);
             }
 
-            Assert.True(MyImg.width == 3);
-            Assert.True(MyImg.height == 2);
-            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)));
-            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)));
-            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)));
-            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)));
-            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)));
-            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)));
+            Assert.True(MyImg.width == 3, "TestReadPfm failed - Assert 1/16");
+            Assert.True(MyImg.height == 2, "TestReadPfm failed - Assert 2/16");
+            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)), "TestReadPfm failed - Assert 3/16");
+            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)), "TestReadPfm failed - Assert 4/16");
+            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)), "TestReadPfm failed - Assert 5/16");
+            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)), "TestReadPfm failed - Assert 6/16");
+            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)), "TestReadPfm failed - Assert 7/16");
+            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)), "TestReadPfm failed - Assert 8/16");
 
             byte[] BE_REFERENCE_BYTES = {
                 0x50, 0x46, 0x0a, 0x33, 0x20, 0x32, 0x0a, 0x31, 0x2e, 0x30, 0x0a, 0x42,
@@ -176,14 +172,14 @@ namespace Trace.Test
                 MyImg.readPfm(memSt);
             }
 
-            Assert.True(MyImg.width == 3);
-            Assert.True(MyImg.height == 2);
-            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)));
-            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)));
-            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)));
-            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)));
-            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)));
-            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)));
+            Assert.True(MyImg.width == 3, "TestReadPfm failed - Assert 9/16");
+            Assert.True(MyImg.height == 2, "TestReadPfm failed - Assert 10/16");
+            Assert.True(MyImg.getPixel(0, 0).isClose(new Color(10.0f, 20.0f, 30.0f)), "TestReadPfm failed - Assert 11/16");
+            Assert.True(MyImg.getPixel(1, 0).isClose(new Color(40.0f, 50.0f, 60.0f)), "TestReadPfm failed - Assert 12/16");
+            Assert.True(MyImg.getPixel(2, 0).isClose(new Color(70.0f, 80.0f, 90.0f)), "TestReadPfm failed - Assert 13/16");
+            Assert.True(MyImg.getPixel(0, 1).isClose(new Color(100.0f, 200.0f, 300.0f)), "TestReadPfm failed - Assert 14/16");
+            Assert.True(MyImg.getPixel(1, 1).isClose(new Color(400.0f, 500.0f, 600.0f)), "TestReadPfm failed - Assert 15/16");
+            Assert.True(MyImg.getPixel(2, 1).isClose(new Color(700.0f, 800.0f, 900.0f)), "TestReadPfm failed - Assert 16/16");
 
         }
 
@@ -194,7 +190,7 @@ namespace Trace.Test
 
             img.setPixel(0, 0, new Color(5.0f, 10.0f, 15.0f));
             img.setPixel(1, 0, new Color(500.0f, 1000.0f, 1500.0f));
-            Assert.True(Color.isClose(img.averageLumi(), 100.0f));
+            Assert.True(Utility.areClose(img.averageLumi(), 100.0f), "TestAverageLumi failed - Assert 1/1");
         }
 
         [Fact]
@@ -206,8 +202,8 @@ namespace Trace.Test
             img.setPixel(1, 0, new Color(0.5e3f, 1.0e3f, 1.5e3f));
 
             img.normalizeImage(factor: 1000.0f, luminosity: 100.0f);
-            Assert.True(img.getPixel(0, 0).isClose(new Color(0.5e2f, 1.0e2f, 1.5e2f)));
-            Assert.True(img.getPixel(1, 0).isClose(new Color(0.5e4f, 1.0e4f, 1.5e4f)));
+            Assert.True(img.getPixel(0, 0).isClose(new Color(0.5e2f, 1.0e2f, 1.5e2f)), "TestNormalizeImage failed - Assert 1/2");
+            Assert.True(img.getPixel(1, 0).isClose(new Color(0.5e4f, 1.0e4f, 1.5e4f)), "TestNormalizeImage failed - Assert 2/2");
         }
 
         [Fact]
@@ -222,9 +218,9 @@ namespace Trace.Test
 
             foreach (var curPixel in img.pixel)
             {
-                Assert.True((curPixel.r >= 0) && (curPixel.r <= 1));
-                Assert.True((curPixel.g >= 0) && (curPixel.g <= 1));
-                Assert.True((curPixel.b >= 0) && (curPixel.b <= 1));
+                Assert.True((curPixel.r >= 0) && (curPixel.r <= 1), "TestClampImage failed - Assert 1/3");
+                Assert.True((curPixel.g >= 0) && (curPixel.g <= 1), "TestClampImage failed - Assert 2/3");
+                Assert.True((curPixel.b >= 0) && (curPixel.b <= 1), "TestClampImage failed - Assert 3/3");
             }
 
         }
