@@ -18,7 +18,6 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System;
-using Trace;
 
 namespace Trace.Test
 {
@@ -71,16 +70,52 @@ namespace Trace.Test
             Ray ray3 = cam.fireRay(0.0f, 1.0f);
             Ray ray4 = cam.fireRay(1.0f, 1.0f);
 
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray2.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 1/7");
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray3.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 2/7");
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray4.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 3/7");
 
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray2.dir).getSquaredNorm()));
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray3.dir).getSquaredNorm()));
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray4.dir).getSquaredNorm()));
+            Assert.True(ray1.at(1.0f).isClose(new Point(0.0f, 2.0f, -1.0f)), "testOrthogonalCamera failed - assert 4/7");
+            Assert.True(ray2.at(1.0f).isClose(new Point(0.0f, -2.0f, -1.0f)), "testOrthogonalCamera failed - assert 5/7");
+            Assert.True(ray3.at(1.0f).isClose(new Point(0.0f, 2.0f, 1.0f)), "testOrthogonalCamera failed - assert 6/7");
+            Assert.True(ray4.at(1.0f).isClose(new Point(0.0f, -2.0f, 1.0f)), "testOrthogonalCamera failed - assert 7/7");
+        }
 
-            Assert.True(ray1.at(1.0f).isClose(new Point(0.0f, 2.0f, -1.0f)));
-            Assert.True(ray2.at(1.0f).isClose(new Point(0.0f, -2.0f, -1.0f)));
-            Assert.True(ray3.at(1.0f).isClose(new Point(0.0f, 2.0f, 1.0f)));
-            Assert.True(ray4.at(1.0f).isClose(new Point(0.0f, -2.0f, 1.0f)));
+        [Fact]
+        void testOrthogonalCameraTransform()
+        {
+            Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
+            OrthogonalCamera cam = new OrthogonalCamera(transformation: Transformation.Translation(-2.0f * VEC_Y) * Transformation.rotationZ((float)Math.PI / 2.0f));
+            Ray ray = cam.fireRay(0.5f, 0.5f);
+            Assert.True(ray.at(1.0f).isClose(new Point(0.0f, -2.0f, 0.0f)), "testOrthogonalCameraTransform failed - Assert 1/1");
+        }
 
+        [Fact]
+        public void testPerspectiveCamera()
+        {
+            PerspectiveCamera cam = new PerspectiveCamera(screenDistance: 1.0f, aspectRatio: 2.0f);
+
+            Ray ray1 = cam.fireRay(0.0f, 0.0f);
+            Ray ray2 = cam.fireRay(1.0f, 0.0f);
+            Ray ray3 = cam.fireRay(0.0f, 1.0f);
+            Ray ray4 = cam.fireRay(1.0f, 1.0f);
+
+            Assert.True(ray1.origin.isClose(ray2.origin), "testPerspectiveCamera failed - assert 1/7");
+            Assert.True(ray1.origin.isClose(ray3.origin), "testPerspectiveCamera failed - assert 2/7");
+            Assert.True(ray1.origin.isClose(ray4.origin), "testPerspectiveCamera failed - assert 3/7");
+
+            Assert.True(ray1.at(1.0f).isClose(new Point(0.0f, 2.0f, -1.0f)), "testPerspectiveCamera failed - assert 4/7");
+            Assert.True(ray2.at(1.0f).isClose(new Point(0.0f, -2.0f, -1.0f)), "testPerspectiveCamera failed - assert 5/7");
+            Assert.True(ray3.at(1.0f).isClose(new Point(0.0f, 2.0f, 1.0f)), "testPerspectiveCamera failed - assert 6/7");
+            Assert.True(ray4.at(1.0f).isClose(new Point(0.0f, -2.0f, 1.0f)), "testPerspectiveCamera failed - assert 7/7");
+        }
+
+        [Fact]
+        void testPerspectiveCameraTransform()
+        {
+            Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
+            PerspectiveCamera cam = new PerspectiveCamera(transformation: Transformation.Translation(-2.0f * VEC_Y) * Transformation.rotationZ((float)Math.PI / 2.0f));
+            Ray ray = cam.fireRay(0.5f, 0.5f);
+            Assert.True(ray.at(1.0f).isClose(new Point(0.0f, -2.0f, 0.0f)), "testPerspectiveCameraTransform failed - Assert 1/1");
         }
     }
 

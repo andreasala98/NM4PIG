@@ -101,12 +101,20 @@ namespace Trace
     /// </summary>
     public abstract class Camera
     {
+        /// <summary>
+        /// The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
+        /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
+        /// used in modern monitors.
+        /// </summary>
         public float aspectRatio;
+
+        /// <summary>
+        /// It is an instance of the struct <see cref="Transformation"/>.
+        /// </summary>
         public Transformation transformation;
 
         public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
-
             this.aspectRatio = aspectRatio ?? 1.0f;
             this.transformation = transformation ?? new Transformation(1);
         }
@@ -129,10 +137,10 @@ namespace Trace
         /// <summary>
         /// Create a new orthogonal camera
         /// </summary>
-        /// <param name="aspRat">It is the ratio between the width and the height of the screen. For fullscreen
+        /// <param name="aspectRatio">It is the ratio between the width and the height of the screen. For fullscreen
         /// images, you should probably set `aspectRatio` to 16/9, as this is the most used aspect ratio
         /// used in modern monitors.</param>
-        /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
+        /// <param name="transformation">It is an instance of the struct <see cref="Transformation"/>.</param>
         public OrthogonalCamera(float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { }
 
         /// <summary>
@@ -141,8 +149,8 @@ namespace Trace
         /// the bottom-left corner, (0f, 1f) the top-left corner, (1f, 0f) the bottom-right corner, and (1f, 1f) the top-right
         /// corner
         /// </summary>
-        /// <param name="u">questo è u</param>
-        /// <param name="v"></param>
+        /// <param name="u">x coordinate of the screen. 0.0f represent left edge, 1.0f represent right edge.</param>
+        /// <param name="v">y coordinate of the screen. 0.0f represent bottom edge, 1.0f represent upper edge.</param>
         /// <returns>A <see cref="Trace.Ray"/> object.</returns>
         public override Ray fireRay(float u, float v)
         {
@@ -152,14 +160,36 @@ namespace Trace
         }
     }
 
+    /// <summary>
+    /// A camera implementing a perspective 3D → 2D projection<br/>
+    /// This class implements an observer seeing the world through a perspective projection.
+    /// </summary>
     public class PerspectiveCamera : Camera
     {
+        /// <summary>
+        /// It tells how much far from the eye of the observer is the screen, and it influences the so-called «aperture» (the field-of-view angle along the horizontal direction).
+        /// </summary>
         public float screenDistance;
-        public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation)
-        {
-            this.screenDistance = screenDistance ?? 1.0f;
-        }
 
+        /// <summary>
+        /// Create a new perspective camera
+        /// </summary>
+        /// <param name="screenDistance">It tells how much far from the eye of the observer is the screen, and it influences the so-called «aperture» (the field-of-view angle along the horizontal direction).</param>
+        /// <param name="aspectRatio">The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
+        /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
+        /// used in modern monitors.</param>
+        /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
+        public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { this.screenDistance = screenDistance ?? 1.0f; }
+
+        /// <summary>
+        /// Shoot a ray through the camera's screen <br/>
+        /// The coordinates(u, v) specify the point on the screen where the ray crosses it.Coordinates(0, 0) represent
+        /// the bottom-left corner, (0, 1) the top-left corner, (1, 0) the bottom-right corner, and (1, 1) the top-right
+        /// corner, as in the following diagram::
+        /// </summary>
+        /// <param name="u">x coordinate of the screen. 0.0f represent left edge, 1.0f represent right edge.</param>
+        /// <param name="v">y coordinate of the screen. 0.0f represent bottom edge, 1.0f represent upper edge.</param>
+        /// <returns>A <see cref="Trace.Ray"/> object.</returns>
         public override Ray fireRay(float u, float v)
         {
             Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
@@ -167,6 +197,11 @@ namespace Trace
             return new Ray(origin, direction, 1.0f).transform(this.transformation);
         }
 
+        /// <summary>
+        /// Compute the aperture of the camera in degrees
+        /// The aperture is the angle of the field-of-view along the horizontal direction(Y axis)
+        /// </summary>
+        /// <returns> The aperture angle, measured in degrees</returns>
         public float apertureDeg()
             => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
     }
