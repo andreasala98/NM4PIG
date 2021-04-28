@@ -122,8 +122,39 @@ namespace Trace.Test
 
     public class ImageTracerTest
     {
+        [Fact]
+        public void TestfireRay()
+        {
+            HdrImage image = new HdrImage(4, 2);
+            PerspectiveCamera camera = new PerspectiveCamera(aspectRatio: 2.0f);
+            ImageTracer tracer = new ImageTracer(image, camera);
 
+            Ray ray1 = tracer.fireRay(0, 0, 2.5f, 1.5f);
+            Ray ray2 = tracer.fireRay(2, 1, 0.5f, 0.5f);
+            Assert.True(ray1.isClose(ray2));
+        }
 
+        public  Color lambda(Ray r)
+        {
+            return new Color(1.0f, 2.0f, 3.0f);
+        }
+
+        [Fact]
+        public void TestfireAllRay()
+        {
+            HdrImage image = new HdrImage(4, 2);
+            PerspectiveCamera camera = new PerspectiveCamera();
+            ImageTracer tracer = new ImageTracer(image, camera);
+
+            tracer.fireAllRay(lambda);
+            for (int row = 0; row < image.height; row++)
+            {
+                for (int col = 0; col < image.width; col++)
+                {   
+                    Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)));
+                }
+            }
+        }
 
     }
 

@@ -94,7 +94,7 @@ namespace Trace
 
 
     }
-
+    
     /// <summary>
     /// An abstract class representing an observer <br/>
     /// Concrete subclasses are `OrthogonalCamera` and `PerspectiveCamera`.
@@ -207,5 +207,40 @@ namespace Trace
         /// <returns> The aperture angle, measured in degrees</returns>
         public float apertureDeg()
             => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
+    }
+
+        
+        public class ImageTracer
+        {
+        public HdrImage image;
+        public Camera camera;
+
+        public ImageTracer(HdrImage i, Camera c)
+        {
+            image  = i;
+            camera = c;
+        }
+
+        public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
+        {
+            float u = (col + uPixel) / (image.width  - 1);
+            float v = (row + vPixel) / (image.height - 1);
+            return camera.fireRay(u, v);
+        }
+
+        public delegate Color myFunction(Ray r);
+        public void fireAllRay(myFunction Func)
+        {
+            for(int r = 0; r < image.height; r++)
+            {
+                for(int c = 0; c < image.width; c++)
+                {
+                    Ray raggio = this.fireRay(c, r);
+                    Color colore = Func(raggio);
+                    this.image.setPixel(c, r, colore);
+                }
+            }
+            
+        }
     }
 }

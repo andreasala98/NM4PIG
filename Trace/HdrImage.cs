@@ -27,7 +27,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Trace
 {
-
+    
     public struct HdrImage
     {
         public int width;
@@ -97,7 +97,6 @@ namespace Trace
                 return new Color(0f, 0f, 0f);
             }
         }
-
 
         public void setPixel(int x, int y, Color a)
         {
