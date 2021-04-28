@@ -21,17 +21,41 @@ using System;
 namespace Trace
 {
 
+    /// <summary>
+    /// Exception InvalidPfmFileFormat. This Exception is intended to be raised whenever there is something 
+    /// wrong while reading an image in the PFM format
+    /// </summary>
     [Serializable]
     public class InvalidPfmFileFormat : Exception
     {
+        /// <summary>
+        /// Constructor for InvalidPfmFileFormat exception. This raise a generic exception, i.e. does not contain an error message
+        /// </summary>
         public InvalidPfmFileFormat() : base() { }
+
+        /// <summary>
+        /// /// Constructor for InvalidPfmFileFormat exception. This raise an exception with an error message
+        /// </summary>
+        /// <param name="Message">The error message</param>
         public InvalidPfmFileFormat(string Message) : base(Message) { }
     }
 
+    /// <summary>
+    /// Exception CommandLineException. This Exception is intended to be raised whenever the user pass meaningless argouments 
+    /// while executing the executable
+    /// </summary>
     [Serializable]
     public class CommandLineException : Exception
     {
+        /// <summary>
+        /// Constructor for CommandLineException exception. This raise a generic exception, i.e. does not contain an error message
+        /// </summary>
         public CommandLineException() : base() { }
+
+        /// <summary>
+        /// /// Constructor for CommandLineException exception. This raise an exception with an error message
+        /// </summary>
+        /// <param name="Message">The error message</param>
         public CommandLineException(string Message) : base(Message) { }
     }
 
@@ -48,10 +72,10 @@ namespace Trace
         try
         {
             //Something
-        } catch (InvalidPfmFileFormat ex)
+        } 
+        catch (InvalidPfmFileFormat ex)
         {
             Console.WriteLine(ex.Message);
         }
     */
-
 }

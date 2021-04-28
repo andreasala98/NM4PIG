@@ -25,11 +25,27 @@ namespace Trace
     /// </summary>
     public struct Color
     {
+        /// <summary>
+        /// Value for red
+        /// </summary>
         public float r;
+
+        /// <summary>
+        /// value for green
+        /// </summary>
         public float g;
+
+        /// <summary>
+        /// value for blue
+        /// </summary>
         public float b;
 
-
+        /// <summary>
+        /// Create an instance of the struct Color.
+        /// </summary>
+        /// <param name="Red">The value for red</param>
+        /// <param name="Green">The value for green</param>
+        /// <param name="Blue">The value for blue</param>
         public Color(float Red, float Green, float Blue)
         {
             this.r = Red;
@@ -37,18 +53,14 @@ namespace Trace
             this.b = Blue;
         }
 
-
         /// <summary>
         /// Element-wise sum of two Colors.
         /// </summary>
         /// <param name="col1"> The first Color</param>
         /// <param name="col2"> The second Color</param>
         /// <returns> A new color.</returns>
-
-
         public static Color operator +(Color col1, Color col2)
             => new Color(col1.r + col2.r, col1.g + col2.g, col1.b + col2.b);
-
 
         /// <summary>
         /// Element-wise difference of two Colors.
@@ -58,7 +70,6 @@ namespace Trace
         /// <returns> A new color.</returns>
         public static Color operator -(Color col1, Color col2)
             => new Color(col1.r - col2.r, col1.g - col2.g, col1.b - col2.b);
-
 
         /// <summary>
         /// Multiplies a color with a scalar.
@@ -70,14 +81,13 @@ namespace Trace
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
 
         /// <summary>
-        /// Multiplies a color with a scalar.
+        /// Multiplies a scalar with a color.
         /// </summary>
         /// <param name="a"> A color.</param>
         /// <param name="alfa">Scaling factor.</param>
         /// <returns> A new color.</returns>
         public static Color operator *(float alfa, Color a)
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
-
 
         /// <summary>
         /// Multiplies a color with another color.
@@ -88,36 +98,20 @@ namespace Trace
         public static Color operator *(Color A, Color B)
             => new Color(A.r * B.r, A.g * B.g, A.b * B.b);
 
-
-        public static bool isClose(float a, float b)
-        {
-            var epsilon = 1e-8F;
-            return Math.Abs(a - b) < epsilon;
-        }
-
-
         /// <summary>
         /// Boolean method to check if 
-        /// two Colors are equal
+        /// two Colors are almost equal, used mainly for test purpose
         /// </summary>
-        /// <param name="a"> A Color. </param>
-        /// <param name="b"> Another Color. </param>
+        /// <param name="A"> A Color. </param>
         /// <returns> True if the colors are close enough</returns>
-
         public bool isClose(Color A)
-        {
-            return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g);
-        }
+            => Utility.areClose(this.r, A.r) && Utility.areClose(this.b, A.b) && Utility.areClose(this.g, A.g);
+
         /// <summary>
         /// Calculate luminosity of a color according to Shirley and Morley.
         /// </summary>
         /// <returns> A float represeting luminosity of the pixel </returns>
         public float Luminosity()
             => (float)(Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
-
-
-
-
     }
-
 }

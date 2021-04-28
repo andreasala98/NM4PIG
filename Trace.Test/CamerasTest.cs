@@ -70,9 +70,9 @@ namespace Trace.Test
             Ray ray3 = cam.fireRay(0.0f, 1.0f);
             Ray ray4 = cam.fireRay(1.0f, 1.0f);
 
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray2.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 1/7");
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray3.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 2/7");
-            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray4.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 3/7");
+            Assert.True(Utility.areClose(0.0f, ray1.dir.crossProd(ray2.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 1/7");
+            Assert.True(Utility.areClose(0.0f, ray1.dir.crossProd(ray3.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 2/7");
+            Assert.True(Utility.areClose(0.0f, ray1.dir.crossProd(ray4.dir).getSquaredNorm()), "testOrthogonalCamera failed - assert 3/7");
 
             Assert.True(ray1.at(1.0f).isClose(new Point(0.0f, 2.0f, -1.0f)), "testOrthogonalCamera failed - assert 4/7");
             Assert.True(ray2.at(1.0f).isClose(new Point(0.0f, -2.0f, -1.0f)), "testOrthogonalCamera failed - assert 5/7");
@@ -134,7 +134,7 @@ namespace Trace.Test
             Assert.True(ray1.isClose(ray2));
         }
 
-        public  Color lambda(Ray r)
+        public Color lambda(Ray r)
         {
             return new Color(1.0f, 2.0f, 3.0f);
         }
@@ -150,7 +150,7 @@ namespace Trace.Test
             for (int row = 0; row < image.height; row++)
             {
                 for (int col = 0; col < image.width; col++)
-                {   
+                {
                     Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)));
                 }
             }
