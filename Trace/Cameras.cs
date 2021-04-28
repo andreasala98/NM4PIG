@@ -25,4 +25,40 @@ namespace Trace
 
     }
 
+    class ImageTracer
+    {
+        public HdrImage image;
+        public Camera camera;
+
+        public ImageTracer(HdrImage i, Camera c)
+        {
+            image  = i;
+            camera = c;
+        }
+
+        public Ray fireRay(int col, int row, float uPixel = 0.5, float vPixel = 0.5)
+        {
+            u = (col + uPixel) / (image.width  - 1);
+            v = (row + vPixel) / (image.height - 1);
+            return camera.fireRay(u, v);
+        }
+
+        public delegate Color myFunction(Ray r);
+        public void fireAllRay(Func<Ray, Color> myFunction)
+        {
+            for(int r = 1; r <= image.height; r++)
+            {
+                for(int c = 1; r <= image.width; c++)
+                {
+                    Ray raggio = this.fireRay(c, r);
+                    Color colore = Func(raggio);
+                    this.image.setPixel(r, c, colore);
+                }
+            }
+            
+        }
+    }
+
+
+
 }

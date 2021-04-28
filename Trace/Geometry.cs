@@ -202,6 +202,9 @@ namespace Trace
             return a.areClose(Matrix4x4.Identity);
         }
 
+        // The Matrix4x4 methods CreateTransletion and CreateRotatoin actually produce the
+        // the transpose of the matrices we wanna use.
+        
         public static Transformation Translation(Vec a)
         {
             return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
