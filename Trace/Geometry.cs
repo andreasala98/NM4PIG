@@ -21,14 +21,28 @@ using System.Numerics;
 
 namespace Trace
 {
+    /// <summary>
+    /// Type to represent a point in 3D space.
+    /// </summary>
     public struct Point
     {
-        // data members
+        /// <summary>
+        /// x coordinate of the point.
+        /// </summary>
         public float x;
+        /// <summary>
+        /// y coordinate of the point.
+        /// </summary>
         public float y;
+        /// <summary>
+        /// z coordinate of the point.
+        /// </summary>
         public float z;
 
         // constructor
+        /// <summary>
+        /// Default constructor for Point. It takes x,y,z in this order.
+        /// </summary>
         public Point(float x, float y, float z)
         {
             this.x = x;
