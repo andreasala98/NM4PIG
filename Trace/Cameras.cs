@@ -23,7 +23,6 @@ namespace Trace
     /// <summary>
     /// An efficient type representing a ray to be fired.
     /// </summary>
-  
     public struct Ray
     {
         /// <summary>
@@ -50,15 +49,15 @@ namespace Trace
         /// Default setting: 0
         /// </summary>
 
-                public int depth;
-      /// <summary>
-      ///  Default constructor for Ray.
-      /// </summary>
-      /// <param name="or"> Origin point (observer) </param>
-      /// <param name="d"> Vector direction </param>
-      /// <param name="tm"> Minimum distance </param>
-      /// <param name="tM"> Maximum distance </param>
-      /// <param name="dep"> Number of reflections </param>
+        public int depth;
+        /// <summary>
+        ///  Default constructor for Ray.
+        /// </summary>
+        /// <param name="or"> Origin point (observer) </param>
+        /// <param name="d"> Vector direction </param>
+        /// <param name="tm"> Minimum distance </param>
+        /// <param name="tM"> Maximum distance </param>
+        /// <param name="dep"> Number of reflections </param>
         public Ray(Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
         {
             this.origin = or;
@@ -90,9 +89,9 @@ namespace Trace
         /// </summary>
         /// <param name="T"> A <see cref="Transformation"/> object. </param>
         /// <returns> The transformed ray.</returns>
-        public Ray Transform(Transformation T) 
+        public Ray transform(Transformation T)
             => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
-        
+
 
     }
 
@@ -102,13 +101,14 @@ namespace Trace
     /// </summary>
     public abstract class Camera
     {
-        public float aspectRatio = 1.0f;
-        public Transformation transformation = new Transformation(1);
+        public float aspectRatio;
+        public Transformation transformation;
 
-        public Camera(float aspRat, Transformation transf)
+        public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
-            this.aspectRatio = aspRat;
-            this.transformation = transf;
+
+            this.aspectRatio = aspectRatio ?? 1.0f;
+            this.transformation = transformation ?? new Transformation(1);
         }
 
         /// <summary>
@@ -133,14 +133,17 @@ namespace Trace
         /// images, you should probably set `aspectRatio` to 16/9, as this is the most used aspect ratio
         /// used in modern monitors.</param>
         /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
-        public OrthogonalCamera(float aspRat, Transformation transf) : base(aspRat, transf) { }
+        public OrthogonalCamera(float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { }
 
         /// <summary>
-        /// ciao
+        /// Shoot a ray through the camera's screen <br/>
+        /// The coordinates(u, v) specify the point on the screen where the ray crosses it. Coordinates(0f, 0f) represent
+        /// the bottom-left corner, (0f, 1f) the top-left corner, (1f, 0f) the bottom-right corner, and (1f, 1f) the top-right
+        /// corner
         /// </summary>
-        /// <param name="u">u</param>
-        /// <param name="v">v</param>
-        /// <returns></returns>
+        /// <param name="u">questo è u</param>
+        /// <param name="v"></param>
+        /// <returns>A <see cref="Trace.Ray"/> object.</returns>
         public override Ray fireRay(float u, float v)
         {
             Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
@@ -151,10 +154,10 @@ namespace Trace
 
     public class PerspectiveCamera : Camera
     {
-        public float screenDistance = 1.0f;
-        public PerspectiveCamera(float screenDist, float aspRat, Transformation transf) : base(aspRat, transf)
+        public float screenDistance;
+        public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation)
         {
-            this.screenDistance = screenDist;
+            this.screenDistance = screenDistance ?? 1.0f;
         }
 
         public override Ray fireRay(float u, float v)
@@ -163,5 +166,8 @@ namespace Trace
             Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
             return new Ray(origin, direction, 1.0f).transform(this.transformation);
         }
+
+        public float apertureDeg()
+            => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
     }
 }
