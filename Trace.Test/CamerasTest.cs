@@ -16,38 +16,35 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
-using System;
+using Xunit;
 
-namespace Trace
+namespace Trace.Test
 {
 
-    struct Ray
+    public class RayTest
     {
-        public Point origin;
-        public Vec dir;
-        public float tmin;
-        public float tmax; 
-        public int depth;
+    
 
-        public Ray (Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep=0)
-        {
-            this.origin = or;
-            this.dir = d;
-            this.tmin = (float)tm;
-            this.tmax = (float)tM;
-            this.depth = (int)dep; 
-        }
-        
-        public Point at (float t)
-            => this.origin + (this.dir * t);
 
-        
     }
 
 
-    class Camera
+    public class CameraTest
     {
+    
+
 
     }
+
+
+    public class ImageTracerTest
+    {
+
+
+
+    }
+
+
+
 
 }
