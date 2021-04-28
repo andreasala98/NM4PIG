@@ -28,8 +28,8 @@ namespace Trace.Test
         Ray ray1 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(5.0f, 4.0f, -1.0f));
         Ray ray2 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(5.0f, 4.0f, -1.0f));
         Ray ray3 = new Ray(new Point(5.0f, 1.0f, 4.0f), new Vec(3.0f, 9.0f, 4.0f));
-        Ray ray4 = new Ray(new Point(1.0f, 2.0f, 4.0f), new Vec(4.0f,2.0f,1.0f));
-    
+        Ray ray4 = new Ray(new Point(1.0f, 2.0f, 4.0f), new Vec(4.0f, 2.0f, 1.0f));
+
         [Fact]
         public void TestIsRayClose()
         {
@@ -40,18 +40,18 @@ namespace Trace.Test
         [Fact]
         public void TestAt()
         {
-            Assert.True( ray4.at(0.0f).isClose(ray4.origin) );
-            Assert.True( ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)) );
-            Assert.True( ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)) );
+            Assert.True(ray4.at(0.0f).isClose(ray4.origin));
+            Assert.True(ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)));
+            Assert.True(ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)));
         }
 
         [Fact]
         public void TestTransform()
-         {
+        {
             Ray ray5 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(6.0f, 5.0f, 4.0f));
-            Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.rotationX( (float)System.Math.PI / 2.0f );
+            Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.rotationX((float)System.Math.PI / 2.0f);
 
-            Ray transf = ray5.Transform(T);
+            Ray transf = ray5.transform(T);
             Assert.True(transf.origin.isClose(new Point(11.0f, 8.0f, 14.0f)));
             Assert.True(transf.dir.isClose(new Vec(6.0f, -4.0f, 5.0f)));
         }
@@ -61,9 +61,27 @@ namespace Trace.Test
 
     public class CameraTest
     {
-    
+        [Fact]
+        public void testOrthogonalCamera()
+        {
+            OrthogonalCamera cam = new OrthogonalCamera(aspectRatio: 2.0f);
+
+            Ray ray1 = cam.fireRay(0.0f, 0.0f);
+            Ray ray2 = cam.fireRay(1.0f, 0.0f);
+            Ray ray3 = cam.fireRay(0.0f, 1.0f);
+            Ray ray4 = cam.fireRay(1.0f, 1.0f);
 
 
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray2.dir).getSquaredNorm()));
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray3.dir).getSquaredNorm()));
+            Assert.True(Vec._isClose(0.0f, ray1.dir.crossProd(ray4.dir).getSquaredNorm()));
+
+            Assert.True(ray1.at(1.0f).isClose(new Point(0.0f, 2.0f, -1.0f)));
+            Assert.True(ray2.at(1.0f).isClose(new Point(0.0f, -2.0f, -1.0f)));
+            Assert.True(ray3.at(1.0f).isClose(new Point(0.0f, 2.0f, 1.0f)));
+            Assert.True(ray4.at(1.0f).isClose(new Point(0.0f, -2.0f, 1.0f)));
+
+        }
     }
 
 

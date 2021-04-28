@@ -132,7 +132,7 @@ namespace Trace
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
         //Method for checking closeness in tests
-        private static bool _isClose(float a, float b, float? epsilon = 1e-7f)
+        public static bool _isClose(float a, float b, float? epsilon = 1e-7f)
             => Math.Abs(a - b) < epsilon;
 
         public bool isClose(Vec vector)
@@ -181,9 +181,9 @@ namespace Trace
         }
 
 
-        public Transformation getInverse ()
+        public Transformation getInverse()
         {
-            return new Transformation (this.Minv, this.M);
+            return new Transformation(this.Minv, this.M);
         }
 
 
@@ -204,7 +204,7 @@ namespace Trace
 
         public static Transformation Translation(Vec a)
         {
-            return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+            return new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
                                         Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
         }
 
@@ -216,10 +216,10 @@ namespace Trace
             b.M.M22 = a.y;
             b.M.M33 = a.z;
 
-            b.Minv.M11 = 1.0f/a.x;
-            b.Minv.M22 = 1.0f/a.y;
-            b.Minv.M33 = 1.0f/a.z;
-            
+            b.Minv.M11 = 1.0f / a.x;
+            b.Minv.M22 = 1.0f / a.y;
+            b.Minv.M33 = 1.0f / a.z;
+
             return b;
         }
 
@@ -267,13 +267,13 @@ namespace Trace
             => new Vec(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
                          p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
                          p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
-        
-         public static Normal operator * (Transformation A, Normal p)
-             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
-                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
-                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
-         
-        
+
+        public static Normal operator *(Transformation A, Normal p)
+            => new Normal(p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                            p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
+                            p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33);
+
+
 
     } // end of Transformation
 
