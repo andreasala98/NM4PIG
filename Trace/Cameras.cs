@@ -29,27 +29,31 @@ namespace Trace
         /// The origin point, where the observer lies.
         /// </summary>
         public Point origin;
+
         /// <summary>
         /// The vector orthogonally connecting the observer to the center of the screen 
         /// </summary>
         public Vec dir;
+
         /// <summary>
         /// Minimum travelling distance of the ray. <br/>
         /// Default setting: 1e-5
         /// </summary>
         public float tmin;
+
         /// <summary>
         /// Minimum travelling distance of the ray. <br/>
         /// Default setting: Infinity
         /// 
         /// </summary>
         public float tmax;
+
         /// <summary>
         /// Number of reflections allowed <br/>
         /// Default setting: 0
         /// </summary>
-
         public int depth;
+
         /// <summary>
         ///  Default constructor for Ray.
         /// </summary>
@@ -81,9 +85,8 @@ namespace Trace
         /// <param name="r"> The other ray.</param>
         /// <returns> True if rays are close enough.</returns>
         public bool isClose(Ray r)
-        {
-            return this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
-        }
+            => this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
+
         /// <summary>
         /// Apply affine transformation to the ray.
         /// </summary>
@@ -92,9 +95,8 @@ namespace Trace
         public Ray transform(Transformation T)
             => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
 
-
     }
-    
+
     /// <summary>
     /// An abstract class representing an observer <br/>
     /// Concrete subclasses are `OrthogonalCamera` and `PerspectiveCamera`.
@@ -113,6 +115,9 @@ namespace Trace
         /// </summary>
         public Transformation transformation;
 
+        /// <summary>
+        /// Create a new camera. This is a constructor for an abstract class and so cannot be used. Use instead constructor for OrthogonalCamera and PerspectiveCamera
+        /// </summary>
         public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
             this.aspectRatio = aspectRatio ?? 1.0f;
@@ -178,7 +183,7 @@ namespace Trace
         /// <param name="aspectRatio">The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
         /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
         /// used in modern monitors.</param>
-        /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
+        /// <param name="transformation">It is an instance of the struct <see cref="Transformation"/>.</param>
         public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { this.screenDistance = screenDistance ?? 1.0f; }
 
         /// <summary>
@@ -203,7 +208,7 @@ namespace Trace
         /// </summary>
         /// <returns> The aperture angle, measured in degrees</returns>
         public float apertureDeg()
-            => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
+            => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / Constant.PI;
     }
 
     /// <summary>
@@ -223,7 +228,7 @@ namespace Trace
         /// <param name="c">Camera-type input parameter</param>
         public ImageTracer(HdrImage i, Camera c)
         {
-            image  = i;
+            image = i;
             camera = c;
         }
         /// <summary>
@@ -240,7 +245,7 @@ namespace Trace
         /// <returns></returns>
         public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
-            float u = (col + uPixel) / (image.width  - 1);
+            float u = (col + uPixel) / (image.width - 1);
             float v = (row + vPixel) / (image.height - 1);
             return camera.fireRay(u, v);
         }
@@ -252,16 +257,16 @@ namespace Trace
         /// <param name="Func"></param>
         public void fireAllRay(myFunction Func)
         {
-            for(int r = 0; r < image.height; r++)
+            for (int r = 0; r < image.height; r++)
             {
-                for(int c = 0; c < image.width; c++)
+                for (int c = 0; c < image.width; c++)
                 {
                     Ray raggio = this.fireRay(c, r);
                     Color colore = Func(raggio);
                     this.image.setPixel(c, r, colore);
                 }
             }
-            
+
         }
     }
 }

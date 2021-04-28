@@ -27,7 +27,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Trace
 {
-    
+
     public struct HdrImage
     {
         public int width;
@@ -257,12 +257,6 @@ namespace Trace
                     pixel[pixelOffset(j, this.height - 1 - i)] = temp;
                 }
             }
-        }
-
-        public static bool isClose(double a, double b)
-        {
-            var epsilon = 1e-8F;
-            return Math.Abs(a - b) < epsilon;
         }
 
         public float averageLumi(double? Delta = null)
