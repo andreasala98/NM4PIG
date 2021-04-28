@@ -25,7 +25,7 @@ namespace Trace
     }
 
     /// <summary>
-    /// A class that contains some usefull constants, which are used many times inside the library
+    /// A class that contains some useful constants, which are used many times inside the library
     /// </summary>
     public class Constant
     {
