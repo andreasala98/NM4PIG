@@ -20,9 +20,62 @@ using System;
 
 namespace Trace
 {
-    class Camera
+    public struct Ray
     {
 
     }
 
+    /// <summary>
+    /// An abstract class representing an observer
+    /// Concrete subclasses are `OrthogonalCamera` and `PerspectiveCamera`.
+    /// </summary>
+    public abstract class Camera
+    {
+        public float aspectRatio = 1.0f;
+        public Transformation transformation = new Transformation(1);
+
+        public Camera(float aspRat, Transformation transf)
+        {
+            this.aspectRatio = aspRat;
+            this.transformation = transf;
+        }
+        public abstract Ray fireRay(float u, float v);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class OrthogonalCamera : Camera
+    {
+        public OrthogonalCamera(float aspRat, Transformation transf) : base(aspRat, transf) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public override Ray fireRay(float u, float v)
+        {
+            Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
+            Vec direction = new Vec(1.0f, 0.0f, 0.0f);
+            return new Ray(origin: origin, dir: direction, tmin: 1.0f).transform(this.transformation);
+        }
+    }
+
+    public class PerspectiveCamera : Camera
+    {
+        public float screenDistance = 1.0f;
+        public PerspectiveCamera(float screenDist, float aspRat, Transformation transf) : base(aspRat, transf)
+        {
+            this.screenDistance = screenDist;
+        }
+
+        public override Ray fireRay(float u, float v)
+        {
+            Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
+            Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
+            return new Ray(origin: origin, dir: direction, tmin: 1.0f).transform(this.transformation);
+        }
+    }
 }
