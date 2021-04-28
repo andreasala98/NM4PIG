@@ -50,21 +50,41 @@ namespace Trace
             => new Color(col1.r + col2.r, col1.g + col2.g, col1.b + col2.b);
 
 
-        //Difference of two Colors
+        /// <summary>
+        /// Element-wise difference of two Colors.
+        /// </summary>
+        /// <param name="col1"> The first Color</param>
+        /// <param name="col2"> The second Color</param>
+        /// <returns> A new color.</returns>
         public static Color operator -(Color col1, Color col2)
             => new Color(col1.r - col2.r, col1.g - col2.g, col1.b - col2.b);
 
 
-        // Scalar products
+        /// <summary>
+        /// Multiplies a color with a scalar.
+        /// </summary>
+        /// <param name="a"> A color.</param>
+        /// <param name="alfa">Scaling factor.</param>
+        /// <returns> A new color.</returns>
         public static Color operator *(Color a, float alfa)
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
 
-
+        /// <summary>
+        /// Multiplies a color with a scalar.
+        /// </summary>
+        /// <param name="a"> A color.</param>
+        /// <param name="alfa">Scaling factor.</param>
+        /// <returns> A new color.</returns>
         public static Color operator *(float alfa, Color a)
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
 
 
-        //Product of two Colors
+        /// <summary>
+        /// Multiplies a color with another color.
+        /// </summary>
+        /// <param name="A"> A color.</param>
+        /// <param name="B">Another color.</param>
+        /// <returns> A new color.</returns>
         public static Color operator *(Color A, Color B)
             => new Color(A.r * B.r, A.g * B.g, A.b * B.b);
 
@@ -82,13 +102,16 @@ namespace Trace
         /// </summary>
         /// <param name="a"> A Color. </param>
         /// <param name="b"> Another Color. </param>
-        /// <returns></returns>
+        /// <returns> True if the colors are close enough</returns>
 
         public bool isClose(Color A)
         {
             return isClose(this.r, A.r) && isClose(this.b, A.b) && isClose(this.g, A.g);
         }
-
+        /// <summary>
+        /// Calculate luminosity of a color according to Shirley and Morley.
+        /// </summary>
+        /// <returns> A float represeting luminosity of the pixel </returns>
         public float Luminosity()
             => (float)(Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
 
