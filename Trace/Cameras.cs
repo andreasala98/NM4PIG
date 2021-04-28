@@ -214,18 +214,38 @@ namespace Trace
             => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / Constant.PI;
     }
 
-
+    /// <summary>
+    /// A class that links an a Camera object to an HdrImage object to creat a matrix of pixel after solving
+    /// the rendering equation <br/>
+    /// Public data members: HdrImage image, Camera camera
+    /// </summary>
     public class ImageTracer
-    {
+        {
         public HdrImage image;
         public Camera camera;
 
+        /// <summary>
+        /// Basic constructor for the class.
+        /// </summary>
+        /// <param name="i">HdrImage-type input parameter</param>
+        /// <param name="c">Camera-type input parameter</param>
         public ImageTracer(HdrImage i, Camera c)
         {
             image = i;
             camera = c;
         }
-
+        /// <summary>
+        /// Method that generates a Ray-type object on the imaginary screen in the coordinates 
+        /// (col+uPixel),(row+vPixel), both normalized
+        /// to the HdrImage-datamember scale
+        /// </summary>
+        /// <param name="col">number of column</param>
+        /// <param name="row">number of row</param>
+        /// <param name="uPixel">x coord in the pixel<br/>
+        /// if not specified, it's equal to 0.5</param>
+        /// <param name="vPixel">y coord in the pixel<br/>
+        /// if not specified, it's equal to 0.5</param>
+        /// <returns></returns>
         public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
             float u = (col + uPixel) / (image.width - 1);
@@ -234,6 +254,10 @@ namespace Trace
         }
 
         public delegate Color myFunction(Ray r);
+        /// <summary>
+        /// Method that sets all pixels of HdrImage datamember to a certain color, specified by a myFunction function
+        /// </summary>
+        /// <param name="Func"></param>
         public void fireAllRay(myFunction Func)
         {
             for (int r = 0; r < image.height; r++)
