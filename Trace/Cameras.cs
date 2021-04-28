@@ -22,11 +22,33 @@ namespace Trace
 {
     public struct Ray
     {
+        public Point origin;
+        public Vec dir;
+        public float tmin;
+        public float tmax;
+        public int depth;
 
+        public Ray(Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
+        {
+            this.origin = or;
+            this.dir = d;
+            this.tmin = (float)tm;
+            this.tmax = (float)tM;
+            this.depth = (int)dep;
+        }
+
+        public Point at(float t)
+            => this.origin + (this.dir * t);
+
+
+        public bool isClose(Ray r)
+        {
+            return this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
+        }
     }
 
     /// <summary>
-    /// An abstract class representing an observer
+    /// An abstract class representing an observer <br/>
     /// Concrete subclasses are `OrthogonalCamera` and `PerspectiveCamera`.
     /// </summary>
     public abstract class Camera
@@ -39,27 +61,42 @@ namespace Trace
             this.aspectRatio = aspRat;
             this.transformation = transf;
         }
+
+        /// <summary>
+        /// Fire a ray through the camera.<br/>
+        /// This is an abstract method. It has been redefined in derived classes.
+        /// Fire a ray that goes through the screen at the position (u, v). The exact meaning
+        /// of these coordinates depend on the projection used by the camera.
+        /// </summary>
         public abstract Ray fireRay(float u, float v);
     }
 
     /// <summary>
-    /// 
+    /// A camera implementing an orthogonal 3D → 2D projection
+    /// This class implements an observer seeing the world through an orthogonal projection.
     /// </summary>
     public class OrthogonalCamera : Camera
     {
+        /// <summary>
+        /// Create a new orthogonal camera
+        /// </summary>
+        /// <param name="aspRat">It is the ratio between the width and the height of the screen. For fullscreen
+        /// images, you should probably set `aspectRatio` to 16/9, as this is the most used aspect ratio
+        /// used in modern monitors.</param>
+        /// <param name="transf">It is an instance of the struct <see cref="Transformation"/>.</param>
         public OrthogonalCamera(float aspRat, Transformation transf) : base(aspRat, transf) { }
 
         /// <summary>
-        /// 
+        /// ciao
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="v"></param>
+        /// <param name="u">u</param>
+        /// <param name="v">v</param>
         /// <returns></returns>
         public override Ray fireRay(float u, float v)
         {
             Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
             Vec direction = new Vec(1.0f, 0.0f, 0.0f);
-            return new Ray(origin: origin, dir: direction, tmin: 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).transform(this.transformation);
         }
     }
 
@@ -75,7 +112,7 @@ namespace Trace
         {
             Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
             Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
-            return new Ray(origin: origin, dir: direction, tmin: 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).transform(this.transformation);
         }
     }
 }
