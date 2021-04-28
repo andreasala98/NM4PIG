@@ -226,7 +226,7 @@ namespace Trace
         /// <summary>
         /// Converts a Vec to a string for printing.
         /// </summary>
-        /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
+        /// <returns> A string in the format Vec(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
         //Method for checking closeness in tests
@@ -244,10 +244,22 @@ namespace Trace
 
     }
 
+    /// <summary>
+    ///  Value type represnting a Normal vector
+    /// </summary>
     public struct Normal
     {
+        /// <summary>
+        /// Basic data members
+        /// </summary>
         public float x, y, z;
 
+        /// <summary>
+        ///  Default constructor
+        /// </summary>
+        /// <param name="ax"> x coordinate </param>
+        /// <param name="ay"> y coordinate </param>
+        /// <param name="az"> z coordinate </param>
         public Normal(float ax, float ay, float az)
         {
             this.x = ax;
@@ -255,27 +267,54 @@ namespace Trace
             this.z = az;
         }
 
+        /// <summary>
+        /// Converts a Normal to a string for printing.
+        /// </summary>
+        /// <returns> A string in the format Normal(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
             => Math.Abs(a - b) < epsilon;
 
+        /// <summary>
+        /// Boolean to check if two Normals are close enough
+        /// </summary>
+        /// <param name="vector"> The other Normal</param>
+        /// <returns>True if the Normals are close</returns> 
         public bool isClose(Normal vector)
             => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
     }
 
+    /// <summary>
+    ///  Affine transformation. It is represented by a 4x4 matrix. 
+    ///  It can be used to create translations, rotations and scalings.
+    /// </summary>
     public struct Transformation
     {
+        /// <summary>
+        /// 4x4 Matrix representing the transformation.
+        /// </summary>
         public Matrix4x4 M;
+        /// <summary>
+        /// 4x4 Matrix representing the inverse transformation.
+        /// </summary>
         public Matrix4x4 Minv;
 
-
+        /// <summary>
+        /// Constructor for Identity transformation.
+        /// </summary>
+        /// <param name="a"> Any integer is fine.</param>
         public Transformation(int a)
         {
             this.M = Matrix4x4.Identity;
             this.Minv = Matrix4x4.Identity;
         }
 
+        /// <summary>
+        /// Constructor taking a 4x4 matrix and its inverse as inputs.
+        /// </summary>
+        /// <param name="myMat"> The matrix representing the transformation. </param>
+        /// <param name="myInvMat"> The inverse matrix.</param>
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
 
         {
@@ -283,7 +322,10 @@ namespace Trace
             this.Minv = myInvMat;
         }
 
-
+        /// <summary>
+        /// Switches the M and Minv fields. Practically, inverts the transformation.
+        /// </summary>
+        /// <returns> The inverse Transformation. </returns>
         public Transformation getInverse ()
         {
             return new Transformation (this.Minv, this.M);
@@ -293,18 +335,33 @@ namespace Trace
         private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
             => Math.Abs(a - b) < epsilon;
 
+
+        /// <summary>
+        /// Method to check if a Transformation and a Matrix4x4 are close.
+        /// </summary>
+        /// <param name="a"> The matrix to be compared with. </param>
+        /// <returns> True if Transformation and Matrix are close</returns>
         public bool areClose(Matrix4x4 a)
             => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) &&
                _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) &&
                _isClose(this.M.M31, a.M31) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
                _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
 
+        /// <summary>
+        /// Method to check if the Minv field actually contains the inverse matrix.
+        /// </summary>
+        /// <returns> True if Minv is the inverse matrix of M</returns>
         public bool isConsistent()
         {
             Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
             return a.areClose(Matrix4x4.Identity);
         }
 
+        /// <summary>
+        /// Translate a Vec in 3D
+        /// </summary>
+        /// <param name="a"> The vector generating the translation. </param>
+        /// <returns> The translation transformation. </returns>
         public static Transformation Translation(Vec a)
         {
             return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
@@ -325,7 +382,11 @@ namespace Trace
             
             return b;
         }
-
+        /// <summary>
+        /// Rotation along the x axis.
+        /// </summary>
+        /// <param name="a"> The rotation angle in radians </param>
+        /// <returns> The rotation transformation. </returns>
         public static Transformation rotationX(float theta)
         {
             return new Transformation(
@@ -333,7 +394,11 @@ namespace Trace
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationX(-theta))
             );
         }
-
+        /// <summary>
+        /// Rotation along the y axis.
+        /// </summary>
+        /// <param name="a"> The rotation angle in radians </param>
+        /// <returns> The rotation transformation. </returns>
         public static Transformation rotationY(float theta)
         {
             return new Transformation(
@@ -342,6 +407,11 @@ namespace Trace
             );
         }
 
+        /// <summary>
+        /// Rotation along the z axis.
+        /// </summary>
+        /// <param name="a"> The rotation angle in radians </param>
+        /// <returns> The rotation transformation. </returns>
         public static Transformation rotationZ(float theta)
         {
             return new Transformation(
@@ -350,6 +420,12 @@ namespace Trace
             );
         }
 
+        /// <summary>
+        /// Composition of transformations
+        /// </summary>
+        /// <param name="A"> Transformation you want to operate last</param>
+        /// <param name="B"> Transformation you want to operate first</param>
+        /// <returns></returns>
         public static Transformation operator *(Transformation A, Transformation B)
             => new Transformation(Matrix4x4.Multiply(A.M, B.M), Matrix4x4.Multiply(B.Minv, A.Minv));
 
