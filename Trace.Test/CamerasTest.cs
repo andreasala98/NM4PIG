@@ -32,34 +32,34 @@ namespace Trace.Test
         [Fact]
         public void TestIsRayClose()
         {
-            Assert.True(ray1.isClose(ray2));
-            Assert.False(ray1.isClose(ray3));
+            Assert.True(ray1.isClose(ray2), "TestIsRayClose failed - Assert 1/2");
+            Assert.False(ray1.isClose(ray3), "TestIsRayClose failed - Assert 2/2");
         }
 
         [Fact]
         public void TestAt()
         {
-            Assert.True(ray4.at(0.0f).isClose(ray4.origin));
-            Assert.True(ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)));
-            Assert.True(ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)));
+            Assert.True(ray4.at(0.0f).isClose(ray4.origin), "TestAt failed - Assert 1/3");
+            Assert.True(ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)), "TestAt failed - Assert 2/3");
+            Assert.True(ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)), "TestAt failed - Assert 3/3");
         }
 
         [Fact]
         public void TestTransform()
         {
             Ray ray5 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(6.0f, 5.0f, 4.0f));
-            Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.rotationX((float)System.Math.PI / 2.0f);
+            Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.RotationX((float)System.Math.PI / 2.0f);
 
             Ray transf = ray5.transform(T);
-            Assert.True(transf.origin.isClose(new Point(11.0f, 8.0f, 14.0f)));
-            Assert.True(transf.dir.isClose(new Vec(6.0f, -4.0f, 5.0f)));
+            Assert.True(transf.origin.isClose(new Point(11.0f, 8.0f, 14.0f)), "TestTransform failed - Assert 1/2");
+            Assert.True(transf.dir.isClose(new Vec(6.0f, -4.0f, 5.0f)), "TestTransform failed - Assert 2/2");
         }
 
     }
 
-
     public class CameraTest
     {
+
         [Fact]
         public void testOrthogonalCamera()
         {
@@ -83,8 +83,7 @@ namespace Trace.Test
         [Fact]
         void testOrthogonalCameraTransform()
         {
-            Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
-            OrthogonalCamera cam = new OrthogonalCamera(transformation: Transformation.Translation(-2.0f * VEC_Y) * Transformation.rotationZ((float)Math.PI / 2.0f));
+            OrthogonalCamera cam = new OrthogonalCamera(transformation: Transformation.Translation(-2.0f * Constant.VEC_Y) * Transformation.RotationZ((float)Math.PI / 2.0f));
             Ray ray = cam.fireRay(0.5f, 0.5f);
             Assert.True(ray.at(1.0f).isClose(new Point(0.0f, -2.0f, 0.0f)), "testOrthogonalCameraTransform failed - Assert 1/1");
         }
@@ -112,8 +111,7 @@ namespace Trace.Test
         [Fact]
         void testPerspectiveCameraTransform()
         {
-            Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
-            PerspectiveCamera cam = new PerspectiveCamera(transformation: Transformation.Translation(-2.0f * VEC_Y) * Transformation.rotationZ((float)Math.PI / 2.0f));
+            PerspectiveCamera cam = new PerspectiveCamera(transformation: Transformation.Translation(-2.0f * Constant.VEC_Y) * Transformation.RotationZ((float)Math.PI / 2.0f));
             Ray ray = cam.fireRay(0.5f, 0.5f);
             Assert.True(ray.at(1.0f).isClose(new Point(0.0f, -2.0f, 0.0f)), "testPerspectiveCameraTransform failed - Assert 1/1");
         }
@@ -131,13 +129,11 @@ namespace Trace.Test
 
             Ray ray1 = tracer.fireRay(0, 0, 2.5f, 1.5f);
             Ray ray2 = tracer.fireRay(2, 1, 0.5f, 0.5f);
-            Assert.True(ray1.isClose(ray2));
+            Assert.True(ray1.isClose(ray2), "TestfireRay failed - Assert 1/1");
         }
 
         public Color lambda(Ray r)
-        {
-            return new Color(1.0f, 2.0f, 3.0f);
-        }
+            => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
         public void TestfireAllRay()
@@ -151,7 +147,7 @@ namespace Trace.Test
             {
                 for (int col = 0; col < image.width; col++)
                 {
-                    Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)));
+                    Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)), $"TestfireAllRay failed - Assert row={row}, col={col}");
                 }
             }
         }

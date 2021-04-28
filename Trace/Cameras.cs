@@ -208,7 +208,7 @@ namespace Trace
         /// </summary>
         /// <returns> The aperture angle, measured in degrees</returns>
         public float apertureDeg()
-            => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
+            => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / Constant.PI;
     }
 
 

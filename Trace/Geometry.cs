@@ -30,16 +30,17 @@ namespace Trace
         /// x coordinate of the point.
         /// </summary>
         public float x;
+
         /// <summary>
         /// y coordinate of the point.
         /// </summary>
         public float y;
+
         /// <summary>
         /// z coordinate of the point.
         /// </summary>
         public float z;
 
-        // constructor
         /// <summary>
         /// Default constructor for Point. It takes x,y,z in this order.
         /// </summary>
@@ -56,18 +57,13 @@ namespace Trace
         /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Point(x={this.x}, y={this.y}, z={this.z})";
 
-        // isClose method to Tests purposes
-        private static bool isClose(float a, float b, float? epsilon = 1e-8f)
-            => Math.Abs(a - b) < epsilon;
-
         /// <summary>
         /// Boolean to check if two Points are close enough
         /// </summary>
         /// <param name="A"> The other Point</param>
         /// <returns>True if the Points are close</returns> 
         public bool isClose(Point A)
-           => isClose(this.x, A.x) && isClose(this.y, A.y) && isClose(this.z, A.z);
-
+           => Utility.areClose(this.x, A.x) && Utility.areClose(this.y, A.y) && Utility.areClose(this.z, A.z);
 
         /// <summary>
         /// Adds a point and a vec
@@ -107,7 +103,6 @@ namespace Trace
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
             return new Point(a.x / alfa, a.y / alfa, a.z / alfa);
         }
-
     }
 
     /// <summary>
@@ -116,15 +111,15 @@ namespace Trace
     public struct Vec
     {
         /// <summary>
-        ///  x coordinate of the vector.
+        /// x coordinate of the vector.
         /// </summary>
         public float x;
         /// <summary>
-        ///  y coordinate of the vector.
+        /// y coordinate of the vector.
         /// </summary>
         public float y;
         /// <summary>
-        ///  z coordinate of the vector.
+        /// z coordinate of the vector.
         /// </summary>
         public float z;
 
@@ -158,7 +153,7 @@ namespace Trace
         /// <returns> A vector difference </returns>
         public static Vec operator -(Vec a, Vec b)
             => new Vec(a.x - b.x, a.y - b.y, a.z - b.z);
-   
+
         /// <summary>
         /// Multiplication vector - scalar
         /// </summary>
@@ -167,6 +162,7 @@ namespace Trace
         /// <returns> A scaled vector. </returns>
         public static Vec operator *(float alfa, Vec a)
             => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
+
         /// <summary>
         /// Multiplication vector - scalar
         /// </summary>
@@ -200,26 +196,37 @@ namespace Trace
         /// <summary>
         ///  Cross product between two 3D vectors.
         /// </summary>
-        /// <param name="a"> First vector </param>
         /// <param name="b"> Second vector</param>
         /// <returns> Cross product in Vec format.</returns>
         public Vec crossProd(Vec b)
-          => new Vec  (this.y * b.z - this.z * b.y,
+            => new Vec(this.y * b.z - this.z * b.y,
                        this.z * b.x - this.x * b.z,
                        this.x * b.y - this.y * b.x);
 
-
+        /// <summary>
+        /// Squared norm of the vector
+        /// </summary>
+        /// <returns> The squared norm of the vector as float</returns>
         public float getSquaredNorm()
             => this * this;
 
+        /// <summary>
+        /// Norm of the vector
+        /// </summary>
+        /// <returns> The norm of the vector as float</returns>
         public float getNorm()
             => (float)Math.Sqrt(this.getSquaredNorm());
 
-        // Normalize vector
+        /// <summary>
+        /// Normalize the vector
+        /// </summary>
+        /// <returns>The vector normalized</returns>
         public Vec Normalize()
             => this / this.getNorm();
 
-        // This could be useful for debugging
+        /// <summary>
+        /// It checks if the vector is normalized. It is used for debugging purpose
+        /// </summary>
         public bool isNormalized()
             => this.getNorm() == 1.0f;
 
@@ -229,19 +236,13 @@ namespace Trace
         /// <returns> A string in the format Vec(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
-        //Method for checking closeness in tests
-        private static bool _isClose(float a, float b, float? epsilon = 1e-7f)
-            => Math.Abs(a - b) < epsilon;
-
         /// <summary>
         /// Boolean to check if two Vec are close enough
         /// </summary>
         /// <param name="vector"> The other Vec</param>
         /// <returns>True if the Vecs are close</returns> 
         public bool isClose(Vec vector)
-            => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
-
-
+            => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
     }
 
     /// <summary>
@@ -273,16 +274,13 @@ namespace Trace
         /// <returns> A string in the format Normal(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
-        private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
-            => Math.Abs(a - b) < epsilon;
-
         /// <summary>
         /// Boolean to check if two Normals are close enough
         /// </summary>
         /// <param name="vector"> The other Normal</param>
         /// <returns>True if the Normals are close</returns> 
         public bool isClose(Normal vector)
-            => _isClose(this.x, vector.x) && _isClose(this.y, vector.y) && _isClose(this.z, vector.z);
+            => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
     }
 
     /// <summary>
@@ -295,6 +293,7 @@ namespace Trace
         /// 4x4 Matrix representing the transformation.
         /// </summary>
         public Matrix4x4 M;
+
         /// <summary>
         /// 4x4 Matrix representing the inverse transformation.
         /// </summary>
@@ -316,7 +315,6 @@ namespace Trace
         /// <param name="myMat"> The matrix representing the transformation. </param>
         /// <param name="myInvMat"> The inverse matrix.</param>
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
-
         {
             this.M = myMat;
             this.Minv = myInvMat;
@@ -326,102 +324,75 @@ namespace Trace
         /// Switches the M and Minv fields. Practically, inverts the transformation.
         /// </summary>
         /// <returns> The inverse Transformation. </returns>
-        public Transformation getInverse ()
-        {
-            return new Transformation (this.Minv, this.M);
-        }
-
-
-        private static bool _isClose(float a, float b, float? epsilon = 1e-8f)
-            => Math.Abs(a - b) < epsilon;
-
+        public Transformation getInverse()
+            => new Transformation(this.Minv, this.M);
 
         /// <summary>
         /// Method to check if a Transformation and a Matrix4x4 are close.
         /// </summary>
         /// <param name="a"> The matrix to be compared with. </param>
         /// <returns> True if Transformation and Matrix are close</returns>
-        public bool areClose(Matrix4x4 a)
-            => _isClose(this.M.M11, a.M11) && _isClose(this.M.M12, a.M12) && _isClose(this.M.M13, a.M13) && _isClose(this.M.M14, a.M14) &&
-               _isClose(this.M.M21, a.M21) && _isClose(this.M.M22, a.M22) && _isClose(this.M.M23, a.M23) && _isClose(this.M.M24, a.M24) &&
-               _isClose(this.M.M31, a.M31) && _isClose(this.M.M32, a.M32) && _isClose(this.M.M33, a.M33) && _isClose(this.M.M34, a.M34) &&
-               _isClose(this.M.M41, a.M41) && _isClose(this.M.M42, a.M42) && _isClose(this.M.M43, a.M43) && _isClose(this.M.M44, a.M44);
+        public bool isClose(Transformation a)
+            => Utility.areMatricesClose(this.M, a.M) && Utility.areMatricesClose(this.Minv, a.Minv);
 
         /// <summary>
         /// Method to check if the Minv field actually contains the inverse matrix.
         /// </summary>
         /// <returns> True if Minv is the inverse matrix of M</returns>
         public bool isConsistent()
-        {
-            Transformation a = new Transformation(this.M * this.Minv, this.M * this.Minv);
-            return a.areClose(Matrix4x4.Identity);
-        }
+            => Utility.areMatricesClose(this.M * this.Minv, Matrix4x4.Identity);
 
         // The Matrix4x4 methods CreateTransletion and CreateRotatoin actually produce the
         // the transpose of the matrices we wanna use.
-        
+
         /// <summary>
         /// Translate a Vec in 3D
         /// </summary>
         /// <param name="a"> The vector generating the translation. </param>
         /// <returns> The translation transformation. </returns>
         public static Transformation Translation(Vec a)
-        {
-            return new Transformation(  Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
-                                        Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
-        }
+            => new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+                                    Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
 
+        /// <summary>
+        /// Return a Transformation object encoding a scaling
+        /// </summary>
+        /// <param name="a"> The vector generating the scaling. </param>
+        /// <returns> The scaling transformation. </returns>
         public static Transformation Scaling(Vec a)
-        {
-            Transformation b = new Transformation(1);
-            b.M.M11 = a.x;
-            b.M.M22 = a.y;
-            b.M.M33 = a.z;
+            => new Transformation(Matrix4x4.CreateScale(a.x, a.y, a.z),
+                                    Matrix4x4.CreateScale(1.0f / a.x, 1.0f / a.y, 1.0f / a.z));
 
-            b.Minv.M11 = 1.0f/a.x;
-            b.Minv.M22 = 1.0f/a.y;
-            b.Minv.M33 = 1.0f/a.z;
-            
-            return b;
-        }
         /// <summary>
         /// Rotation along the x axis.
         /// </summary>
-        /// <param name="a"> The rotation angle in radians </param>
+        /// <param name="theta"> The rotation angle in radians </param>
         /// <returns> The rotation transformation. </returns>
-        public static Transformation rotationX(float theta)
-        {
-            return new Transformation(
+        public static Transformation RotationX(float theta)
+            => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationX(theta)),
-                Matrix4x4.Transpose(Matrix4x4.CreateRotationX(-theta))
-            );
-        }
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationX(-theta)));
+
         /// <summary>
         /// Rotation along the y axis.
         /// </summary>
-        /// <param name="a"> The rotation angle in radians </param>
+        /// <param name="theta"> The rotation angle in radians </param>
         /// <returns> The rotation transformation. </returns>
-        public static Transformation rotationY(float theta)
-        {
-            return new Transformation(
+        public static Transformation RotationY(float theta)
+            => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationY(theta)),
-                Matrix4x4.Transpose(Matrix4x4.CreateRotationY(-theta))
-            );
-        }
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationY(-theta)));
 
         /// <summary>
         /// Rotation along the z axis.
         /// </summary>
-        /// <param name="a"> The rotation angle in radians </param>
+        /// <param name="theta"> The rotation angle in radians </param>
         /// <returns> The rotation transformation. </returns>
-        public static Transformation rotationZ(float theta)
-        {
-            return new Transformation(
+        public static Transformation RotationZ(float theta)
+            => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(theta)),
-                Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(-theta))
-            );
-        }
+                Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(-theta)));
 
         /// <summary>
         /// Composition of transformations
@@ -449,13 +420,13 @@ namespace Trace
             => new Vec(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
                          p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
                          p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
-        
-         public static Normal operator * (Transformation A, Normal p)
-             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
-                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
-                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
-         
-        
+
+        public static Normal operator *(Transformation A, Normal p)
+            => new Normal(p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                            p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
+                            p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33);
+
+
 
     } // end of Transformation
 

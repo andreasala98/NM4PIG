@@ -11,7 +11,7 @@ namespace Trace
         /// <summary>
         /// This function checks if two floats a and b are closer than epsilon
         /// </summary>
-        public static bool areClose(float a, float b, float? epsilon = 1e-8f)
+        public static bool areClose(float a, float b, float? epsilon = 1e-6f)
             => Math.Abs(a - b) < epsilon;
 
         /// <summary>
@@ -32,22 +32,22 @@ namespace Trace
         /// <summary>
         /// A float version of Math.PI
         /// </summary>
-        public float PI = (float)Math.PI;
+        public static float PI = (float)Math.PI;
 
         /// <summary>
         /// The unit vector for the x-axis
         /// </summary>
-        public Vec VEC_X = new Vec(1.0f, 0.0f, 0.0f);
+        public static Vec VEC_X = new Vec(1.0f, 0.0f, 0.0f);
 
         /// <summary>
         /// The unit vector for the y-axis
         /// </summary>
-        public Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
+        public static Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
 
         /// <summary>
         /// The unit vector for the z-axis
         /// </summary>
-        public Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
+        public static Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
     }
 
 }
