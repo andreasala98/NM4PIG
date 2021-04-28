@@ -171,8 +171,9 @@ namespace Trace
             => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / (float)Math.PI;
     }
 
-        class ImageTracer
-    {
+        
+        public class ImageTracer
+        {
         public HdrImage image;
         public Camera camera;
 
@@ -182,23 +183,23 @@ namespace Trace
             camera = c;
         }
 
-        public Ray fireRay(int col, int row, float uPixel = 0.5, float vPixel = 0.5)
+        public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
-            u = (col + uPixel) / (image.width  - 1);
-            v = (row + vPixel) / (image.height - 1);
+            float u = (col + uPixel) / (image.width  - 1);
+            float v = (row + vPixel) / (image.height - 1);
             return camera.fireRay(u, v);
         }
 
         public delegate Color myFunction(Ray r);
-        public void fireAllRay(Func<Ray, Color> myFunction)
+        public void fireAllRay(myFunction Func)
         {
-            for(int r = 1; r <= image.height; r++)
+            for(int r = 0; r < image.height; r++)
             {
-                for(int c = 1; r <= image.width; c++)
+                for(int c = 0; c < image.width; c++)
                 {
                     Ray raggio = this.fireRay(c, r);
                     Color colore = Func(raggio);
-                    this.image.setPixel(r, c, colore);
+                    this.image.setPixel(c, r, colore);
                 }
             }
             
