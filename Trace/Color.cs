@@ -20,6 +20,9 @@ using System;
 
 namespace Trace
 {
+    /// <summary>
+    ///  A very simple class: three floats r,g,b to represent a color.
+    /// </summary>
     public struct Color
     {
         public float r;
@@ -35,7 +38,14 @@ namespace Trace
         }
 
 
-        //Sum of two Colors
+    /// <summary>
+    /// Element-wise sum of two Colors.
+    /// </summary>
+    /// <param name="col1"> The first Color</param>
+    /// <param name="col2"> The second Color</param>
+    /// <returns> A new color.</returns>
+
+
         public static Color operator +(Color col1, Color col2)
             => new Color(col1.r + col2.r, col1.g + col2.g, col1.b + col2.b);
 
@@ -59,13 +69,20 @@ namespace Trace
             => new Color(A.r * B.r, A.g * B.g, A.b * B.b);
 
 
-        // are close method
-
-        public static bool isClose(float a, float b)
+                public static bool isClose(float a, float b)
         {
             var epsilon = 1e-8F;
             return Math.Abs(a - b) < epsilon;
         }
+
+
+        /// <summary>
+        /// Boolean method to check if 
+        /// two Colors are equal
+        /// </summary>
+        /// <param name="a"> A Color. </param>
+        /// <param name="b"> Another Color. </param>
+        /// <returns></returns>
 
         public bool isClose(Color A)
         {
