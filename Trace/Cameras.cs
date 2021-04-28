@@ -21,7 +21,7 @@ using System;
 namespace Trace
 {
 
-    struct Ray
+    public struct Ray
     {
         public Point origin;
         public Vec dir;
@@ -42,6 +42,10 @@ namespace Trace
             => this.origin + (this.dir * t);
 
         
+        public bool isClose(Ray r)
+        {
+            return this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
+        }
     }
 
 

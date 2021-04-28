@@ -23,8 +23,25 @@ namespace Trace.Test
 
     public class RayTest
     {
+        Ray ray1 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(5.0f, 4.0f, -1.0f));
+        Ray ray2 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(5.0f, 4.0f, -1.0f));
+        Ray ray3 = new Ray(new Point(5.0f, 1.0f, 4.0f), new Vec(3.0f, 9.0f, 4.0f));
+        Ray ray4 = new Ray(new Point(1.0f, 2.0f, 4.0f), new Vec(4.0f,2.0f,1.0f));
     
+        [Fact]
+        public void TestIsRayClose()
+        {
+            Assert.True(ray1.isClose(ray2));
+            Assert.False(ray1.isClose(ray3));
+        }
 
+        [Fact]
+        public void TestAt()
+        {
+            Assert.True( ray4.at(0.0f).isClose(ray4.origin) );
+            Assert.True( ray4.at(1.0f).isClose(new Point(5.0f, 4.0f, 5.0f)) );
+            Assert.True( ray4.at(2.0f).isClose(new Point(9.0f, 6.0f, 6.0f)) );
+        }
 
     }
 
@@ -43,8 +60,5 @@ namespace Trace.Test
 
 
     }
-
-
-
 
 }
