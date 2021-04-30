@@ -3,15 +3,7 @@
 name: DocFX Build and Publish
 
 # Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on: [push,workflow_dispatch]
 
 jobs:
   generate-docs:
@@ -23,7 +15,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 5.0.103
       - name: Setup DocFX
         uses: crazy-max/ghaction-chocolatey@v1
         with:
