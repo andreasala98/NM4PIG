@@ -405,7 +405,7 @@ namespace Trace
 
 
         /// <summary>
-        /// Apply affine transformation to a <see href="Point"/>
+        /// Apply affine transformation to a <see cref="Point"/>
         /// </summary>
         /// <param name="A"> <see cref ="Transformation"/> object </param>
         /// <param name="p"> <see cref="Point"/> object </param>
@@ -423,28 +423,28 @@ namespace Trace
         }
 
         /// <summary>
-        /// Apply affine transformation to a <see href="Vec"/>
+        /// Apply affine transformation to a <see cref="Vec"/>
         /// </summary>
-        /// <param name="A"> <see cref ="Transformation"/> object </param>
+        /// <param name="A"> <see cref="Transformation"/> object </param>
         /// <param name="p"> <see cref="Vec"/> object </param>
         /// <returns> The tranformed <see cref="Vec"/> </returns>
         public static Vec operator *(Transformation A, Vec p)
             => new Vec(p.x * A.M.M11 + p.y * A.M.M12 + p.z * A.M.M13,
                          p.x * A.M.M21 + p.y * A.M.M22 + p.z * A.M.M23,
                          p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
-        
+
         /// <summary>
-        /// Apply affine transformation to a <see href="Normal"/>
+        /// Apply affine transformation to a <see cref="Normal"/>
         /// </summary>
-        /// <param name="A"> <see cref ="Transformation"/> object </param>
+        /// <param name="A"> <see cref="Transformation"/> object </param>
         /// <param name="p"> <see cref="Normal"/> object </param>
         /// <returns> The tranformed <see cref="Normal"/> </returns>
-         public static Normal operator * (Transformation A, Normal p)
-             => new Normal ( p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
-                             p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
-                             p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33 );
-         
-        
+        public static Normal operator *(Transformation A, Normal p)
+            => new Normal(p.x * A.Minv.M11 + p.y * A.Minv.M21 + p.z * A.Minv.M31,
+                            p.x * A.Minv.M12 + p.y * A.Minv.M22 + p.z * A.Minv.M32,
+                            p.x * A.Minv.M13 + p.y * A.Minv.M23 + p.z * A.Minv.M33);
+
+
 
     } // end of Transformation
 
