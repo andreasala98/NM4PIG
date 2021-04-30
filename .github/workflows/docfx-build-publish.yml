@@ -3,33 +3,28 @@
 name: DocFX Build and Publish
 
 # Controls when the action will run. 
-on: [push,workflow_dispatch]
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  generate-docs:
-    runs-on: windows-latest
-
+  build&deploy-doc:
+    runs-on: ubuntu-latest
+    name: DocFX Build and Publish
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-      - name: Setup DocFX
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install docfx
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: DocFX Build
-        working-directory: docs
-        run: docfx docfx.json
-        continue-on-error: false
-      - name: Publish
-        if: github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_site
-          force_orphan: true
+    - uses: actions/checkout@v1
+    # ...
+    - uses: nikeee/docfx-action@v1.0.0
+      name: Build Documentation
+      with:
+        args: docs/docfx.json
+
+    - name: Publish
+      if: github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_site
+        force_orphan: true
