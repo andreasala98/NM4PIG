@@ -33,36 +33,51 @@ namespace Trace
     /// </summary>
     public struct HdrImage
     {
+        /// <summary>
+        /// Widht of the image (number of pixel)
+        /// </summary>
         public int width;
+
+        /// <summary>
+        /// Height of the image (number of pixel)
+        /// </summary>
         public int height;
+
+        /// <summary>
+        /// List of width * height pixels
+        /// </summary>
         public List<Color> pixel;
 
-        // Constructor with pixel number
+        /// <summary>
+        /// Constructor with the width and heigth of the image. Initialize all the pixels to black, i.e. RGB(0,0,0)
+        /// </summary>
+        /// <param name="x">Width of the image</param>
+        /// <param name="y">Height of the image</param>
         public HdrImage(int x, int y)
         {
-            // x = COLS, y = ROWS (larghezza x altezza)
             this.width = x;
             this.height = y;
 
-            // Initializing all pixels to black.
             this.pixel = new List<Color>(x * y);
             for (int nrow = 0; nrow < y; nrow++)
-            {
                 for (int ncol = 0; ncol < x; ncol++)
-                {
                     this.pixel.Add(new Color(0f, 0f, 0f));
-                }
-            }
         }
 
 
-        // Constructor passing a stream
+        /// <summary>
+        /// Constructor from a Stream. Import a PFM file
+        /// </summary>
+        /// <param name="inputStream">Stream pointing to a PFM file</param>
         public HdrImage(Stream inputStream) : this()
         {
             readPfm(inputStream);
         }
 
-        // Constructor passing a string (fileName)
+        /// <summary>
+        /// Constructor from a filename. Receive a string with the name of the file you want to open.
+        /// </summary>
+        /// <param name="fileName">String of the name of the file PFM you want to open</param>
         public HdrImage(string fileName) : this()
         {
             using (FileStream fileStream = File.OpenRead(fileName))
