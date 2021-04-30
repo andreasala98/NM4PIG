@@ -23,13 +23,13 @@ namespace Trace
 
     /// <summary>
     /// Exception InvalidPfmFileFormat. This Exception is intended to be raised whenever there is something 
-    /// wrong while reading an image in the PFM format
+    /// wrong while reading an image in the PFM format.
     /// </summary>
     [Serializable]
     public class InvalidPfmFileFormat : Exception
     {
         /// <summary>
-        /// Constructor for InvalidPfmFileFormat exception. This raise a generic exception, i.e. does not contain an error message
+        /// Constructor for InvalidPfmFileFormat exception. This raise a generic exception, i.e. does not contain an error message.
         /// </summary>
         public InvalidPfmFileFormat() : base() { }
 
