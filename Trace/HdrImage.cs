@@ -27,7 +27,10 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Trace
 {
-
+    /// <summary>
+    /// Struct for handling Images in HDR format. Use this struct for reading a PFM file, perform tone mapping,
+    /// and save in png or jpg format.
+    /// </summary>
     public struct HdrImage
     {
         public int width;
