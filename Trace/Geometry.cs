@@ -84,7 +84,7 @@ namespace Trace
             => new Point(p.x - v.x, p.y - v.y, p.z - v.z);
 
         /// <summary>
-        /// Calculate the vector connecting two Points
+        /// Calculate the vector connecting two <see cref="Point"/> objects.
         /// </summary>
         /// <param name="p"> A <see cref="Point"/> object.</param>
         /// <param name="v"> A <see cref="Point"/> object.</param>
@@ -93,11 +93,11 @@ namespace Trace
             => new Vec(p.x - v.x, p.y - v.y, p.z - v.z);
 
         /// <summary>
-        /// Divide a Point by a scaling factor.
+        /// Divide a <see cref="Point"/> by a scaling factor.
         /// </summary>
-        /// <param name="a"> The point.</param>
+        /// <param name="a"> The <see cref="Point"/></param>
         /// <param name="alfa"> Scaling factor. </param>
-        /// <returns> The scaled Point.</returns>
+        /// <returns> The scaled <see cref="Point"/>.</returns>
         public static Point operator /(Point a, float alfa)
         {
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
@@ -124,7 +124,7 @@ namespace Trace
         public float z;
 
         /// <summary>
-        /// Default constructor for Vec
+        /// Default constructor for <see cref="Vec"/>.
         /// </summary>
         /// <param name="x"> x coord </param>
         /// <param name="y"> y coord </param>
@@ -137,47 +137,47 @@ namespace Trace
         }
 
         /// <summary>
-        /// Sum of two vectors
+        /// Sum of two <see cref="Vec"/> objects.
         /// </summary>
-        /// <param name="a"> First vector</param>
-        /// <param name="b"> Second vector</param>
-        /// <returns> A vector sum </returns>
+        /// <param name="a"> First <see cref="Vec"/></param>
+        /// <param name="b"> Second <see cref="Vec"/></param>
+        /// <returns> A <see cref="Vec"/> sum </returns>
         public static Vec operator +(Vec a, Vec b)
             => new Vec(a.x + b.x, a.y + b.y, a.z + b.z);
 
         /// <summary>
-        /// Difference of two vectors
+        /// Difference of two <see cref="Vec"/> objects
         /// </summary>
-        /// <param name="a"> First vector</param>
-        /// <param name="b"> Second vector</param>
-        /// <returns> A vector difference </returns>
+        /// <param name="a"> First <see cref="Vec"/></param>
+        /// <param name="b"> Second vec<see cref="Vec"/>tor</param>
+        /// <returns> A <see cref="Vec"/> difference </returns>
         public static Vec operator -(Vec a, Vec b)
             => new Vec(a.x - b.x, a.y - b.y, a.z - b.z);
 
         /// <summary>
-        /// Multiplication vector - scalar
+        /// Multiplication <see cref="Vec"/> - scalar
         /// </summary>
-        /// <param name="a">  Vector</param>
+        /// <param name="a">  <see cref="Vec"/> object</param>
         /// <param name="alfa">  Scaling factor </param>
-        /// <returns> A scaled vector. </returns>
+        /// <returns> A scaled <see cref="Vec"/> object </returns>
         public static Vec operator *(float alfa, Vec a)
             => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
 
         /// <summary>
-        /// Multiplication vector - scalar
+        /// Multiplication <see cref="Vec"/> - scalar
         /// </summary>
-        /// <param name="a">  Vector</param>
+        /// <param name="a">  <see cref="Vec"/> object </param>
         /// <param name="alfa">  Scaling factor </param>
-        /// <returns> A scaled vector. </returns>
+        /// <returns> A scaled <see cref="Vec"/>. </returns>
         public static Vec operator *(Vec a, float alfa)
             => new Vec(a.x * alfa, a.y * alfa, a.z * alfa);
 
         /// <summary>
-        /// Divide a Vec by a scaling factor.
+        /// Divide a <see cref="Vec"/> by a scaling factor.
         /// </summary>
-        /// <param name="a"> The Vec.</param>
+        /// <param name="a"> The <see cref="Vec"/>.</param>
         /// <param name="alfa"> Scaling factor. </param>
-        /// <returns> The scaled Vec.</returns>
+        /// <returns> The scaled <see cref="Vec"/>.</returns>
         public static Vec operator /(Vec a, float alfa)
         {
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a vector by zero!");
@@ -185,62 +185,62 @@ namespace Trace
         }
 
         /// <summary>
-        ///  Euclidean scalar product between two vectors.
+        ///  Euclidean scalar product between two <see cref="Vec"/>s.
         /// </summary>
-        /// <param name="a"> First vector </param>
-        /// <param name="b"> Second vector</param>
+        /// <param name="a"> First <see cref="Vec"/> </param>
+        /// <param name="b"> Second <see cref="Vec"/></param>
         /// <returns> Scalar product in float format.</returns>
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
         /// <summary>
-        ///  Cross product between two 3D vectors.
+        ///  Cross product between two 3D <see cref="Vec"/>s.
         /// </summary>
-        /// <param name="b"> Second vector</param>
-        /// <returns> Cross product in Vec format.</returns>
+        /// <param name="b"> Second <see cref="Vec"/></param>
+        /// <returns> Cross product in <see cref="Vec"/> format.</returns>
         public Vec crossProd(Vec b)
             => new Vec(this.y * b.z - this.z * b.y,
                        this.z * b.x - this.x * b.z,
                        this.x * b.y - this.y * b.x);
 
         /// <summary>
-        /// Squared norm of the vector
+        /// Squared norm of the <see cref="Vec"/>
         /// </summary>
-        /// <returns> The squared norm of the vector as float</returns>
+        /// <returns> The squared norm of the <see cref="Vec"/> as float</returns>
         public float getSquaredNorm()
             => this * this;
 
         /// <summary>
-        /// Norm of the vector
+        /// Norm of the <see cref="Vec"/>
         /// </summary>
-        /// <returns> The norm of the vector as float</returns>
+        /// <returns> The norm of the <see cref="Vec"/> as float</returns>
         public float getNorm()
             => (float)Math.Sqrt(this.getSquaredNorm());
 
         /// <summary>
-        /// Normalize the vector
+        /// Normalize the <see cref="Vec"/>
         /// </summary>
-        /// <returns>The vector normalized</returns>
+        /// <returns>The <see cref="Vec"/>, normalized</returns>
         public Vec Normalize()
             => this / this.getNorm();
 
         /// <summary>
-        /// It checks if the vector is normalized. It is used for debugging purpose
+        /// It checks if the <see cref="Vec"/> is normalized. It is used for debugging purpose
         /// </summary>
         public bool isNormalized()
             => this.getNorm() == 1.0f;
 
         /// <summary>
-        /// Converts a Vec to a string for printing.
+        /// Converts a <see cref="Vec"/> to a string for printing.
         /// </summary>
         /// <returns> A string in the format Vec(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Vec(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
-        /// Boolean to check if two Vec are close enough
+        /// Boolean to check if two <see cref="Vec"/>s are close enough
         /// </summary>
-        /// <param name="vector"> The other Vec</param>
-        /// <returns>True if the Vecs are close</returns> 
+        /// <param name="vector"> The other <see cref="Vec"/></param>
+        /// <returns>True if the <see cref="Vec"/>s are close</returns> 
         public bool isClose(Vec vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
     }
@@ -269,16 +269,16 @@ namespace Trace
         }
 
         /// <summary>
-        /// Converts a Normal to a string for printing.
+        /// Converts a <see cref="Normal"/> to a string for printing.
         /// </summary>
         /// <returns> A string in the format Normal(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
-        /// Boolean to check if two Normals are close enough
+        /// Boolean to check if two <see cref="Normal"/>s are close enough
         /// </summary>
-        /// <param name="vector"> The other Normal</param>
-        /// <returns>True if the Normals are close</returns> 
+        /// <param name="vector"> The other <see cref="Normal"/></param>
+        /// <returns>True if the <see cref="Normal"/>s are close</returns> 
         public bool isClose(Normal vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
     }
@@ -290,12 +290,12 @@ namespace Trace
     public struct Transformation
     {
         /// <summary>
-        /// 4x4 Matrix representing the transformation.
+        /// <see cref="Matrix4x4"/> representing the transformation.
         /// </summary>
         public Matrix4x4 M;
 
         /// <summary>
-        /// 4x4 Matrix representing the inverse transformation.
+        /// <see cref="Matrix4x4"/> representing the inverse transformation.
         /// </summary>
         public Matrix4x4 Minv;
 
@@ -310,10 +310,10 @@ namespace Trace
         }
 
         /// <summary>
-        /// Constructor taking a 4x4 matrix and its inverse as inputs.
+        /// Constructor taking a <see cref="Matrix4x4"/> and its inverse as inputs.
         /// </summary>
-        /// <param name="myMat"> The matrix representing the transformation. </param>
-        /// <param name="myInvMat"> The inverse matrix.</param>
+        /// <param name="myMat"> The <see cref="Matrix4x4"/> representing the transformation. </param>
+        /// <param name="myInvMat"> The inverse <see cref="Matrix4x4"/>.</param>
         public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)
         {
             this.M = myMat;
@@ -323,14 +323,14 @@ namespace Trace
         /// <summary>
         /// Switches the M and Minv fields. Practically, inverts the transformation.
         /// </summary>
-        /// <returns> The inverse Transformation. </returns>
+        /// <returns> The inverse <see cref="Transformation"/>. </returns>
         public Transformation getInverse()
             => new Transformation(this.Minv, this.M);
 
         /// <summary>
-        /// Method to check if a Transformation and a Matrix4x4 are close.
+        /// Method to check if a <see cref="Transformation"/> and a <see cref="Matrix4x4"/> are close.
         /// </summary>
-        /// <param name="a"> The matrix to be compared with. </param>
+        /// <param name="a"> The <see cref="Matrix4x4"/> to be compared with. </param>
         /// <returns> True if Transformation and Matrix are close</returns>
         public bool isClose(Transformation a)
             => Utility.areMatricesClose(this.M, a.M) && Utility.areMatricesClose(this.Minv, a.Minv);
@@ -342,24 +342,22 @@ namespace Trace
         public bool isConsistent()
             => Utility.areMatricesClose(this.M * this.Minv, Matrix4x4.Identity);
 
-        // The Matrix4x4 methods CreateTransletion and CreateRotatoin actually produce the
-        // the transpose of the matrices we wanna use.
 
         /// <summary>
-        /// Translate a Vec in 3D
+        /// Translate a <see cref="Vec"/> in 3D
         /// </summary>
-        /// <param name="a"> The vector generating the translation. </param>
-        /// <returns> The translation transformation. </returns>
+        /// <param name="a"> The <see cref="Vec"/> generating the translation. </param>
+        /// <returns> The translation <see cref="Transformation"/>. </returns>
         public static Transformation Translation(Vec a)
             => new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
                                     Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
 
         /// <summary>
-        /// Return a Transformation object encoding a scaling
+        /// Return a <see cref="Transformation"/> object encoding a scaling
         /// </summary>
-        /// <param name="a"> The vector generating the scaling. </param>
-        /// <returns> The scaling transformation. </returns>
+        /// <param name="a"> The <see cref="Vec"/> generating the scaling. </param>
+        /// <returns> The scaling <see cref="Transformation"/>. </returns>
         public static Transformation Scaling(Vec a)
             => new Transformation(Matrix4x4.CreateScale(a.x, a.y, a.z),
                                     Matrix4x4.CreateScale(1.0f / a.x, 1.0f / a.y, 1.0f / a.z));
@@ -368,7 +366,7 @@ namespace Trace
         /// Rotation along the x axis.
         /// </summary>
         /// <param name="theta"> The rotation angle in radians </param>
-        /// <returns> The rotation transformation. </returns>
+        /// <returns> The rotation <see cref="Transformation"/>. </returns>
         public static Transformation RotationX(float theta)
             => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationX(theta)),
@@ -378,7 +376,7 @@ namespace Trace
         /// Rotation along the y axis.
         /// </summary>
         /// <param name="theta"> The rotation angle in radians </param>
-        /// <returns> The rotation transformation. </returns>
+        /// <returns> The rotation <see cref="Transformation"/>. </returns>
         public static Transformation RotationY(float theta)
             => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationY(theta)),
@@ -388,7 +386,7 @@ namespace Trace
         /// Rotation along the z axis.
         /// </summary>
         /// <param name="theta"> The rotation angle in radians </param>
-        /// <returns> The rotation transformation. </returns>
+        /// <returns> The rotation <see cref="Transformation"/>. </returns>
         public static Transformation RotationZ(float theta)
             => new Transformation(
                 Matrix4x4.Transpose(Matrix4x4.CreateRotationZ(theta)),
@@ -397,15 +395,15 @@ namespace Trace
         /// <summary>
         /// Composition of transformations
         /// </summary>
-        /// <param name="A"> Transformation you want to operate last</param>
-        /// <param name="B"> Transformation you want to operate first</param>
-        /// <returns></returns>
+        /// <param name="A"> left-side <see cref="Transformation"/> </param>
+        /// <param name="B"> right-side <see cref="Transformation"/> </param>
+        /// <returns> The composed <see cref="Transformation"/>.</returns>
         public static Transformation operator *(Transformation A, Transformation B)
             => new Transformation(Matrix4x4.Multiply(A.M, B.M), Matrix4x4.Multiply(B.Minv, A.Minv));
 
 
         /// <summary>
-        /// Apply affine transformation to a <see cref="Point"/>
+        /// Apply <see cref="Transformation"/> to a <see cref="Point"/>
         /// </summary>
         /// <param name="A"> <see cref ="Transformation"/> object </param>
         /// <param name="p"> <see cref="Point"/> object </param>
@@ -423,7 +421,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Apply affine transformation to a <see cref="Vec"/>
+        /// Apply <see cref="Transformation"/> to a <see cref="Vec"/>
         /// </summary>
         /// <param name="A"> <see cref="Transformation"/> object </param>
         /// <param name="p"> <see cref="Vec"/> object </param>
@@ -434,7 +432,7 @@ namespace Trace
                          p.x * A.M.M31 + p.y * A.M.M32 + p.z * A.M.M33);
 
         /// <summary>
-        /// Apply affine transformation to a <see cref="Normal"/>
+        /// Apply <see cref="Transformation"/> to a <see cref="Normal"/>
         /// </summary>
         /// <param name="A"> <see cref="Transformation"/> object </param>
         /// <param name="p"> <see cref="Normal"/> object </param>

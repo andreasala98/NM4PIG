@@ -23,37 +23,37 @@ namespace Trace
 
     /// <summary>
     /// Exception InvalidPfmFileFormat. This Exception is intended to be raised whenever there is something 
-    /// wrong while reading an image in the PFM format.
+    /// wrong while dealing with the <see cref="HDRImage"/> struct.
     /// </summary>
     [Serializable]
     public class InvalidPfmFileFormat : Exception
     {
         /// <summary>
-        /// Constructor for InvalidPfmFileFormat exception. This raise a generic exception, i.e. does not contain an error message.
+        /// Constructor for InvalidPfmFileFormat exception. This raises a generic exception, i.e. does not contain an error message.
         /// </summary>
         public InvalidPfmFileFormat() : base() { }
 
         /// <summary>
-        /// /// Constructor for InvalidPfmFileFormat exception. This raise an exception with an error message
+        /// /// Constructor for InvalidPfmFileFormat exception. This raises an exception with an error message.
         /// </summary>
         /// <param name="Message">The error message</param>
         public InvalidPfmFileFormat(string Message) : base(Message) { }
     }
 
     /// <summary>
-    /// Exception CommandLineException. This Exception is intended to be raised whenever the user pass meaningless argouments 
-    /// while executing the executable
+    /// Exception CommandLineException. This Exception is intended to be raised whenever the user
+    /// passes meaningless argouments while running the executable.
     /// </summary>
     [Serializable]
     public class CommandLineException : Exception
     {
         /// <summary>
-        /// Constructor for CommandLineException exception. This raise a generic exception, i.e. does not contain an error message
+        /// Constructor for CommandLineException exception. This raises a generic exception, i.e. does not contain an error message
         /// </summary>
         public CommandLineException() : base() { }
 
         /// <summary>
-        /// /// Constructor for CommandLineException exception. This raise an exception with an error message
+        /// /// Constructor for CommandLineException exception. This raises an exception with an error message
         /// </summary>
         /// <param name="Message">The error message</param>
         public CommandLineException(string Message) : base(Message) { }
@@ -62,12 +62,12 @@ namespace Trace
     /*
         Example:
 
-        For throwing exception:
+        To throw exceptions (Usually in libraries):
 
         throw new InvalidPfmFileFormat();
         throw new InvalidPfmFileFormat("Message Error");
 
-        For catching exceptions
+        To catch exceptions (Usually in main program):
 
         try
         {

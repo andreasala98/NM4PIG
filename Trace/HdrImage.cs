@@ -28,28 +28,31 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace Trace
 {
     /// <summary>
-    /// Struct for handling Images in HDR format. Use this struct for reading a PFM file, perform tone mapping,
-    /// and save in png or jpg format.
+    /// Value type used to handle images in HDR format. 
+    /// This means every pixel is associated with three floating-point vlaues.
+    /// Use this struct to read a PFM file, perform tone mapping,
+    /// gamma correction, and convert the image to png/jpg.
     /// </summary>
     public struct HdrImage
     {
         /// <summary>
-        /// Widht of the image (number of pixel)
+        /// Widht of the image (number of pixels)
         /// </summary>
         public int width;
 
         /// <summary>
-        /// Height of the image (number of pixel)
+        /// Height of the image (number of pixels)
         /// </summary>
         public int height;
 
         /// <summary>
-        /// List of width * height pixels
+        /// List of (width * height) pixels
         /// </summary>
         public List<Color> pixel;
 
         /// <summary>
-        /// Constructor with the width and heigth of the image. Initialize all the pixels to black, i.e. RGB(0,0,0)
+        /// Constructor with the width and heigth of the image. 
+        /// It sets all the pixels to black, i.e. RGB=(0,0,0)
         /// </summary>
         /// <param name="x">Width of the image</param>
         /// <param name="y">Height of the image</param>
@@ -66,18 +69,20 @@ namespace Trace
 
 
         /// <summary>
-        /// Constructor from a Stream. Import a PFM file
+        /// Load image from a Stream. Import a PFM file from either a 
+        /// memory or file stream.
         /// </summary>
-        /// <param name="inputStream">Stream pointing to a PFM file</param>
+        /// <param name="inputStream">Stream pointing to a .pfm file</param>
         public HdrImage(Stream inputStream) : this()
         {
             readPfm(inputStream);
         }
 
         /// <summary>
-        /// Constructor from a filename. Receive a string with the name of the file you want to open.
+        /// Load image from a file. It takes as input a string 
+        /// with the name of the file you want to open.
         /// </summary>
-        /// <param name="fileName">String of the name of the file PFM you want to open</param>
+        /// <param name="fileName">String of the name of the pfm file you want to open.</param>
         public HdrImage(string fileName) : this()
         {
             using (FileStream fileStream = File.OpenRead(fileName))
@@ -88,46 +93,51 @@ namespace Trace
 
 
 
-        // Checking if (x,y) is in range
+        // Boolean method to check if (x,y) is in range.
         public bool validCoords(int x, int y)
         {
             return (x >= 0) & (x < this.width) & (y >= 0) & (y < this.height);
 
         }
 
-        // Flattening the image into 1D array
+        // It flattens the image into 1D array.
         public int pixelOffset(int x, int y)
         {
             return (y * this.width + x);
         }
 
-
+        /// <summary>
+        /// It outputs a pixel with given coordinates (x,y).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns> The selected pixel. </returns>
         public Color getPixel(int x, int y)
         {
 
-            if (validCoords(x, y))
+            if(validCoords(x, y))
             {
                 return pixel[pixelOffset(x, y)];
             }
-            else
-            {
-                Console.WriteLine($"Pixel ({x},{y}) out of range!");
-                return new Color(0f, 0f, 0f);
-            }
+            else throw new InvalidPfmFileFormat($"Pixel {x},{y} out of range!");
         }
 
+        /// <summary>
+        /// Manually set the color of a single pixel by passing a <see cref="Color"/> object.
+        /// </summary>
+        /// <param name="x"> x coordinate of the pixel</param>
+        /// <param name="y"> y coordinate of the pixel</param>
+        /// <param name="a"> <see cref="Color"/> object</param>
         public void setPixel(int x, int y, Color a)
         {
-            if (validCoords(x, y))
-            {
-                pixel[pixelOffset(x, y)] = a;
-            }
-            else
-            {
-                Console.WriteLine($"Pixel ({x},{y}) out of range!");
-            }
+            if (validCoords(x, y)) pixel[pixelOffset(x, y)] = a;
+            else throw new InvalidPfmFileFormat($"Pixel {x},{y} out of range!");
         }
 
+        /// <summary>
+        /// It saves the image in .pfm format into a stream
+        /// </summary>
+        /// <param name="outputStream"> Output Stream (either Memory- or FileStream).</param>
         public void savePfm(Stream outputStream)
         {
             var endiannessValue = BitConverter.IsLittleEndian ? "-1.0" : "1.0";
@@ -161,6 +171,11 @@ namespace Trace
 
         // Reading functions
 
+        /// <summary>
+        /// Read a byte line from a stream and convert to string.
+        /// </summary>
+        /// <param name="s"> The stream from which you want to read the line.</param>
+        /// <returns> The line in <see cref="String"/> format.</returns>
         public static string readLine(Stream s)
         {
             string result = "";
@@ -180,6 +195,12 @@ namespace Trace
             }
         }
 
+        /// <summary>
+        /// Check if the image is encoded in little endian.
+        /// This function makes advantage of the InvariantCulture method.
+        /// </summary>
+        /// <param name="line"> The 'endianness line' of a .pfm file</param>
+        /// <returns> True if the image is encoded with little-endianness.</returns>
         public static bool isLittleEndian(string line)
         {
             float value;
@@ -201,6 +222,12 @@ namespace Trace
 
         }
 
+        /// <summary>
+        /// Read a  4 byte sequence from a stream corresponding and convert to floating-point.
+        /// </summary>
+        /// <param name="inputStream"> The input stream</param>
+        /// <param name="lEnd"> Put <see cref="True"/> if the image is little-endian.</param>
+        /// <returns> Float value corresponding to 4-byte sequence</returns>
         public static float readFloat(Stream inputStream, bool lEnd)
         {
 
@@ -219,17 +246,15 @@ namespace Trace
                 throw new InvalidPfmFileFormat("Unable to read float!");
             }
 
-            if (lEnd)
-            {
-                return BitConverter.ToSingle(bytes, 0);
-            }
-            else
-            {
-                Array.Reverse(bytes);
-                return BitConverter.ToSingle(bytes, 0);
-            }
+            if (!lEnd) Array.Reverse(bytes);
+            return BitConverter.ToSingle(bytes, 0);
         }
 
+        /// <summary>
+        /// Read the size of a .pfm image
+        /// </summary>
+        /// <param name="line"> The third line of a .pfm file</param>
+        /// <returns>List containing image width and height.</returns>
         public static List<int> parseImageSize(string line)
         {
             List<string> linePieces = new List<string>(line.Split(' ').ToList());
@@ -251,6 +276,10 @@ namespace Trace
             return widthHeight;
         }
 
+        /// <summary>
+        ///  Read an image from a stream pointing to a .pfm file
+        /// </summary>
+        /// <param name="inputStream"> A stream pointing to a .pfm file.</param>
         public void readPfm(Stream inputStream)
         {
             string magic = readLine(inputStream);
@@ -277,6 +306,11 @@ namespace Trace
             }
         }
 
+        /// <summary>
+        /// Returns average luminosity of the image (logarithmic average)
+        /// </summary>
+        /// <param name="Delta"> Optional offset </param>
+        /// <returns>Average luminosity in floating-point format.</returns>
         public float averageLumi(double? Delta = null)
         {
 
@@ -297,6 +331,11 @@ namespace Trace
 
         }
 
+        /// <summary>
+        /// Divide every pixel of the image by a factor.
+        /// </summary>
+        /// <param name="factor"> The scaling factor</param>
+        /// <param name="luminosity"> Average luminosity (optional)</param>
         public void normalizeImage(float factor, float? luminosity = null)
 
         {
@@ -311,6 +350,9 @@ namespace Trace
 
         private float _clamp(float x) => x / (1f + x);
 
+        /// <summary>
+        /// Apply tone mapping to the image by clamping every pixel
+        /// </summary>
         public void clampImage()
         {
             for (int i = 0; i < pixel.Count; i++)
@@ -320,7 +362,12 @@ namespace Trace
             return;
         }
 
-
+        /// <summary>
+        /// Saves the image into a LDR file (png/jpg)
+        /// </summary>
+        /// <param name="outputFile"> Output file name</param>
+        /// <param name="format"> .png or .jpg (auto-recognised)</param>
+        /// <param name="gamma"> gamma factor of your screen</param>
         public void writeLdrImage(string outputFile, string format, float gamma)
 
         {

@@ -21,7 +21,7 @@ using System;
 namespace Trace
 {
     /// <summary>
-    ///  A very simple class: three floats r,g,b to represent a color.
+    ///  A very simple struct: three floats r,g,b to represent a color.
     /// </summary>
     public struct Color
     {
@@ -72,7 +72,7 @@ namespace Trace
             => new Color(col1.r - col2.r, col1.g - col2.g, col1.b - col2.b);
 
         /// <summary>
-        /// Multiplies a color with a scalar.
+        /// Multiplies a <see cref="Color"/> with a <see cref="float"/>.
         /// </summary>
         /// <param name="a"> A color.</param>
         /// <param name="alfa">Scaling factor.</param>
@@ -81,36 +81,36 @@ namespace Trace
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
 
         /// <summary>
-        /// Multiplies a scalar with a color.
+        /// Multiplies a <see cref="float"/> with a <see cref="Transformation"/>.
         /// </summary>
         /// <param name="a"> A color.</param>
         /// <param name="alfa">Scaling factor.</param>
-        /// <returns> A new color.</returns>
+        /// <returns> A new <see cref="Color"/>.</returns>
         public static Color operator *(float alfa, Color a)
             => new Color(a.r * alfa, a.g * alfa, a.b * alfa);
 
         /// <summary>
-        /// Multiplies a color with another color.
+        /// Multiplies a <see cref="Color"/> with another <see cref="Color"/>.
         /// </summary>
-        /// <param name="A"> A color.</param>
-        /// <param name="B">Another color.</param>
-        /// <returns> A new color.</returns>
+        /// <param name="A"> A <see cref="Color"/>.</param>
+        /// <param name="B">Another <see cref="Color"/>.</param>
+        /// <returns> A new <see cref="Color"/>.</returns>
         public static Color operator *(Color A, Color B)
             => new Color(A.r * B.r, A.g * B.g, A.b * B.b);
 
         /// <summary>
         /// Boolean method to check if 
-        /// two Colors are almost equal, used mainly for test purpose
+        /// two <see cref="Color"/>s are close, used mainly for test purpose
         /// </summary>
-        /// <param name="A"> A Color. </param>
-        /// <returns> True if the colors are close enough</returns>
+        /// <param name="A"> The other <see cref="Color"/>. </param>
+        /// <returns> True if the <see cref="Color"/>s are close enough</returns>
         public bool isClose(Color A)
             => Utility.areClose(this.r, A.r) && Utility.areClose(this.b, A.b) && Utility.areClose(this.g, A.g);
 
         /// <summary>
-        /// Calculate luminosity of a color according to Shirley and Morley.
+        /// Calculate luminosity of a <see cref="Color"/> according to Shirley and Morley.
         /// </summary>
-        /// <returns> A float represeting luminosity of the pixel </returns>
+        /// <returns> A <see cref="float"/> represeting luminosity of the pixel </returns>
         public float Luminosity()
             => (float)(Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
     }

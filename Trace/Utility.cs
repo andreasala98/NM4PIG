@@ -9,14 +9,20 @@ namespace Trace
     public class Utility
     {
         /// <summary>
-        /// This function checks if two floats a and b are closer than epsilon
+        /// Check if two floating-point numbers are closer than epsilon
         /// </summary>
+        /// <param name="a"> First number</param>
+        /// <param name="b">< Second number/<param>
+        /// <param name="epsilon"> Max distance allowed (default: 1e-6)</param>
         public static bool areClose(float a, float b, float? epsilon = 1e-6f)
             => Math.Abs(a - b) < epsilon;
 
         /// <summary>
         /// This function checks if all the elements of two Matrix4x4 are closer than epsilon
         /// </summary>
+        /// <param name="a"> First matrix</param>
+        /// <param name="b">< Second matrix</param>
+        /// <param name="epsilon"> Max distance allowed (default: 1e-6)</param>
         public static bool areMatricesClose(Matrix4x4 a, Matrix4x4 b)
             => areClose(a.M11, b.M11) && areClose(a.M12, b.M12) && areClose(a.M13, b.M13) && areClose(a.M14, b.M14) &&
                areClose(a.M21, b.M21) && areClose(a.M22, b.M22) && areClose(a.M23, b.M23) && areClose(a.M24, b.M24) &&
@@ -25,7 +31,7 @@ namespace Trace
     }
 
     /// <summary>
-    /// A class that contains some useful constants, which are used many times inside the library
+    /// A class that contains some useful constants, which are used many times inside the library.
     /// </summary>
     public class Constant
     {

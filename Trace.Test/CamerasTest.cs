@@ -81,7 +81,7 @@ namespace Trace.Test
         }
 
         [Fact]
-        void testOrthogonalCameraTransform()
+        void TestOrthogonalCameraTransform()
         {
             OrthogonalCamera cam = new OrthogonalCamera(transformation: Transformation.Translation(-2.0f * Constant.VEC_Y) * Transformation.RotationZ((float)Math.PI / 2.0f));
             Ray ray = cam.fireRay(0.5f, 0.5f);
@@ -89,7 +89,7 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void testPerspectiveCamera()
+        public void TestPerspectiveCamera()
         {
             PerspectiveCamera cam = new PerspectiveCamera(screenDistance: 1.0f, aspectRatio: 2.0f);
 
@@ -109,7 +109,7 @@ namespace Trace.Test
         }
 
         [Fact]
-        void testPerspectiveCameraTransform()
+        void TestPerspectiveCameraTransform()
         {
             PerspectiveCamera cam = new PerspectiveCamera(transformation: Transformation.Translation(-2.0f * Constant.VEC_Y) * Transformation.RotationZ((float)Math.PI / 2.0f));
             Ray ray = cam.fireRay(0.5f, 0.5f);
@@ -121,7 +121,7 @@ namespace Trace.Test
     public class ImageTracerTest
     {
         [Fact]
-        public void TestfireRay()
+        public void TestFireRay()
         {
             HdrImage image = new HdrImage(4, 2);
             PerspectiveCamera camera = new PerspectiveCamera(aspectRatio: 2.0f);
@@ -136,13 +136,13 @@ namespace Trace.Test
             => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
-        public void TestfireAllRay()
+        public void TestFireAllRays()
         {
             HdrImage image = new HdrImage(4, 2);
             PerspectiveCamera camera = new PerspectiveCamera();
             ImageTracer tracer = new ImageTracer(image, camera);
 
-            tracer.fireAllRay(lambda);
+            tracer.fireAllRays(lambda);
             for (int row = 0; row < image.height; row++)
             {
                 for (int col = 0; col < image.width; col++)

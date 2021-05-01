@@ -21,23 +21,23 @@ using System;
 namespace Trace
 {
     /// <summary>
-    /// An efficient type representing a ray to be fired.
+    /// An efficient value type representing a ray to be fired.
     /// </summary>
     public struct Ray
     {
         /// <summary>
-        /// The origin point, where the observer lies.
+        /// The origin <see cref="Point"/>, where the observer lies.
         /// </summary>
         public Point origin;
 
         /// <summary>
-        /// The vector orthogonally connecting the observer to the center of the screen 
+        /// The <see cref="Vec"/> orthogonally connecting the observer to the center of the screen 
         /// </summary>
         public Vec dir;
 
         /// <summary>
         /// Minimum travelling distance of the ray. <br/>
-        /// Default setting: 1e-5
+        /// Default setting: 1e-5f
         /// </summary>
         public float tmin;
 
@@ -57,8 +57,8 @@ namespace Trace
         /// <summary>
         ///  Default constructor for Ray.
         /// </summary>
-        /// <param name="or"> Origin point (observer) </param>
-        /// <param name="d"> Vector direction </param>
+        /// <param name="or"> Origin <see cref="Point"/> (observer) </param>
+        /// <param name="d"> <see cref="Vec"/> direction </param>
         /// <param name="tm"> Minimum distance </param>
         /// <param name="tM"> Maximum distance </param>
         /// <param name="dep"> Number of reflections </param>
@@ -72,7 +72,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Calculate ray position at origin + dir*t.
+        /// Calculate ray position at (origin + dir*t).
         /// </summary>
         /// <param name="t"> Running paramter between tmin and tmax.</param>
         /// <returns> A <see cref="Point"/> object </returns>
@@ -80,18 +80,18 @@ namespace Trace
             => this.origin + (this.dir * t);
 
         /// <summary>
-        ///  Boolean to check if two rays are equal.
+        ///  Boolean to check if two <see cref="Ray"/>s are equal.
         /// </summary>
-        /// <param name="r"> The other ray.</param>
-        /// <returns> True if rays are close enough.</returns>
+        /// <param name="r"> The other <see cref="Ray"/>.</param>
+        /// <returns> True if <see cref="Ray"/>s are close enough.</returns>
         public bool isClose(Ray r)
             => this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
 
         /// <summary>
-        /// Apply affine transformation to the ray.
+        /// Apply <see cref="Transformation"/> to the <see cref="Ray"/>.
         /// </summary>
         /// <param name="T"> A <see cref="Transformation"/> object. </param>
-        /// <returns> The transformed ray.</returns>
+        /// <returns> The transformed <see cref="Ray"/>.</returns>
         public Ray transform(Transformation T)
             => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
 
@@ -99,12 +99,12 @@ namespace Trace
 
     /// <summary>
     /// An abstract class representing an observer <br/>
-    /// Concrete subclasses are `OrthogonalCamera` and `PerspectiveCamera`.
+    /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
     /// </summary>
     public abstract class Camera
     {
         /// <summary>
-        /// The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
+        /// This parameter defines how larger than the height is the image. For fullscreen
         /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
         /// used in modern monitors.
         /// </summary>
@@ -117,7 +117,7 @@ namespace Trace
 
         /// <summary>
         /// Create a new camera. This is a constructor for an abstract class and so it cannot be used.
-        /// Use instead constructors for OrthogonalCamera and PerspectiveCamera
+        /// Use instead constructors for <see cref="OrthogonalCamera"/> and <see cref="PerspectiveCamera"/>.
         /// </summary>
         public Camera(float? aspectRatio = null, Transformation? transformation = null)
         {
@@ -126,9 +126,8 @@ namespace Trace
         }
 
         /// <summary>
-        /// Fire a ray through the camera.<br/>
         /// This is an abstract method. It has been redefined in derived classes.
-        /// Fire a ray that goes through the screen at the position (u, v). The exact meaning
+        /// Fire a <see cref="Ray"/> that goes through the screen at the position (u, v). The exact meaning
         /// of these coordinates depends on the projection used by the camera.
         /// </summary>
         public abstract Ray fireRay(float u, float v);
@@ -180,7 +179,7 @@ namespace Trace
         public float screenDistance;
 
         /// <summary>
-        /// Create a new perspective camera
+        /// Create a new <see cref="PerspectiveCamera"/>.
         /// </summary>
         /// <param name="screenDistance">It tells how much far from the eye of the observer is the screen, and it influences the so-called «aperture» (the field-of-view angle along the horizontal direction).</param>
         /// <param name="aspectRatio">The parameter `aspect_ratio` defines how larger than the height is the image.For fullscreen
@@ -190,7 +189,7 @@ namespace Trace
         public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null) : base(aspectRatio, transformation) { this.screenDistance = screenDistance ?? 1.0f; }
 
         /// <summary>
-        /// Shoot a ray through the camera's screen <br/>
+        /// Shoot a <see cref="Ray"/> through the camera's screen <br/>
         /// The coordinates(u, v) specify the point on the screen where the ray crosses it.Coordinates(0, 0) represent
         /// the bottom-left corner, (0, 1) the top-left corner, (1, 0) the bottom-right corner, and (1, 1) the top-right
         /// corner, as in the following diagram::
@@ -207,7 +206,7 @@ namespace Trace
 
         /// <summary>
         /// Compute the aperture of the camera in degrees
-        /// The aperture is the angle of the field-of-view along the horizontal direction(Y axis)
+        /// The aperture is the angle of the field-of-view along the horizontal direction (Y axis)
         /// </summary>
         /// <returns> The aperture angle, measured in degrees</returns>
         public float apertureDeg()
@@ -215,50 +214,53 @@ namespace Trace
     }
 
     /// <summary>
-    /// A class that links an a Camera object to an HdrImage object to creat a matrix of pixel after solving
-    /// the rendering equation <br/>
-    /// Public data members: HdrImage image, Camera camera
+    /// A class that links a <see cref="Camera"/> object to a <see cref="HdrImage"/> object to create
+    /// a matrix of pixel after solving the rendering equation. <br/>
+    /// Public data members: <see cref="HdrImage"/>, <see cref="Camera"/>.
     /// </summary>
     public class ImageTracer
         {
         public HdrImage image;
+        /// <summary>
+        /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.
+        /// </summary>
         public Camera camera;
 
         /// <summary>
         /// Basic constructor for the class.
         /// </summary>
-        /// <param name="i">HdrImage-type input parameter</param>
-        /// <param name="c">Camera-type input parameter</param>
+        /// <param name="i"><see cref="HdrImage"/> input parameter</param>
+        /// <param name="c"><see cref="Camera"/> input parameter</param>
         public ImageTracer(HdrImage i, Camera c)
         {
-            image = i;
-            camera = c;
+            this.image = i;
+            this.camera = c;
         }
         /// <summary>
-        /// Method that generates a Ray-type object on the imaginary screen in the coordinates 
-        /// (col+uPixel),(row+vPixel), both normalized
-        /// to the HdrImage-datamember scale
+        /// Method that generates a <see cref="Ray"/> object on the virtual screen
+        /// at the coordinates (col + uPixel),(row+ vPixel), both normalized
+        /// to the <see cref="HdrImage"/> scale.
         /// </summary>
-        /// <param name="col">number of column</param>
-        /// <param name="row">number of row</param>
-        /// <param name="uPixel">x coord in the pixel<br/>
-        /// if not specified, it's equal to 0.5</param>
-        /// <param name="vPixel">y coord in the pixel<br/>
-        /// if not specified, it's equal to 0.5</param>
-        /// <returns></returns>
+        /// <param name="col"> Column number (start fom 0)</param>
+        /// <param name="row"> Row number (staet from 0) </param>
+        /// <param name="uPixel"> x coordinate inside the pixel (default: 0.5) </param>
+        /// <param name="vPixel"> y coordinate inside the pixel (default: 0.5) </param>
+        /// <returns> The fired <see cref="Ray"/>. </returns>
         public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
-            float u = (col + uPixel) / (image.width - 1);
-            float v = (row + vPixel) / (image.height - 1);
-            return camera.fireRay(u, v);
+            float u = (col + uPixel) / (this.image.width - 1);
+            float v = (row + vPixel) / (this.image.height - 1);
+            return this.camera.fireRay(u, v);
         }
 
         public delegate Color myFunction(Ray r);
         /// <summary>
-        /// Method that sets all pixels of HdrImage datamember to a certain color, specified by a myFunction function
+        /// Method that calculates all pixels of the <see cref="HdrImage"/>
+        /// datamember according to the rendering equation,
+        /// specified by a <see cref="myFunction"/> object.
         /// </summary>
-        /// <param name="Func"></param>
-        public void fireAllRay(myFunction Func)
+        /// <param name="Func"> The function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
+        public void fireAllRays(myFunction Func)
         {
             for (int r = 0; r < image.height; r++)
             {
