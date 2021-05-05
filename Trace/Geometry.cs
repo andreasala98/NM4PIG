@@ -202,6 +202,12 @@ namespace Trace
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
         /// <summary>
+        /// Change sign to all the components
+        /// </summary>
+        public static Vec operator -(Vec vec)
+            => new Vec(-vec.x, -vec.y, -vec.z);
+
+        /// <summary>
         ///  Cross product between two 3D <see cref="Vec"/>s.
         /// </summary>
         /// <param name="b"> Second <see cref="Vec"/></param>
@@ -283,11 +289,8 @@ namespace Trace
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
-        /// Multiplication <see cref="Vec"/> - scalar
+        /// Change sign to all the components
         /// </summary>
-        /// <param name="a">  <see cref="Vec"/> object</param>
-        /// <param name="alfa">  Scaling factor </param>
-        /// <returns> A scaled <see cref="Vec"/> object </returns>
         public static Normal operator -(Normal normal)
             => new Normal(-normal.x, -normal.y, -normal.z);
 

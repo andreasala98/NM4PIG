@@ -62,10 +62,10 @@ namespace Trace
         /// <param name="tm"> Minimum distance </param>
         /// <param name="tM"> Maximum distance </param>
         /// <param name="dep"> Number of reflections </param>
-        public Ray(Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
+        public Ray(Point origin, Vec dir, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
         {
-            this.origin = or;
-            this.dir = d;
+            this.origin = origin;
+            this.dir = dir;
             this.tmin = (float)tm;
             this.tmax = (float)tM;
             this.depth = (int)dep;
