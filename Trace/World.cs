@@ -21,14 +21,11 @@ using System.Collections.Generic;
 
 namespace Trace
 {
-
-
     /// <summary>
     ///  A class holding information about a ray-shape intersection
     /// </summary>
     public struct HitRecord
     {
-
         /// <summary>
         /// a <see cref="Point"/> object holding the world coordinates of the hit point
         /// </summary>
@@ -51,7 +48,6 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-
         public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
         {
             this.worldPoint = wp;
@@ -64,12 +60,14 @@ namespace Trace
 
         public bool isClose(HitRecord? other)
         {
+
             if (other == null) return false;
 
             else return (this.worldPoint.isClose((Point)other?.worldPoint)
-                            && this.normal.isClose((Normal)other?.normal)
-                            && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
-                            && this.ray.isClose((Ray)other?.ray)
+                         && this.normal.isClose((Normal)other?.normal)
+                         && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
+                         && this.ray.isClose((Ray)other?.ray)
+                         && Utility.areClose((float)this.t, (float)other?.t)
                         );
         }
 
@@ -123,7 +121,6 @@ namespace Trace
                     closest = lastIntersection;
                 }
             }
-
             return closest;
         }
 
