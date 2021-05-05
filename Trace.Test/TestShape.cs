@@ -44,8 +44,13 @@ namespace Trace.Test
             HitRecord? intersection2 = sphere.rayIntersection(ray2);
             Assert.True(intersection2 != null, "TestHit failed! - Assert 3/5");
             HitRecord hit2 = new HitRecord(
+<<<<<<< HEAD
                 new Point(1.0f, 0.0f, 0.0f),
                 new Normal(1.0f, 0.0f, 0.0f),
+=======
+                new Point(1.0f, 0.0f, 1.0f),
+                new Normal(1.0f, 0.0f, 1.0f),
+>>>>>>> TestHit
                 new Vec2D(0.0f, 0.5f),
                 2.0f,
                 ray2
@@ -53,6 +58,7 @@ namespace Trace.Test
             Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
 
             Assert.True(sphere.rayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)) == null, "TestHit failed! - Assert 5/5 ");
+<<<<<<< HEAD
         }
 
         [Fact]
@@ -72,6 +78,8 @@ namespace Trace.Test
                                         );
             Assert.True(hit.isClose(intersection), "TestInnerHit failed! - Assert 2/2");
         }
+=======
+>>>>>>> TestHit
 
         [Fact]
         public void TestTransformation()
