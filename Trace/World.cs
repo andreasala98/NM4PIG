@@ -21,8 +21,6 @@ using System.Collections.Generic;
 
 namespace Trace
 {
-
-
     /// <summary>
     ///  A class holding information about a ray-shape intersection
     /// </summary>
@@ -74,8 +72,6 @@ namespace Trace
         }
 
     }
-
-
 
     /// <summary>
     /// Class to represent the rendering environment. It is a collection of all the present 3D shapes.
