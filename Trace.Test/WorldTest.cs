@@ -44,13 +44,6 @@ namespace Trace.Test
             // mettere 2 sfere e verifiare che l'HitRecord è quello della sfera più avanti
             w.addShape(new Sphere());
         }
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> 785fbfdf921467730da0f9d2b14daf955f784d58
     } //end of class
 
 } //end of namespace
