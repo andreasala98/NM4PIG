@@ -24,9 +24,12 @@ namespace Trace.Test
         public void TestRayIntersection() 
         {
             World w = new World();
-            // mettere 2 sfere e verifiare che l'HitRecord è quello della sfera più avanti
-            w.addShape(new Sphere());
-            w.addShape(new Sphere(Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f))));
+            Ray myRay = new Ray(new Point(5.0f, 0.0f, 0.0f),-Constant.VEC_X);
+            w.addShape(new Sphere()); //Sphere in the origin
+            w.addShape(new Sphere(Transformation.Translation(new Vec(2.0f, 0.0f, 0.0f)))); //Centred in (2,0,0)
+
+            HitRecord? TrueHitRecord = w.shapes[1].rayIntersection(myRay);
+            Assert.True( TrueHitRecord?.isClose( w.rayIntersection(myRay)));
         }
 
 

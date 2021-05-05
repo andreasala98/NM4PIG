@@ -40,7 +40,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Compute the intersection between a ray and this shape. This method has to be ridefined in
+        /// Compute the intersection between a ray and this shape. This method has to be redefined in
         /// derived classes
         /// </summary>
         public abstract HitRecord? rayIntersection(Ray ray);
@@ -60,7 +60,7 @@ namespace Trace
         public Sphere(Transformation? transformation = null) : base(transformation) { }
 
         /// <summary>
-        /// Checks if a ray intersects the sphere
+        /// Checks if a ray intersects the sphere and return the hit record
         /// </summary>
         /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
         /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>

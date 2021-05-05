@@ -107,12 +107,20 @@ namespace Trace
         public void addShape(Shape sh)
           => shapes.Add(sh);
 
+
+        /// <summary>
+        /// It calculates all intersections between shapes and a ray,
+        /// and it outputs the hit record of the closest object.
+        /// </summary>
+        /// <param name="intRay"> <see cref="Ray"/> object potentially intersecating
+        /// <see cref="Shape"/> objects in the world</param>.
+        /// <returns> The Hit Record of the ray with the closest object </returns>
         public HitRecord? rayIntersection(Ray intRay) 
         {
             HitRecord? closest = null;
             HitRecord? lastIntersection;
 
-            foreach (var shape in this.shapes){
+            foreach (var shape in shapes){
                 lastIntersection = shape.rayIntersection(intRay);
                 if (lastIntersection==null) continue;
                 if (closest==null || (float)closest?.t > (float)lastIntersection?.t){
