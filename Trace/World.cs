@@ -109,7 +109,6 @@ namespace Trace
         {
             HitRecord? closest = null;
             HitRecord? lastIntersection;
-
             foreach (var shape in this.shapes)
             {
                 lastIntersection = shape.rayIntersection(intRay);
