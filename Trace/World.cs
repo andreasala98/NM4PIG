@@ -48,21 +48,7 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-<<<<<<< HEAD
         public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
-=======
-        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r) 
-        {
-            this.worldPoint = wp;
-            this.normal = nm;
-            this.surfacePoint = sp;
-            this.t = tt;
-            this.ray = r;
-        }
-
-
-        public bool isClose(HitRecord? other) 
->>>>>>> Added constructor for HitRecord
         {
             this.worldPoint = wp;
             this.normal = nm;
