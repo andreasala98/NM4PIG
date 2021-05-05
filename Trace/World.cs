@@ -68,6 +68,7 @@ namespace Trace
                         );
         }
     }
+
     /// <summary>
     /// Class to represent the rendering environment. It is a collection of all the present 3D shapes.
     /// This class is used to calculate ray intersections with objects and to determine the closest ones.
