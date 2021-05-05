@@ -161,8 +161,8 @@ namespace Trace.Test
                     Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)), $"TestImageCoverage failed - Assert row={row}, col={col}");
                 }
             }
-        }
+        } //end of function
 
-    }
+    } //end of class
 
-}
+} //end of namespace

@@ -21,13 +21,65 @@ using System.IO;
 using Trace;
 using System.Globalization;
 using System.Numerics;
+using R5.RunInfoBuilder;
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace NM4PIG
 {
+
     class Program
     {
-        static void Main(string[] args)
+
+        
+        public static void Main(params string[] args)
         {
+            
+            CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false);
+            CommandArgument names = null;
+            CLI.Command("demo", 
+                        (target) => names = target.Argument(
+                                                 "Demo option",
+                                                 "I dont know what to write here",
+                                                  multipleValues: true
+                                                )
+                        );
+
+           /* CommandOption demo = CLI.Option(
+            "-$|-d |--demo",
+             "The demo option to execute. Demo",
+            CommandOptionType.SingleValue);
+
+            CLI.HelpOption("-? | -h | --help");
+            CLI.OnExecute(() =>
+            {
+                if (demo.ToString() == "demo")
+                {
+                    Demo();
+                }
+                return 0;
+            });
+
+            CommandOption converter = CLI.Option(
+            "-$|-c |--converter",
+             "The converter option to execute. Converter",
+            CommandOptionType.SingleValue);
+
+            CLI.HelpOption("-? | -h | --help");
+            CLI.OnExecute(() =>
+            {
+                if (converter.ToString() == "converter")
+                {
+                    Converter();
+                }
+                return 0;
+            });
+
+
+
+            CLI.Execute(args);
+            this is all probably wrong
+            */
+
 
             /*
             Parameters readParam = new Parameters();
@@ -81,9 +133,17 @@ namespace NM4PIG
             */
 
 
+            Console.WriteLine("Hello world!");
+
+
+
+
 
             return;
         }
+
+        public static void Demo() { Console.WriteLine("Hello world demo"); }
+        public static void Converter() { Console.WriteLine("Hello world converter"); }
 
         class Parameters
         {
