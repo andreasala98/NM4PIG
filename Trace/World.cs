@@ -21,21 +21,20 @@ using System.Collections.Generic;
 
 namespace Trace
 {
-
-
-/// <summary>
-///  A class holding information about a ray-shape intersection
-/// </summary>
-    public struct HitRecord{
-
+    /// <summary>
+    ///  A class holding information about a ray-shape intersection
+    /// </summary>
+    public struct HitRecord
+    {
         /// <summary>
         /// a <see cref="Point"/> object holding the world coordinates of the hit point
         /// </summary>
         public Point worldPoint;
         /// <summary>
         /// a <see cref="Normal"/> object holding the orientation of the normal to the surface where the hit happened
-         /// </summary>
+        /// </summary>
         public Normal normal;
+
         /// <summary>
         /// a <see cref="Vec2D"> object holding the position of the hit point on the surface of the object
         /// </summary>
@@ -49,8 +48,7 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-
-        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r) 
+        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
         {
             this.worldPoint = wp;
             this.normal = nm;
@@ -60,18 +58,17 @@ namespace Trace
         }
 
 
-        public bool isClose(HitRecord? other) 
+        public bool isClose(HitRecord? other)
         {
 
             if (other == null) return false;
 
-            else return (   this.worldPoint.isClose((Point)other?.worldPoint)
+            else return (this.worldPoint.isClose((Point)other?.worldPoint)
                          && this.normal.isClose((Normal)other?.normal)
                          && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
                          && this.ray.isClose((Ray)other?.ray)
-                         && Utility.areClose((float)this.t,(float)other?.t)
+                         && Utility.areClose((float)this.t, (float)other?.t)
                         );
-
         }
 
     }
@@ -91,15 +88,18 @@ namespace Trace
         /// </summary>
         public List<Trace.Shape> shapes;
 
-        public World(){
+        public World()
+        {
             this.shapes = new List<Shape>();
         }
 
-        public World(List<Shape> ShapeList) {
+        public World(List<Shape> ShapeList)
+        {
             this.shapes = ShapeList;
         }
 
-        public World(Shape sh) {
+        public World(Shape sh)
+        {
             this.shapes = new List<Shape>();
             this.addShape(sh);
         }
@@ -122,12 +122,12 @@ namespace Trace
 
             foreach (var shape in shapes){
                 lastIntersection = shape.rayIntersection(intRay);
-                if (lastIntersection==null) continue;
-                if (closest==null || (float)closest?.t > (float)lastIntersection?.t){
+                if (lastIntersection == null) continue;
+                if (closest == null || (float)closest?.t > (float)lastIntersection?.t)
+                {
                     closest = lastIntersection;
                 }
-             }
-
+            }
             return closest;
         }
 

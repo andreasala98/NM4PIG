@@ -25,10 +25,16 @@ namespace Trace
     /// </summary>
     public abstract class Shape
     {
+
+        // Fields 
+        
         /// <summary>
         /// <see cref="Transformation associated to the shape">
         /// </summary>
         public Transformation transformation;
+
+
+        // Methods
 
         /// <summary>
         /// Create a unit sphere, potentially associating a transformation to it
@@ -122,7 +128,7 @@ namespace Trace
         /// <returns><see cref="Vec2D"/></returns>
         private static Vec2D _spherePointToUV(Point point)
             => new Vec2D(
-                    (float)Math.Atan2(point.y, point.x) / (2.0f * Constant.PI),
+                    (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
                     (float)Math.Acos(point.z) / Constant.PI
                 );
 

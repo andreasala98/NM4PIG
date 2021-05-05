@@ -44,8 +44,8 @@ namespace Trace.Test
             HitRecord? intersection2 = sphere.rayIntersection(ray2);
             Assert.True(intersection2 != null, "TestHit failed! - Assert 3/5");
             HitRecord hit2 = new HitRecord(
-                new Point(1.0f, 0.0f, 1.0f),
-                new Normal(1.0f, 0.0f, 1.0f),
+                new Point(1.0f, 0.0f, 0.0f),
+                new Normal(1.0f, 0.0f, 0.0f),
                 new Vec2D(0.0f, 0.5f),
                 2.0f,
                 ray2
@@ -53,9 +53,60 @@ namespace Trace.Test
             Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
 
             Assert.True(sphere.rayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)) == null, "TestHit failed! - Assert 5/5 ");
+        }
 
+        [Fact]
+        public void TestInnerHit()
+        {
+            Sphere sphere = new Sphere();
+            Ray ray = new Ray(origin: new Point(0f, 0f, 0f), dir: Constant.VEC_X);
+            HitRecord? intersection = sphere.rayIntersection(ray);
+            Assert.True(intersection != null, "TestInnerHit failed! - Assert 1/2");
+
+            HitRecord hit = new HitRecord(
+                                            new Point(1.0f, 0.0f, 0.0f),
+                                            new Normal(-1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.0f, 0.5f),
+                                            1.0f,
+                                            ray
+                                        );
+            Assert.True(hit.isClose(intersection), "TestInnerHit failed! - Assert 2/2");
+        }
+
+        [Fact]
+        public void TestTransformation()
+        {
+            Sphere sphere = new Sphere(Transformation.Translation(new Vec(10.0f, 0.0f, 0.0f)));
+
+            Ray ray1 = new Ray(new Point(10f, 0f, 2f), -Constant.VEC_Z);
+            HitRecord? intersection1 = sphere.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestTransformation failed - assert 1/6");
+            HitRecord hit1 = new HitRecord(
+                                            new Point(10.0f, 0.0f, 1.0f),
+                                            new Normal(0.0f, 0.0f, 1.0f),
+                                            new Vec2D(0.0f, 0.0f),
+                                            1.0f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), "TestTransformation failed - assert 2/6");
+
+            Ray ray2 = new Ray(new Point(13f, 0f, 0f), -Constant.VEC_X);
+            HitRecord? intersection2 = sphere.rayIntersection(ray2);
+            Assert.True(intersection2 != null, "TestTransformation failed - assert 3/6");
+            HitRecord hit2 = new HitRecord(
+                                            new Point(11.0f, 0.0f, 0.0f),
+                                            new Normal(1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.0f, 0.5f),
+                                            2.0f,
+                                            ray2
+                                        );
+            Assert.True(hit2.isClose(intersection2), "TestTransformation failed - assert 4/6");
+
+            // Check if the sphere failed to move by trying to hit the untransformed shape
+            Assert.True(sphere.rayIntersection(new Ray(new Point(0f, 0f, 2f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 5/6");
+
+            // Check if the *inverse* transformation was wrongly applied
+            Assert.True(sphere.rayIntersection(new Ray(new Point(-10f, 0f, 0f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 6/6");
         }
     } // 
-
 } // end of namespace
-
