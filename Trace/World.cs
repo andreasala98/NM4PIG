@@ -26,7 +26,6 @@ namespace Trace
     /// </summary>
     public struct HitRecord
     {
-
         /// <summary>
         /// a <see cref="Point"/> object holding the world coordinates of the hit point
         /// </summary>
