@@ -43,7 +43,7 @@ namespace Trace
         /// Compute the intersection between a ray and this shape. This method has to be ridefined in
         /// derived classes
         /// </summary>
-        public abstract HitRecord? RayIntersection(Ray ray);
+        public abstract HitRecord? rayIntersection(Ray ray);
 
     }
 
@@ -64,7 +64,7 @@ namespace Trace
         /// </summary>
         /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
         /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
-        public override HitRecord? RayIntersection(Ray ray)
+        public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             Vec originVec = invRay.origin.toVec();
@@ -90,11 +90,11 @@ namespace Trace
 
             Point hitPoint = invRay.at(firstHitT);
             return new HitRecord(
-                worldPoint: this.transformation * hitPoint,
-                normal: this.transformation * _sphereNormal(hitPoint, ray.dir),
-                surfacePoint: _spherePointToUV(hitPoint),
-                t: firstHitT,
-                ray: ray
+                this.transformation * hitPoint,
+                this.transformation * _sphereNormal(hitPoint, ray.dir),
+                _spherePointToUV(hitPoint),
+                firstHitT,
+                ray
             );
         }
 
@@ -122,8 +122,8 @@ namespace Trace
         /// <returns><see cref="Vec2D"/></returns>
         private static Vec2D _spherePointToUV(Point point)
             => new Vec2D(
-                    u: (float)Math.Atan2(point.y, point.x) / (2.0f * Constant.PI),
-                    v: Math.Acos(point.z) / Constant.PI
+                    (float)Math.Atan2(point.y, point.x) / (2.0f * Constant.PI),
+                    (float)Math.Acos(point.z) / Constant.PI
                 );
 
 
