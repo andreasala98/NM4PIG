@@ -17,10 +17,60 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.Numerics;
+using System.Collections.Generic;
 
 namespace Trace
 {
+
+
+/// <summary>
+///  A class holding information about a ray-shape intersection
+/// </summary>
+    public struct HitRecord{
+
+        /// <summary>
+        /// a <see cref="Point"/> object holding the world coordinates of the hit point
+        /// </summary>
+        Point worldPoint;
+        /// <summary>
+        /// a <see cref="Normal"/> object holding the orientation of the normal to the surface where the hit happened
+         /// </summary>
+        Normal normal;
+        /// <summary>
+        /// a <see cref="Vec2D"> object holding the position of the hit point on the surface of the object
+        /// </summary>
+        Vec2D surfacePoint;
+        /// <summary>
+        /// a floating-point value specifying the distance from the origin of the <see cref="Ray"> where the hit happened
+        /// </summary>
+        float t;
+        /// <summary>
+        /// The <see cref="Ray"/> that hit the surface
+        /// </summary>
+        Ray ray;
+
+
+
+        public bool isClose(HitRecord? other) 
+        {
+
+            if (other == null) return false;
+
+            else return (   this.worldPoint.isClose((Point)other.worldPoint)
+                         && this.normal.isClose((Normal)other.normal)
+                         && this.surfacePoint.isClose((Vec2D)other.surfacePoint)
+                         && this.ray.isClose((Ray)other.ray)
+                        );
+
+        // ??
+
+        }
+
+
+
+    }
+
+
 
     /// <summary>
     /// Class to represent the rendering environment. It is a collection of all the present 3D shapes.
@@ -38,6 +88,16 @@ namespace Trace
         public void addShape(Shape sh)
           => shapes.Add(sh);
 
+        public HitRecord? rayIntersection(Ray intRay) 
+        {
+            HitRecord? closest = null;
+            HitRecord? lastIntersection;
+
+            foreach (var shape in this.shapes){
+                lastIntersection = shape.rayIntersection(intRay);
+            }
+
+        }
 
 
 
