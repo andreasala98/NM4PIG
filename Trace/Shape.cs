@@ -110,7 +110,7 @@ namespace Trace
         private static Normal _sphereNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal(point.x, point.y, point.z);
-            if (point.toVec() * rayDir < 0.0f)
+            if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
         }
@@ -122,7 +122,7 @@ namespace Trace
         /// <returns><see cref="Vec2D"/></returns>
         private static Vec2D _spherePointToUV(Point point)
             => new Vec2D(
-                    (float)Math.Atan2(point.y, point.x) / (2.0f * Constant.PI),
+                    ((float)Math.Atan2(point.y, point.x) + Constant.PI) / (2.0f * Constant.PI),
                     (float)Math.Acos(point.z) / Constant.PI
                 );
 
