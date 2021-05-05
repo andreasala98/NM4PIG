@@ -1,4 +1,5 @@
 using Xunit;
+using Trace;
 using System.Numerics;
 using System;
 
@@ -25,6 +26,7 @@ namespace Trace.Test
             World w = new World();
             // mettere 2 sfere e verifiare che l'HitRecord è quello della sfera più avanti
             w.addShape(new Sphere());
+            w.addShape(new Sphere(Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f))));
         }
 
 
