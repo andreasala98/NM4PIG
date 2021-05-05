@@ -266,7 +266,6 @@ namespace Trace
     /// </summary>
     public struct Vec2D
     {
-
         float u, v;
 
         public Vec2D(float a, float b)
