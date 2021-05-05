@@ -311,16 +311,8 @@ namespace Trace
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
-<<<<<<< HEAD
         /// Change sign to all the components
         /// </summary>
-=======
-        /// Multiplication <see cref="Vec"/> - scalar
-        /// </summary>
-        /// <param name="a">  <see cref="Vec"/> object</param>
-        /// <param name="alfa">  Scaling factor </param>
-        /// <returns> A scaled <see cref="Vec"/> object </returns>
->>>>>>> Ended implementations of shapes and spheres
         public static Normal operator -(Normal normal)
             => new Normal(-normal.x, -normal.y, -normal.z);
 
