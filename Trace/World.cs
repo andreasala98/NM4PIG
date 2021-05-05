@@ -71,7 +71,7 @@ namespace Trace
                          && this.ray.isClose((Ray)other.ray)
                         );
 
-        // ??
+
 
         }
 
@@ -105,9 +105,12 @@ namespace Trace
             foreach (var shape in this.shapes){
                 lastIntersection = shape.rayIntersection(intRay);
                 if (lastIntersection==null) continue;
-                if (closest==null )
-            }
+                if (closest==null || closest.t > lastIntersection.t){
+                    closest = lastIntersection;
+                }
+             }
 
+            return closest;
         }
 
 
