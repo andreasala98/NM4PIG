@@ -67,14 +67,7 @@ namespace Trace
                             && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
                             && this.ray.isClose((Ray)other?.ray)
                         );
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> Completed World class
         }
-
     }
 
     /// <summary>
