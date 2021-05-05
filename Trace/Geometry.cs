@@ -265,11 +265,11 @@ namespace Trace
     /// The fields are named `u` and `v` to distinguish them from the usual 3D coordinates `x`, `y`, `z`.
     /// </summary>
     public struct Vec2D
-     {
+    {
 
         float u, v;
 
-        public Vec2D(float a, float b) 
+        public Vec2D(float a, float b)
         {
             this.u = a;
             this.v = b;

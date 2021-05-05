@@ -15,6 +15,7 @@ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 */
+
 using System;
 
 namespace Trace
@@ -43,7 +44,6 @@ namespace Trace
         /// derived classes
         /// </summary>
         public abstract HitRecord? rayIntersection(Ray ray);
-
     }
 
     /// <summary>
