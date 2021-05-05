@@ -121,7 +121,18 @@ namespace Trace.Test
     public class ImageTracerTest
     {
         [Fact]
-        public void TestFireRay()
+        public void TestOrientation()
+        {
+            HdrImage image = new HdrImage(4, 2);
+            PerspectiveCamera camera = new PerspectiveCamera(aspectRatio: 2.0f);
+            ImageTracer tracer = new ImageTracer(image, camera);
+            Ray topLeftRay = tracer.fireRay(0, 0, 0.0f, 0.0f);
+            Point p = new Point(0.0f, 2.0f, 1.0f);
+            Assert.True(p.isClose(topLeftRay.at(1.0f)));
+        }
+
+        [Fact]
+        public void TestUVSubMapping()
         {
             HdrImage image = new HdrImage(4, 2);
             PerspectiveCamera camera = new PerspectiveCamera(aspectRatio: 2.0f);
@@ -129,14 +140,14 @@ namespace Trace.Test
 
             Ray ray1 = tracer.fireRay(0, 0, 2.5f, 1.5f);
             Ray ray2 = tracer.fireRay(2, 1, 0.5f, 0.5f);
-            Assert.True(ray1.isClose(ray2), "TestfireRay failed - Assert 1/1");
+            Assert.True(ray1.isClose(ray2), "TestUVSubMapping failed - Assert 1/1");
         }
 
         public Color lambda(Ray r)
             => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
-        public void TestFireAllRays()
+        public void TestImageCoverage()
         {
             HdrImage image = new HdrImage(4, 2);
             PerspectiveCamera camera = new PerspectiveCamera();
@@ -147,7 +158,7 @@ namespace Trace.Test
             {
                 for (int col = 0; col < image.width; col++)
                 {
-                    Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)), $"TestfireAllRay failed - Assert row={row}, col={col}");
+                    Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)), $"TestImageCoverage failed - Assert row={row}, col={col}");
                 }
             }
         }
