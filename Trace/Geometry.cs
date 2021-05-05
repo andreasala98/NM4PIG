@@ -245,6 +245,29 @@ namespace Trace
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
     }
 
+
+    /// <summary>
+    /// A 2D vector used to represent a point on a surface
+    /// The fields are named `u` and `v` to distinguish them from the usual 3D coordinates `x`, `y`, `z`.
+    /// </summary>
+    public struct Vec2D
+     {
+
+        float u, v;
+
+        public Vec2D(float a, float b) 
+        {
+            this.u = a;
+            this.v = b;
+        }
+
+        public bool isClose(Vec2D vector)
+           => Utility.areClose(this.u, vector.u) && Utility.areClose(this.v, vector.v);
+
+    }
+
+
+
     /// <summary>
     ///  Value type represnting a Normal vector
     /// </summary>
