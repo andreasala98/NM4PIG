@@ -92,7 +92,7 @@ namespace Trace
         /// </summary>
         /// <param name="T"> A <see cref="Transformation"/> object. </param>
         /// <returns> The transformed <see cref="Ray"/>.</returns>
-        public Ray transform(Transformation T)
+        public Ray Transform(Transformation T)
             => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
 
     }
@@ -161,7 +161,7 @@ namespace Trace
         {
             Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
             Vec direction = new Vec(1.0f, 0.0f, 0.0f);
-            return new Ray(origin, direction, 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
     }
 
@@ -201,7 +201,7 @@ namespace Trace
         {
             Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
             Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
-            return new Ray(origin, direction, 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Trace
     /// Public data members: <see cref="HdrImage"/>, <see cref="Camera"/>.
     /// </summary>
     public class ImageTracer
-        {
+    {
         public HdrImage image;
         /// <summary>
         /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.
