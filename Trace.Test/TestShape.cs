@@ -24,33 +24,35 @@ namespace Trace.Test
     {
 
         [Fact]
-        public TestHit()
+        public void TestHit()
         {
             Sphere sphere = new Sphere();
 
             Ray ray1 = new Ray(origin: new Point(0f, 0f, 2f), dir: -Constant.VEC_Z);
             HitRecord? intersection1 = sphere.rayIntersection(ray1);
-            assert intersection1
-        assert HitRecord(
-            world_point= Point(0.0, 0.0, 1.0),
-            normal = Normal(0.0, 0.0, 1.0),
-            surface_point = Vec2d(0.0, 0.0),
-            t = 1.0,
-            ray = ray1,
-        ).is_close(intersection1)
+            Assert.True(intersection1 != null, "TestHit failed! - Assert 1/5");
+            HitRecord hit1 = new HitRecord(
+                new Point(0.0f, 0.0f, 1.0f),
+                new Normal(0.0f, 0.0f, 1.0f),
+                new Vec2D(0.0f, 0.0f),
+                1.0f,
+                ray1
+            );
+            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
 
-        ray2 = Ray(origin = Point(3, 0, 0), dir = -VEC_X)
-        intersection2 = sphere.ray_intersection(ray2)
-        assert intersection2
-        assert HitRecord(
-            world_point= Point(1.0, 0.0, 0.0),
-            normal = Normal(1.0, 0.0, 0.0),
-            surface_point = Vec2d(0.0, 0.5),
-            t = 2.0,
-            ray = ray2,
-        ).is_close(intersection2)
+            Ray ray2 = new Ray(new Point(3f, 0f, 0f), -Constant.VEC_X);
+            HitRecord? intersection2 = sphere.rayIntersection(ray2);
+            Assert.True(intersection2 != null, "TestHit failed! - Assert 3/5");
+            HitRecord hit2 = new HitRecord(
+                new Point(1.0f, 0.0f, 1.0f),
+                new Normal(1.0f, 0.0f, 1.0f),
+                new Vec2D(0.0f, 0.5f),
+                2.0f,
+                ray2
+            );
+            Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
 
-        assert not sphere.ray_intersection(Ray(origin = Point(0, 10, 2), dir = -VEC_Z))
+            Assert.True(sphere.rayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)) == null, "TestHit failed! - Assert 5/5 ");
 
         }
     }
