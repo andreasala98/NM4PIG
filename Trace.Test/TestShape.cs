@@ -108,11 +108,5 @@ namespace Trace.Test
             // Check if the *inverse* transformation was wrongly applied
             Assert.True(sphere.rayIntersection(new Ray(new Point(-10f, 0f, 0f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 6/6");
         }
-    } // 
-<<<<<<< HEAD
+    }
 } // end of namespace
-=======
-
-} // end of namespace
-
->>>>>>> Working on world test
