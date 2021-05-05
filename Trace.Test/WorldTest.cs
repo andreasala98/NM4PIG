@@ -59,7 +59,12 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void 
+        public void TestRayIntersection() 
+        {
+            World w = new World();
+            // mettere 2 sfere e verifiare che l'HitRecord è quello della sfera più avanti
+            w.addShape(new Sphere());
+        }
 
 
 
