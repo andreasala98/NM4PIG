@@ -50,6 +50,15 @@ namespace Trace
         Ray ray;
 
 
+        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r) 
+        {
+            this.worldPoint = wp;
+            this.normal = nm;
+            this.surfacePoint = sp;
+            this.t = tt;
+            this.ray = r;
+        }
+
 
         public bool isClose(HitRecord? other) 
         {
@@ -95,6 +104,8 @@ namespace Trace
 
             foreach (var shape in this.shapes){
                 lastIntersection = shape.rayIntersection(intRay);
+                if (lastIntersection==null) continue;
+                if (closest==null )
             }
 
         }
