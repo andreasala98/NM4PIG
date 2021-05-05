@@ -103,6 +103,14 @@ namespace Trace
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
             return new Point(a.x / alfa, a.y / alfa, a.z / alfa);
         }
+
+        /// <summary>
+        /// Convert a <see cref="Point"/> to <see cref="Vec"/>
+        /// e.g. Point(1,2,3) to Vec(1,2,3)
+        /// </summary>
+        /// <returns><see cref="Vec"/> version of <see cref="Point"/></returns>
+        public Vec toVec()
+           => new Vec(this.x, this.y, this.z);
     }
 
     /// <summary>
@@ -275,12 +283,23 @@ namespace Trace
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
+        /// Multiplication <see cref="Vec"/> - scalar
+        /// </summary>
+        /// <param name="a">  <see cref="Vec"/> object</param>
+        /// <param name="alfa">  Scaling factor </param>
+        /// <returns> A scaled <see cref="Vec"/> object </returns>
+        public static Normal operator -(Normal normal)
+            => new Normal(-normal.x, -normal.y, -normal.z);
+
+        /// <summary>
         /// Boolean to check if two <see cref="Normal"/>s are close enough
         /// </summary>
         /// <param name="vector"> The other <see cref="Normal"/></param>
         /// <returns>True if the <see cref="Normal"/>s are close</returns> 
         public bool isClose(Normal vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
+
+
     }
 
     /// <summary>
