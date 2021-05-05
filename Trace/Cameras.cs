@@ -248,8 +248,8 @@ namespace Trace
         /// <returns> The fired <see cref="Ray"/>. </returns>
         public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
-            float u = (col + uPixel) / (this.image.width - 1);
-            float v = (row + vPixel) / (this.image.height - 1);
+            float u = (col + uPixel) / (this.image.width);
+            float v = 1.0f - (row + vPixel) / (this.image.height);
             return this.camera.fireRay(u, v);
         }
 
