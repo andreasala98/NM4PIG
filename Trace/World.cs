@@ -37,6 +37,7 @@ namespace Trace
         /// a <see cref="Normal"/> object holding the orientation of the normal to the surface where the hit happened
         /// </summary>
         public Normal normal;
+
         /// <summary>
         /// a <see cref="Vec2D"> object holding the position of the hit point on the surface of the object
         /// </summary>
@@ -72,8 +73,6 @@ namespace Trace
                         );
         }
 
-
-
     }
 
 
@@ -90,6 +89,22 @@ namespace Trace
         ///  objects present in the environment.
         /// </summary>
         public List<Trace.Shape> shapes;
+
+        public World()
+        {
+            this.shapes = new List<Shape>();
+        }
+
+        public World(List<Shape> ShapeList)
+        {
+            this.shapes = ShapeList;
+        }
+
+        public World(Shape sh)
+        {
+            this.shapes = new List<Shape>();
+            this.addShape(sh);
+        }
 
         public void addShape(Shape sh)
           => shapes.Add(sh);
@@ -111,9 +126,6 @@ namespace Trace
 
             return closest;
         }
-
-
-
 
     } // end of World
 
