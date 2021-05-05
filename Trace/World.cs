@@ -23,34 +23,35 @@ namespace Trace
 {
 
 
-/// <summary>
-///  A class holding information about a ray-shape intersection
-/// </summary>
-    public struct HitRecord{
+    /// <summary>
+    ///  A class holding information about a ray-shape intersection
+    /// </summary>
+    public struct HitRecord
+    {
 
         /// <summary>
         /// a <see cref="Point"/> object holding the world coordinates of the hit point
         /// </summary>
-        Point worldPoint;
+        public Point worldPoint;
         /// <summary>
         /// a <see cref="Normal"/> object holding the orientation of the normal to the surface where the hit happened
-         /// </summary>
-        Normal normal;
+        /// </summary>
+        public Normal normal;
         /// <summary>
         /// a <see cref="Vec2D"> object holding the position of the hit point on the surface of the object
         /// </summary>
-        Vec2D surfacePoint;
+        public Vec2D surfacePoint;
         /// <summary>
         /// a floating-point value specifying the distance from the origin of the <see cref="Ray"> where the hit happened
         /// </summary>
-        float t;
+        public float t;
         /// <summary>
         /// The <see cref="Ray"/> that hit the surface
         /// </summary>
-        Ray ray;
+        public Ray ray;
 
 
-        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r) 
+        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
         {
             this.worldPoint = wp;
             this.normal = nm;
@@ -60,19 +61,15 @@ namespace Trace
         }
 
 
-        public bool isClose(HitRecord? other) 
+        public bool isClose(HitRecord? other)
         {
-
             if (other == null) return false;
 
-            else return (   this.worldPoint.isClose((Point)other.worldPoint)
-                         && this.normal.isClose((Normal)other.normal)
-                         && this.surfacePoint.isClose((Vec2D)other.surfacePoint)
-                         && this.ray.isClose((Ray)other.ray)
+            else return (this.worldPoint.isClose((Point)other?.worldPoint)
+                            && this.normal.isClose((Normal)other?.normal)
+                            && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
+                            && this.ray.isClose((Ray)other?.ray)
                         );
-
-
-
         }
 
 
@@ -97,18 +94,20 @@ namespace Trace
         public void addShape(Shape sh)
           => shapes.Add(sh);
 
-        public HitRecord? rayIntersection(Ray intRay) 
+        public HitRecord? rayIntersection(Ray intRay)
         {
             HitRecord? closest = null;
             HitRecord? lastIntersection;
 
-            foreach (var shape in this.shapes){
+            foreach (var shape in this.shapes)
+            {
                 lastIntersection = shape.rayIntersection(intRay);
-                if (lastIntersection==null) continue;
-                if (closest==null || closest.t > lastIntersection.t){
+                if (lastIntersection == null) continue;
+                if (closest == null || (float)closest?.t > (float)lastIntersection?.t)
+                {
                     closest = lastIntersection;
                 }
-             }
+            }
 
             return closest;
         }
