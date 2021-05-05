@@ -72,6 +72,8 @@ namespace Trace
         /// The unit vector for the z-axis
         /// </summary>
         public static Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
+
+        // Hello!
     }
 
 }

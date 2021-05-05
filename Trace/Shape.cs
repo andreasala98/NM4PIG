@@ -50,7 +50,6 @@ namespace Trace
         /// derived classes
         /// </summary>
         public abstract HitRecord? rayIntersection(Ray ray);
-
     }
 
     /// <summary>
@@ -131,8 +130,5 @@ namespace Trace
                     (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
                     (float)Math.Acos(point.z) / Constant.PI
                 );
-
-
-
     }
 }
