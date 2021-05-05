@@ -88,13 +88,13 @@ namespace Trace
         public void addShape(Shape sh)
           => shapes.Add(sh);
 
-        public HitRecord? rayIntersection() 
+        public HitRecord? rayIntersection(Ray intRay) 
         {
             HitRecord? closest = null;
             HitRecord? lastIntersection;
 
             foreach (var shape in this.shapes){
-                lastIntersection = shape.RayIntersection()
+                lastIntersection = shape.rayIntersection(intRay);
             }
 
         }
