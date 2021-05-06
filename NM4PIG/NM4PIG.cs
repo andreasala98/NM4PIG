@@ -33,24 +33,34 @@ namespace NM4PIG
         {
             
             CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false);
-           
+            CommandArgument demo_arg = null;
+            CommandArgument conv_arg = null;
+            CLI.Command("demo",
+            (target) =>
+              demo_arg = target.Argument("demo", "Enter demo mode and visualize image", multipleValues: false));
 
-            CommandOption demo = CLI.Option(
-             "-d | --demo", "Display a simple image",
-            CommandOptionType.NoValue);
-            CommandOption convert = CLI.Option(
-             "-g | --convert", "Convert HDR to jpg/png",
-            CommandOptionType.NoValue);
+            CLI.Command("convert",
+            (target) =>
+              conv_arg = target.Argument("convert", "Enter convert mode and convert an input pfm file into a jpg/png file", multipleValues: false));
+
+           /* CommandOption width  = CLI.Option("-w | --width",  "width of the image" , CommandOptionType.SingleValue);
+            CommandOption height = CLI.Option("-h | --height", "height of the image", CommandOptionType.SingleValue);
+            */
+            CommandOption size = CLI.Option("--size", "width an height of the iamge", CommandOptionType.MultipleValue);
+            CommandOption angledeg = CLI.Option("--angle-deg | --angle", "field-of-view angle", CommandOptionType.SingleValue);
+            CommandOption orthogonal = CLI.Option("--orthogonal | --orth", "Use an orthogonal camera", CommandOptionType.NoValue);
+            CommandOption pfmfile = CLI.Option("--pfmfile", "name of .pfm output file", CommandOptionType.SingleValue);
+            CommandOption ldrfile = CLI.Option("--ldrfile", "name of .png/.jpg output file", CommandOptionType.SingleValue);
 
             CLI.HelpOption("-? | -h | --help");
-            CLI.OnExecute( () =>
-            {
-                if (demo.HasValue()) Demo(args);
-                if (convert.HasValue()) Converter(args);
-                
-                 return 0;
-            }
-                        );
+
+            CLI.OnExecute(
+            () => {
+                    if (demo_arg!=null) Demo(args);
+                    if (conv_arg!=null) Convert(args);
+                    return 0;
+                  }
+            );
 
             CLI.Execute(args);
             Console.WriteLine("Hello world!");
@@ -61,10 +71,16 @@ namespace NM4PIG
 
         // ############################################# //
 
-        public static void Demo(string[] args) { Console.WriteLine("Demo branch entered"); }
+        public static void Demo(string[] args) {
+
+             Console.WriteLine("Demo branch entered");
+             
+              }
 
         // ############################################# //
-        public static void Converter(string[] args) {
+        public static void Convert(string[] args) {
+
+            Console.WriteLine("Convert branch entered");
 
             Parameters readParam = new Parameters();
             try
