@@ -21,7 +21,6 @@ using System.IO;
 using Trace;
 using System.Globalization;
 using System.Numerics;
-using R5.RunInfoBuilder;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace NM4PIG
@@ -35,50 +34,36 @@ namespace NM4PIG
         {
             
             CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false);
-            CommandArgument names = null;
-            CLI.Command("demo", 
-                        (target) => names = target.Argument(
-                                                 "Demo option",
-                                                 "I dont know what to write here",
-                                                  multipleValues: true
-                                                )
+           
+
+            CommandOption demo = CLI.Option(
+             "-d | --demo", "Display a simple image",
+            CommandOptionType.NoValue);
+            CommandOption convert = CLI.Option(
+             "-c | --convert", "Convert HDR to jpg/png",
+            CommandOptionType.NoValue);
+
+            CLI.HelpOption("-? | -h | --help");
+            CLI.OnExecute( () =>
+            {
+                if (demo.HasValue())
+                    {
+                    //insert code here
+                    Console.WriteLine("Demo branch entered");
+                    }
+
+                if (convert.HasValue())
+                    {
+                    Console.WriteLine("Convert branch entered");
+
+                }
+                 return 0;
+            }
                         );
 
-           /* CommandOption demo = CLI.Option(
-            "-$|-d |--demo",
-             "The demo option to execute. Demo",
-            CommandOptionType.SingleValue);
-
-            CLI.HelpOption("-? | -h | --help");
-            CLI.OnExecute(() =>
-            {
-                if (demo.ToString() == "demo")
-                {
-                    Demo();
-                }
-                return 0;
-            });
-
-            CommandOption converter = CLI.Option(
-            "-$|-c |--converter",
-             "The converter option to execute. Converter",
-            CommandOptionType.SingleValue);
-
-            CLI.HelpOption("-? | -h | --help");
-            CLI.OnExecute(() =>
-            {
-                if (converter.ToString() == "converter")
-                {
-                    Converter();
-                }
-                return 0;
-            });
-
-
-
             CLI.Execute(args);
-            this is all probably wrong
-            */
+
+          
 
 
             /*
