@@ -22,6 +22,7 @@ This library has been developed and tested with .NET version 5.0.x. It is possib
 
 This library uses some external libraries. The user should not worry because .NET automatically import them
 - [ImageSharp][5] `dotnet add package SixLabors.ImageSharp`
+- [CommandLineUtils][8] `dotnet add package Microsoft.Extensions.CommandLineUtils`
 
 ## Usage
 
@@ -58,3 +59,4 @@ The code is released under a MIT license. See the file [LICENSE.md](./LICENSE.md
 [5]: https://docs.sixlabors.com/articles/imagesharp/index.html?tabs=tabid-1
 [6]: https://dotnet.github.io/docfx/
 [7]: https://andreasala98.github.io/NM4PIG/
+[8]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.commandlineutils.commandlineapplication?view=dotnet-plat-ext-1.1
