@@ -22,8 +22,8 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 This library has been developed and tested with .NET version 5.0.x. It is possible to download the latest version [here](https://dotnet.microsoft.com/download).
 
 This library uses some external libraries. The user should not worry because .NET automatically import them
-- [ImageSharp][5] `dotnet add package SixLabors.ImageSharp`
-- [CommandLineUtils][8] `dotnet add package Microsoft.Extensions.CommandLineUtils`
+- [ImageSharp][5] `dotnet add package SixLabors.ImageSharp --version 1.0.3`
+- [CommandLineUtils][8] `dotnet add package Microsoft.Extensions.CommandLineUtils --version 1.1.1`
 
 ## Usage
 
