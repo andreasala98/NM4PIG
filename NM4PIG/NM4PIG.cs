@@ -22,6 +22,7 @@ using Trace;
 using System.Globalization;
 using System.Numerics;
 using Microsoft.Extensions.CommandLineUtils;
+using System.Collections.Generic;
 
 namespace NM4PIG
 {
@@ -74,8 +75,56 @@ namespace NM4PIG
         public static void Demo(string[] args) {
 
              Console.WriteLine("Demo branch entered");
-             
-              }
+
+            int width=100, height=60; // These two will be parsed (when we learn how)
+
+            HdrImage image = new HdrImage(width, height);
+            World world = new World();
+
+            List<float> Vertices = new List<float>() { -0.5f, 0.5f };
+
+            foreach(var x in Vertices){
+                foreach(var y in Vertices){
+                    foreach (var z in Vertices){
+
+                        world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z)) 
+                                            * Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+                    } // z
+                } // y
+            }// x
+
+            world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
+                                     *Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+            world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
+                                     *Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+
+            bool orth=true; //This line will be removed once we larn how to parse arguments
+            float angle_deg=0; //This as well
+
+            // Camera initialization
+            var cameraTransf = Transformation.RotationZ(angle_deg) * Transformation.Translation(new Vec(-1.0f,0.0f,0.0f));
+            Camera camera;
+            if (orth) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+            else {  camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+
+            // Ray tracing
+
+            var rayTracer = new ImageTracer(image, camera);
+            rayTracer.fireAllRays((Ray r) => world.rayIntersection(r)!=null ? Constant.White : Constant.Black);
+
+
+            string outputPfmFileName = "sampleDemo.png"; //This need to be parsed!
+
+            // Write PFM image
+            using (FileStream outpfmstream = File.OpenWrite(outputPfmFileName))
+            {
+                image.savePfm(outpfmstream);
+                Console.WriteLine($"Image saved to {outputPfmFileName}");
+            }
+
+            Convert(args);
+
+        }//Demo
 
         // ############################################# //
         public static void Convert(string[] args) {
