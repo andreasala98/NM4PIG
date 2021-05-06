@@ -29,7 +29,6 @@ namespace NM4PIG
     class Program
     {
 
-        
         public static void Main(params string[] args)
         {
             
@@ -40,33 +39,33 @@ namespace NM4PIG
              "-d | --demo", "Display a simple image",
             CommandOptionType.NoValue);
             CommandOption convert = CLI.Option(
-             "-c | --convert", "Convert HDR to jpg/png",
+             "-g | --convert", "Convert HDR to jpg/png",
             CommandOptionType.NoValue);
 
             CLI.HelpOption("-? | -h | --help");
             CLI.OnExecute( () =>
             {
-                if (demo.HasValue())
-                    {
-                    //insert code here
-                    Console.WriteLine("Demo branch entered");
-                    }
-
-                if (convert.HasValue())
-                    {
-                    Console.WriteLine("Convert branch entered");
-
-                }
+                if (demo.HasValue()) Demo(args);
+                if (convert.HasValue()) Converter(args);
+                
                  return 0;
             }
                         );
 
             CLI.Execute(args);
+            Console.WriteLine("Hello world!");
 
-          
+            return;
+            
+        } //Main
 
+        // ############################################# //
 
-            /*
+        public static void Demo(string[] args) { Console.WriteLine("Demo branch entered"); }
+
+        // ############################################# //
+        public static void Converter(string[] args) {
+
             Parameters readParam = new Parameters();
             try
             {
@@ -115,22 +114,13 @@ namespace NM4PIG
                 Console.WriteLine(e.Message);
                 return;
             }
-            */
-
-
-            Console.WriteLine("Hello world!");
-
-
-
-
-
-            return;
+              
         }
 
-        public static void Demo() { Console.WriteLine("Hello world demo"); }
-        public static void Converter() { Console.WriteLine("Hello world converter"); }
 
-        class Parameters
+    } //Program class
+
+    class Parameters
         {
             public string inputPfmFileName;
             public float factor;
@@ -149,22 +139,22 @@ namespace NM4PIG
 
             public void parseCommandLine(string[] args)
             {
-                if (args.Length != 4)
+                if (args.Length != 5) //-g counts as an argument
                 {
-                    throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
+                    throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run -g <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
                 }
 
-                this.inputPfmFileName = args[0];
-                this.outputFileName = args[3];
+                this.inputPfmFileName = args[1];
+                this.outputFileName = args[4];
 
                 try
                 {
-                    this.factor = float.Parse(args[1], CultureInfo.InvariantCulture);
-                    this.gamma = float.Parse(args[2], CultureInfo.InvariantCulture);
+                    this.factor = float.Parse(args[2], CultureInfo.InvariantCulture);
+                    this.gamma = float.Parse(args[3], CultureInfo.InvariantCulture);
                 }
                 catch
                 {
-                    throw new CommandLineException("Factor or gamma argument is not a float. Please enter some numbers");
+                    throw new CommandLineException("Factor or gamma argument is not a float. Please enter floating-point numbers");
                 }
 
 
@@ -172,11 +162,10 @@ namespace NM4PIG
 
 
 
-            }
+            } //parseCommandLine
 
-        }
+        } //Parameters class
 
-    }
-}
+} //NM4PIG namespace
 
 
