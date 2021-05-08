@@ -47,7 +47,7 @@ namespace NM4PIG
             {
                 command.Description = "Enter demo mode and generate a simple image";
                 var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
-                var height = command.Option("--heigth|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
+                var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
                 var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
                 var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
@@ -77,14 +77,25 @@ namespace NM4PIG
             {
                 command.Description = "Enter convert mode and convert an input pfm file into a jpg/ png file";
                 command.HelpOption("-?|-h|--help");
+
+                var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
+                var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+                var factor = command.Option("--factor|-f <FACTOR>", "scaling factor", CommandOptionType.SingleValue);
+                var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction", CommandOptionType.SingleValue);
+
+                command.HelpOption("-?|-h|--help");
+
                 command.OnExecute(() =>
                 {
-                    Convert(args);
+                    Convert(
+                            pfmfile.HasValue() ? pfmfile.Value() : DefaultDemo.pfmFile,
+                            ldrfile.HasValue() ? ldrfile.Value() : DefaultDemo.ldrFile, 
+                            factor.HasValue() ? Single.Parse(factor.Value()) : 0.18f,
+                            factor.HasValue() ? Single.Parse(factor.Value()) : 1.05f
+                             );
                     return 0;
                 });
             });
-
-            CLI.HelpOption("-? | -h | --help");
 
             CLI.OnExecute(() =>
             {
@@ -149,42 +160,42 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            //Convert(args);
-
         }//Demo
 
         // ############################################# //
-        public static void Convert(params string[] args)
+        public static void Convert(string inputpfm, string outputldr, float factor, float gamma)
         {
+            string[] args = { inputpfm, factor.ToString(), gamma.ToString(), outputldr };
 
-            Console.WriteLine("Convert branch entered");
+            Console.WriteLine("Starting Convert\n\n");
 
+        /*
             Parameters readParam = new Parameters();
             try
             {
-                readParam.parseCommandLine(args);
-
-            }
-            catch (CommandLineException e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
+            readParam.parseCommandLine(args);
+    
+           }
+           catch (CommandLineException e)
+           {
+               Console.WriteLine(e.Message);
+               return;
+           }
 
             string inputPfmFileName = readParam.inputPfmFileName;
             float factor = readParam.factor;
             float gamma = readParam.gamma;
             string outputFileName = readParam.outputFileName;
-            string fmt = readParam.outputFormat;
+            string fmt = readParam.outputFormat; */
 
             HdrImage myImg = new HdrImage();
 
             try
             {
-                using (FileStream inputStream = File.OpenRead(inputPfmFileName))
+                using (FileStream inputStream = File.OpenRead(inputpfm))
                 {
                     myImg.readPfm(inputStream);
-                    Console.WriteLine($"File {inputPfmFileName} has been correctly read from disk.");
+                    Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
                 }
 
             }
@@ -194,13 +205,15 @@ namespace NM4PIG
                 return;
             }
 
+            string fmt = outputldr.Substring(outputldr.Length - 3, 3);
+
             try
             {
                 myImg.normalizeImage(factor);
                 myImg.clampImage();
-                myImg.writeLdrImage(outputFileName, fmt, gamma);
+                myImg.writeLdrImage(outputldr, fmt, gamma);
 
-                Console.WriteLine($"File {outputFileName} has been correctly written to disk.");
+                Console.WriteLine($"File {outputldr} has been correctly written to disk.");
             }
             catch (Exception e)
             {
