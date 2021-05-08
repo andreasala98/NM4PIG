@@ -46,6 +46,9 @@ namespace Trace
                areClose(a.M21, b.M21) && areClose(a.M22, b.M22) && areClose(a.M23, b.M23) && areClose(a.M24, b.M24) &&
                areClose(a.M31, b.M31) && areClose(a.M32, b.M32) && areClose(a.M33, b.M33) && areClose(a.M34, b.M34) &&
                areClose(a.M41, b.M41) && areClose(a.M42, b.M42) && areClose(a.M43, b.M43) && areClose(a.M44, b.M44);
+
+        public static float ToRadians(int deg)
+            => (float)deg * Constant.PI / 180f;
     }
 
     /// <summary>
@@ -73,9 +76,9 @@ namespace Trace
         /// </summary>
         public static Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
 
-        public static Color White = new Color(1.0f,1.0f,1.0f);
-        public static Color Black = new Color(0.0f,0.0f,0.0f);
-        
+        public static Color White = new Color(1.0f, 1.0f, 1.0f);
+        public static Color Black = new Color(0.0f, 0.0f, 0.0f);
+
     }
 
 }

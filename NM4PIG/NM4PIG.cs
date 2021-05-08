@@ -32,102 +32,130 @@ namespace NM4PIG
 
         public static void Main(params string[] args)
         {
-            
-            CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false);
-            CommandArgument demo_arg = null;
-            CommandArgument conv_arg = null;
+
+            // foreach (var item in args)
+            //     Console.WriteLine(item.ToString());
+
+            CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false)
+            {
+                FullName = "Numerical Methods For Photorealistic Image Generation",
+                Description = "Insert Description here"
+            };
+
             CLI.Command("demo",
-            (target) =>
-              demo_arg = target.Argument("demo", "Enter demo mode and visualize image", multipleValues: false));
+            command =>
+            {
+                command.Description = "Enter demo mode and generate a simple image";
+                var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
+                var height = command.Option("--heigth|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
+                var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
+                var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera", CommandOptionType.NoValue);
+                var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
+                var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+
+                command.HelpOption("-?|-h|--help");
+                command.OnExecute(() =>
+                {
+                    if (orthogonal.Value() == null)
+                        Console.WriteLine("null");
+                    else
+                        Console.WriteLine(orthogonal.Value());
+                    Demo(
+                        width.HasValue() ? Int32.Parse(width.Value()) : DefaultDemo.width,
+                        height.HasValue() ? Int32.Parse(height.Value()) : DefaultDemo.height,
+                        angledeg.HasValue() ? Int32.Parse(angledeg.Value()) : DefaultDemo.angledeg,
+                        orthogonal.HasValue() ? true : false,
+                        pfmfile.HasValue() ? pfmfile.Value() : DefaultDemo.pfmFile,
+                        ldrfile.HasValue() ? ldrfile.Value() : DefaultDemo.ldrFile
+                    );
+                    return 0;
+                });
+            });
 
             CLI.Command("convert",
-            (target) =>
-              conv_arg = target.Argument("convert", "Enter convert mode and convert an input pfm file into a jpg/png file", multipleValues: false));
-
-           /* CommandOption width  = CLI.Option("-w | --width",  "width of the image" , CommandOptionType.SingleValue);
-            CommandOption height = CLI.Option("-h | --height", "height of the image", CommandOptionType.SingleValue);
-            */
-            CommandOption size = CLI.Option("--size", "width an height of the iamge", CommandOptionType.MultipleValue);
-            CommandOption angledeg = CLI.Option("--angle-deg | --angle", "field-of-view angle", CommandOptionType.SingleValue);
-            CommandOption orthogonal = CLI.Option("--orthogonal | --orth", "Use an orthogonal camera", CommandOptionType.NoValue);
-            CommandOption pfmfile = CLI.Option("--pfmfile", "name of .pfm output file", CommandOptionType.SingleValue);
-            CommandOption ldrfile = CLI.Option("--ldrfile", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+            command =>
+            {
+                command.Description = "Enter convert mode and convert an input pfm file into a jpg/ png file";
+                command.HelpOption("-?|-h|--help");
+                command.OnExecute(() =>
+                {
+                    Convert(args);
+                    return 0;
+                });
+            });
 
             CLI.HelpOption("-? | -h | --help");
 
-            CLI.OnExecute(
-            () => {
-                    if (demo_arg!=null) Demo(args);
-                    if (conv_arg!=null) Convert(args);
-                    return 0;
-                  }
+            CLI.OnExecute(() =>
+            {
+                CLI.ShowHelp();
+                return 0;
+            }
             );
-
             CLI.Execute(args);
-            Console.WriteLine("Hello world!");
 
             return;
-            
+
         } //Main
 
         // ############################################# //
 
-        public static void Demo(string[] args) {
+        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile)
+        {
 
-             Console.WriteLine("Demo branch entered");
-
-            int width=100, height=60; // These two will be parsed (when we learn how)
+            Console.WriteLine("Starting Demo\n\n");
 
             HdrImage image = new HdrImage(width, height);
+
+            Console.WriteLine("Creating the scene...");
             World world = new World();
-
             List<float> Vertices = new List<float>() { -0.5f, 0.5f };
+            foreach (var x in Vertices)
+            {
+                foreach (var y in Vertices)
+                {
+                    foreach (var z in Vertices)
+                    {
 
-            foreach(var x in Vertices){
-                foreach(var y in Vertices){
-                    foreach (var z in Vertices){
-
-                        world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z)) 
-                                            * Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+                        world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
+                                            * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                     } // z
                 } // y
             }// x
 
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
-                                     *Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
-                                     *Transformation.Scaling(new Vec(0.1f,0.1f,0.1f))));
+                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
 
-            bool orth=true; //This line will be removed once we larn how to parse arguments
-            float angle_deg=0; //This as well
 
             // Camera initialization
-            var cameraTransf = Transformation.RotationZ(angle_deg) * Transformation.Translation(new Vec(-1.0f,0.0f,0.0f));
+            Console.WriteLine("Creating the camera...");
+            var cameraTransf = Transformation.RotationZ(Utility.ToRadians(angle)) * Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f));
             Camera camera;
-            if (orth) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
-            else {  camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+            if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+            else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
 
             // Ray tracing
-
+            Console.WriteLine("Rendering the scene...");
             var rayTracer = new ImageTracer(image, camera);
-            rayTracer.fireAllRays((Ray r) => world.rayIntersection(r)!=null ? Constant.White : Constant.Black);
-
-
-            string outputPfmFileName = "sampleDemo.png"; //This need to be parsed!
+            rayTracer.fireAllRays((Ray r) => world.rayIntersection(r) != null ? Constant.White : Constant.Black);
 
             // Write PFM image
-            using (FileStream outpfmstream = File.OpenWrite(outputPfmFileName))
+            Console.WriteLine("Saving in pfm format...");
+            using (FileStream outpfmstream = File.OpenWrite(pfmFile))
             {
                 image.savePfm(outpfmstream);
-                Console.WriteLine($"Image saved to {outputPfmFileName}");
+                Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            Convert(args);
+            //Convert(args);
 
         }//Demo
 
         // ############################################# //
-        public static void Convert(string[] args) {
+        public static void Convert(params string[] args)
+        {
 
             Console.WriteLine("Convert branch entered");
 
@@ -179,57 +207,71 @@ namespace NM4PIG
                 Console.WriteLine(e.Message);
                 return;
             }
-              
+
         }
 
 
     } //Program class
 
-    class Parameters
-        {
-            public string inputPfmFileName;
-            public float factor;
-            public float gamma;
-            public string outputFileName;
-            public string outputFormat;
+    public class DefaultDemo
+    {
+        public static int width = 640;
+        public static int height = 480;
 
-            public Parameters()
+        public static int angledeg = 0;
+
+        public static string pfmFile = "demoImage.pfm";
+
+        public static string ldrFile = "demoImage.jpg";
+
+    }
+
+
+    class Parameters
+    {
+        public string inputPfmFileName;
+        public float factor;
+        public float gamma;
+        public string outputFileName;
+        public string outputFormat;
+
+        public Parameters()
+        {
+            this.inputPfmFileName = "";
+            this.factor = 0.2f;
+            this.gamma = 1.0f;
+            this.outputFileName = "";
+            this.outputFormat = "";
+        }
+
+        public void parseCommandLine(string[] args)
+        {
+            if (args.Length != 5) //-g counts as an argument
             {
-                this.inputPfmFileName = "";
-                this.factor = 0.2f;
-                this.gamma = 1.0f;
-                this.outputFileName = "";
-                this.outputFormat = "";
+                throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run -g <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
             }
 
-            public void parseCommandLine(string[] args)
+            this.inputPfmFileName = args[1];
+            this.outputFileName = args[4];
+
+            try
             {
-                if (args.Length != 5) //-g counts as an argument
-                {
-                    throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run -g <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
-                }
-
-                this.inputPfmFileName = args[1];
-                this.outputFileName = args[4];
-
-                try
-                {
-                    this.factor = float.Parse(args[2], CultureInfo.InvariantCulture);
-                    this.gamma = float.Parse(args[3], CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Factor or gamma argument is not a float. Please enter floating-point numbers");
-                }
+                this.factor = float.Parse(args[2], CultureInfo.InvariantCulture);
+                this.gamma = float.Parse(args[3], CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                throw new CommandLineException("Factor or gamma argument is not a float. Please enter floating-point numbers");
+            }
 
 
-                this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
+            this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
 
 
 
-            } //parseCommandLine
+        } //parseCommandLine
 
-        } //Parameters class
+    } //Parameters class
 
 } //NM4PIG namespace
 
