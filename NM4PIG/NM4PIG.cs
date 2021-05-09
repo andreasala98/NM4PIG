@@ -19,8 +19,6 @@ IN THE SOFTWARE.
 using System;
 using System.IO;
 using Trace;
-using System.Globalization;
-using System.Numerics;
 using Microsoft.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 
@@ -33,13 +31,10 @@ namespace NM4PIG
         public static void Main(params string[] args)
         {
 
-            // foreach (var item in args)
-            //     Console.WriteLine(item.ToString());
-
             CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                FullName = "Numerical Methods For Photorealistic Image Generation",
-                Description = "Insert Description here"
+                FullName = "Numerical Methods For Photorealistic Image Generation, shortly NM4PIG 🐷\n" +
+                            "For more informations and examples visit the GitHub repository at https://github.com/andreasala98/NM4PIG"
             };
 
             CLI.Command("demo",
@@ -56,17 +51,31 @@ namespace NM4PIG
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
                 {
-                    if (orthogonal.Value() == null)
-                        Console.WriteLine("null");
-                    else
-                        Console.WriteLine(orthogonal.Value());
+                    Parameters readParam = new Parameters();
+                    try
+                    {
+                        readParam.parseCommandLineDemo(
+                                                        width.Value(),
+                                                        height.Value(),
+                                                        angledeg.Value(),
+                                                        orthogonal.Value(),
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value()
+                                                    );
+                    }
+                    catch (CommandLineException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        return 0;
+                    }
+
                     Demo(
-                        width.HasValue() ? Int32.Parse(width.Value()) : DefaultDemo.width,
-                        height.HasValue() ? Int32.Parse(height.Value()) : DefaultDemo.height,
-                        angledeg.HasValue() ? Int32.Parse(angledeg.Value()) : DefaultDemo.angledeg,
-                        orthogonal.HasValue() ? true : false,
-                        pfmfile.HasValue() ? pfmfile.Value() : DefaultDemo.pfmFile,
-                        ldrfile.HasValue() ? ldrfile.Value() : DefaultDemo.ldrFile
+                        readParam.width,
+                        readParam.height,
+                        readParam.angledeg,
+                        readParam.orthogonal,
+                        readParam.pfmFile,
+                        readParam.ldrFile
                     );
                     return 0;
                 });
@@ -76,7 +85,6 @@ namespace NM4PIG
             command =>
             {
                 command.Description = "Enter convert mode and convert an input pfm file into a jpg/ png file";
-                command.HelpOption("-?|-h|--help");
 
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
@@ -87,12 +95,23 @@ namespace NM4PIG
 
                 command.OnExecute(() =>
                 {
+
+                    Parameters readParam = new Parameters();
+                    try
+                    {
+                        readParam.parseCommandLineConvert(pfmfile.Value(), ldrfile.Value(), factor.Value(), gamma.Value());
+                    }
+                    catch (CommandLineException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        return 0;
+                    }
                     Convert(
-                            pfmfile.HasValue() ? pfmfile.Value() : DefaultDemo.pfmFile,
-                            ldrfile.HasValue() ? ldrfile.Value() : DefaultDemo.ldrFile, 
-                            factor.HasValue() ? Single.Parse(factor.Value()) : 0.18f,
-                            factor.HasValue() ? Single.Parse(factor.Value()) : 1.05f
-                             );
+                            readParam.pfmFile,
+                            readParam.ldrFile,
+                            readParam.factor,
+                            readParam.gamma
+                            );
                     return 0;
                 });
             });
@@ -114,13 +133,24 @@ namespace NM4PIG
         public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile)
         {
 
-            Console.WriteLine("Starting Demo\n\n");
+            Console.WriteLine("Starting Demo with these parameters:\n");
+
+            Console.WriteLine("Width: " + width);
+            Console.WriteLine("Height " + height);
+            Console.WriteLine("Angle " + angle);
+            Console.WriteLine(orthogonal ? "Orthogonal Camera" : "Perspective Camera");
+            Console.WriteLine("pfmFile: " + pfmFile);
+            Console.WriteLine("ldrFile: " + ldrFile);
+
+            Console.WriteLine("\n");
 
             HdrImage image = new HdrImage(width, height);
 
             Console.WriteLine("Creating the scene...");
             World world = new World();
             List<float> Vertices = new List<float>() { -0.5f, 0.5f };
+
+            //One sphere for each vertex of the cube
             foreach (var x in Vertices)
             {
                 foreach (var y in Vertices)
@@ -134,6 +164,7 @@ namespace NM4PIG
                 } // y
             }// x
 
+            //Two more sphere to break simmetry
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
                                      * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
@@ -160,33 +191,24 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
+            Convert(pfmFile, ldrFile, Default.factor, Default.gamma);
+
         }//Demo
 
         // ############################################# //
         public static void Convert(string inputpfm, string outputldr, float factor, float gamma)
         {
-            string[] args = { inputpfm, factor.ToString(), gamma.ToString(), outputldr };
+            string fmt = outputldr.Substring(outputldr.Length - 3, 3);
 
-            Console.WriteLine("Starting Convert\n\n");
+            Console.WriteLine("\n\nStarting Converting the file using these parameters:\n");
 
-        /*
-            Parameters readParam = new Parameters();
-            try
-            {
-            readParam.parseCommandLine(args);
-    
-           }
-           catch (CommandLineException e)
-           {
-               Console.WriteLine(e.Message);
-               return;
-           }
+            Console.WriteLine("pfmFile: " + inputpfm);
+            Console.WriteLine("ldrFile: " + outputldr);
+            Console.WriteLine("Format: " + fmt);
+            Console.WriteLine("Factor: " + factor);
+            Console.WriteLine("Gamma: " + gamma);
 
-            string inputPfmFileName = readParam.inputPfmFileName;
-            float factor = readParam.factor;
-            float gamma = readParam.gamma;
-            string outputFileName = readParam.outputFileName;
-            string fmt = readParam.outputFormat; */
+            Console.WriteLine("\n");
 
             HdrImage myImg = new HdrImage();
 
@@ -197,7 +219,6 @@ namespace NM4PIG
                     myImg.readPfm(inputStream);
                     Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
                 }
-
             }
             catch (Exception e)
             {
@@ -205,12 +226,16 @@ namespace NM4PIG
                 return;
             }
 
-            string fmt = outputldr.Substring(outputldr.Length - 3, 3);
-
+            Console.WriteLine("Starting Tone Mapping...");
             try
             {
+                Console.WriteLine("Normalizing image...");
                 myImg.normalizeImage(factor);
+
+                Console.WriteLine("Clamping image...");
                 myImg.clampImage();
+
+                Console.WriteLine("Saving LDR image...");
                 myImg.writeLdrImage(outputldr, fmt, gamma);
 
                 Console.WriteLine($"File {outputldr} has been correctly written to disk.");
@@ -225,66 +250,6 @@ namespace NM4PIG
 
 
     } //Program class
-
-    public class DefaultDemo
-    {
-        public static int width = 640;
-        public static int height = 480;
-
-        public static int angledeg = 0;
-
-        public static string pfmFile = "demoImage.pfm";
-
-        public static string ldrFile = "demoImage.jpg";
-
-    }
-
-
-    class Parameters
-    {
-        public string inputPfmFileName;
-        public float factor;
-        public float gamma;
-        public string outputFileName;
-        public string outputFormat;
-
-        public Parameters()
-        {
-            this.inputPfmFileName = "";
-            this.factor = 0.2f;
-            this.gamma = 1.0f;
-            this.outputFileName = "";
-            this.outputFormat = "";
-        }
-
-        public void parseCommandLine(string[] args)
-        {
-            if (args.Length != 5) //-g counts as an argument
-            {
-                throw new CommandLineException("Invalid arguments specified.\nUsage: dotnet run -g <inputFile.pfm> <factor> <gamma> <outputFile.png/jpg>");
-            }
-
-            this.inputPfmFileName = args[1];
-            this.outputFileName = args[4];
-
-            try
-            {
-                this.factor = float.Parse(args[2], CultureInfo.InvariantCulture);
-                this.gamma = float.Parse(args[3], CultureInfo.InvariantCulture);
-            }
-            catch
-            {
-                throw new CommandLineException("Factor or gamma argument is not a float. Please enter floating-point numbers");
-            }
-
-
-            this.outputFormat = this.outputFileName.Substring(outputFileName.Length - 3, 3);
-
-
-
-        } //parseCommandLine
-
-    } //Parameters class
 
 } //NM4PIG namespace
 

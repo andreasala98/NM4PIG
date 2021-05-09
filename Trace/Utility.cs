@@ -76,7 +76,14 @@ namespace Trace
         /// </summary>
         public static Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
 
+        /// <summary>
+        /// White color
+        /// </summary>
         public static Color White = new Color(1.0f, 1.0f, 1.0f);
+
+        /// <summary>
+        /// Black color
+        /// </summary>
         public static Color Black = new Color(0.0f, 0.0f, 0.0f);
 
     }
