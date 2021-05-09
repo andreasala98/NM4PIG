@@ -44,7 +44,7 @@ namespace NM4PIG
                 var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
                 var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
                 var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
-                var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera", CommandOptionType.NoValue);
+                var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera insted of perspective", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
 
@@ -157,14 +157,13 @@ namespace NM4PIG
                 {
                     foreach (var z in Vertices)
                     {
-
                         world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                     } // z
                 } // y
             }// x
 
-            //Two more sphere to break simmetry
+            //Adding two more spheres to break simmetry
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
                                      * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
             world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
@@ -173,7 +172,7 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.ToRadians(angle)) * Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f));
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f));
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
@@ -200,7 +199,7 @@ namespace NM4PIG
         {
             string fmt = outputldr.Substring(outputldr.Length - 3, 3);
 
-            Console.WriteLine("\n\nStarting Converting the file using these parameters:\n");
+            Console.WriteLine("\n\nStarting file conversion using these parameters:\n");
 
             Console.WriteLine("pfmFile: " + inputpfm);
             Console.WriteLine("ldrFile: " + outputldr);

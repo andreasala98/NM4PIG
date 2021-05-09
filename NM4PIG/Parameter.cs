@@ -23,6 +23,11 @@ using System.Globalization;
 
 namespace NM4PIG
 {
+
+    /// <summary>
+    /// This class contains the default parameters fro the command line
+    /// interface for both the 'demo' and the 'convert' commands.
+    /// </summary>
     public class Default
     {
         // Demo
@@ -40,6 +45,9 @@ namespace NM4PIG
         public static string ldrFile = "demoImage.jpg";
     }
 
+/// <summary>
+/// This class contains the settable parameters for the aforementioned command line interface.
+/// </summary>
     class Parameters
     {
         public string pfmFile;
@@ -63,6 +71,13 @@ namespace NM4PIG
             this.orthogonal = Default.orthogonal;
         }
 
+        /// <summary>
+        ///  Parse parameters from the command line in 'convert' mode
+        /// </summary>
+        /// <param name="pfmfile"> name of the .pfm file you want to convert</param>
+        /// <param name="ldrfile"> name of the .png/.jpg file you want to save</param>
+        /// <param name="factor"> scaling factor for every pixel in the image. Default is 0.18</param>
+        /// <param name="gamma"> encoding/decoding factor due to monitor differences </param>
         public void parseCommandLineConvert(string? pfmfile, string? ldrfile, string? factor, string? gamma)
         {
 
@@ -95,6 +110,15 @@ namespace NM4PIG
 
         } //parseCommandLineConvert
 
+        /// <summary>
+        ///  Parse parameters from the command line in 'demo' mode
+        /// </summary>
+        /// <param name="width"> Width of the image</param>
+        /// <param name="height"> Height of the image</param>
+        /// <param name="angledeg"> Field of view angle in degrees</param>
+        /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
+        /// <param name="pfmfile"> Name of the fm output file</param>
+        /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
         public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal, string? pfmfile, string? ldrfile)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
@@ -109,7 +133,7 @@ namespace NM4PIG
                 }
                 catch
                 {
-                    throw new CommandLineException("Width argument is not an int. Please enter integers numbers");
+                    throw new CommandLineException("Width argument is not an int. Please enter an integer");
                 }
             }
 
@@ -121,7 +145,7 @@ namespace NM4PIG
                 }
                 catch
                 {
-                    throw new CommandLineException("Height argument is not an int. Please enter integers numbers");
+                    throw new CommandLineException("Height argument is not an int. Please enter an integer");
                 }
             }
 
@@ -133,7 +157,7 @@ namespace NM4PIG
                 }
                 catch
                 {
-                    throw new CommandLineException("Angle argument is not an int. Please enter integers numbers");
+                    throw new CommandLineException("Angle argument is not an int. Please enter an integer");
                 }
             }
         }

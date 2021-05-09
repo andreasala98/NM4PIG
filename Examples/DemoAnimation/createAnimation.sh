@@ -1,9 +1,9 @@
-# This script use ffmpeg
+# This script uses ffmpeg
 # To check if it is installed use 
 # ffmpeg -version
 # 
 # To install use 
-# brew install ffmpeg
+# brew install ffmpeg (on Mac OS X)
 #
 # NOTE: You may need to update your PATH
 

@@ -44,15 +44,15 @@ To run the application and visualize a simple image, use the following command (
 
     dotnet run -- demo
 
-The command use some default parmaeters. Fell free to explore all the possible options and to use the most suitable for you
+The command use some default parmaeters. Feel free to explore all the possible options and to use the most suitable for you
 
     dotnet run -- demo --help
 
-Varying the angle of the camera (-a <ANGLE>) it is possible to obtain something like this (see `Examples/DemoAnimation/`)
+It is also possible to vary the angle of the camera (-a <ANGLE>) in roder to obtain something like this (see `Examples/DemoAnimation/`)
 
-#### Converter mode
+#### Convert mode
 
-To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the following command (if no arguments are passed we use some default values):
+To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the following command (if no arguments are passed some default values are used):
  
     dotnet run -- convert -f <FACTOR> -g <GAMMA>
     
@@ -65,7 +65,7 @@ A webpage with all the documentation is available at [this link][7]. This webpag
 
 ## License
 
-The code is released under a MIT license. See the file [LICENSE.md](./LICENSE.md)
+The code is released under a MIT license. See the file [LICENSE](./LICENSE)
 
 
 [1]: https://github.com/ziotom78

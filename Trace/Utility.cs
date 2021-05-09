@@ -47,8 +47,11 @@ namespace Trace
                areClose(a.M31, b.M31) && areClose(a.M32, b.M32) && areClose(a.M33, b.M33) && areClose(a.M34, b.M34) &&
                areClose(a.M41, b.M41) && areClose(a.M42, b.M42) && areClose(a.M43, b.M43) && areClose(a.M44, b.M44);
 
-        public static float ToRadians(int deg)
+        public static float DegToRad(int deg)
             => (float)deg * Constant.PI / 180f;
+
+        public static float RadToDeg(int rad)
+            => (float)rad *180f / Constant.PI;
     }
 
     /// <summary>
