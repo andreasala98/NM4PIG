@@ -3,7 +3,7 @@
  
  [![Unit tests](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml/badge.svg)](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml)
  [![DocFX Build and Publish](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml/badge.svg?branch=master)](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml)
- [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/andreasala98/NM4PIG/blob/master/LICENSE.md)
+ [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/andreasala98/NM4PIG/blob/master/LICENSE)
 
 This is a rayTracer library called NM4PIG written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano (A.Y. 2020-2021).
 
