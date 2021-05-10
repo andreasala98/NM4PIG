@@ -21,9 +21,10 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 
 This library has been developed and tested with .NET version 5.0.x. It is possible to download the latest version [here](https://dotnet.microsoft.com/download).
 
-This library uses some external libraries. The user should not worry because .NET automatically import them
-- [ImageSharp][5]
-- [CommandLineUtils][8]
+This library uses some external libraries. The user should not worry as .NET automatically imports them with the repository download. The libraries are listed below:
+
+- [ImageSharp][5] to convert `.pfm` images into LDR formats
+- [CommandLineUtils][8] to handle Command Line Interface
 
 ## Usage
 
@@ -31,12 +32,11 @@ In order to use the library you can clone the repository:
 
     git clone git@github.com:andreasala98/NM4PIG.git
 
-To check that the code works as expected, you can run a set of tests using the following command:
+To check that the code works as expected, you can run a set of tests using the following command (from the NM4PIG/Trace.Test directory):
 
-    cd Trace.Test
     dotnet test
 
-#### Demo mode
+### Demo mode
 
 <img align="right" src="/Examples/DemoAnimation/spheres-perspective.gif" width="300"/>
 
@@ -44,13 +44,13 @@ To run the application and visualize a simple image, use the following command (
 
     dotnet run -- demo
 
-The command use some default parmaeters. Feel free to explore all the possible options and to use the most suitable for you
+The command uses some default parmaeters. Feel free to explore all the possible options and to use the most suitable for you
 
     dotnet run -- demo --help
 
-It is also possible to vary the angle of the camera (-a <ANGLE>) in roder to obtain something like this (see `Examples/DemoAnimation/`)
+It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in order to obtain something like the image shown (see `Examples/DemoAnimation/`)
 
-#### Convert mode
+### Convert mode
 
 To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the following command (if no arguments are passed some default values are used):
  
