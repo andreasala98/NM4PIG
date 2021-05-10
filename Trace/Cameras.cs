@@ -24,7 +24,6 @@ namespace Trace
         /// An abstract class representing an observer <br/>
         /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
         /// </summary>
-
     public abstract class Camera
     {
         /// <summary>
