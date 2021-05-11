@@ -33,9 +33,14 @@ namespace NM4PIG
 
             CommandLineApplication CLI = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                FullName = "Numerical Methods For Photorealistic Image Generation, shortly NM4PIG 🐷\n" +
-                            "For more informations and examples visit the GitHub repository at https://github.com/andreasala98/NM4PIG"
-            };
+                FullName = "\n***********************************************************\n" +
+                           "*  Numerical Methods For Photorealistic Image Generation  *\n" +
+                           "*                 ( shortly NM4PIG 🐷 )                   *\n" +
+                           "*                                                         *\n" +
+                           "*      for more info: visit the GitHub repository at      *\n" +
+                           "*         https://github.com/andreasala98/NM4PIG          *\n" +
+                           "***********************************************************\n"
+        };
 
             CLI.Command("demo",
             command =>
@@ -44,13 +49,15 @@ namespace NM4PIG
                 var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
                 var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
                 var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
-                var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera insted of perspective", CommandOptionType.NoValue);
+                var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera instead of perspective", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
 
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
                 {
+
+                    Console.WriteLine(CLI.FullName);
                     Parameters readParam = new Parameters();
                     try
                     {
@@ -96,6 +103,7 @@ namespace NM4PIG
                 command.OnExecute(() =>
                 {
 
+                    Console.WriteLine(CLI.FullName);
                     Parameters readParam = new Parameters();
                     try
                     {
@@ -136,8 +144,8 @@ namespace NM4PIG
             Console.WriteLine("Starting Demo with these parameters:\n");
 
             Console.WriteLine("Width: " + width);
-            Console.WriteLine("Height " + height);
-            Console.WriteLine("Angle " + angle);
+            Console.WriteLine("Height: " + height);
+            Console.WriteLine("Angle: " + angle);
             Console.WriteLine(orthogonal ? "Orthogonal Camera" : "Perspective Camera");
             Console.WriteLine("pfmFile: " + pfmFile);
             Console.WriteLine("ldrFile: " + ldrFile);
