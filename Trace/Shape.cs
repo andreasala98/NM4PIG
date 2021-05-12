@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 
 namespace Trace
 {
@@ -52,7 +53,12 @@ namespace Trace
         /// derived classes
         /// </summary>
         public abstract HitRecord? rayIntersection(Ray ray);
+        public abstract List<HitRecord?> rayIntersectionList(Ray ray);
     }
+
+
+
+
 
     /// <summary>
     /// A 3D unit sphere centered on the origin of the axes
@@ -107,43 +113,6 @@ namespace Trace
         }
 
         /// <summary>
-        /// Checks if a ray intersects the sphere and return the hit record with the biggest t
-        /// </summary>
-        /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
-        /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
-        public HitRecord? rayIntersectionMax(Ray ray)
-        {
-            Ray invRay = ray.Transform(this.transformation.getInverse());
-            Vec originVec = invRay.origin.toVec();
-            float a = invRay.dir.getSquaredNorm();
-            float b = 2.0f * originVec * invRay.dir;
-            float c = originVec.getSquaredNorm() - 1.0f;
-
-            float delta = b * b - 4.0f * a * c;
-            if (delta <= 0.0f)
-                return null;
-
-            float sqrtDelta = (float)Math.Sqrt((float)delta);
-            float tmax = (-b + sqrtDelta) / (2.0f * a);
-
-            float firstHitT;
-            
-            if (tmax > invRay.tmin && tmax < invRay.tmax)
-                firstHitT = tmax;
-            else
-                return null;
-
-            Point hitPoint = invRay.at(firstHitT);
-            return new HitRecord(
-                this.transformation * hitPoint,
-                this.transformation * _sphereNormal(hitPoint, ray.dir),
-                _spherePointToUV(hitPoint),
-                firstHitT,
-                ray
-            );
-        }
-
-        /// <summary>
         /// Compute the normal of a unit sphere<br/>
         /// The normal is computed for <see cref="Point"> (a point on the surface of the
         /// sphere), and it is chosen so that it is always in the opposite
@@ -184,63 +153,7 @@ namespace Trace
         } 
     }
 
-    /// <summary>
-    /// A 3D Shape created by the union 
-    /// of two Shapes (Constructive Solid Geometry).
-    /// 
-    /// Datamembers: Shape firstsShape, Shape secondShape.
-    /// </summary>
-    public class CSGUnion : Shape
-    {
-        public Shape firstShape;
-        public Shape secondShape;
-
-        public CSGUnion (Shape a, Shape b)
-        {
-            this.firstShape = a;
-            this.secondShape = b;
-        }
-
-        public override HitRecord? rayIntersection (Ray ray) 
-        {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
-
-            if (a?.t < b?.t) 
-                return a;
-            else
-                return b;
-            
-        }
-    }
-    /// <summary>
-    /// A 3D Shape created by the difference 
-    /// of two Shapes (Constructive Solid Geometry).
-    /// 
-    /// Datamembers: Shape firstsShape, Shape secondShape.
-    /// </summary>
-    public class CSGDifference : Shape
-    {
-        public Shape firstShape;
-        public Shape secondShape;
-
-        public CSGDifference (Shape a, Shape b)
-        {
-            this.firstShape = a;
-            this.secondShape = b;
-        }
-
-        public override HitRecord? rayIntersection (Ray ray) 
-        {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
-
-            return a;
-
-        }
-    }
-
-
+    // ################################
 
     public class Plane : Shape
     {
@@ -270,6 +183,15 @@ namespace Trace
 
             }
         }
+
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            List<HitRecord?> hitList = new List<HitRecord?>();
+            hitList.Add(this.rayIntersection(ray));
+            return hitList;
+        }
+
+
 
         private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null) {
 
