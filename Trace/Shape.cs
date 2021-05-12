@@ -17,6 +17,8 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
+
 
 namespace Trace
 {
@@ -111,7 +113,7 @@ namespace Trace
         /// </summary>
         /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
         /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
-        public HitRecord? rayIntersectionMax(Ray ray)
+        public List<HitRecord?> rayIntersectionList(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             Vec originVec = invRay.origin.toVec();
@@ -232,8 +234,9 @@ namespace Trace
 
         public override HitRecord? rayIntersection (Ray ray) 
         {
-            HitRecord? a = firstShape.rayIntersection(ray);
-            HitRecord? b = secondShape.rayIntersection(ray);
+            HitRecord? aMin = firstShape.rayIntersection(ray);
+            HitRecord? bMin = secondShape.rayIntersection(ray);
+            HitRecord? aMax = firstShape.rayIntersectionMax
 
             return a;
 
