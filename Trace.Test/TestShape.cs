@@ -23,6 +23,10 @@ using System.Collections.Generic;
 
 namespace Trace.Test
 {
+
+    /// <summary>
+    /// Class to collect tests for the <see cref="Sphere"/> class
+    /// </summary>
     public class TestSphere
     {
 
@@ -143,6 +147,7 @@ namespace Trace.Test
 
         }*/
 
+        
         [Fact]
         public void TestisPointInside()
         {
@@ -190,6 +195,9 @@ namespace Trace.Test
 
     }
 
+    /// <summary>
+    /// Class to collect tests for the <see cref="Plane"/> class
+    /// </summary>
 
     public class TestPlane
     {

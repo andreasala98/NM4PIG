@@ -22,7 +22,11 @@ using System.Numerics;
 using System;
 
 namespace Trace.Test
+
 {
+    /// <summary>
+    /// Class to collect test for the <see cref="HitRecord"> and <see cref="World"> classes.
+    /// </summary>
     public class HitRecordAndWorldTest
     {
         [Fact]

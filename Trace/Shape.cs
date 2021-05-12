@@ -68,7 +68,8 @@ namespace Trace
 
 
     /// <summary>
-    /// A 3D unit sphere centered on the origin of the axes
+    /// A 3D unit sphere centered on the origin of the axes. 
+    /// It is possible to apply transformations to the sphere
     /// </summary>
     public class Sphere : Shape
     {
@@ -120,10 +121,10 @@ namespace Trace
         }
 
         /// <summary>
-        /// Checks if a ray intersects the sphere and return the hit record with the biggest t
+        /// Checks if a ray intersects the sphere and return a list of all the hit records
         /// </summary>
-        /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
-        /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
+        /// <param name="ray"><see cref="Ray"> that you want to check if it intersects the sphere</param>
+        /// <returns>List of <see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> intersections = new List<HitRecord?>();
@@ -207,11 +208,11 @@ namespace Trace
                 );
 
         /// <summary>
-        /// Method that assert if a Point is inside of the Unitary Shape.
-        /// It is needed to implement CSG Shape
+        /// Method that checks if a Point is inside of the unit sphere.
+        /// It is needed to implement CSG functionalities.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+        /// <param name="a">Point inside/outside the sphere</param>
+        /// <returns> True if INSIDE</returns>
         public override bool isPointInside(Point a)
         {
             a = this.transformation.getInverse() * a;
@@ -221,9 +222,24 @@ namespace Trace
 
     // ################################
 
+
+    /// <summary>
+    /// A 2D plane that you can put in the scene. Unless transformations are applied, the z=0 plane is constructed
+    /// </summary>
     public class Plane : Shape
     {
+        /// <summary>
+        /// Construct a plane and potentially associate a transformation to it
+        /// </summary>
+        /// <param name="transformation"></param>
         public Plane(Transformation? transformation = null) : base(transformation) { }
+
+        /// <summary>
+        /// Intersect a <see cref='Ray'/> object with the plane. It return a <see cref="HitRecord"/> object
+        /// with the details of the intersection, or null if there is no intersection
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -250,6 +266,12 @@ namespace Trace
             }
         }
 
+        /// <summary>
+        /// Intersect a <see cref='Ray'/> object with the plane. It returns a List of <see cref="HitRecord"/> 
+        /// and it is needed for CSG features.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> hitList = new List<HitRecord?>();
@@ -258,7 +280,13 @@ namespace Trace
         }
 
 
-
+        /// <summary>
+        /// Compute the oriented normal to the z=0 plane. It is a private method, so it cannot
+        /// be used outside of this class.
+        /// </summary>
+        /// <param name="r"> Ray intersecting the plane </param>
+        /// <param name="hitPoint"> Point of intersection (optional parameter)</param>
+        /// <returns> The oriented <see cref="Normal"/> object, so that the scalar product with the ray is negative</returns>
         private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null) {
 
             // hitPoint is a nullable parameter because it is not needed. Yet, someone could be used to 
@@ -285,6 +313,11 @@ namespace Trace
             return new Vec2D(u, v);
         }
 
+        /// <summary>
+        /// Checks whether a <see cref="Point"/> lies on the plane
+        /// </summary>
+        /// <param name="p"> The <see cref="Point"/> object</param>
+        /// <returns> True if the poit lies on the plane </returns>
         public override bool isPointInside(Point p)
         {
             Point invtransfpoint = this.transformation.getInverse() * p;
@@ -294,11 +327,26 @@ namespace Trace
 
     }
 
+    /// <summary>
+    /// A 3D axis-aligned box (AAB)
+    /// </summary>
     public class Box : Shape
     {
+        /// <summary>
+        /// A <see cref="Point"> object to record minimum x,y,z of the box
+        /// </summary>
         public Point min;
+        /// <summary>
+        /// A <see cref="Point"> object to record maximum x,y,z of the box
+        /// </summary>
         public Point max;
 
+        /// <summary>
+        /// Constructor for box. If min and max are not passed, they are respectively set to
+        /// min=(-1,-1,-1) and max(1,1,1). You can optionally pass a transformation to the box
+        /// </summary>
+        /// <param name="min"> Minimum edge</param>
+        /// <param name="max">Maximum edge</param>
         public Box(Point? min = null, Point? max = null, Transformation? transformation = null) : base(transformation)
         {
             // Controllo min max
@@ -307,9 +355,22 @@ namespace Trace
             this.max = max ?? new Point(1f, 1f, 1f);
         }
 
+        /// <summary>
+        /// Checks if a <see cref="Point"/> lies inside the box
+        /// </summary>
+        /// <param name="a"> The point </param>
+        /// <returns>True if the point is inside</returns>
         public override bool isPointInside(Point a)
             => a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
 
+
+        /// <summary>
+        /// Intersect a <see cref="Ray"/> object with the box and returns a 
+        /// <see cref="HitRecord"/> if there is an intersection,
+        /// otherwise it returns null.
+        /// </summary>
+        /// <param name="ray"> The intersecting ray</param>
+        /// <returns> A  nullable <see cref="HitRecord"> with the details of the intersection</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -339,6 +400,13 @@ namespace Trace
             );
         }
 
+        /// <summary>
+        /// Private method to calculate the normal to a box, with a <see cref="Ray"> 
+        /// object intersecting the box at a <see cref="Point">.
+        /// </summary>
+        /// <param name="point"> The point of intersection</param>
+        /// <param name="rayDir"> Intersecting ray </param>
+        /// <returns> The oriented normal</returns>
         private Normal _boxNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal();
@@ -352,12 +420,24 @@ namespace Trace
         }
 
 
-        // To be completed
+        /// <summary>
+        /// Private method to perform UV mapping of a Point which lies on a box
+        /// </summary>
+        /// <param name="point"> <see cref="Point"> on the box</param>
+        /// <returns> A 2D Vec with (u,v) coordiantes</returns>
         private Vec2D _boxPointToUV(Point point)
         {
             return new Vec2D(0.5f, 0.5f);
         }
 
+
+        /// <summary>
+        /// Intersect a <see cref="Ray"/> object with the box and returns a 
+        ///List of <see cref="HitRecord"/> if there is an intersection,
+        /// otherwise it returns a List with a null object.
+        /// </summary>
+        /// <param name="ray"> The intersecting ray</param>
+        /// <returns> A  List of nullable <see cref="HitRecord"> with the details of the intersections</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             return new List<HitRecord?>();
