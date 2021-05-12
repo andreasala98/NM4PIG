@@ -55,6 +55,12 @@ namespace Trace
         /// </summary>
         public abstract HitRecord? rayIntersection(Ray ray);
         public abstract List<HitRecord?> rayIntersectionList(Ray ray);
+
+        /// <summary>
+        /// Computes whether a point is inside the shape. It must be redefinde in derived classes.
+        /// </summary>
+        /// <param name="a"></param>
+        public abstract bool isPointInside(Point a);
     }
 
 
@@ -206,7 +212,7 @@ namespace Trace
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public bool isPointInside(Point a)
+        public override bool isPointInside(Point a)
         {
             a = this.transformation.getInverse() * a;
             return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
@@ -279,7 +285,7 @@ namespace Trace
             return new Vec2D(u, v);
         }
 
-        public bool isPointOnPlane(Point p)
+        public override bool isPointInside(Point p)
         {
             Point invtransfpoint = this.transformation.getInverse() * p;
             if (Utility.areClose(invtransfpoint.z, 0.0f)) return true;
@@ -301,7 +307,7 @@ namespace Trace
             this.max = max ?? new Point(1f, 1f, 1f);
         }
 
-        public bool isPointInside(Point a)
+        public override bool isPointInside(Point a)
             => a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
 
         public override HitRecord? rayIntersection(Ray ray)

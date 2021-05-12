@@ -54,10 +54,24 @@ namespace Trace{
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
-
+            
             List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
 
-            return a;
+            List<HitRecord?> hits = new List<HitRecord?>();
+
+            for (int i = 0; i < a.Count; i++)
+            {   //il punto a(i) non è in b
+                Point p = a[i].worldPoint;
+                if (this.secondShape.isPointInside(a[i].worldPoint))
+                        =>hits.Add(a[i]);
+            }
+
+                return hits;
+        }
+
+        public override bool isPointInside(Point a)
+        {
+
         }
     }
 
@@ -67,7 +81,7 @@ namespace Trace{
     /// 
     /// Datamembers: Shape firstsShape, Shape secondShape.
     /// </summary>
-    public class CSGDifference : Shape
+/*    public class CSGDifference : Shape
     {
         public Shape firstShape;
         public Shape secondShape;
@@ -93,5 +107,5 @@ namespace Trace{
         }
         
     } //CSGDifference
-
+*/
 } // Trace
