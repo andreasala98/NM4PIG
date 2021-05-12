@@ -197,14 +197,14 @@ namespace Trace
 
         public CSGUnion (Shape a, Shape b)
         {
-            firstShape = a;
-            secondShape = b;
+            this.firstShape = a;
+            this.secondShape = b;
         }
 
         public override HitRecord? rayIntersection (Ray ray) 
         {
-            HitRecord? a = firstShape.rayIntersection(ray);
-            HitRecord? b = secondShape.rayIntersection(ray);
+            HitRecord? a = this.firstShape.rayIntersection(ray);
+            HitRecord? b = this.secondShape.rayIntersection(ray);
 
             if (a?.t < b?.t) 
                 return a;
@@ -226,14 +226,14 @@ namespace Trace
 
         public CSGDifference (Shape a, Shape b)
         {
-            firstShape = a;
-            secondShape = b;
+            this.firstShape = a;
+            this.secondShape = b;
         }
 
         public override HitRecord? rayIntersection (Ray ray) 
         {
-            HitRecord? a = firstShape.rayIntersection(ray);
-            HitRecord? b = secondShape.rayIntersection(ray);
+            HitRecord? a = this.firstShape.rayIntersection(ray);
+            HitRecord? b = this.secondShape.rayIntersection(ray);
 
             return a;
 
