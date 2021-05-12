@@ -112,7 +112,7 @@ namespace Trace.Test
             Assert.True(sphere.rayIntersection(new Ray(new Point(-10f, 0f, 0f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 6/6");
         }
 
-        [Fact]
+        /*[Fact]
         void TestBoxes()
         {
             Box box = new Box();
@@ -141,8 +141,9 @@ namespace Trace.Test
                                         );
             Assert.True(hit2.isClose(intersection2), "TestTransformation failed - assert 4/6");
 
-        }
+        }*/
 
+        [Fact]
         public void TestisPointInside()
         {
             Point a = new Point(0.5f, 0.5f, 0.5f);
@@ -156,6 +157,7 @@ namespace Trace.Test
             Assert.True(s1.isPointInside(a1), "TestisPointInside failed - assert 3/3");
         }
 
+        [Fact]
         public void TestrayIntersectionList()
         {
             Sphere s = new Sphere();

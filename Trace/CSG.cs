@@ -43,6 +43,7 @@ namespace Trace{
         {
             HitRecord? a = this.firstShape.rayIntersection(ray);
             HitRecord? b = this.secondShape.rayIntersection(ray);
+            
 
             if (a?.t < b?.t) 
                 return a;
@@ -60,18 +61,27 @@ namespace Trace{
             List<HitRecord?> hits = new List<HitRecord?>();
 
             for (int i = 0; i < a.Count; i++)
-            {   //il punto a(i) non è in b
-                Point p = a[i].worldPoint;
-                if (this.secondShape.isPointInside(a[i].worldPoint))
-                        =>hits.Add(a[i]);
+            {
+                if (!(this.secondShape.isPointInside((Point) a[i]?.worldPoint)))
+                {
+                    hits.Add(a[i]);
+                }
             }
 
-                return hits;
+            for (int i = 0; i < b.Count; i++)
+            {
+                if (!(this.firstShape.isPointInside((Point) b[i]?.worldPoint)))
+                {
+                    hits.Add(b[i]);
+                }
+            }
+
+            return hits;
         }
 
         public override bool isPointInside(Point a)
         {
-
+            return firstShape.isPointInside(a) || secondShape.isPointInside(a);
         }
     }
 
