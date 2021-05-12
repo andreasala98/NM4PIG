@@ -141,11 +141,13 @@ namespace Trace.Test
             Point p2 = new Point(-0.75f, 0f, 0f);
             Point p3 = new Point(1.25f, 0f, 0f);
             Point p4 = new Point(0.25f, 0.999f, 0f);
+            Point p5 = new Point(-56789f, 0f, 0f);
 
             Assert.True(u1.isPointInside(p1), "TestisPointInside failed - assert 1/4");
             Assert.True(u1.isPointInside(p2), "TestisPointInside failed - assert 2/4");
             Assert.True(u1.isPointInside(p3), "TestisPointInside failed - assert 3/4");
             Assert.False(u1.isPointInside(p4), "TestisPointInside failed - assert 4/4");
+            Assert.False(u1.isPointInside(p5), "TestisPointInside failed - assert 5/4");
 
         }
     }
@@ -159,18 +161,18 @@ namespace Trace.Test
             Sphere s2 = new Sphere();
             CSGDifference u1 = new CSGDifference(s1, s2);
 
-            Ray r1 = new Ray(origin: new Point(2.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            Ray r1 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: Constant.VEC_X);
             HitRecord? intersection1 = u1.rayIntersection(r1);
-            Assert.True(intersection1 != null, "TestHit failed! - Assert 1/5");
+            Assert.True(intersection1 != null, "TestHit failed! - Assert 1/");
             HitRecord hit1 = new HitRecord(
-                new Point(1.5f, 0.0f, 0.0f),
-                new Normal(1.0f, 0.0f, 0.0f),
+                new Point(1.0f, 0.0f, 0.0f),
+                new Normal(-1.0f, 0.0f, 0.0f),
                 new Vec2D(0.0f, 0.5f),
-                0.5f,
+                1.0f,
                 r1
             );
             
-            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
+            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/");
 
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
             HitRecord? intersection2 = u1.rayIntersection(r2);
@@ -178,8 +180,127 @@ namespace Trace.Test
 
             Ray r3 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
             HitRecord? intersection3 = u1.rayIntersection(r3);
-            Assert.True(intersection3 == null, "Far away ray test failed - Asser 3/");
+            Assert.True(intersection3 == null, "Ray through secondShape only test failed - Asser 4/");
+        }
+
+        [Fact]
+        public void TestrayIntersctionInner()
+        {
+            Sphere s1 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere();
+            CSGDifference u1 = new CSGDifference(s1, s2);
+
+            Ray r1 = new Ray(origin: new Point(1.25f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            HitRecord? intersection1 = u1.rayIntersection(r1);
+            Assert.True(intersection1 != null, "TestHit failed! - Assert 1/5");
+            HitRecord hit1 = new HitRecord(
+                new Point(1.0f, 0.0f, 0.0f),
+                new Normal(1.0f, 0.0f, 0.0f),
+                new Vec2D(0.0f, 0.5f),
+                0.25f,
+                r1
+            );
+            
+            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
+
+            Ray r2 = new Ray(origin: new Point(1.25f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            HitRecord? intersection2 = u1.rayIntersection(r2);
+            Assert.True(intersection2 != null, "TestHit failed! - Assert 3/5");
+            HitRecord hit2 = new HitRecord(
+                new Point(1.5f, 0.0f, 0.0f),
+                new Normal(-1.0f, 0.0f, 0.0f),
+                new Vec2D(0.0f, 0.5f),
+                0.25f,
+                r2
+            );
+            
+            Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
+        }
+
+        [Fact]
+
+        public void TestrayIntersectionList()
+        {
+            Sphere s1 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere();
+            CSGDifference u1 = new CSGDifference(s1, s2);
+            Ray r1 = new Ray(origin: new Point(0.5f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            
+            List<HitRecord?> intersection = u1.rayIntersectionList(r1);
+            List<HitRecord> hits = new List<HitRecord>();
+            hits.Add(new HitRecord(
+                                    new Point(1.5f, 0f, 0f),
+                                    new Normal(-1.0f, 0f, 0f),
+                                    new Vec2D(0.0f, 0.5f),
+                                    1.0f,
+                                    r1)
+                                   );   
+            hits.Add(new HitRecord(
+                                    new Point(1.0f, 0.0f, 0.0f),
+                                    new Normal(-1.0f, 0.0f, 0f),
+                                    new Vec2D(0.0f, 0.5f),
+                                    0.5f,
+                                    r1)
+                                   );
+
+            Assert.True(intersection.Count == hits.Count);
+            for (int i = 0; i < intersection.Count; i ++)
+            {
+                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), "TestRayIntersectionList failed - assert 2/2");
+            }
+        }
+
+        [Fact]
+
+        public void TestisPointInside()
+        {
+            Sphere s1 = new Sphere();
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            CSGDifference u1 = new CSGDifference(s2, s1);
+
+
+            Point p1 = new Point(1.25f, 0f, 0f);
+            Point p2 = new Point(1.25f, 0.2f, 0.2f);
+            Point p3 = new Point(0.95f, 0f, 0f);
+            Assert.True(u1.isPointInside(p1), "Test isPointInside failed - assert 1/4");
+            Assert.True(u1.isPointInside(p2), "Test isPointInside failed - assert 2/4");
+            Assert.False(u1.isPointInside(p3), "Test isPointInside failed - assert 4/4");
         }
     }
 
 }
+
+/* Ray r1 = new Ray(origin: new Point(0.75f, 0.0f, 2.0f), dir: -Constant.VEC_Z);
+            
+            List<HitRecord?> intersection = u1.rayIntersectionList(r1);
+            List<HitRecord> hits = new List<HitRecord>();
+            hits.Add(new HitRecord(
+                                    new Point(0.75f, 0.0f, 0.96824584f),
+                                    new Normal(0.25f, 0.0f, 0.96824584f),
+                                    new Vec2D(0.0f, 0.30820222f),
+                                    3.0f,
+                                    r1)
+                                   );
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, 1.5f, 0f),
+                                    new Normal(0.0f, 1.0f, 0f),
+                                    new Vec2D(0.25f, 0.5f),
+                                    0.5f,
+                                    r1)
+                                   );
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, 1.5f, 0f),
+                                    new Normal(0.0f, 1.0f, 0f),
+                                    new Vec2D(0.25f, 0.5f),
+                                    0.5f,
+                                    r1)
+                                   );
+            hits.Add(new HitRecord(
+                                    new Point(0.75f, 0.0f, -0.96824584f),
+                                    new Normal(0.0f, 1.0f, 0f),
+                                    new Vec2D(0.25f, 0.5f),
+                                    0.5f,
+                                    r1)
+                                   );    
+*/                                          
+
