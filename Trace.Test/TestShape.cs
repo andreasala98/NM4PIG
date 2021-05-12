@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
+using System;
 
 namespace Trace.Test
 {
@@ -107,6 +108,37 @@ namespace Trace.Test
 
             // Check if the *inverse* transformation was wrongly applied
             Assert.True(sphere.rayIntersection(new Ray(new Point(-10f, 0f, 0f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 6/6");
+        }
+
+        [Fact]
+        void TestBoxes()
+        {
+            Box box = new Box();
+            Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
+            HitRecord? intersection1 = box.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestBoxes failed - assert 1/6");
+            Console.WriteLine();
+            HitRecord hit1 = new HitRecord(
+                                            new Point(-1.0f, 0.0f, 0.0f),
+                                            new Normal(-1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.5f, 0.5f),
+                                            4.0f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), "TestBoxes failed - assert 2/6");
+
+            Ray ray2 = new Ray(new Point(0.8f, 0f, 4f), -Constant.VEC_Z);
+            HitRecord? intersection2 = box.rayIntersection(ray2);
+            Assert.True(intersection2 != null, "TestTransformation failed - assert 3/6");
+            HitRecord hit2 = new HitRecord(
+                                            new Point(11.0f, 0.0f, 0.0f),
+                                            new Normal(1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.0f, 0.5f),
+                                            2.0f,
+                                            ray2
+                                        );
+            Assert.True(hit2.isClose(intersection2), "TestTransformation failed - assert 4/6");
+
         }
     }
 } // end of namespace
