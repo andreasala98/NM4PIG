@@ -97,21 +97,30 @@ namespace Trace{
 
             List<HitRecord?> hits = new List<HitRecord?>();
 
-            for (int i = 0; i < a.Count; i++)
+            if (a[0] != null)
             {
-                if (!(this.secondShape.isPointInside((Point) a[i]?.worldPoint)))
+                for (int i = 0; i < a.Count; i++)
                 {
-                    hits.Add(a[i]);
+                    if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
+                    {
+                        hits.Add(a[i]);
+                    }
                 }
             }
 
-            for (int i = 0; i < b.Count; i++)
+            if (b[0] != null)
             {
-                if (!(this.firstShape.isPointInside((Point) b[i]?.worldPoint)))
+                for (int i = 0; i < b.Count; i++)
                 {
-                    hits.Add(b[i]);
+                    if (!(this.firstShape.isPointInside((Point)b[i]?.worldPoint)))
+                    {
+                        hits.Add(b[i]);
+                    }
                 }
             }
+
+            if (hits.Count == 0)
+                hits.Add(null);
 
             return hits;
         }
