@@ -40,7 +40,7 @@ namespace NM4PIG
                            "*      for more info: visit the GitHub repository at      *\n" +
                            "*         https://github.com/andreasala98/NM4PIG          *\n" +
                            "***********************************************************\n"
-        };
+            };
 
             CLI.Command("demo",
             command =>
@@ -52,6 +52,7 @@ namespace NM4PIG
                 var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera instead of perspective", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+                var scene = command.Option("--scene|-s <scene>", "number of the scene", CommandOptionType.SingleValue);
 
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
@@ -67,8 +68,9 @@ namespace NM4PIG
                                                         angledeg.Value(),
                                                         orthogonal.Value(),
                                                         pfmfile.Value(),
-                                                        ldrfile.Value()
-                                                    );
+                                                        ldrfile.Value(),
+                                                        scene.Value()
+                                                        );
                     }
                     catch (CommandLineException e)
                     {
@@ -82,7 +84,8 @@ namespace NM4PIG
                         readParam.angledeg,
                         readParam.orthogonal,
                         readParam.pfmFile,
-                        readParam.ldrFile
+                        readParam.ldrFile,
+                        readParam.scene
                     );
                     return 0;
                 });
@@ -138,7 +141,7 @@ namespace NM4PIG
 
         // ############################################# //
 
-        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile)
+        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene)
         {
 
             Console.WriteLine("Starting Demo with these parameters:\n");
@@ -156,26 +159,39 @@ namespace NM4PIG
 
             Console.WriteLine("Creating the scene...");
             World world = new World();
-            List<float> Vertices = new List<float>() { -0.5f, 0.5f };
 
-            //One sphere for each vertex of the cube
-            foreach (var x in Vertices)
+            switch (scene)
             {
-                foreach (var y in Vertices)
-                {
-                    foreach (var z in Vertices)
-                    {
-                        world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
-                                            * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
-                    } // z
-                } // y
-            }// x
+                case 1:
+                    List<float> Vertices = new List<float>() { -0.5f, 0.5f };
 
-            //Adding two more spheres to break simmetry
-            world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
-                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
-            world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
-                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                    //One sphere for each vertex of the cube
+                    foreach (var x in Vertices)
+                    {
+                        foreach (var y in Vertices)
+                        {
+                            foreach (var z in Vertices)
+                            {
+                                world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
+                                                    * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                            } // z
+                        } // y
+                    }// x
+
+                    //Adding two more spheres to break simmetry
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
+                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
+                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                    break;
+
+                case 2:
+                    world.addShape(new Box(new Point(-0.5f, -0.5f, -0.5f), new Point(-0.5f, 0.5f, 0.5f)));
+                    break;
+
+                default:
+                    break;
+            }
 
 
             // Camera initialization

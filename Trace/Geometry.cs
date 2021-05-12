@@ -308,6 +308,48 @@ namespace Trace
         }
 
         /// <summary>
+        /// Divide a <see cref="Normal"/> by a scaling factor.
+        /// </summary>
+        /// <param name="a"> The <see cref="Normal"/>.</param>
+        /// <param name="alfa"> Scaling factor. </param>
+        /// <returns> The scaled <see cref="Normal"/>.</returns>
+        public static Normal operator /(Normal a, float alfa)
+        {
+            if (alfa == 0) throw new DivideByZeroException("You cannot divide a vector by zero!");
+            return new Normal(a.x / alfa, a.y / alfa, a.z / alfa);
+        }
+
+        /// <summary>
+        ///  Euclidean scalar product between two <see cref="Normal"/>s.
+        /// </summary>
+        /// <param name="a"> First <see cref="Normal"/> </param>
+        /// <param name="b"> Second <see cref="Normal"/></param>
+        /// <returns> Scalar product in float format.</returns>
+        public static float operator *(Normal a, Normal b)
+            => a.x * b.x + a.y * b.y + a.z * b.z;
+
+        /// <summary>
+        /// Squared norm of the <see cref="Normal"/>
+        /// </summary>
+        /// <returns> The squared norm of the <see cref="Normal"/> as float</returns>
+        public float getSquaredNorm()
+            => this * this;
+
+        /// <summary>
+        /// Norm of the <see cref="Normal"/>
+        /// </summary>
+        /// <returns> The norm of the <see cref="Normal"/> as float</returns>
+        public float getNorm()
+            => (float)Math.Sqrt(this.getSquaredNorm());
+
+        /// <summary>
+        /// Normalize the <see cref="Normal"/>
+        /// </summary>
+        /// <returns>The <see cref="Normal"/>, normalized</returns>
+        public Normal Normalize()
+            => this / this.getNorm();
+
+        /// <summary>
         /// Converts a <see cref="Normal"/> to a string for printing.
         /// </summary>
         /// <returns> A string in the format Normal(x=" ",y=" ",z=" ")</returns>
