@@ -74,16 +74,19 @@ namespace Trace
         /// The unit vector for the x-axis
         /// </summary>
         public static Vec VEC_X = new Vec(1.0f, 0.0f, 0.0f);
+        public static Normal VEC_X_N = new Normal(1.0f, 0.0f, 0.0f);
 
         /// <summary>
         /// The unit vector for the y-axis
         /// </summary>
         public static Vec VEC_Y = new Vec(0.0f, 1.0f, 0.0f);
+        public static Normal VEC_Y_N = new Normal(0.0f, 1.0f, 0.0f);
 
         /// <summary>
         /// The unit vector for the z-axis
         /// </summary>
         public static Vec VEC_Z = new Vec(0.0f, 0.0f, 1.0f);
+        public static Normal VEC_Z_N = new Normal(0.0f, 0.0f, 1.0f);
 
         /// <summary>
         /// White color
@@ -95,6 +98,9 @@ namespace Trace
         /// </summary>
         public static Color Black = new Color(0.0f, 0.0f, 0.0f);
 
+        /// <summary>
+        /// <see cref="Point"> object do describe the origin of axes, i.e. (0,0,0)
+        /// </summary>
         public static Point Origin = new Point(0.0f, 0.0f, 0.0f);
 
     }
