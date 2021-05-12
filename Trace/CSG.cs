@@ -45,11 +45,17 @@ namespace Trace{
             HitRecord? b = this.secondShape.rayIntersection(ray);
             
 
-            if (a?.t < b?.t) 
+            if (a?.t < b?.t && !(this.secondShape.isPointInside((Point) a?.worldPoint))) 
                 return a;
-            else
+
+            else if (a?.t < b?.t && (this.secondShape.isPointInside((Point) a?.worldPoint)))
                 return b;
-            
+
+            else if (b?.t < a?.t && !(this.firstShape.isPointInside((Point) b?.worldPoint)))
+                return b;
+            else //equivalent to esleif(b?.t < a?.t && (this.firstShape.isPointInside((Point) b?.worldPoint)))
+                return a;
+
         }
 
         public override List<HitRecord?> rayIntersectionList(Ray ray)
@@ -91,7 +97,7 @@ namespace Trace{
     /// 
     /// Datamembers: Shape firstsShape, Shape secondShape.
     /// </summary>
-/*    public class CSGDifference : Shape
+    public class CSGDifference : Shape
     {
         public Shape firstShape;
         public Shape secondShape;
@@ -104,10 +110,38 @@ namespace Trace{
 
         public override HitRecord? rayIntersection (Ray ray) 
         {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a[0] == null)
+                    return null;
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> legalHits = new List<HitRecord?>();
 
-            return a;
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            for (int i = 0; i < b.Count; i++)
+            {
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+            }
+
+            if (legalHits.Count == 0)
+                return null;
+
+            int iHit = 0;
+            for (int i = 1; i < legalHits.Count; i++) 
+                if (legalHits[i]?.t < legalHits[i-1]?.t)
+                    iHit = i;
+            
+
+            return legalHits[iHit];
         }
 
         public override List<HitRecord?> rayIntersectionList(Ray ray)
@@ -115,7 +149,12 @@ namespace Trace{
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
             return a;
         }
+
+        public override bool isPointInside(Point a)
+        {
+            return true;
+        }
         
     } //CSGDifference
-*/
+
 } // Trace

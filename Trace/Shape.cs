@@ -215,7 +215,7 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             a = this.transformation.getInverse() * a;
-            return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
+            return a.x * a.x + a.y * a.y + a.z * a.z < 1;
         } 
     }
 
