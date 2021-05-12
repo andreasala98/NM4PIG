@@ -51,7 +51,13 @@ namespace Trace
             => (float)deg * Constant.PI / 180f;
 
         public static float RadToDeg(int rad)
-            => (float)rad *180f / Constant.PI;
+            => (float)rad * 180f / Constant.PI;
+
+        public static float Min(float a, float b, float c)
+            => Math.Min(a, Math.Min(b, c));
+
+        public static float Max(float a, float b, float c)
+            => Math.Max(a, Math.Max(b, c));
     }
 
     /// <summary>

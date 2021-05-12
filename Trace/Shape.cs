@@ -227,4 +227,73 @@ namespace Trace
         }
 
     }
+
+    public class Box : Shape
+    {
+        public Point min;
+        public Point max;
+
+        public Box(Point? min = null, Point? max = null, Transformation? transformation = null) : base(transformation)
+        {
+            // Controllo min max
+
+            this.min = min ?? new Point(-1f, -1f, -1f);
+            this.max = max ?? new Point(1f, 1f, 1f);
+        }
+
+        public bool isPointInside(Point a)
+            => a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
+
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            float t1x, t2x, t1y, t2y, t1z, t2z;
+
+            t1x = (min.x - invRay.origin.x) / invRay.dir.x;
+            t2x = (max.x - invRay.origin.x) / invRay.dir.x;
+            t1y = (min.y - invRay.origin.y) / invRay.dir.y;
+            t2y = (max.y - invRay.origin.y) / invRay.dir.y;
+            t1z = (min.z - invRay.origin.z) / invRay.dir.z;
+            t2z = (max.z - invRay.origin.z) / invRay.dir.z;
+
+            float tEnter = Utility.Max(Math.Min(t1x, t2x), Math.Min(t1y, t2y), Math.Min(t1z, t2z));
+            float tExit = Utility.Min(Math.Max(t1x, t2x), Math.Max(t1y, t2y), Math.Max(t1z, t2z));
+
+            if (tEnter < 0 && tExit < 0) return null;
+            if (tEnter < 0) tEnter = tExit;
+
+            Point hitPoint = invRay.at(tEnter);
+            return new HitRecord(
+                this.transformation * hitPoint,
+                this.transformation * this._boxNormal(hitPoint, ray.dir),
+                this._boxPointToUV(hitPoint),
+                tEnter,
+                ray
+            );
+        }
+
+        private Normal _boxNormal(Point point, Vec rayDir)
+        {
+            Normal result = new Normal();
+            if (Utility.areClose(point.x, this.min.x)) result = new Normal(-1f, point.y, point.z);
+            if (Utility.areClose(point.x, this.max.x)) result = new Normal(1f, point.y, point.z);
+            if (Utility.areClose(point.y, this.min.y)) result = new Normal(point.x, -1f, point.z);
+            if (Utility.areClose(point.y, this.max.y)) result = new Normal(point.x, 1f, point.z);
+            if (Utility.areClose(point.z, this.min.z)) result = new Normal(point.x, point.y, -1f);
+            if (Utility.areClose(point.z, this.max.z)) result = new Normal(point.x, point.y, 1f);
+            return result.Normalize();
+        }
+
+
+        // To be completed
+        private Vec2D _boxPointToUV(Point point)
+        {
+            return new Vec2D(0.5f, 0.5f);
+        }
+
+
+    }
+
+
 }

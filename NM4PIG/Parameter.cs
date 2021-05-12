@@ -36,6 +36,8 @@ namespace NM4PIG
         public static int angledeg = 0;
         public static bool orthogonal = false;
 
+        public static int scene = 1;
+
         //Convert
         public static float factor = 0.18f;
         public static float gamma = 1.0f;
@@ -45,9 +47,9 @@ namespace NM4PIG
         public static string ldrFile = "demoImage.jpg";
     }
 
-/// <summary>
-/// This class contains the settable parameters for the aforementioned command line interface.
-/// </summary>
+    /// <summary>
+    /// This class contains the settable parameters for the aforementioned command line interface.
+    /// </summary>
     class Parameters
     {
         public string pfmFile;
@@ -59,6 +61,8 @@ namespace NM4PIG
         public int angledeg;
         public bool orthogonal;
 
+        public int scene;
+
         public Parameters()
         {
             this.pfmFile = Default.pfmFile;
@@ -69,6 +73,7 @@ namespace NM4PIG
             this.height = Default.height;
             this.angledeg = Default.angledeg;
             this.orthogonal = Default.orthogonal;
+            this.scene = Default.scene;
         }
 
         /// <summary>
@@ -119,7 +124,7 @@ namespace NM4PIG
         /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
         /// <param name="pfmfile"> Name of the fm output file</param>
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
-        public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal, string? pfmfile, string? ldrfile)
+        public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal, string? pfmfile, string? ldrfile, string? scene)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -134,6 +139,18 @@ namespace NM4PIG
                 catch
                 {
                     throw new CommandLineException("Width argument is not an int. Please enter an integer");
+                }
+            }
+
+            if (scene != null)
+            {
+                try
+                {
+                    this.scene = Int32.Parse(scene);
+                }
+                catch
+                {
+                    throw new CommandLineException("Scene argument is not an int. Please enter an integer");
                 }
             }
 
