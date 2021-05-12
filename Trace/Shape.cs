@@ -115,6 +115,7 @@ namespace Trace
         /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
         public List<HitRecord?> rayIntersectionList(Ray ray)
         {
+            List<HitRecord?> intersections = new List<HitRecord?>();
             Ray invRay = ray.Transform(this.transformation.getInverse());
             Vec originVec = invRay.origin.toVec();
             float a = invRay.dir.getSquaredNorm();
@@ -123,26 +124,47 @@ namespace Trace
 
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
-                return null;
+            {
+                intersections.Add(null);
+                return intersections;
+            }
 
             float sqrtDelta = (float)Math.Sqrt((float)delta);
+            float tmin = (-b - sqrtDelta) / (2.0f * a);
             float tmax = (-b + sqrtDelta) / (2.0f * a);
 
-            float firstHitT;
+            if (tmin > invRay.tmin && tmin < invRay.tmax)
+            {
+                Point hitPoint = invRay.at(tmin);
+
+                intersections.Add(new HitRecord(
+                                                this.transformation * hitPoint,
+                                                this.transformation * _sphereNormal(hitPoint, ray.dir),
+                                                _spherePointToUV(hitPoint),
+                                                tmin,
+                                                ray
+                                                )
+                                  );
+            }
             
             if (tmax > invRay.tmin && tmax < invRay.tmax)
-                firstHitT = tmax;
-            else
-                return null;
+            {
+                Point hitPoint = invRay.at(tmax);
+                
+                intersections.Add(new HitRecord(
+                                                this.transformation * hitPoint,
+                                                this.transformation * _sphereNormal(hitPoint, ray.dir),
+                                                _spherePointToUV(hitPoint),
+                                                tmax,
+                                                ray
+                                                )
+                                  );
+            }
+                
+            if (intersections.Count == 0)
+                intersections.Add(null);
 
-            Point hitPoint = invRay.at(firstHitT);
-            return new HitRecord(
-                this.transformation * hitPoint,
-                this.transformation * _sphereNormal(hitPoint, ray.dir),
-                _spherePointToUV(hitPoint),
-                firstHitT,
-                ray
-            );
+            return intersections;
         }
 
         /// <summary>
@@ -185,64 +207,6 @@ namespace Trace
             return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
         } 
     }
-
-    /// <summary>
-    /// A 3D Shape created by the union 
-    /// of two Shapes (Constructive Solid Geometry).
-    /// 
-    /// Datamembers: Shape firstsShape, Shape secondShape.
-    /// </summary>
-    public class CSGUnion : Shape
-    {
-        public Shape firstShape;
-        public Shape secondShape;
-
-        public CSGUnion (Shape a, Shape b)
-        {
-            firstShape = a;
-            secondShape = b;
-        }
-
-        public override HitRecord? rayIntersection (Ray ray) 
-        {
-            HitRecord? a = firstShape.rayIntersection(ray);
-            HitRecord? b = secondShape.rayIntersection(ray);
-
-            if (a?.t < b?.t) 
-                return a;
-            else
-                return b;
-            
-        }
-    }
-    /// <summary>
-    /// A 3D Shape created by the difference 
-    /// of two Shapes (Constructive Solid Geometry).
-    /// 
-    /// Datamembers: Shape firstsShape, Shape secondShape.
-    /// </summary>
-    public class CSGDifference : Shape
-    {
-        public Shape firstShape;
-        public Shape secondShape;
-
-        public CSGDifference (Shape a, Shape b)
-        {
-            firstShape = a;
-            secondShape = b;
-        }
-
-        public override HitRecord? rayIntersection (Ray ray) 
-        {
-            HitRecord? aMin = firstShape.rayIntersection(ray);
-            HitRecord? bMin = secondShape.rayIntersection(ray);
-            HitRecord? aMax = firstShape.rayIntersectionMax
-
-            return a;
-
-        }
-    }
-
 
 
     public class Plane : Shape
