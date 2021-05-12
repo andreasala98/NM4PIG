@@ -101,6 +101,44 @@ namespace Trace
                 firstHitT,
                 ray
             );
+
+        }
+
+        /// <summary>
+        /// Checks if a ray intersects the sphere and return the hit record with the biggest t
+        /// </summary>
+        /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
+        /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
+        public HitRecord? rayIntersectionMax(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            Vec originVec = invRay.origin.toVec();
+            float a = invRay.dir.getSquaredNorm();
+            float b = 2.0f * originVec * invRay.dir;
+            float c = originVec.getSquaredNorm() - 1.0f;
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+                return null;
+
+            float sqrtDelta = (float)Math.Sqrt((float)delta);
+            float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+            float firstHitT;
+            
+            if (tmax > invRay.tmin && tmax < invRay.tmax)
+                firstHitT = tmax;
+            else
+                return null;
+
+            Point hitPoint = invRay.at(firstHitT);
+            return new HitRecord(
+                this.transformation * hitPoint,
+                this.transformation * _sphereNormal(hitPoint, ray.dir),
+                _spherePointToUV(hitPoint),
+                firstHitT,
+                ray
+            );
         }
 
         /// <summary>
@@ -130,5 +168,73 @@ namespace Trace
                     (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
                     (float)Math.Acos(point.z) / Constant.PI
                 );
+
+        /// <summary>
+        /// Method that assert if a Point is inside of the Unitary Shape.
+        /// It is needed to implement CSG Shape
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public bool isPointInside(Point a)
+        {
+            a = this.transformation.getInverse() * a;
+            return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
+        } 
+    }
+
+    /// <summary>
+    /// A 3D Shape created by the union 
+    /// of two Shapes (Constructive Solid Geometry).
+    /// 
+    /// Datamembers: Shape firstsShape, Shape secondShape.
+    /// </summary>
+    public class CSGUnion : Shape
+    {
+        public Shape firstShape;
+        public Shape secondShape;
+
+        public CSGUnion (Shape a, Shape b)
+        {
+            firstShape = a;
+            secondShape = b;
+        }
+
+        public override HitRecord? rayIntersection (Ray ray) 
+        {
+            HitRecord? a = firstShape.rayIntersection(ray);
+            HitRecord? b = secondShape.rayIntersection(ray);
+
+            if (a?.t < b?.t) 
+                return a;
+            else
+                return b;
+            
+        }
+    }
+    /// <summary>
+    /// A 3D Shape created by the difference 
+    /// of two Shapes (Constructive Solid Geometry).
+    /// 
+    /// Datamembers: Shape firstsShape, Shape secondShape.
+    /// </summary>
+    public class CSGDifference : Shape
+    {
+        public Shape firstShape;
+        public Shape secondShape;
+
+        public CSGDifference (Shape a, Shape b)
+        {
+            firstShape = a;
+            secondShape = b;
+        }
+
+        public override HitRecord? rayIntersection (Ray ray) 
+        {
+            HitRecord? a = firstShape.rayIntersection(ray);
+            HitRecord? b = secondShape.rayIntersection(ray);
+
+            return a;
+
+        }
     }
 }
