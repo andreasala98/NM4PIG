@@ -21,11 +21,11 @@ using System;
 namespace Trace
 {
     /// <summary>
-    /// Abstract class that implements a generic shape
+    /// Abstract class that implements a generic shape. This class is used to generate
+    /// some basic shapes such as sphere and plane.
     /// </summary>
     public abstract class Shape
     {
-
         // Fields 
 
         /// <summary>
@@ -37,7 +37,9 @@ namespace Trace
         // Methods
 
         /// <summary>
-        /// Create a unit sphere, potentially associating a transformation to it
+        /// Create a default shape, potentially associating a transformation to it.
+        /// This is an abstract constructor,
+        /// therefore it cannot be directly used in the code
         /// </summary>
         /// <param name="transformation"><see cref="Transformation"> associated to the sphere</param>
         public Shape(Transformation? transformation = null)
@@ -101,6 +103,44 @@ namespace Trace
                 firstHitT,
                 ray
             );
+
+        }
+
+        /// <summary>
+        /// Checks if a ray intersects the sphere and return the hit record with the biggest t
+        /// </summary>
+        /// <param name="ray"><see cref="Ray"> that you want to check if intersect the sphere</param>
+        /// <returns><see cref="HitRecord"> or <see cref="null"> if no intersection was found.</returns>
+        public HitRecord? rayIntersectionMax(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            Vec originVec = invRay.origin.toVec();
+            float a = invRay.dir.getSquaredNorm();
+            float b = 2.0f * originVec * invRay.dir;
+            float c = originVec.getSquaredNorm() - 1.0f;
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+                return null;
+
+            float sqrtDelta = (float)Math.Sqrt((float)delta);
+            float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+            float firstHitT;
+            
+            if (tmax > invRay.tmin && tmax < invRay.tmax)
+                firstHitT = tmax;
+            else
+                return null;
+
+            Point hitPoint = invRay.at(firstHitT);
+            return new HitRecord(
+                this.transformation * hitPoint,
+                this.transformation * _sphereNormal(hitPoint, ray.dir),
+                _spherePointToUV(hitPoint),
+                firstHitT,
+                ray
+            );
         }
 
         /// <summary>
@@ -130,6 +170,140 @@ namespace Trace
                     (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
                     (float)Math.Acos(point.z) / Constant.PI
                 );
+
+        /// <summary>
+        /// Method that assert if a Point is inside of the Unitary Shape.
+        /// It is needed to implement CSG Shape
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public bool isPointInside(Point a)
+        {
+            a = this.transformation.getInverse() * a;
+            return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
+        } 
+    }
+
+    /// <summary>
+    /// A 3D Shape created by the union 
+    /// of two Shapes (Constructive Solid Geometry).
+    /// 
+    /// Datamembers: Shape firstsShape, Shape secondShape.
+    /// </summary>
+    public class CSGUnion : Shape
+    {
+        public Shape firstShape;
+        public Shape secondShape;
+
+        public CSGUnion (Shape a, Shape b)
+        {
+            this.firstShape = a;
+            this.secondShape = b;
+        }
+
+        public override HitRecord? rayIntersection (Ray ray) 
+        {
+            HitRecord? a = this.firstShape.rayIntersection(ray);
+            HitRecord? b = this.secondShape.rayIntersection(ray);
+
+            if (a?.t < b?.t) 
+                return a;
+            else
+                return b;
+            
+        }
+    }
+    /// <summary>
+    /// A 3D Shape created by the difference 
+    /// of two Shapes (Constructive Solid Geometry).
+    /// 
+    /// Datamembers: Shape firstsShape, Shape secondShape.
+    /// </summary>
+    public class CSGDifference : Shape
+    {
+        public Shape firstShape;
+        public Shape secondShape;
+
+        public CSGDifference (Shape a, Shape b)
+        {
+            this.firstShape = a;
+            this.secondShape = b;
+        }
+
+        public override HitRecord? rayIntersection (Ray ray) 
+        {
+            HitRecord? a = this.firstShape.rayIntersection(ray);
+            HitRecord? b = this.secondShape.rayIntersection(ray);
+
+            return a;
+
+        }
+    }
+
+
+
+    public class Plane : Shape
+    {
+        public Plane(Transformation? transformation = null) : base(transformation) { }
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+           // Vec invRayOrigin = invRay.origin.toVec();
+
+            if (invRay.dir.z == 0) return null;
+            else
+            {
+                float tHit = -invRay.origin.z / invRay.dir.z;
+                if (tHit > invRay.tmin && tHit < invRay.tmax)
+                {
+                    Point hitPoint = invRay.at(tHit);
+                    return new HitRecord(
+                        wp: this.transformation * hitPoint,
+                        nm: this.transformation * _stdPlaneNormal(ray),
+                        sp: _stdPlanePointToUV(hitPoint),
+                        tt: tHit,
+                        r: ray
+                    );
+                    
+                }
+                else return null;
+
+            }
+        }
+
+        private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null) {
+
+            // hitPoint is a nullable parameter because it is not needed. Yet, someone could be used to 
+            // call it because it is needed on a Sphere, so I unclude it to avoid unnecessary errors
+
+            Normal res = new Normal(0.0f,0.0f,1.0f);
+
+            if (r.dir * res <0.0f) return res;
+            else return -res;
+
+        }
+
+        /// <summary>
+        /// Convert a point on the z=0 plane into the (u,v) space using tile pattern
+        /// In this way, u and v are in [0,1)
+        /// </summary>
+        /// <param name="point"> Point on the standard plane </param>
+        /// <returns> Vec2D with u and v as coordinates</returns>
+        private static Vec2D _stdPlanePointToUV(Point point)
+        {
+            float u = point.x - Convert.ToInt32(point.x);
+            float v = point.y - Convert.ToInt32(point.y);
+
+            return new Vec2D(u, v);
+        }
+
+        public bool isPointOnPlane(Point p)
+        {
+            Point invtransfpoint = this.transformation.getInverse() * p;
+            if (Utility.areClose(invtransfpoint.z, 0.0f)) return true;
+            else return false;
+        }
+
     }
 
     public class Box : Shape

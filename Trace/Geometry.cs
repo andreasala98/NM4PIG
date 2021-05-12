@@ -201,6 +201,9 @@ namespace Trace
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
+        public static float operator *(Vec a, Normal b)
+            => a.x * b.x + a.y * b.y + a.z * b.z;
+
         /// <summary>
         /// Change sign to all the components
         /// </summary>
