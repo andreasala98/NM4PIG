@@ -17,8 +17,8 @@ IN THE SOFTWARE.
 */
   
 using System;
+using System.Collections.Generic;
 
-  
 namespace Trace{ 
    
    
@@ -50,6 +50,15 @@ namespace Trace{
                 return b;
             
         }
+
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+
+            return a;
+        }
     }
 
     /// <summary>
@@ -75,7 +84,12 @@ namespace Trace{
             HitRecord? b = this.secondShape.rayIntersection(ray);
 
             return a;
+        }
 
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            return a;
         }
         
     } //CSGDifference
