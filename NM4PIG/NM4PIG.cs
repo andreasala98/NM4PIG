@@ -186,7 +186,10 @@ namespace NM4PIG
                     break;
 
                 case 2:
-                    world.addShape(new Box(new Point(-0.5f, -0.5f, -0.5f), new Point(-0.5f, 0.5f, 0.5f)));
+                    //world.addShape(new Box(new Point(-0.5f, -0.5f, -0.5f), new Point(-0.5f, 0.5f, 0.5f)));
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
+                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                    world.addShape(new Plane(Transformation.RotationY(Constant.PI / 2f)));
                     break;
 
                 default:
