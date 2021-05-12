@@ -442,6 +442,13 @@ namespace Trace
                                     Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
 
+        public static Transformation Translation(float ax, float ay, float az)
+        {
+            Vec a = new Vec(ax, ay, az);
+            return new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+                                    Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
+        }
+
         /// <summary>
         /// Return a <see cref="Transformation"/> object encoding a scaling
         /// </summary>
