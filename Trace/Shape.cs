@@ -21,13 +21,13 @@ using System;
 namespace Trace
 {
     /// <summary>
-    /// Abstract class that implements a generic shape
+    /// Abstract class that implements a generic shape. This class is used to generate
+    /// some basic shapes such as sphere and plane.
     /// </summary>
     public abstract class Shape
     {
-
         // Fields 
-        
+
         /// <summary>
         /// <see cref="Transformation associated to the shape">
         /// </summary>
@@ -37,7 +37,9 @@ namespace Trace
         // Methods
 
         /// <summary>
-        /// Create a unit sphere, potentially associating a transformation to it
+        /// Create a default shape, potentially associating a transformation to it.
+        /// This is an abstract constructor,
+        /// therefore it cannot be directly used in the code
         /// </summary>
         /// <param name="transformation"><see cref="Transformation"> associated to the sphere</param>
         public Shape(Transformation? transformation = null)
@@ -236,5 +238,71 @@ namespace Trace
             return a;
 
         }
+    }
+
+
+
+    public class Plane : Shape
+    {
+        public Plane(Transformation? transformation = null) : base(transformation) { }
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+           // Vec invRayOrigin = invRay.origin.toVec();
+
+            if (invRay.dir.z == 0) return null;
+            else
+            {
+                float tHit = -invRay.origin.z / invRay.dir.z;
+                if (tHit > invRay.tmin && tHit < invRay.tmax)
+                {
+                    Point hitPoint = invRay.at(tHit);
+                    return new HitRecord(
+                        wp: this.transformation * hitPoint,
+                        nm: this.transformation * _stdPlaneNormal(ray),
+                        sp: _stdPlanePointToUV(hitPoint),
+                        tt: tHit,
+                        r: ray
+                    );
+                    
+                }
+                else return null;
+
+            }
+        }
+
+        private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null) {
+
+            // hitPoint is a nullable parameter because it is not needed. Yet, someone could be used to 
+            // call it because it is needed on a Sphere, so I unclude it to avoid unnecessary errors
+
+            Normal res = new Normal(0.0f,0.0f,1.0f);
+
+            if (r.dir * res <0.0f) return res;
+            else return -res;
+
+        }
+
+        /// <summary>
+        /// Convert a point on the z=0 plane into the (u,v) space using tile pattern
+        /// In this way, u and v are in [0,1)
+        /// </summary>
+        /// <param name="point"> Point on the standard plane </param>
+        /// <returns> Vec2D with u and v as coordinates</returns>
+        private static Vec2D _stdPlanePointToUV(Point point)
+        {
+            float u = point.x - Convert.ToInt32(point.x);
+            float v = point.y - Convert.ToInt32(point.y);
+
+            return new Vec2D(u, v);
+        }
+
+        public bool isPointOnPlane(Point p)
+        {
+            Point invtransfpoint = this.transformation.getInverse() * p;
+            if (Utility.areClose(invtransfpoint.z, 0.0f)) return true;
+            else return false;
+        }
+
     }
 }

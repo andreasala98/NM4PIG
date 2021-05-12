@@ -89,6 +89,8 @@ namespace Trace
         /// </summary>
         public static Color Black = new Color(0.0f, 0.0f, 0.0f);
 
+        public static Point Origin = new Point(0.0f, 0.0f, 0.0f);
+
     }
 
 }
