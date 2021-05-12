@@ -18,13 +18,15 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System;
+using System.Collections.Generic;
+
 
 namespace Trace.Test
 {
        public class TestCSGUnion
     {
         [Fact]
-        public void TestUnion()
+        public void TestrayIntersction()
         {
             Sphere s1 = new Sphere();
             Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
@@ -56,5 +58,128 @@ namespace Trace.Test
 
             Assert.True(u1.rayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)) == null, "TestHit failed! - Assert 5/5 ");
         }
+
+        [Fact]
+        public void TestrayIntersctionInner()
+        {
+            Sphere s1 = new Sphere();
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+
+            CSGUnion u1 = new CSGUnion(s1, s2);
+            Ray ray1 = new Ray(origin: new Point(0.5f, 0f, 0f), dir: Constant.VEC_X);
+
+            HitRecord? intersection1 = u1.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestInnerHit failed! - Assert 1/4");
+            HitRecord hit1 = new HitRecord(
+                                            new Point(1.5f, 0.0f, 0.0f),
+                                            new Normal(-1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.0f, 0.5f),
+                                            1.0f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), "TestInnerHit failed! - Assert 2/4");
+
+            // now from the other side
+            Ray ray2 = new Ray(origin: new Point(0.5f, 0f, 0f), dir: -Constant.VEC_X);
+
+            HitRecord? intersection2 = u1.rayIntersection(ray2);
+            Assert.True(intersection2 != null, "TestInnerHit failed! - Assert 3/4");
+            HitRecord hit2 = new HitRecord(
+                                            new Point(-1.0f, 0.0f, 0.0f),
+                                            new Normal(1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.5f, 0.5f),
+                                            1.5f,
+                                            ray2
+                                        );
+            Assert.True(hit2.isClose(intersection2), "TestInnerHit failed! - Assert 4/4");
+
+        }
+
+        [Fact]
+        public void TestrayIntersectionList()
+        {
+            Sphere s1 = new Sphere();
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.0f, 0.5f, 0.0f)));
+            CSGUnion u1 = new CSGUnion(s1, s2);
+            
+            Ray r = new Ray(origin: new Point(0.0f, 2.0f, 0f), dir: -Constant.VEC_Y);
+            Assert.True(u1.rayIntersection(r) != null, "TestHit failed! - Assert 1/2");
+
+            List<HitRecord?> intersection = u1.rayIntersectionList(r);
+            List<HitRecord> hits = new List<HitRecord>();
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, -1.0f, 0f),
+                                    new Normal(0.0f, 1.0f, 0f),
+                                    new Vec2D(0.75f, 0.5f),
+                                    3.0f,
+                                    r)
+                                   );
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, 1.5f, 0f),
+                                    new Normal(0.0f, 1.0f, 0f),
+                                    new Vec2D(0.25f, 0.5f),
+                                    0.5f,
+                                    r)
+                                   );
+
+            for (int i = 0; i < 2; i ++)
+            {
+                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), "TestRayIntersectionList failed - assert 2/2");
+            }
+
+        }
+
+        [Fact]
+        public void TestisPointInside()
+        {
+            Sphere s1 = new Sphere();
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            CSGUnion u1 = new CSGUnion(s1, s2);
+
+
+            Point p1 = new Point(0.25f, 0f, 0f);
+            Point p2 = new Point(-0.75f, 0f, 0f);
+            Point p3 = new Point(1.25f, 0f, 0f);
+            Point p4 = new Point(0.25f, 0.999f, 0f);
+
+            Assert.True(u1.isPointInside(p1), "TestisPointInside failed - assert 1/4");
+            Assert.True(u1.isPointInside(p2), "TestisPointInside failed - assert 2/4");
+            Assert.True(u1.isPointInside(p3), "TestisPointInside failed - assert 3/4");
+            Assert.False(u1.isPointInside(p4), "TestisPointInside failed - assert 4/4");
+
+        }
     }
+
+    public class TestCSGDifference
+    {
+        [Fact]
+        public void TestrayIntersction()
+        {
+            Sphere s1 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere();
+            CSGDifference u1 = new CSGDifference(s1, s2);
+
+            Ray r1 = new Ray(origin: new Point(2.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            HitRecord? intersection1 = u1.rayIntersection(r1);
+            Assert.True(intersection1 != null, "TestHit failed! - Assert 1/5");
+            HitRecord hit1 = new HitRecord(
+                new Point(1.5f, 0.0f, 0.0f),
+                new Normal(1.0f, 0.0f, 0.0f),
+                new Vec2D(0.0f, 0.5f),
+                0.5f,
+                r1
+            );
+            
+            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
+
+            Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
+            HitRecord? intersection2 = u1.rayIntersection(r2);
+            Assert.True(intersection2 == null, "Far away ray test failed - Asser 3/");
+
+            Ray r3 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            HitRecord? intersection3 = u1.rayIntersection(r3);
+            Assert.True(intersection3 == null, "Far away ray test failed - Asser 3/");
+        }
+    }
+
 }

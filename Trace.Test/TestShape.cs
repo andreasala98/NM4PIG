@@ -18,9 +18,15 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System;
+using System.Collections.Generic;
+
 
 namespace Trace.Test
 {
+
+    /// <summary>
+    /// Class to collect tests for the <see cref="Sphere"/> class
+    /// </summary>
     public class TestSphere
     {
 
@@ -110,6 +116,7 @@ namespace Trace.Test
             Assert.True(sphere.rayIntersection(new Ray(new Point(-10f, 0f, 0f), -Constant.VEC_Z)) == null, "TestTransformation failed - assert 6/6");
         }
 
+        [Fact]
         public void TestisPointInside()
         {
             Point a = new Point(0.5f, 0.5f, 0.5f);
@@ -123,8 +130,42 @@ namespace Trace.Test
             Assert.True(s1.isPointInside(a1), "TestisPointInside failed - assert 3/3");
         }
 
+        [Fact]
+        public void TestrayIntersectionList()
+        {
+            Sphere s = new Sphere();
+            Ray r = new Ray(origin: new Point(0f, 0f, 2f), dir: -Constant.VEC_Z);
+
+            List<HitRecord?> intersection = s.rayIntersectionList(r);
+            List<HitRecord> hits = new List<HitRecord>();
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, 0.0f, 1.0f),
+                                    new Normal(0.0f, 0.0f, 1.0f),
+                                    new Vec2D(0.0f, 0.0f),
+                                    1.0f,
+                                    r)
+                                   );
+            hits.Add(new HitRecord(
+                                    new Point(0.0f, 0.0f, -1.0f),
+                                    new Normal(0.0f, 0.0f, 1.0f),
+                                    new Vec2D(0.0f, 1.0f),
+                                    3.0f,
+                                    r)
+                                   );
+
+
+            for (int i = 0; i < 2; i++)
+            {
+                Assert.True(hits[i].isClose((HitRecord)intersection[i]), "TestRayIntersectionList failed");
+            }
+
+        }
+
     }
 
+    /// <summary>
+    /// Class to collect tests for the <see cref="Plane"/> class
+    /// </summary>
 
     public class TestPlane
     {

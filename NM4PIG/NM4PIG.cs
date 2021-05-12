@@ -37,7 +37,7 @@ namespace NM4PIG
                            "*  Numerical Methods For Photorealistic Image Generation  *\n" +
                            "*                 ( shortly NM4PIG 🐷 )                   *\n" +
                            "*                                                         *\n" +
-                           "*      for more info: visit the GitHub repository at      *\n" +
+                           "*      for more info visit the GitHub repository at       *\n" +
                            "*         https://github.com/andreasala98/NM4PIG          *\n" +
                            "***********************************************************\n"
             };
@@ -186,10 +186,8 @@ namespace NM4PIG
                     break;
 
                 case 2:
-                    //world.addShape(new Box(new Point(-0.5f, -0.5f, -0.5f), new Point(-0.5f, 0.5f, 0.5f)));
-                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
-                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
-                    world.addShape(new Plane(Transformation.RotationY(Constant.PI / 2f)));
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0f, 0.2f)),
+                                                new Sphere(Transformation.Translation(0f, 0f, -0.2f))));
                     break;
 
                 default:
@@ -199,7 +197,7 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(new Vec(-1.0f, 0.0f, 0.0f));
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
