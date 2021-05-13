@@ -68,7 +68,7 @@ namespace Trace{
             else if (b == null)
                 return a;
 
-            /// the second conditions are nececcary if the ray originates inside the Union Shape.
+            /// the second conditions are nececcary if the ray originates from the inside of the Union Shape.
             else if (a?.t < b?.t && !(this.secondShape.isPointInside((Point) a?.worldPoint))) 
                 return a;
 
@@ -120,8 +120,12 @@ namespace Trace{
             }
 
             if (hits.Count == 0)
+            {
                 hits.Add(null);
+                return hits;
+            }
 
+            //hits.Sort((x, y) => ((int) x?.t) - ((int) y?.t));
             return hits;
         }
 
@@ -251,5 +255,106 @@ namespace Trace{
         }
         
     } //CSGDifference
+
+    /// <summary>
+    /// A 3D Shape created by the intersection 
+    /// of two Shapes (Constructive Solid Geometry).
+    /// 
+    /// Datamembers: Shape firstShape, Shape secondShape.
+    /// </summary>
+    public class CSGIntersection : Shape
+    {
+        public Shape firstShape;
+
+        public Shape secondShape;
+
+        public CSGIntersection (Shape a, Shape b)
+        {
+            this.firstShape = a;
+            this.secondShape = b;
+        }
+
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a[0] == null)
+                    return null;
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            if (b[0] == null)
+                    return null;
+            List<HitRecord?> legalHits = new List<HitRecord?>();
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (this.secondShape.isPointInside((Point) a[i]?.worldPoint))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            {
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside((Point) b[i]?.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+                }
+            }
+
+            if (legalHits.Count == 0)
+                return null;
+
+            int iHit = 0;
+            for (int i = 1; i < legalHits.Count; i++) 
+                if (legalHits[i]?.t < legalHits[iHit]?.t)
+                    iHit = i;
+            
+
+            return legalHits[iHit];
+        }
+
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            List<HitRecord?> legalHits = new List<HitRecord?>();
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a[0] == null)
+            {
+                legalHits.Add(null);
+                return legalHits;
+            }
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            if (b[0] == null)
+            {
+                legalHits.Add(null);
+                return legalHits;
+            }
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (this.secondShape.isPointInside((Point) a[i]?.worldPoint))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            {
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside((Point) b[i]?.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+                }
+            }
+
+            return legalHits;
+        }
+
+        public override bool isPointInside(Point a)
+        {
+            return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
+        }
+    } // CSGIntersection
 
 } // Trace
