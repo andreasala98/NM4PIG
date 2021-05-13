@@ -180,16 +180,27 @@ namespace NM4PIG
 
                     //Adding two more spheres to break simmetry
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
-                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                                             * Transformation.Scaling(0.1f)));
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
                                              * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                     break;
 
                 case 2:
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0f, 0.2f)),
-                                                new Sphere(Transformation.Translation(0f, 0f, -0.2f))));
+                    world.addShape(new CSGDifference(new Sphere(Transformation.RotationX(Constant.PI)*Transformation.Translation(0f, 0f, -0.4f)),
+                                                     new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
+                                                                *Transformation.Translation(0f, 0f, 0.1f))));
                     break;
-
+                case 3:
+                    world.addShape(new CSGIntersection(new Sphere(Transformation.Translation(0f,0.3f,0f)),
+                                                 new Sphere(Transformation.Translation(0f,-0.3f,0.0f))));
+                    break;
+                case 4:
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f,0.3f,0f)),
+                                                 new Sphere(Transformation.Translation(0f,-0.3f,0.0f))));
+                    break;
+                case 5:
+                    world.addShape(new CSGIntersection(new Sphere(), new Plane(Transformation.RotationY(0.5f))));
+                    break;
                 default:
                     break;
             }

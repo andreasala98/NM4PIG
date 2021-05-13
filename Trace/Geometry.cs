@@ -458,6 +458,32 @@ namespace Trace
             => new Transformation(Matrix4x4.CreateScale(a.x, a.y, a.z),
                                     Matrix4x4.CreateScale(1.0f / a.x, 1.0f / a.y, 1.0f / a.z));
 
+
+
+        /// <summary>
+        /// Create a sclaing transformation by passing three floats, representing the 
+        /// scaling in the tree directions x, y, z.
+        /// </summary>
+        /// <param name="ax"> X scaling</param>
+        /// <param name="ay"> Y scaling</param>
+        /// <param name="az"> Z scaling</param>
+        /// <returns> A scaling transformation</returns>
+         public static Transformation Scaling(float ax, float ay, float az)
+            => new Transformation(Matrix4x4.CreateScale(ax, ay, az),
+                                    Matrix4x4.CreateScale(1.0f / ax, 1.0f / ay, 1.0f / az));
+
+
+        /// <summary>
+        /// Scale an object isotropically.
+        /// </summary>
+        /// <param name="a">Saling factor in all directions</param>
+        /// <returns> The scaling transformation</returns>
+        public static Transformation Scaling(float a)
+        {
+           return new Transformation(Matrix4x4.CreateScale(a, a, a),
+                                    Matrix4x4.CreateScale(1.0f / a, 1.0f / a, 1.0f / a));
+        }
+
         /// <summary>
         /// Rotation along the x axis.
         /// </summary>
