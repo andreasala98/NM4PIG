@@ -26,32 +26,32 @@ namespace Trace.Test
        public class TestCSGUnion
     {
         [Fact]
-        public void TestrayIntersction()
+        public void TestrayIntersection()
         {
             Sphere s1 = new Sphere();
-            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.0f, 1.7f, 0.0f)));
 
             CSGUnion u1 = new CSGUnion(s1, s2);
-            Ray ray1 = new Ray(origin: new Point(0.5f, 0f, 2.0f), dir: -Constant.VEC_Z);
+            Ray ray1 = new Ray(origin: new Point(3f, 0f, 0f), dir: -Constant.VEC_X);
             HitRecord? intersection1 = u1.rayIntersection(ray1);
             Assert.True(intersection1 != null, "TestHit failed! - Assert 1/5");
             HitRecord hit1 = new HitRecord(
-                new Point(0.5f, 0.0f, 1.0f),
-                new Normal(0.0f, 0.0f, 1.0f),
-                new Vec2D(0.0f, 0.0f),
-                1.0f,
+                new Point(1f, 0.0f, 0.0f),
+                Constant.VEC_X_N,
+                new Vec2D(0.0f, 0.5f),
+                3.0f,
                 ray1
             );
             Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
 
-            Ray ray2 = new Ray(new Point(3f, 0f, 0f), -Constant.VEC_X);
+            Ray ray2 = new Ray(new Point(6f, 1.7f, 0f), -Constant.VEC_X);
             HitRecord? intersection2 = u1.rayIntersection(ray2);
             Assert.True(intersection2 != null, "TestHit failed! - Assert 3/5");
             HitRecord hit2 = new HitRecord(
-                new Point(1.5f, 0.0f, 0.0f),
-                new Normal(1.0f, 0.0f, 0.0f),
+                new Point(1.0f, 1.7f, 0.0f),
+                Constant.VEC_X_N,
                 new Vec2D(0.0f, 0.5f),
-                1.5f,
+                6.0f,
                 ray2
             );
             Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
