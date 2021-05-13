@@ -51,35 +51,32 @@ namespace Trace{
         }
 
         /// <summary>
-        /// Method that computes whether a Ray intersects the new union Shape.
-        /// 
-        /// It's overriden from the abstract class Shape
+        /// Checks if a Ray intersects the new CSGUnion Shape.
+        /// It is an override from the abstract class <see cref="Shape"/>
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
+        /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection (Ray ray) 
         {
             HitRecord? a = this.firstShape.rayIntersection(ray);
             HitRecord? b = this.secondShape.rayIntersection(ray);
-            
+
             if (a == null)
-                return b;
-            
-            else if (b == null)
-                return a;
-
-            /// the second conditions are nececcary if the ray originates inside the Union Shape.
-            else if (a?.t < b?.t && !(this.secondShape.isPointInside((Point) a?.worldPoint))) 
-                return a;
-
-            else if (a?.t < b?.t && (this.secondShape.isPointInside((Point) a?.worldPoint)))
-                return b;
-
-            else if (b?.t < a?.t && !(this.firstShape.isPointInside((Point) b?.worldPoint)))
-                return b;
-            else //equivalent to esleif(b?.t < a?.t && (this.firstShape.isPointInside((Point) b?.worldPoint)))
-                return a;
-
+            {
+                if (b == null) return null;
+                else return b;
+            }
+            else // a!=null
+            {
+                if (b == null) return a;
+                else // a and b not null, return closest intersection
+                {
+                    if (a?.t < b?.t && !(this.secondShape.isPointInside((Point)a?.worldPoint))) return a;
+                    else if (a?.t < b?.t && (this.secondShape.isPointInside((Point)a?.worldPoint))) return b;
+                    else if (b?.t < a?.t && !(this.firstShape.isPointInside((Point)b?.worldPoint))) return b;
+                    else return a;
+                }
+            }
         }
 
         /// <summary>
