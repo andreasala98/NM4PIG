@@ -121,6 +121,7 @@ namespace Trace.Test
                                     0.5f,
                                     r)
                                    );
+            hits.Sort();
 
             for (int i = 0; i < 2; i ++)
             {
@@ -228,13 +229,15 @@ namespace Trace.Test
             
             List<HitRecord?> intersection = u1.rayIntersectionList(r1);
             List<HitRecord> hits = new List<HitRecord>();
+             
+           
             hits.Add(new HitRecord(
                                     new Point(1.5f, 0f, 0f),
                                     new Normal(-1.0f, 0f, 0f),
                                     new Vec2D(0.0f, 0.5f),
                                     1.0f,
                                     r1)
-                                   );   
+                                   );
             hits.Add(new HitRecord(
                                     new Point(1.0f, 0.0f, 0.0f),
                                     new Normal(-1.0f, 0.0f, 0f),
@@ -242,6 +245,7 @@ namespace Trace.Test
                                     0.5f,
                                     r1)
                                    );
+            hits.Sort();
 
             Assert.True(intersection.Count == hits.Count);
             for (int i = 0; i < intersection.Count; i ++)
@@ -356,7 +360,8 @@ namespace Trace.Test
                                     new Vec2D(0.0f, 0.5f),
                                     0.5f,
                                     r1)
-                                   );   
+                                   );
+            hits.Sort();
 
             Assert.True(intersection.Count == hits.Count);
             for (int i = 0; i < intersection.Count; i ++)

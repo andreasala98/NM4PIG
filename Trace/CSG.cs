@@ -75,7 +75,7 @@ namespace Trace{
 
         /// <summary>
         /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
-        ///
+        /// The HitRecord are than order by the t datamember, in crescent order.
         ///It's overriden from the abstract Shape class. 
         /// </summary>
         /// <param name="ray"></param>
@@ -116,7 +116,7 @@ namespace Trace{
                 return hits;
             }
 
-            //hits.Sort((x, y) => ((int) x?.t) - ((int) y?.t));
+            hits.Sort();
             return hits;
         }
 
@@ -164,10 +164,11 @@ namespace Trace{
         }
 
         /// <summary>
-        /// Given a Ray, this method computes whether it intersects the new Difference Shape.
+        /// Checks if a Ray intersects the new CSGDifference Shape.
+        /// It is an override from the abstract class <see cref="Shape"/>
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
+        /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection (Ray ray) 
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
@@ -207,6 +208,13 @@ namespace Trace{
             return legalHits[iHit];
         }
 
+        /// <summary>
+        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
+        /// The HitRecord are than order by the t datamember, in crescent order.
+        /// It's overriden from the abstract Shape class. 
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> legalHits = new List<HitRecord?>();
@@ -237,9 +245,17 @@ namespace Trace{
                 }
             }
 
+            legalHits.Sort();
             return legalHits;
         }
 
+        /// <summary>
+        /// Method that computes whether a Point is inside the Shape.
+        /// 
+        /// It's overriden from the abstract Shape class.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public override bool isPointInside(Point a)
         {
             return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
@@ -265,6 +281,12 @@ namespace Trace{
             this.secondShape = b;
         }
 
+        /// <summary>
+        /// Checks if a Ray intersects the new CSGIntersection Shape.
+        /// It is an override from the abstract class <see cref="Shape"/>
+        /// </summary>
+        /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
+        /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
@@ -305,6 +327,13 @@ namespace Trace{
             return legalHits[iHit];
         }
 
+        /// <summary>
+        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
+        /// The HitRecord are than order by the t datamember, in crescent order.
+        ///It's overriden from the abstract Shape class. 
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> legalHits = new List<HitRecord?>();
@@ -339,9 +368,17 @@ namespace Trace{
                 }
             }
 
+            legalHits.Sort();
             return legalHits;
         }
 
+        /// <summary>
+        /// Method that computes whether a Point is inside the Shape.
+        /// 
+        /// It's overriden from the abstract Shape class.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public override bool isPointInside(Point a)
         {
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
