@@ -156,7 +156,7 @@ namespace Trace
                                                 tmin,
                                                 ray
                                                 )
-                                  );
+                                                );
             }
             
             if (tmax > invRay.tmin && tmax < invRay.tmax)
@@ -170,7 +170,7 @@ namespace Trace
                                                 tmax,
                                                 ray
                                                 )
-                                  );
+                                                );
             }
                 
             if (intersections.Count == 0)

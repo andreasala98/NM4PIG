@@ -154,6 +154,7 @@ namespace Trace.Test
                                    );
 
 
+            Assert.True(intersection.Count == hits.Count);
             for (int i = 0; i < 2; i++)
             {
                 Assert.True(hits[i].isClose((HitRecord)intersection[i]), "TestRayIntersectionList failed");

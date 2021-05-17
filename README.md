@@ -50,6 +50,16 @@ The command uses some default parmaeters. Feel free to explore all the possible 
 
 It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in order to obtain something like the image shown (see `Examples/DemoAnimation/`)
 
+##### Available shapes
+
+The program can be executed in `demo` mode, adding any of the following shapes to the environment:
+- Spheres
+- Planes
+- Axis-Aligned Boxes (AAB)
+- Constructive Solid Geometry (CSG): Union, Intersection and Difference of any pair of shapes of the ones mentioned above
+
+Each shape can be transformed upon creation with a composition of scaling, translations and rotation around any of the three axes.
+
 ### Convert mode
 
 To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the following command (if no arguments are passed some default values are used):

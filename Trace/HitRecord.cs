@@ -24,7 +24,7 @@ namespace Trace
     /// <summary>
     ///  A class holding information about a ray-shape intersection
     /// </summary>
-    public struct HitRecord
+    public struct HitRecord : IComparable<HitRecord>
     {
         /// <summary>
         /// a <see cref="Point"/> object holding the world coordinates of the hit point
@@ -66,6 +66,17 @@ namespace Trace
                             && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
                             && this.ray.isClose((Ray)other?.ray)
                         );
+        }
+
+        /// <summary>
+        /// Default method to compare two HitRecord objects. 
+        /// One HitRecord is "bigger" than another one if its t parameter is bigger.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public int CompareTo(HitRecord a)
+        {
+                return this.t.CompareTo(a.t);
         }
     }
 
