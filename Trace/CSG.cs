@@ -1,4 +1,4 @@
-  /*
+/*
 The MIT License (MIT)
 
 Copyright © 2021 Tommaso Armadillo, Pietro Klausner, Andrea Sala
@@ -15,13 +15,13 @@ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 */
-  
-using System;
+
 using System.Collections.Generic;
 
-namespace Trace{ 
-   
-   
+namespace Trace
+{
+
+
     /// <summary>
     /// A 3D Shape created by the union 
     /// of two Shapes (Constructive Solid Geometry).
@@ -44,7 +44,7 @@ namespace Trace{
         /// </summary>
         /// <param name="a">First Shape</param>
         /// <param name="b">Second Shape</param>
-        public CSGUnion (Shape a, Shape b)
+        public CSGUnion(Shape a, Shape b)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -56,7 +56,7 @@ namespace Trace{
         /// </summary>
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
-        public override HitRecord? rayIntersection (Ray ray) 
+        public override HitRecord? rayIntersection(Ray ray)
         {
             HitRecord? a = this.firstShape.rayIntersection(ray);
             HitRecord? b = this.secondShape.rayIntersection(ray);
@@ -69,7 +69,7 @@ namespace Trace{
                 if (a?.t < b?.t && !(this.secondShape.isPointInside((Point)a?.worldPoint))) return a;
                 else if (a?.t < b?.t && (this.secondShape.isPointInside((Point)a?.worldPoint))) return b;
                 else if (b?.t < a?.t && !(this.firstShape.isPointInside((Point)b?.worldPoint))) return b;
-                else return a; 
+                else return a;
             }
         }
 
@@ -83,7 +83,7 @@ namespace Trace{
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
-            
+
             List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
 
             List<HitRecord?> hits = new List<HitRecord?>();
@@ -157,7 +157,7 @@ namespace Trace{
         /// </summary>
         /// <param name="a">first Shape (the one FROM which you subtract)</param>
         /// <param name="b">second Shape (the one you subtract)</param>
-        public CSGDifference (Shape a, Shape b)
+        public CSGDifference(Shape a, Shape b)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -169,17 +169,17 @@ namespace Trace{
         /// </summary>
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
-        public override HitRecord? rayIntersection (Ray ray) 
+        public override HitRecord? rayIntersection(Ray ray)
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
             if (a[0] == null)
-                    return null;
+                return null;
             List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
             List<HitRecord?> legalHits = new List<HitRecord?>();
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (!(this.secondShape.isPointInside((Point) a[i]?.worldPoint)))
+                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -200,10 +200,10 @@ namespace Trace{
                 return null;
 
             int iHit = 0;
-            for (int i = 1; i < legalHits.Count; i++) 
+            for (int i = 1; i < legalHits.Count; i++)
                 if (legalHits[i]?.t < legalHits[iHit]?.t)
                     iHit = i;
-            
+
 
             return legalHits[iHit];
         }
@@ -228,7 +228,7 @@ namespace Trace{
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (!(this.secondShape.isPointInside((Point) a[i]?.worldPoint)))
+                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -260,7 +260,7 @@ namespace Trace{
         {
             return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
         }
-        
+
     } //CSGDifference
 
     /// <summary>
@@ -275,7 +275,7 @@ namespace Trace{
 
         public Shape secondShape;
 
-        public CSGIntersection (Shape a, Shape b)
+        public CSGIntersection(Shape a, Shape b)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -291,15 +291,15 @@ namespace Trace{
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
             if (a[0] == null)
-                    return null;
+                return null;
             List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
             if (b[0] == null)
-                    return null;
+                return null;
             List<HitRecord?> legalHits = new List<HitRecord?>();
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (this.secondShape.isPointInside((Point) a[i]?.worldPoint))
+                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -308,7 +308,7 @@ namespace Trace{
             {
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside((Point) b[i]?.worldPoint))
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
                     {
                         legalHits.Add(b[i]);
                     }
@@ -319,10 +319,10 @@ namespace Trace{
                 return null;
 
             int iHit = 0;
-            for (int i = 1; i < legalHits.Count; i++) 
+            for (int i = 1; i < legalHits.Count; i++)
                 if (legalHits[i]?.t < legalHits[iHit]?.t)
                     iHit = i;
-            
+
 
             return legalHits[iHit];
         }
@@ -352,7 +352,7 @@ namespace Trace{
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (this.secondShape.isPointInside((Point) a[i]?.worldPoint))
+                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -361,7 +361,7 @@ namespace Trace{
             {
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside((Point) b[i]?.worldPoint))
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
                     {
                         legalHits.Add(b[i]);
                     }

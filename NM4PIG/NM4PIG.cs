@@ -39,12 +39,15 @@ namespace NM4PIG
                            "*                                                         *\n" +
                            "*      for more info visit the GitHub repository at       *\n" +
                            "*         https://github.com/andreasala98/NM4PIG          *\n" +
-                           "***********************************************************\n"
+                           "***********************************************************\n",
+                Name = "dotnet run --"
             };
 
             CLI.Command("demo",
             command =>
             {
+                command.FullName = "\nThis is demo mode. Use this mode to generate some test images and\n" +
+                                    "see that everything works as expected";
                 command.Description = "Enter demo mode and generate a simple image";
                 var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
                 var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
@@ -94,6 +97,9 @@ namespace NM4PIG
             CLI.Command("convert",
             command =>
             {
+                command.FullName = "\nThis is convert mode. Use this mode to convert a pfm file generated\n" +
+                                    "by other modes to a jpg/png file. The purpuse of this command is to let\n" +
+                                    "the user to perform again the tone mapping step without re-rendering the scene.";
                 command.Description = "Enter convert mode and convert an input pfm file into a jpg/ png file";
 
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
@@ -186,20 +192,32 @@ namespace NM4PIG
                     break;
 
                 case 2:
-                    world.addShape(new CSGDifference(new Sphere(Transformation.RotationX(Constant.PI)*Transformation.Translation(0f, 0f, -0.4f)),
+                    world.addShape(new CSGDifference(new Sphere(Transformation.RotationX(Constant.PI) * Transformation.Translation(0f, 0f, -0.4f)),
                                                      new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
-                                                                *Transformation.Translation(0f, 0f, 0.1f))));
+                                                                * Transformation.Translation(0f, 0f, 0.1f))));
                     break;
                 case 3:
-                    world.addShape(new CSGIntersection(new Sphere(Transformation.Translation(0f,0.3f,0f)),
-                                                 new Sphere(Transformation.Translation(0f,-0.3f,0.0f))));
+                    world.addShape(new CSGIntersection(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
+                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
                     break;
                 case 4:
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f,0.3f,0f)),
-                                                 new Sphere(Transformation.Translation(0f,-0.3f,0.0f))));
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
+                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
                     break;
                 case 5:
                     world.addShape(new CSGIntersection(new Sphere(), new Plane(Transformation.RotationY(0.5f))));
+                    break;
+                case 6:
+                    world.addShape(new Box(transformation: Transformation.Scaling(0.5f)));
+                    break;
+                case 7:
+                    world.addShape(new CSGUnion(
+                                            new Sphere(
+                                                    Transformation.Translation(new Vec(0f, 0f, 0.5f))
+                                                    * Transformation.Scaling(0.635f)),
+                                            new Box(transformation: Transformation.Scaling(0.5f))
+                                            )
+                                    );
                     break;
                 default:
                     break;

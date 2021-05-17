@@ -16,19 +16,10 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
-using System;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System.Collections.Generic;
-using System.Globalization;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-
 namespace Trace
 {
 
-     /// <summary>
+    /// <summary>
     /// An efficient value type representing a ray to be fired.
     /// </summary>
     public struct Ray

@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using System;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Trace
 {
@@ -111,6 +112,14 @@ namespace Trace
         /// <returns><see cref="Vec"/> version of <see cref="Point"/></returns>
         public Vec toVec()
            => new Vec(this.x, this.y, this.z);
+
+        /// <summary>
+        /// Convert a <see cref="Point"/> to <see cref="Vec"/>
+        /// e.g. Point(1,2,3) to List<float>(1,2,3)
+        /// </summary>
+        /// <returns><see cref="List"/> version of <see cref="Point"/></returns>
+        public List<float> ToList()
+            => new List<float>() { this.x, this.y, this.z };
     }
 
     /// <summary>
@@ -260,6 +269,10 @@ namespace Trace
         /// <returns>True if the <see cref="Vec"/>s are close</returns> 
         public bool isClose(Vec vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
+
+        public List<float> ToList()
+            => new List<float>() { this.x, this.y, this.z };
+
     }
 
 
@@ -468,9 +481,9 @@ namespace Trace
         /// <param name="ay"> Y scaling</param>
         /// <param name="az"> Z scaling</param>
         /// <returns> A scaling transformation</returns>
-         public static Transformation Scaling(float ax, float ay, float az)
-            => new Transformation(Matrix4x4.CreateScale(ax, ay, az),
-                                    Matrix4x4.CreateScale(1.0f / ax, 1.0f / ay, 1.0f / az));
+        public static Transformation Scaling(float ax, float ay, float az)
+           => new Transformation(Matrix4x4.CreateScale(ax, ay, az),
+                                   Matrix4x4.CreateScale(1.0f / ax, 1.0f / ay, 1.0f / az));
 
 
         /// <summary>
@@ -480,8 +493,8 @@ namespace Trace
         /// <returns> The scaling transformation</returns>
         public static Transformation Scaling(float a)
         {
-           return new Transformation(Matrix4x4.CreateScale(a, a, a),
-                                    Matrix4x4.CreateScale(1.0f / a, 1.0f / a, 1.0f / a));
+            return new Transformation(Matrix4x4.CreateScale(a, a, a),
+                                     Matrix4x4.CreateScale(1.0f / a, 1.0f / a, 1.0f / a));
         }
 
         /// <summary>

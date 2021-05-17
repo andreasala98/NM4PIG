@@ -18,7 +18,7 @@ IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-
+using System.Threading;
 
 namespace Trace
 {
@@ -62,9 +62,6 @@ namespace Trace
         /// <param name="a"></param>
         public abstract bool isPointInside(Point a);
     }
-
-
-
 
 
     /// <summary>
@@ -158,11 +155,11 @@ namespace Trace
                                                 )
                                                 );
             }
-            
+
             if (tmax > invRay.tmin && tmax < invRay.tmax)
             {
                 Point hitPoint = invRay.at(tmax);
-                
+
                 intersections.Add(new HitRecord(
                                                 this.transformation * hitPoint,
                                                 this.transformation * _sphereNormal(hitPoint, ray.dir),
@@ -172,7 +169,7 @@ namespace Trace
                                                 )
                                                 );
             }
-                
+
             if (intersections.Count == 0)
                 intersections.Add(null);
 
@@ -217,7 +214,7 @@ namespace Trace
         {
             a = this.transformation.getInverse() * a;
             return a.x * a.x + a.y * a.y + a.z * a.z < 1;
-        } 
+        }
     }
 
     // ################################
@@ -243,7 +240,7 @@ namespace Trace
         public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
-           // Vec invRayOrigin = invRay.origin.toVec();
+            // Vec invRayOrigin = invRay.origin.toVec();
 
             if (invRay.dir.z == 0) return null;
             else
@@ -259,7 +256,7 @@ namespace Trace
                         tt: tHit,
                         r: ray
                     );
-                    
+
                 }
                 else return null;
 
@@ -287,14 +284,15 @@ namespace Trace
         /// <param name="r"> Ray intersecting the plane </param>
         /// <param name="hitPoint"> Point of intersection (optional parameter)</param>
         /// <returns> The oriented <see cref="Normal"/> object, so that the scalar product with the ray is negative</returns>
-        private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null) {
+        private static Normal _stdPlaneNormal(Ray r, Point? hitPoint = null)
+        {
 
             // hitPoint is a nullable parameter because it is not needed. Yet, someone could be used to 
             // call it because it is needed on a Sphere, so I unclude it to avoid unnecessary errors
 
-            Normal res = new Normal(0.0f,0.0f,1.0f);
+            Normal res = new Normal(0.0f, 0.0f, 1.0f);
 
-            if (r.dir * res <0.0f) return res;
+            if (r.dir * res < 0.0f) return res;
             else return -res;
 
         }
@@ -373,31 +371,9 @@ namespace Trace
         /// <returns> A  nullable <see cref="HitRecord"> with the details of the intersection</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
-            Ray invRay = ray.Transform(this.transformation.getInverse());
-
-            float t1x, t2x, t1y, t2y, t1z, t2z;
-
-            t1x = (min.x - invRay.origin.x) / invRay.dir.x;
-            t2x = (max.x - invRay.origin.x) / invRay.dir.x;
-            t1y = (min.y - invRay.origin.y) / invRay.dir.y;
-            t2y = (max.y - invRay.origin.y) / invRay.dir.y;
-            t1z = (min.z - invRay.origin.z) / invRay.dir.z;
-            t2z = (max.z - invRay.origin.z) / invRay.dir.z;
-
-            float tEnter = Utility.Max(Math.Min(t1x, t2x), Math.Min(t1y, t2y), Math.Min(t1z, t2z));
-            float tExit = Utility.Min(Math.Max(t1x, t2x), Math.Max(t1y, t2y), Math.Max(t1z, t2z));
-
-            if (tEnter < 0 && tExit < 0) return null;
-            if (tEnter < 0) tEnter = tExit;
-
-            Point hitPoint = invRay.at(tEnter);
-            return new HitRecord(
-                this.transformation * hitPoint,
-                this.transformation * this._boxNormal(hitPoint, ray.dir),
-                this._boxPointToUV(hitPoint),
-                tEnter,
-                ray
-            );
+            List<HitRecord?> intersections = rayIntersectionList(ray);
+            if (intersections.Count == 0) return null;
+            return intersections[0];
         }
 
         /// <summary>
@@ -410,13 +386,15 @@ namespace Trace
         private Normal _boxNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal();
-            if (Utility.areClose(point.x, this.min.x)) result = new Normal(-1f, point.y, point.z);
-            if (Utility.areClose(point.x, this.max.x)) result = new Normal(1f, point.y, point.z);
-            if (Utility.areClose(point.y, this.min.y)) result = new Normal(point.x, -1f, point.z);
-            if (Utility.areClose(point.y, this.max.y)) result = new Normal(point.x, 1f, point.z);
-            if (Utility.areClose(point.z, this.min.z)) result = new Normal(point.x, point.y, -1f);
-            if (Utility.areClose(point.z, this.max.z)) result = new Normal(point.x, point.y, 1f);
-            return result.Normalize();
+            if (Utility.areClose(point.x, this.min.x)) result = new Normal(-1f, 0f, 0f);
+            if (Utility.areClose(point.x, this.max.x)) result = new Normal(1f, 0f, 0f);
+            if (Utility.areClose(point.y, this.min.y)) result = new Normal(0f, -1f, 0f);
+            if (Utility.areClose(point.y, this.max.y)) result = new Normal(0f, 1f, 0f);
+            if (Utility.areClose(point.z, this.min.z)) result = new Normal(0f, 0f, -1f);
+            if (Utility.areClose(point.z, this.max.z)) result = new Normal(0f, 0f, 1f);
+            if (point.toVec() * rayDir > 0.0f)
+                result = -result;
+            return result;
         }
 
 
@@ -440,7 +418,45 @@ namespace Trace
         /// <returns> A  List of nullable <see cref="HitRecord"> with the details of the intersections</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
-            return new List<HitRecord?>();
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            float t0 = 0, t1 = ray.tmax;
+            for (int i = 0; i < 3; i++)
+            {
+                float invRayDir = 1 / invRay.dir.ToList()[i];
+                float tNear = (min.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+                float tFar = (max.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+
+                if (tNear > tFar)
+                {
+                    float tmp = tNear;
+                    tNear = tFar;
+                    tFar = tmp;
+                }
+
+                t0 = tNear > t0 ? tNear : t0;
+                t1 = tFar < t1 ? tFar : t1;
+                if (t0 > t1) return new List<HitRecord?>();
+            }
+
+            List<HitRecord?> hits = new List<HitRecord?>();
+            Point hitPoint0 = invRay.at(t0);
+            Point hitPoint1 = invRay.at(t1);
+
+            hits.Add(new HitRecord(
+                wp: this.transformation * hitPoint0,
+                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)).Normalize(),
+                sp: this._boxPointToUV(hitPoint0),
+                tt: t0,
+                r: ray
+            ));
+            hits.Add(new HitRecord(
+                wp: this.transformation * hitPoint1,
+                nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)).Normalize(),
+                sp: this._boxPointToUV(hitPoint1),
+                tt: t1,
+                r: ray
+            ));
+            return hits;
         }
 
 

@@ -196,13 +196,12 @@ namespace Trace.Test
     public class TestBoxes
     {
         [Fact]
-        void TestBoxesIntersection()
+        void TestBoxesIntersectionBasic()
         {
             Box box = new Box();
             Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box.rayIntersection(ray1);
-            Assert.True(intersection1 != null, "TestBoxes failed - assert 1/6");
-            Console.WriteLine();
+            Assert.True(intersection1 != null, "TestBoxesIntersectionBasic failed - assert 1/6");
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
                                             new Normal(-1.0f, 0.0f, 0.0f),
@@ -210,19 +209,51 @@ namespace Trace.Test
                                             4.0f,
                                             ray1
                                         );
-            Assert.True(hit1.isClose(intersection1), "TestBoxes failed - assert 2/6");
+            Assert.True(hit1.isClose(intersection1), "TestBoxesIntersectionBasic failed - assert 2/6");
 
-            Ray ray2 = new Ray(new Point(0.8f, 0f, 4f), -Constant.VEC_Z);
+            Ray ray2 = new Ray(new Point(0f, 0f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box.rayIntersection(ray2);
-            Assert.True(intersection2 != null, "TestTransformation failed - assert 3/6");
+            Assert.True(intersection2 != null, "TestBoxesIntersectionBasic failed - assert 3/6");
             HitRecord hit2 = new HitRecord(
-                                            new Point(11.0f, 0.0f, 0.0f),
-                                            new Normal(1.0f, 0.0f, 0.0f),
+                                            new Point(0.0f, 0.0f, 1.0f),
+                                            new Normal(0.0f, 0.0f, 1.0f),
                                             new Vec2D(0.5f, 0.5f),
-                                            2.0f,
+                                            9.0f,
                                             ray2
                                         );
-            Assert.True(hit2.isClose(intersection2), "TestTransformation failed - assert 4/6");
+            Assert.True(hit2.isClose(intersection2), "TestBoxesIntersectionBasic failed - assert 4/6");
+
+            Ray ray3 = new Ray(new Point(-5f, 0f, 10f), Constant.VEC_X);
+            HitRecord? intersection3 = box.rayIntersection(ray3);
+            Assert.True(intersection3 == null, "TestBoxesIntersectionBasic failed - assert 5/6");
+
+            // Intersect for t<0
+            Ray ray4 = new Ray(new Point(0f, 3f, 0f), Constant.VEC_Y);
+            HitRecord? intersection4 = box.rayIntersection(ray4);
+            Assert.True(intersection4 == null, "TestBoxesIntersectionBasic failed - assert 6/6");
+        }
+
+        [Fact]
+        void TestBoxesIntersectionTransformation()
+        {
+            // Box box1 = new Box(min: new Point(-5f, -5f, -5f), max: new Point(5f, 5f, 5f));
+            Box box1 = new Box(transformation: Transformation.Scaling(5));
+            Ray ray1 = new Ray(new Point(-10f, 3f, 0f), Constant.VEC_X);
+            HitRecord? intersection1 = box1.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestBoxesIntersectionTransformation failed - assert 1/6");
+            HitRecord hit1 = new HitRecord(
+                                            new Point(-5f, 3f, 0.0f),
+                                            new Normal(-1.0f, 0.0f, 0.0f),
+                                            new Vec2D(0.5f, 0.5f),
+                                            5.0f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), "TestBoxesIntersectionBasic failed - assert 2/6");
+
+            Ray ray2 = new Ray(new Point(0f, 10f, 10f), -Constant.VEC_Z);
+            HitRecord? intersection2 = box1.rayIntersection(ray2);
+            Assert.True(intersection2 == null, "TestBoxesIntersectionTransformation failed - assert 3/6");
+
 
         }
     }
