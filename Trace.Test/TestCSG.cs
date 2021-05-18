@@ -366,7 +366,7 @@ namespace Trace.Test
             Assert.True(intersection.Count == hits.Count);
             for (int i = 0; i < intersection.Count; i ++)
             {
-                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), "TestRayIntersectionList failed - assert 2/2");
+                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), $"TestRayIntersectionList failed - assert 2.{i}/2");
             }
         }
 

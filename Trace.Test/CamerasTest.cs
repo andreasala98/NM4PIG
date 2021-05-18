@@ -143,7 +143,7 @@ namespace Trace.Test
             Assert.True(ray1.isClose(ray2), "TestUVSubMapping failed - Assert 1/1");
         }
 
-        public Color lambda(Ray r)
+        public static Color lambda(Ray r)
             => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
