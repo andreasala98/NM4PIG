@@ -20,87 +20,10 @@ using System;
 
 namespace Trace
 {
-    /// <summary>
-    /// An efficient value type representing a ray to be fired.
-    /// </summary>
-    public struct Ray
-    {
         /// <summary>
-        /// The origin <see cref="Point"/>, where the observer lies.
+        /// An abstract class representing an observer <br/>
+        /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
         /// </summary>
-        public Point origin;
-
-        /// <summary>
-        /// The <see cref="Vec"/> orthogonally connecting the observer to the center of the screen 
-        /// </summary>
-        public Vec dir;
-
-        /// <summary>
-        /// Minimum travelling distance of the ray. <br/>
-        /// Default setting: 1e-5f
-        /// </summary>
-        public float tmin;
-
-        /// <summary>
-        /// Minimum travelling distance of the ray. <br/>
-        /// Default setting: Infinity
-        /// 
-        /// </summary>
-        public float tmax;
-
-        /// <summary>
-        /// Number of reflections allowed <br/>
-        /// Default setting: 0
-        /// </summary>
-        public int depth;
-
-        /// <summary>
-        ///  Default constructor for Ray.
-        /// </summary>
-        /// <param name="or"> Origin <see cref="Point"/> (observer) </param>
-        /// <param name="d"> <see cref="Vec"/> direction </param>
-        /// <param name="tm"> Minimum distance </param>
-        /// <param name="tM"> Maximum distance </param>
-        /// <param name="dep"> Number of reflections </param>
-        public Ray(Point or, Vec d, float? tm = 1e-5f, float? tM = System.Single.PositiveInfinity, int? dep = 0)
-        {
-            this.origin = or;
-            this.dir = d;
-            this.tmin = (float)tm;
-            this.tmax = (float)tM;
-            this.depth = (int)dep;
-        }
-
-        /// <summary>
-        /// Calculate ray position at (origin + dir*t).
-        /// </summary>
-        /// <param name="t"> Running paramter between tmin and tmax.</param>
-        /// <returns> A <see cref="Point"/> object </returns>
-        public Point at(float t)
-            => this.origin + (this.dir * t);
-
-        /// <summary>
-        ///  Boolean to check if two <see cref="Ray"/>s are equal.
-        /// </summary>
-        /// <param name="r"> The other <see cref="Ray"/>.</param>
-        /// <returns> True if <see cref="Ray"/>s are close enough.</returns>
-        public bool isClose(Ray r)
-            => this.origin.isClose(r.origin) && this.dir.isClose(r.dir);
-
-        /// <summary>
-        /// Apply <see cref="Transformation"/> to the <see cref="Ray"/>.
-        /// </summary>
-        /// <param name="T"> A <see cref="Transformation"/> object. </param>
-        /// <returns> The transformed <see cref="Ray"/>.</returns>
-        public Ray transform(Transformation T)
-            => new Ray(T * this.origin, T * this.dir, this.tmin, this.tmax, this.depth);
-
-    }
-
-    /// <summary>
-    /// An abstract class representing an observer <br/>
-    /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
-    /// </summary>
     public abstract class Camera
     {
         /// <summary>
@@ -161,7 +84,7 @@ namespace Trace
         {
             Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
             Vec direction = new Vec(1.0f, 0.0f, 0.0f);
-            return new Ray(origin, direction, 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
     }
 
@@ -201,7 +124,7 @@ namespace Trace
         {
             Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
             Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
-            return new Ray(origin, direction, 1.0f).transform(this.transformation);
+            return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
 
         /// <summary>
@@ -219,7 +142,7 @@ namespace Trace
     /// Public data members: <see cref="HdrImage"/>, <see cref="Camera"/>.
     /// </summary>
     public class ImageTracer
-        {
+    {
         public HdrImage image;
         /// <summary>
         /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.

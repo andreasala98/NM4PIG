@@ -50,7 +50,7 @@ namespace Trace.Test
             Ray ray5 = new Ray(new Point(1.0f, 2.0f, 3.0f), new Vec(6.0f, 5.0f, 4.0f));
             Transformation T = Transformation.Translation(new Vec(10.0f, 11.0f, 12.0f)) * Transformation.RotationX((float)System.Math.PI / 2.0f);
 
-            Ray transf = ray5.transform(T);
+            Ray transf = ray5.Transform(T);
             Assert.True(transf.origin.isClose(new Point(11.0f, 8.0f, 14.0f)), "TestTransform failed - Assert 1/2");
             Assert.True(transf.dir.isClose(new Vec(6.0f, -4.0f, 5.0f)), "TestTransform failed - Assert 2/2");
         }
@@ -143,7 +143,7 @@ namespace Trace.Test
             Assert.True(ray1.isClose(ray2), "TestUVSubMapping failed - Assert 1/1");
         }
 
-        public Color lambda(Ray r)
+        public static Color lambda(Ray r)
             => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
@@ -161,8 +161,8 @@ namespace Trace.Test
                     Assert.True(image.getPixel(col, row).isClose(new Color(1.0f, 2.0f, 3.0f)), $"TestImageCoverage failed - Assert row={row}, col={col}");
                 }
             }
-        }
+        } //end of function
 
-    }
+    } //end of class
 
-}
+} //end of namespace

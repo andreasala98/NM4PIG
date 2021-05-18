@@ -13,3 +13,14 @@ if [[ $f != *"G.jpg" ]]; then
 	rm $f
 fi
 done
+
+
+for f in *.pfm
+do
+if [[ $f == "demoImage.pfm" ]]; then
+	echo "Removing $f"
+	rm $f
+fi
+done
+
+

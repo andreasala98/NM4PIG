@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using System;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Trace
 {
@@ -103,6 +104,22 @@ namespace Trace
             if (alfa == 0) throw new DivideByZeroException("You cannot divide a point by zero!");
             return new Point(a.x / alfa, a.y / alfa, a.z / alfa);
         }
+
+        /// <summary>
+        /// Convert a <see cref="Point"/> to <see cref="Vec"/>
+        /// e.g. Point(1,2,3) to Vec(1,2,3)
+        /// </summary>
+        /// <returns><see cref="Vec"/> version of <see cref="Point"/></returns>
+        public Vec toVec()
+           => new Vec(this.x, this.y, this.z);
+
+        /// <summary>
+        /// Convert a <see cref="Point"/> to <see cref="Vec"/>
+        /// e.g. Point(1,2,3) to List<float>(1,2,3)
+        /// </summary>
+        /// <returns><see cref="List"/> version of <see cref="Point"/></returns>
+        public List<float> ToList()
+            => new List<float>() { this.x, this.y, this.z };
     }
 
     /// <summary>
@@ -193,6 +210,15 @@ namespace Trace
         public static float operator *(Vec a, Vec b)
             => a.x * b.x + a.y * b.y + a.z * b.z;
 
+        public static float operator *(Vec a, Normal b)
+            => a.x * b.x + a.y * b.y + a.z * b.z;
+
+        /// <summary>
+        /// Change sign to all the components
+        /// </summary>
+        public static Vec operator -(Vec vec)
+            => new Vec(-vec.x, -vec.y, -vec.z);
+
         /// <summary>
         ///  Cross product between two 3D <see cref="Vec"/>s.
         /// </summary>
@@ -243,7 +269,33 @@ namespace Trace
         /// <returns>True if the <see cref="Vec"/>s are close</returns> 
         public bool isClose(Vec vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
+
+        public List<float> ToList()
+            => new List<float>() { this.x, this.y, this.z };
+
     }
+
+
+    /// <summary>
+    /// A 2D vector used to represent a point on a surface
+    /// The fields are named `u` and `v` to distinguish them from the usual 3D coordinates `x`, `y`, `z`.
+    /// </summary>
+    public struct Vec2D
+    {
+        float u, v;
+
+        public Vec2D(float a, float b)
+        {
+            this.u = a;
+            this.v = b;
+        }
+
+        public bool isClose(Vec2D vector)
+           => Utility.areClose(this.u, vector.u) && Utility.areClose(this.v, vector.v);
+
+    }
+
+
 
     /// <summary>
     ///  Value type represnting a Normal vector
@@ -269,10 +321,58 @@ namespace Trace
         }
 
         /// <summary>
+        /// Divide a <see cref="Normal"/> by a scaling factor.
+        /// </summary>
+        /// <param name="a"> The <see cref="Normal"/>.</param>
+        /// <param name="alfa"> Scaling factor. </param>
+        /// <returns> The scaled <see cref="Normal"/>.</returns>
+        public static Normal operator /(Normal a, float alfa)
+        {
+            if (alfa == 0) throw new DivideByZeroException("You cannot divide a vector by zero!");
+            return new Normal(a.x / alfa, a.y / alfa, a.z / alfa);
+        }
+
+        /// <summary>
+        ///  Euclidean scalar product between two <see cref="Normal"/>s.
+        /// </summary>
+        /// <param name="a"> First <see cref="Normal"/> </param>
+        /// <param name="b"> Second <see cref="Normal"/></param>
+        /// <returns> Scalar product in float format.</returns>
+        public static float operator *(Normal a, Normal b)
+            => a.x * b.x + a.y * b.y + a.z * b.z;
+
+        /// <summary>
+        /// Squared norm of the <see cref="Normal"/>
+        /// </summary>
+        /// <returns> The squared norm of the <see cref="Normal"/> as float</returns>
+        public float getSquaredNorm()
+            => this * this;
+
+        /// <summary>
+        /// Norm of the <see cref="Normal"/>
+        /// </summary>
+        /// <returns> The norm of the <see cref="Normal"/> as float</returns>
+        public float getNorm()
+            => (float)Math.Sqrt(this.getSquaredNorm());
+
+        /// <summary>
+        /// Normalize the <see cref="Normal"/>
+        /// </summary>
+        /// <returns>The <see cref="Normal"/>, normalized</returns>
+        public Normal Normalize()
+            => this / this.getNorm();
+
+        /// <summary>
         /// Converts a <see cref="Normal"/> to a string for printing.
         /// </summary>
         /// <returns> A string in the format Normal(x=" ",y=" ",z=" ")</returns>
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
+
+        /// <summary>
+        /// Change sign to all the components
+        /// </summary>
+        public static Normal operator -(Normal normal)
+            => new Normal(-normal.x, -normal.y, -normal.z);
 
         /// <summary>
         /// Boolean to check if two <see cref="Normal"/>s are close enough
@@ -281,6 +381,8 @@ namespace Trace
         /// <returns>True if the <see cref="Normal"/>s are close</returns> 
         public bool isClose(Normal vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
+
+
     }
 
     /// <summary>
@@ -353,6 +455,13 @@ namespace Trace
                                     Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
 
+        public static Transformation Translation(float ax, float ay, float az)
+        {
+            Vec a = new Vec(ax, ay, az);
+            return new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
+                                    Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
+        }
+
         /// <summary>
         /// Return a <see cref="Transformation"/> object encoding a scaling
         /// </summary>
@@ -361,6 +470,32 @@ namespace Trace
         public static Transformation Scaling(Vec a)
             => new Transformation(Matrix4x4.CreateScale(a.x, a.y, a.z),
                                     Matrix4x4.CreateScale(1.0f / a.x, 1.0f / a.y, 1.0f / a.z));
+
+
+
+        /// <summary>
+        /// Create a sclaing transformation by passing three floats, representing the 
+        /// scaling in the tree directions x, y, z.
+        /// </summary>
+        /// <param name="ax"> X scaling</param>
+        /// <param name="ay"> Y scaling</param>
+        /// <param name="az"> Z scaling</param>
+        /// <returns> A scaling transformation</returns>
+        public static Transformation Scaling(float ax, float ay, float az)
+           => new Transformation(Matrix4x4.CreateScale(ax, ay, az),
+                                   Matrix4x4.CreateScale(1.0f / ax, 1.0f / ay, 1.0f / az));
+
+
+        /// <summary>
+        /// Scale an object isotropically.
+        /// </summary>
+        /// <param name="a">Saling factor in all directions</param>
+        /// <returns> The scaling transformation</returns>
+        public static Transformation Scaling(float a)
+        {
+            return new Transformation(Matrix4x4.CreateScale(a, a, a),
+                                     Matrix4x4.CreateScale(1.0f / a, 1.0f / a, 1.0f / a));
+        }
 
         /// <summary>
         /// Rotation along the x axis.
