@@ -40,7 +40,7 @@ namespace NM4PIG
                            "*      for more info visit the GitHub repository at       *\n" +
                            "*         https://github.com/andreasala98/NM4PIG          *\n" +
                            "***********************************************************\n",
-                Name = "dotnet run --"
+                Name = "dotnet run"
             };
 
             CLI.Command("demo",
@@ -213,11 +213,13 @@ namespace NM4PIG
                 case 7:
                     world.addShape(new CSGUnion(
                                             new Sphere(
-                                                    Transformation.Translation(new Vec(0f, 0f, 0.5f))
+                                                    Transformation.Translation(new Vec(0f, 0f, 1.2f))
                                                     * Transformation.Scaling(0.635f)),
-                                            new Box(transformation: Transformation.Scaling(0.5f))
+                                            new Box(transformation: Transformation.Scaling(0.5f,0.5f,1f))
                                             )
                                     );
+                    world.addShape(new Sphere(Transformation.Scaling(0.6f) * Transformation.Translation(new Vec(0f, 0.7f, -1.2f))));
+                    world.addShape(new Sphere((Transformation.Scaling(0.6f)*Transformation.Translation(new Vec(0f,-0.7f,-1.2f)))));
                     break;
                 default:
                     break;

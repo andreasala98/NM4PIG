@@ -386,12 +386,12 @@ namespace Trace
         private Normal _boxNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal();
-            if (Utility.areClose(point.x, this.min.x)) result = new Normal(-1f, 0f, 0f);
-            if (Utility.areClose(point.x, this.max.x)) result = new Normal(1f, 0f, 0f);
-            if (Utility.areClose(point.y, this.min.y)) result = new Normal(0f, -1f, 0f);
-            if (Utility.areClose(point.y, this.max.y)) result = new Normal(0f, 1f, 0f);
-            if (Utility.areClose(point.z, this.min.z)) result = new Normal(0f, 0f, -1f);
-            if (Utility.areClose(point.z, this.max.z)) result = new Normal(0f, 0f, 1f);
+            if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
+            if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
+            if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
+            if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
+            if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
+            if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
             if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
