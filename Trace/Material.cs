@@ -22,7 +22,7 @@ namespace Trace
 {
     public interface IPigment
     {
-        Color getColor(Vec2d v);
+        Color getColor(Vec2D v);
     }
 
     public class UniformPigment : IPigment
@@ -33,7 +33,7 @@ namespace Trace
             this.c = color;
         }
 
-        public Color getColor(Vec2d vec)
+        public Color getColor(Vec2D vec)
         {
             return this.c;
         }
@@ -48,7 +48,7 @@ namespace Trace
             this.image = i;
         }
 
-        public Color GetColor(Vec2D v)
+        public Color getColor(Vec2D v)
         {
             return image.getColor(v.u, v.v);
         }
