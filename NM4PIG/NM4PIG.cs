@@ -188,7 +188,7 @@ namespace NM4PIG
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
                                              * Transformation.Scaling(0.1f)));
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
-                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                                             * Transformation.Scaling(0.1f)));
                     break;
 
                 case 2:
@@ -218,8 +218,6 @@ namespace NM4PIG
                                             new Box(transformation: Transformation.Scaling(0.5f,0.5f,1f))
                                             )
                                     );
-                    world.addShape(new Sphere(Transformation.Scaling(0.6f) * Transformation.Translation(new Vec(0f, 0.7f, -1.2f))));
-                    world.addShape(new Sphere((Transformation.Scaling(0.6f)*Transformation.Translation(new Vec(0f,-0.7f,-1.2f)))));
                     break;
                 default:
                     break;
