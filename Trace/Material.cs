@@ -20,35 +20,29 @@ using System;
 
 namespace Trace
 {
-    public abstract class Pigment
+    public interface IPigment
     {
-        // Fields
-        public Color c;
-
-        // methods
-
-        public Pigment(Color col1)
-        {
-            this.c = col1;
-        }
-
-        public Color GetColor(Vec2d v){}
+        Color getColor(Vec2d v);
     }
 
-    public class UniformPigment : Pigment
+    public class UniformPigment : IPigment
     {
-        public UniformPigment(Color? color = null) : base(color) { }
+        public Color c;
+        public UniformPigment(Color color)
+        {
+            this.c = color;
+        }
 
-        public override Color GetColor(Vec2d vec)
+        public Color getColor(Vec2d vec)
         {
             return this.c;
         }
     }
 
-    // public class CheckeredPigment : Pigment
-    // {
-    //     public Color c2;
-    // }
+    public class ImagePigment : Pigment
+    {
+
+    }
 }
 #nullable enable
 namespace Trace
