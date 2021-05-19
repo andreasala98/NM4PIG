@@ -17,7 +17,6 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
 
 namespace Trace
 {
@@ -48,15 +47,23 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
+#nullable enable
+        /// <summary>
+        /// The <see cref="Shape"> intersected by the Ray
+        /// </summary>
+        public Shape? shape;
+
+
+        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r, Shape? shape = null)
         {
             this.worldPoint = wp;
             this.normal = nm;
             this.surfacePoint = sp;
             this.t = tt;
             this.ray = r;
+            this.shape = shape;
         }
-
+#nullable disable
         public bool isClose(HitRecord? other)
         {
             if (other == null) return false;
@@ -76,7 +83,7 @@ namespace Trace
         /// <returns></returns>
         public int CompareTo(HitRecord a)
         {
-                return this.t.CompareTo(a.t);
+            return this.t.CompareTo(a.t);
         }
     }
 
