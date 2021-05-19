@@ -19,52 +19,54 @@ IN THE SOFTWARE.
 using System;
 
 namespace Trace
-{
-    public abstract class Pigment
+{/*    public abstract class Pigment
     {
+
+
+        public Color c; 
+        public Color d; 
+        
+        // methods 
+        public Pigment(Color col1, Color? col2)
+        {
+            this.c = col1;
+            this.d = col2 ?? new Color(0f, 0f, 0f);
+        }
         // Fields
-        public Color c;
+
 
         // methods
 
-        public Pigment(Color col1)
-        {
-            this.c = col1;
-        }
 
-        public Color GetColor(Vec2d v){}
+        public abstract Color getColor(Vec2D v);
     }
 
     public class UniformPigment : Pigment
     {
-        public UniformPigment(Color? color = null) : base(color) { }
+        public UniformPigment(Color? color = null): base(color) { //da capire ancora
+            this.c = color ?? Constant.Black;
+        }
 
-        public override Color GetColor(Vec2d vec)
+        public override Color getColor(Vec2D vec)
         {
             return this.c;
         }
     }
 
-    // public class CheckeredPigment : Pigment
-    // {
-    //     public Color c2;
-    // }
-}
-#nullable enable
-namespace Trace
-{
-
-    public abstract class Pigment
+    public class CheckeredPigment : Pigment
     {
 
-        public Color color;
-        public Color getColor(Vec2D uv)
+        public int nSteps;
+
+        public CheckeredPigment(int nS = 10) { }
+        public override Color getColor(Vec2D uv)
         {
-            return new Color(0f, 0f, 0f);
+            int col = 
         }
 
 
-    }
+
+     }*/
 
 
     /// <summary>
