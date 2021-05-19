@@ -105,8 +105,8 @@ namespace Trace
 
 
 
-        public static Pigment Pigment_WHITE = new UniformPigment(White);
-        public static Pigment Pigment_BLACK = new UniformPigment(Black);
+       // public static Pigment Pigment_WHITE = new UniformPigment(White);
+       // public static Pigment Pigment_BLACK = new UniformPigment(Black);
 
     }
 

@@ -30,9 +30,16 @@ namespace Trace
 
     }
 
+
+    /// <summary>
+    ///   A derivate class of BRDF representing an ideal diffusive BRDF (also called «Lambertian»)
+    /// </summary>
     public class DiffuseBRDF : BRDF {
 
-
+        public DiffuseBRDF(Pigment pig= new UniformPigment(Constant.White), float refl=1.0f) {
+            this.pigment = pig;
+            this.reflectance = refl;
+        }
 
         public override Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv)
         {
