@@ -70,15 +70,22 @@ namespace Trace
             int v = (int)Math.Floor(uv.v * this.nSteps);
             return (u + v) % 2 == 0 ? this.color1 : this.color2;
         }
-
-    } // end of CheckeredPigment
+    }
 
     public class ImagePigment : IPigment
     {
+        public HdrImage image;
 
+        public ImagePigment(HdrImage i)
+        {
+            this.image = i;
+        }
+
+        public Color GetColor(Vec2D v)
+        {
+            return image.getColor(v.u, v.v);
+        }
     }
-   
-
 
     /// <summary>
     /// An abstract class representing a Bidirectional Reflectance Distribution Function.
