@@ -68,11 +68,10 @@ namespace Trace
         public bool isClose(HitRecord? other)
         {
             if (other == null) return false;
-
-            else return (this.worldPoint.isClose((Point)other?.worldPoint)
-                            && this.normal.isClose((Normal)other?.normal)
-                            && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
-                            && this.ray.isClose((Ray)other?.ray)
+            return (this.worldPoint.isClose(other.Value.worldPoint)
+                            && this.normal.isClose(other.Value.normal)
+                            && this.surfacePoint.isClose(other.Value.surfacePoint)
+                            && this.ray.isClose(other.Value.ray)
                         );
         }
 
