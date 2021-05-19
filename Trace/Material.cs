@@ -50,3 +50,86 @@ namespace Trace
     //     public Color c2;
     // }
 }
+#nullable enable
+namespace Trace
+{
+
+    public abstract class Pigment
+    {
+
+        public Color color;
+        public Color getColor(Vec2D uv)
+        {
+            return new Color(0f, 0f, 0f);
+        }
+
+
+    }
+
+
+    /// <summary>
+    /// An abstract class representing a Bidirectional Reflectance Distribution Function.
+    /// Use only derivate classes in the program.
+    /// </summary>
+
+    public abstract class BRDF
+    {
+
+        public Pigment pigment;
+        public float reflectance;
+        public BRDF() { }
+        public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
+
+    }
+
+
+    /// <summary>
+    ///   A derivate class of BRDF representing an ideal diffusive BRDF (also called «Lambertian»)
+    /// </summary>
+    public class DiffuseBRDF : BRDF
+    {
+
+        public DiffuseBRDF(Pigment pig = new UniformPigment(Constant.White), float refl = 1.0f)
+        {
+            this.pigment = pig;
+            this.reflectance = refl;
+        }
+
+        public override Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv)
+        {
+            return this.pigment.getColor(uv) * (this.reflectance / Constant.PI);
+        }
+
+    }
+
+    /// <summary>
+    /// A class that implements a material
+    /// </summary>
+
+    public class Material
+    {
+        /// <summary>
+        /// A <see cref="BRDF"/> object
+        /// </summary>
+        public BRDF brdf;
+
+        /// <summary>
+        /// A <see cref="Pigment"/> object
+        /// </summary>
+        public Pigment emittedRadiance;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="Brdf">A <see cref="BRDF"/> object, default is DiffuseBRDF()</param>
+        /// <param name="EmittedRadiance">A <see cref="Pigment"/> object, default is UniformPigment(Constant.Black)</param>
+        public Material(BRDF? Brdf = null, Pigment? EmittedRadiance = null)
+        {
+            this.brdf = Brdf ?? new DiffuseBRDF();
+            this.emittedRadiance = EmittedRadiance ?? new UniformPigment(Constant.Black);
+        }
+    }
+
+
+
+} // Trace

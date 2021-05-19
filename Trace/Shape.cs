@@ -18,8 +18,8 @@ IN THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
+#nullable enable
 namespace Trace
 {
     /// <summary>
@@ -35,7 +35,7 @@ namespace Trace
         /// </summary>
         public Transformation transformation;
 
-
+        public Material material;
         // Methods
 
         /// <summary>
@@ -44,9 +44,10 @@ namespace Trace
         /// therefore it cannot be directly used in the code
         /// </summary>
         /// <param name="transformation"><see cref="Transformation"> associated to the sphere</param>
-        public Shape(Transformation? transformation = null)
+        public Shape(Transformation? transformation = null, Material? material = null)
         {
             this.transformation = transformation ?? new Transformation(1);
+            this.material = material ?? new Material();
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace Trace
         /// Create a unit sphere, potentially associating a transformation to it
         /// </summary>
         /// <param name="transformation"><see cref="Transformation"> associated to the sphere</param>
-        public Sphere(Transformation? transformation = null) : base(transformation) { }
+        public Sphere(Transformation? transformation = null, Material? material = null) : base(transformation, material) { }
 
         /// <summary>
         /// Checks if a ray intersects the sphere and return the hit record
@@ -112,7 +113,8 @@ namespace Trace
                 this.transformation * _sphereNormal(hitPoint, ray.dir),
                 _spherePointToUV(hitPoint),
                 firstHitT,
-                ray
+                ray,
+                this
             );
 
         }
@@ -151,7 +153,8 @@ namespace Trace
                                                 this.transformation * _sphereNormal(hitPoint, ray.dir),
                                                 _spherePointToUV(hitPoint),
                                                 tmin,
-                                                ray
+                                                ray,
+                                                this
                                                 )
                                                 );
             }
@@ -165,7 +168,8 @@ namespace Trace
                                                 this.transformation * _sphereNormal(hitPoint, ray.dir),
                                                 _spherePointToUV(hitPoint),
                                                 tmax,
-                                                ray
+                                                ray,
+                                                this
                                                 )
                                                 );
             }
@@ -229,7 +233,7 @@ namespace Trace
         /// Construct a plane and potentially associate a transformation to it
         /// </summary>
         /// <param name="transformation"></param>
-        public Plane(Transformation? transformation = null) : base(transformation) { }
+        public Plane(Transformation? transformation = null, Material? material = null) : base(transformation, material) { }
 
         /// <summary>
         /// Intersect a <see cref='Ray'/> object with the plane. It return a <see cref="HitRecord"/> object
@@ -254,7 +258,8 @@ namespace Trace
                         nm: this.transformation * _stdPlaneNormal(ray),
                         sp: _stdPlanePointToUV(hitPoint),
                         tt: tHit,
-                        r: ray
+                        r: ray,
+                        shape: this
                     );
 
                 }
@@ -345,7 +350,7 @@ namespace Trace
         /// </summary>
         /// <param name="min"> Minimum edge</param>
         /// <param name="max">Maximum edge</param>
-        public Box(Point? min = null, Point? max = null, Transformation? transformation = null) : base(transformation)
+        public Box(Point? min = null, Point? max = null, Transformation? transformation = null, Material? material = null) : base(transformation, material)
         {
             // Controllo min max
 
@@ -447,14 +452,16 @@ namespace Trace
                 nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)).Normalize(),
                 sp: this._boxPointToUV(hitPoint0),
                 tt: t0,
-                r: ray
+                r: ray,
+                shape: this
             ));
             hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint1,
                 nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)).Normalize(),
                 sp: this._boxPointToUV(hitPoint1),
                 tt: t1,
-                r: ray
+                r: ray,
+                shape: this
             ));
             return hits;
         }

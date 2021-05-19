@@ -103,6 +103,11 @@ namespace Trace
         /// </summary>
         public static Point Origin = new Point(0.0f, 0.0f, 0.0f);
 
+
+
+       // public static Pigment Pigment_WHITE = new UniformPigment(White);
+       // public static Pigment Pigment_BLACK = new UniformPigment(Black);
+
     }
 
 }
