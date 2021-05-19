@@ -17,13 +17,12 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
-using System;
 using System.Collections.Generic;
 
 
 namespace Trace.Test
 {
-       public class TestCSGUnion
+    public class TestCSGUnion
     {
         [Fact]
         public void TestrayIntersection()
@@ -101,7 +100,7 @@ namespace Trace.Test
             Sphere s1 = new Sphere();
             Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.0f, 0.5f, 0.0f)));
             CSGUnion u1 = new CSGUnion(s1, s2);
-            
+
             Ray r = new Ray(origin: new Point(0.0f, 2.0f, 0f), dir: -Constant.VEC_Y);
             Assert.True(u1.rayIntersection(r) != null, "TestHit failed! - Assert 1/2");
 
@@ -123,9 +122,9 @@ namespace Trace.Test
                                    );
             hits.Sort();
 
-            for (int i = 0; i < 2; i ++)
+            for (int i = 0; i < 2; i++)
             {
-                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), "TestRayIntersectionList failed - assert 2/2");
+                Assert.True(hits[i].isClose((HitRecord)intersection[i]), "TestRayIntersectionList failed - assert 2/2");
             }
 
         }
@@ -172,7 +171,7 @@ namespace Trace.Test
                 1.0f,
                 r1
             );
-            
+
             Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/");
 
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
@@ -201,7 +200,7 @@ namespace Trace.Test
                 0.25f,
                 r1
             );
-            
+
             Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/5");
 
             Ray r2 = new Ray(origin: new Point(1.25f, 0.0f, 0.0f), dir: Constant.VEC_X);
@@ -214,7 +213,7 @@ namespace Trace.Test
                 0.25f,
                 r2
             );
-            
+
             Assert.True(hit2.isClose(intersection2), "TestHit failed! - Assert 4/5");
         }
 
@@ -226,11 +225,11 @@ namespace Trace.Test
             Sphere s2 = new Sphere();
             CSGDifference u1 = new CSGDifference(s1, s2);
             Ray r1 = new Ray(origin: new Point(0.5f, 0.0f, 0.0f), dir: Constant.VEC_X);
-            
+
             List<HitRecord?> intersection = u1.rayIntersectionList(r1);
             List<HitRecord> hits = new List<HitRecord>();
-             
-           
+
+
             hits.Add(new HitRecord(
                                     new Point(1.5f, 0f, 0f),
                                     new Normal(-1.0f, 0f, 0f),
@@ -248,9 +247,9 @@ namespace Trace.Test
             hits.Sort();
 
             Assert.True(intersection.Count == hits.Count);
-            for (int i = 0; i < intersection.Count; i ++)
+            for (int i = 0; i < intersection.Count; i++)
             {
-                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), "TestRayIntersectionList failed - assert 2/2");
+                Assert.True(hits[i].isClose((HitRecord)intersection[i]), "TestRayIntersectionList failed - assert 2/2");
             }
         }
 
@@ -291,7 +290,7 @@ namespace Trace.Test
                 0.5f,
                 r1
             );
-            
+
             Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/");
 
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
@@ -344,7 +343,7 @@ namespace Trace.Test
             Sphere s2 = new Sphere(Transformation.Translation(new Vec(-0.5f, 0.0f, 0.0f)));
             CSGIntersection u1 = new CSGIntersection(s1, s2);
             Ray r1 = new Ray(origin: new Point(1.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
-            
+
             List<HitRecord?> intersection = u1.rayIntersectionList(r1);
             List<HitRecord> hits = new List<HitRecord>();
             hits.Add(new HitRecord(
@@ -364,9 +363,9 @@ namespace Trace.Test
             hits.Sort();
 
             Assert.True(intersection.Count == hits.Count);
-            for (int i = 0; i < intersection.Count; i ++)
+            for (int i = 0; i < intersection.Count; i++)
             {
-                Assert.True(hits[i].isClose((HitRecord)  intersection[i]), $"TestRayIntersectionList failed - assert 2.{i}/2");
+                Assert.True(hits[i].isClose((HitRecord)intersection[i]), $"TestRayIntersectionList failed - assert 2.{i}/2");
             }
         }
 
@@ -421,5 +420,5 @@ namespace Trace.Test
                                     0.5f,
                                     r1)
                                    );    
-*/                                          
+*/
 

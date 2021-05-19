@@ -17,9 +17,7 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
-using System;
 using System.Collections.Generic;
-
 
 namespace Trace.Test
 {
@@ -203,7 +201,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
                                             new Normal(-1.0f, 0.0f, 0.0f),
-                                            new Vec2D(0.5f, 0.5f),
+                                            new Vec2D(0.375f, 0.8333334f),
                                             4.0f,
                                             ray1
                                         );
@@ -215,7 +213,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 1.0f),
                                             new Normal(0.0f, 0.0f, 1.0f),
-                                            new Vec2D(0.5f, 0.5f),
+                                            new Vec2D(0.625f, 0.5f),
                                             9.0f,
                                             ray2
                                         );
@@ -242,7 +240,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-5f, 3f, 0.0f),
                                             new Normal(-1.0f, 0.0f, 0.0f),
-                                            new Vec2D(0.5f, 0.5f),
+                                            new Vec2D(0.45f, 0.8333334f),
                                             5.0f,
                                             ray1
                                         );
@@ -251,8 +249,6 @@ namespace Trace.Test
             Ray ray2 = new Ray(new Point(0f, 10f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box1.rayIntersection(ray2);
             Assert.True(intersection2 == null, "TestBoxesIntersectionTransformation failed - assert 3/3");
-
-
         }
     }
 

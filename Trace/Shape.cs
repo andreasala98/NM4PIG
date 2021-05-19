@@ -404,13 +404,31 @@ namespace Trace
 
 
         /// <summary>
-        /// Private method to perform UV mapping of a Point which lies on a box
+        /// Private method to perform UV mapping of a Point which lies on a box. 
+        /// Used this as reference <br/>
+        /// http://ilkinulas.github.io/development/unity/2016/05/06/uv-mapping.html
         /// </summary>
         /// <param name="point"> <see cref="Point"> on the box</param>
         /// <returns> A 2D Vec with (u,v) coordiantes</returns>
-        private Vec2D _boxPointToUV(Point point)
+        public Vec2D _boxPointToUV(Point point)
         {
-            return new Vec2D(0.5f, 0.5f);
+            float var1 = 0f, var2 = 0f;
+            int face = 0;
+            if (Utility.areClose(point.y, this.max.y)) { face = 1; var1 = 1f - (point.x - this.min.x) / (this.max.x - this.min.x); var2 = 1f - (point.z - this.min.z) / (this.max.z - this.min.z); }
+            else if (Utility.areClose(point.z, this.max.z)) { face = 2; var1 = 1f - (point.x - this.min.x) / (this.max.x - this.min.x); var2 = (point.y - this.min.y) / (this.max.y - this.min.y); }
+            else if (Utility.areClose(point.y, this.min.y)) { face = 3; var1 = 1f - (point.x - this.min.x) / (this.max.x - this.min.x); var2 = (point.z - this.min.z) / (this.max.z - this.min.z); }
+            else if (Utility.areClose(point.z, this.min.z)) { face = 4; var1 = 1f - (point.x - this.min.x) / (this.max.x - this.min.x); var2 = 1f - (point.y - this.min.y) / (this.max.y - this.min.y); }
+            else if (Utility.areClose(point.x, this.max.x)) { face = 5; var1 = (point.y - this.min.y) / (this.max.y - this.min.y); var2 = 1f - (point.z - this.min.z) / (this.max.z - this.min.z); }
+            else if (Utility.areClose(point.x, this.min.x)) { face = 6; var1 = (point.y - this.min.y) / (this.max.y - this.min.y); var2 = (point.z - this.min.z) / (this.max.z - this.min.z); }
+
+            float u = 0f, v = 0f;
+            if (face == 1) { u = 0.75f + var1 / 4f; v = 1f / 3f + var2 / 3f; }
+            else if (face == 2) { u = 0.50f + var1 / 4f; v = 1f / 3f + var2 / 3f; }
+            else if (face == 3) { u = 0.25f + var1 / 4f; v = 1f / 3f + var2 / 3f; }
+            else if (face == 4) { u = 0.00f + var1 / 4f; v = 1f / 3f + var2 / 3f; }
+            else if (face == 5) { u = 0.25f + var1 / 4f; v = 0f / 3f + var2 / 3f; }
+            else if (face == 6) { u = 0.25f + var1 / 4f; v = 2f / 3f + var2 / 3f; }
+            return new Vec2D(u, v);
         }
 
 

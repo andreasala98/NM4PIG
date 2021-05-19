@@ -47,6 +47,9 @@ namespace Trace
             return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
         }
 
+        /// <summary>
+        /// Return a new float random number in [0,1) and advance PCG's internal state
+        /// </summary>
         public float randomFloat()
             => this.random() / (float)UInt32.MaxValue;
 

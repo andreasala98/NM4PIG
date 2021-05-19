@@ -17,8 +17,6 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
-using System;
-
 
 namespace Trace.Test
 {
@@ -40,8 +38,8 @@ namespace Trace.Test
         [Fact]
         public void TestCheckeredPigment()
         {
-            Color col1 = new Color(1f,2f,3f);
-            Color col2 = new Color(10f,20f,30f);
+            Color col1 = new Color(1f, 2f, 3f);
+            Color col2 = new Color(10f, 20f, 30f);
 
             IPigment Pig = new CheckeredPigment(col1, col2, 2);
 
@@ -64,9 +62,6 @@ namespace Trace.Test
 
             ImagePigment pig = new ImagePigment(image);
             Vec2D v = new Vec2D(1f, 1f);
-            Console.WriteLine("Rosso = " + pig.getColor(v).r);
-            Console.WriteLine("Verde = " + pig.getColor(v).g);
-            Console.WriteLine("Blu = " + pig.getColor(v).b);
 
             Assert.True(pig.getColor(new Vec2D(0f, 0f)).isClose(new Color(1.0f, 2.0f, 3.0f)), "Test failed, 1/4");
             Assert.True(pig.getColor(new Vec2D(0f, 1f)).isClose(new Color(2.0f, 1.0f, 3.0f)), "Test failed, 2/4");
