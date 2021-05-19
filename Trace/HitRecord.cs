@@ -20,6 +20,8 @@ using System;
 
 namespace Trace
 {
+#nullable enable
+
     /// <summary>
     ///  A class holding information about a ray-shape intersection
     /// </summary>
@@ -47,7 +49,6 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-#nullable enable
         /// <summary>
         /// The <see cref="Shape"> intersected by the Ray
         /// </summary>
@@ -63,7 +64,7 @@ namespace Trace
             this.ray = r;
             this.shape = shape;
         }
-#nullable disable
+
         public bool isClose(HitRecord? other)
         {
             if (other == null) return false;
