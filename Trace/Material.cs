@@ -39,9 +39,19 @@ namespace Trace
         }
     }
 
-    public class ImagePigment : Pigment
+    public class ImagePigment : IPigment
     {
+        public HdrImage image;
 
+        public ImagePigment(HdrImage i)
+        {
+            this.image = i;
+        }
+
+        public Color GetColor(Vec2D v)
+        {
+            return image.getColor(v.u, v.v);
+        }
     }
 }
 #nullable enable
