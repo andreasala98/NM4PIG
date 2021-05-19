@@ -97,8 +97,12 @@ namespace Trace
 
         public IPigment pigment;
         public float reflectance;
-        public BRDF() { }
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
+
+        public BRDF(IPigment? pig = null) 
+        {
+            this.pigment = pig ?? new UniformPigment(Constant.White);
+        }
 
     }
 
