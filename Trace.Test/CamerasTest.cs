@@ -143,8 +143,6 @@ namespace Trace.Test
             Assert.True(ray1.isClose(ray2), "TestUVSubMapping failed - Assert 1/1");
         }
 
-        public static Color lambda(Ray r)
-            => new Color(1.0f, 2.0f, 3.0f);
 
         [Fact]
         public void TestImageCoverage()
@@ -153,7 +151,7 @@ namespace Trace.Test
             PerspectiveCamera camera = new PerspectiveCamera();
             ImageTracer tracer = new ImageTracer(image, camera);
 
-            tracer.fireAllRays(lambda);
+            tracer.fireAllRays((Ray r)=> new Color(1f,2f,3f));
             for (int row = 0; row < image.height; row++)
             {
                 for (int col = 0; col < image.width; col++)

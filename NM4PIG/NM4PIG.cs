@@ -196,16 +196,12 @@ namespace NM4PIG
                                                      new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
                                                                 * Transformation.Translation(0f, 0f, 0.1f))));
                     break;
-                case 3:
-                    world.addShape(new CSGIntersection(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
-                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
-                    break;
                 case 4:
                     world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
                                                  new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
                     break;
                 case 5:
-                    world.addShape(new CSGIntersection(new Sphere(), new Plane(Transformation.RotationY(0.5f))));
+                    world.addShape(new Plane(transformation: Transformation.RotationY(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(Constant.White, new Color(0f,0f,1f),40),0.7f))));
                     break;
                 case 6:
                     world.addShape(new Box(transformation: Transformation.Scaling(0.5f)));
@@ -234,7 +230,8 @@ namespace NM4PIG
             // Ray tracing
             Console.WriteLine("Rendering the scene...");
             var rayTracer = new ImageTracer(image, camera);
-            rayTracer.fireAllRays((Ray r) => world.rayIntersection(r) != null ? Constant.White : Constant.Black);
+            rayTracer.fireAllRays(new FlatRender(world));
+            //rayTracer.fireAllRays(OnOff());
 
             // Write PFM image
             Console.WriteLine("Saving in pfm format...");
