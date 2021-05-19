@@ -17,14 +17,22 @@ IN THE SOFTWARE.
 */
 
 using System;
+#nullable enable
 
 namespace Trace
 {
+
+    /// <summary>
+    /// An interface to describe a pigment
+    /// </summary>
     public interface IPigment
     {
-        Color getColor(Vec2D v);
+        Color getColor(Vec2D uv);
     }
 
+    /// <summary>
+    /// A simple uniform pigment. It puts a uniform color over the whole object
+    /// </summary>
     public class UniformPigment : IPigment
     {
         public Color c;
@@ -39,6 +47,31 @@ namespace Trace
         }
     }
 
+    /// <summary>
+    /// A checkered Pigment. This class is derived form the <see cref="IPigment"/> interface.
+    /// The number of repetitions is tunable, but it must be the same for both directions
+    /// </summary>
+    public class CheckeredPigment : IPigment
+    {
+        public Color color1;
+        public Color color2;
+        public int nSteps;
+
+        public CheckeredPigment(Color? col1 = null, Color? col2 = null, int nS = 10)
+        {
+            this.color1 = col1 ?? Constant.White;
+            this.color2 = col2 ?? Constant.Black;
+            this.nSteps = nS;
+        }
+
+        public Color getColor(Vec2D uv) {
+
+            int u = (int)Math.Floor(uv.u * this.nSteps);
+            int v = (int)Math.Floor(uv.v * this.nSteps);
+            return (u + v) % 2 == 0 ? this.color1 : this.color2;
+        }
+    }
+
     public class ImagePigment : IPigment
     {
         public HdrImage image;
@@ -48,28 +81,11 @@ namespace Trace
             this.image = i;
         }
 
-        public Color getColor(Vec2D v)
+        public Color GetColor(Vec2D v)
         {
             return image.getColor(v.u, v.v);
         }
     }
-}
-#nullable enable
-namespace Trace
-{
-
-    public abstract class Pigment
-    {
-
-        public Color color;
-        public Color getColor(Vec2D uv)
-        {
-            return new Color(0f, 0f, 0f);
-        }
-
-
-    }
-
 
     /// <summary>
     /// An abstract class representing a Bidirectional Reflectance Distribution Function.
@@ -79,7 +95,7 @@ namespace Trace
     public abstract class BRDF
     {
 
-        public Pigment pigment;
+        public IPigment pigment;
         public float reflectance;
         public BRDF() { }
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
@@ -93,9 +109,9 @@ namespace Trace
     public class DiffuseBRDF : BRDF
     {
 
-        public DiffuseBRDF(Pigment pig = new UniformPigment(Constant.White), float refl = 1.0f)
+        public DiffuseBRDF(IPigment? pig = null, float refl = 1.0f)
         {
-            this.pigment = pig;
+            this.pigment = pig ?? new UniformPigment(Constant.White);
             this.reflectance = refl;
         }
 
@@ -120,14 +136,14 @@ namespace Trace
         /// <summary>
         /// A <see cref="Pigment"/> object
         /// </summary>
-        public Pigment emittedRadiance;
+        public IPigment emittedRadiance;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="Brdf">A <see cref="BRDF"/> object, default is DiffuseBRDF()</param>
         /// <param name="EmittedRadiance">A <see cref="Pigment"/> object, default is UniformPigment(Constant.Black)</param>
-        public Material(BRDF? Brdf = null, Pigment? EmittedRadiance = null)
+        public Material(BRDF? Brdf = null, IPigment? EmittedRadiance = null)
         {
             this.brdf = Brdf ?? new DiffuseBRDF();
             this.emittedRadiance = EmittedRadiance ?? new UniformPigment(Constant.Black);
