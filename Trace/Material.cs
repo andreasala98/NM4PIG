@@ -83,7 +83,39 @@ namespace Trace
 
         public Color getColor(Vec2D v)
         {
-            return image.getPixel((int) v.u, (int) v.v);
+            // simple interpolation
+            int col = (int)(v.u * this.image.width);
+            int row = (int)(v.v * this.image.height);
+
+            if (col >= this.image.width) col = this.image.width - 1;
+            if (row >= this.image.height) row = this.image.height - 1;
+
+            return image.getPixel(col, row);
+
+            // elegant bilinear interpolation, but not working
+
+            // float x = v.u * this.image.width;
+            // int x1 = (int) Math.Floor(v.u * this.image.width);
+            // int x2 = (int) Math.Ceiling(v.u * this.image.width);
+
+            // float y = v.v * this.image.height;
+            // int y1 = (int) Math.Floor(v.v * this.image.height);
+            // int y2 = (int) Math.Ceiling(v.v * this.image.height);
+
+            // float denominator = 1.0f / ((x2 - x1) * (y2 - y1));
+
+            // float r = (x2 - x) * (this.image.getPixel(x1, y1).r * (y2 - y) + this.image.getPixel(x1, y2).r * (y - y1));
+            // r += (x - x1) * (this.image.getPixel(x2, y1).r * (y2 - y) + this.image.getPixel(x2, y2).r * (y - y1));
+
+            // float g = (x2 - x) * (this.image.getPixel(x1, y1).g * (y2 - y) + this.image.getPixel(x1, y2).g * (y - y1));
+            // g += (x - x1) * (this.image.getPixel(x2, y1).g * (y2 - y) + this.image.getPixel(x2, y2).g * (y - y1));
+
+            // float b = (x2 - x) * (this.image.getPixel(x1, y1).b * (y2 - y) + this.image.getPixel(x1, y2).b * (y - y1));
+            // b += (x - x1) * (this.image.getPixel(x2, y1).b * (y2 - y) + this.image.getPixel(x2, y2).b * (y - y1));
+
+            // return new Color(r, g, b);
+
+
         }
     }
 
@@ -97,8 +129,12 @@ namespace Trace
 
         public IPigment pigment;
         public float reflectance;
-        public BRDF() { }
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
+
+        public BRDF(IPigment? pig = null) 
+        {
+            this.pigment = pig ?? new UniformPigment(Constant.White);
+        }
 
     }
 

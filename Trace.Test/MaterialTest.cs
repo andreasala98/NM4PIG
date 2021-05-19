@@ -38,6 +38,22 @@ namespace Trace.Test
         }
 
         [Fact]
+        public void TestCheckeredPigment()
+        {
+            Color col1 = new Color(1f,2f,3f);
+            Color col2 = new Color(10f,20f,30f);
+
+            IPigment Pig = new CheckeredPigment(col1, col2, 2);
+
+            Assert.True(Pig.getColor(new Vec2D(0.25f, 0.25f)).isClose(col1), "TestCheckeredPigment failed! (1/4)");
+            Assert.True(Pig.getColor(new Vec2D(0.75f, 0.25f)).isClose(col2), "TestCheckeredPigment failed! (2/4)");
+            Assert.True(Pig.getColor(new Vec2D(0.25f, 0.75f)).isClose(col2), "TestCheckeredPigment failed! (3/4)");
+            Assert.True(Pig.getColor(new Vec2D(0.75f, 0.75f)).isClose(col1), "TestCheckeredPigment failed! (4/4)");
+
+
+        }
+
+        [Fact]
         public void TestImagePigment()
         {
             HdrImage image = new HdrImage(2, 2);
@@ -47,6 +63,10 @@ namespace Trace.Test
             image.setPixel(1, 1, new Color(3.0f, 2.0f, 1.0f));
 
             ImagePigment pig = new ImagePigment(image);
+            Vec2D v = new Vec2D(1f, 1f);
+            Console.WriteLine("Rosso = " + pig.getColor(v).r);
+            Console.WriteLine("Verde = " + pig.getColor(v).g);
+            Console.WriteLine("Blu = " + pig.getColor(v).b);
 
             Assert.True(pig.getColor(new Vec2D(0f, 0f)).isClose(new Color(1.0f, 2.0f, 3.0f)), "Test failed, 1/4");
             Assert.True(pig.getColor(new Vec2D(0f, 1f)).isClose(new Color(2.0f, 1.0f, 3.0f)), "Test failed, 2/4");
