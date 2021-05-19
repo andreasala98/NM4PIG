@@ -81,9 +81,9 @@ namespace Trace
             this.image = i;
         }
 
-        public Color GetColor(Vec2D v)
+        public Color getColor(Vec2D v)
         {
-            return image.getColor(v.u, v.v);
+            return image.getPixel((int) v.u, (int) v.v);
         }
     }
 

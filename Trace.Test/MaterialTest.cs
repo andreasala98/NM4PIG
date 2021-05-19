@@ -30,10 +30,10 @@ namespace Trace.Test
             Color c = new Color(1.0f, 2.0f, 3.0f);
             UniformPigment p = new UniformPigment(c);
 
-            Assert.True(p.getColor(new Vec2D(0f, 1f).isClose(c)), "Test failed, 1/4");
-            Assert.True(p.getColor(new Vec2D(0f, 0f).isClose(c)), "Test failed, 2/4");
-            Assert.True(p.getColor(new Vec2D(1f, 0f).isClose(c)), "Test failed, 3/4");
-            Assert.True(p.getColor(new Vec2D(1f, 1f).isClose(c)), "Test failed, 4/4");
+            Assert.True(p.getColor(new Vec2D(0f, 1f)).isClose(c), "Test failed, 1/4");
+            Assert.True(p.getColor(new Vec2D(0f, 0f)).isClose(c), "Test failed, 2/4");
+            Assert.True(p.getColor(new Vec2D(1f, 0f)).isClose(c), "Test failed, 3/4");
+            Assert.True(p.getColor(new Vec2D(1f, 1f)).isClose(c), "Test failed, 4/4");
 
         }
 
@@ -48,10 +48,10 @@ namespace Trace.Test
 
             ImagePigment pig = new ImagePigment(image);
 
-            Assert.True(pig.getColor(new Vec2D(0f, 0f).isClose(new Color(1.0f, 2.0f, 3.0f))), "Test failed, 1/4");
-            Assert.True(pig.getColor(new Vec2D(0f, 1f).isClose(new Color(2.0f, 1.0f, 3.0f))), "Test failed, 2/4");
-            Assert.True(pig.getColor(new Vec2D(1f, 0f).isClose(new Color(2.0f, 3.0f, 1.0f))), "Test failed, 3/4");
-            Assert.True(pig.getColor(new Vec2D(1f, 1f).isClose(new Color(3.0f, 2.0f, 1.0f))), "Test failed, 4/4");
+            Assert.True(pig.getColor(new Vec2D(0f, 0f)).isClose(new Color(1.0f, 2.0f, 3.0f)), "Test failed, 1/4");
+            Assert.True(pig.getColor(new Vec2D(0f, 1f)).isClose(new Color(2.0f, 1.0f, 3.0f)), "Test failed, 2/4");
+            Assert.True(pig.getColor(new Vec2D(1f, 0f)).isClose(new Color(2.0f, 3.0f, 1.0f)), "Test failed, 3/4");
+            Assert.True(pig.getColor(new Vec2D(1f, 1f)).isClose(new Color(3.0f, 2.0f, 1.0f)), "Test failed, 4/4");
         }
     }
 }
