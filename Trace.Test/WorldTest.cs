@@ -17,9 +17,6 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
-using Trace;
-using System.Numerics;
-using System;
 
 namespace Trace.Test
 
@@ -45,12 +42,12 @@ namespace Trace.Test
         public void TestRayIntersection()
         {
             World w = new World();
-            Ray myRay = new Ray(new Point(5.0f, 0.0f, 0.0f),-Constant.VEC_X);
+            Ray myRay = new Ray(new Point(5.0f, 0.0f, 0.0f), -Constant.VEC_X);
             w.addShape(new Sphere()); //Sphere in the origin
             w.addShape(new Sphere(Transformation.Translation(new Vec(2.0f, 0.0f, 0.0f)))); //Centred in (2,0,0)
 
             HitRecord? TrueHitRecord = w.shapes[1].rayIntersection(myRay);
-            Assert.True( TrueHitRecord?.isClose( w.rayIntersection(myRay)));
+            Assert.True(TrueHitRecord?.isClose(w.rayIntersection(myRay)));
         }
     } //end of class
 

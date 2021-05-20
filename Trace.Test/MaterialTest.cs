@@ -17,8 +17,6 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
-using System;
-
 
 namespace Trace.Test
 {
@@ -40,8 +38,8 @@ namespace Trace.Test
         [Fact]
         public void TestCheckeredPigment()
         {
-            Color col1 = new Color(1f,2f,3f);
-            Color col2 = new Color(10f,20f,30f);
+            Color col1 = new Color(1f, 2f, 3f);
+            Color col2 = new Color(10f, 20f, 30f);
 
             IPigment Pig = new CheckeredPigment(col1, col2, 2);
 

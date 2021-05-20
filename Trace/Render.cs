@@ -18,48 +18,72 @@ IN THE SOFTWARE.
 namespace Trace
 {
 
+    /// <summary>
+    /// A class implementing a solver of the rendering equation.
+    /// This is an abstract class; you should use a derived concrete class.
+    /// </summary>
+    public abstract class Render
+    {
 
-    public abstract class Render {
+        /// <summary>
+        /// <see cref="World"> object to be rendered
+        /// </summary>
+        public World world;
 
-        public World wrld;
-        public Color bkgColor;
+        /// <summary>
+        /// <see cref="Color"> of the background. Default is black.
+        /// </summary>
+        public Color backgroundColor;
+
+        public Render(World world, Color? background = null)
+        {
+            this.world = world;
+            this.backgroundColor = background ?? Constant.Black;
+        }
+
+        /// <summary>
+        /// Estimate the radiance along a ray
+        /// </summary>
         public abstract Color computeRadiance(Ray r);
-
     }
 
 
+    /// <summary>
+    /// A on/off renderer<br/>
+    /// This renderer is mostly useful for debugging purposes, as it is really fast, but it produces boring images.
+    /// </summary>
     public class OnOffRender : Render
     {
+        /// <summary>
+        /// <see cref="Color"> of the world. Default is white
+        /// </summary>
+        public Color color;
 
-        public OnOffRender(World w, Color? bkg=null)
+        public OnOffRender(World world, Color? background = null, Color? color = null) : base(world, background)
         {
-            this.wrld = w;
-            this.bkgColor = bkg ?? Constant.Black;
+            this.color = color ?? Constant.White;
         }
 
         public override Color computeRadiance(Ray r)
-        {
-            return this.wrld.rayIntersection(r) != null ? Constant.White : this.bkgColor;
-        }
-
-
+            => this.world.rayIntersection(r) != null ? this.color : this.backgroundColor;
     }
 
+
+    /// <summary>
+    /// A «flat» renderer.<br/>
+    /// This renderer estimates the solution of the rendering equation by neglecting any contribution of the light.
+    /// It just uses the pigment of each surface to determine how to compute the final radiance.
+    /// </summary>
     public class FlatRender : Render
     {
-        public FlatRender(World wo, Color? bkg = null) 
-        {
-            this.wrld = wo;
-            this.bkgColor = bkg ?? Constant.Black;
-        }
+        public FlatRender(World world, Color? background = null) : base(world, background) { }
 
         public override Color computeRadiance(Ray r)
         {
-            HitRecord? hr = this.wrld.rayIntersection(r);
-            if (hr==null) return bkgColor;
-            Material mat = ((Shape)hr?.shape).material;
-
-            return mat.brdf.pigment.getColor((Vec2D)hr?.surfacePoint) + mat.emittedRadiance.getColor((Vec2D)hr?.surfacePoint);
+            HitRecord? hit = this.world.rayIntersection(r);
+            if (hit == null) return backgroundColor;
+            Material mat = (hit.Value.shape).material;
+            return mat.brdf.pigment.getColor(hit.Value.surfacePoint) + mat.emittedRadiance.getColor(hit.Value.surfacePoint);
         }
 
     }
