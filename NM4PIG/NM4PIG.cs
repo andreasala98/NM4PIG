@@ -120,7 +120,7 @@ namespace NM4PIG
                     Parameters readParam = new Parameters();
                     try
                     {
-                        readParam.parseCommandLineConvert(pfmfile.Value(), ldrfile.Value(), luminosity.Value(), factor.Value(), gamma.Value(), luminosity.Value());
+                        readParam.parseCommandLineConvert(pfmfile.Value(), ldrfile.Value(), factor.Value(), gamma.Value(), luminosity.Value());
                     }
                     catch (CommandLineException e)
                     {
