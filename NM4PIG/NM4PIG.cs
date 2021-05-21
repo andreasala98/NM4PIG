@@ -201,17 +201,31 @@ namespace NM4PIG
                                                  new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
                     break;
                 case 5:
-                    world.addShape(new Plane(transformation: Transformation.RotationY(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(Constant.White, new Color(0f,0f,1f),40),0.7f))));
+                    world.addShape(new Plane(transformation: Transformation.RotationY(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(Constant.White, new Color(0f, 0f, 1f), 40), 0.7f))));
                     break;
                 case 6:
-                    world.addShape(new Box(transformation: Transformation.Scaling(0.5f)));
+                    HdrImage img = new HdrImage();
+                    string inputpfm = "demoImage.pfm";
+                    using (FileStream inputStream = File.OpenRead(inputpfm))
+                    {
+                        img.readPfm(inputStream);
+                        Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
+                    }
+                    world.addShape(
+                                    new Box(
+                                            transformation: Transformation.Scaling(0.5f),
+                                            material: new Material(
+                                                                EmittedRadiance: new ImagePigment(img)
+                                                                )
+                                )
+                                );
                     break;
                 case 7:
                     world.addShape(new CSGUnion(
                                             new Sphere(
                                                     Transformation.Translation(new Vec(0f, 0f, 1.2f))
                                                     * Transformation.Scaling(0.635f)),
-                                            new Box(transformation: Transformation.Scaling(0.5f,0.5f,1f))
+                                            new Box(transformation: Transformation.Scaling(0.5f, 0.5f, 1f))
                                             )
                                     );
                     break;
