@@ -89,7 +89,6 @@ namespace NM4PIG
                         readParam.angledeg,
                         readParam.orthogonal,
                         readParam.pfmFile,
-                        readParam.luminosity,
                         readParam.ldrFile,
                         readParam.scene
                     );

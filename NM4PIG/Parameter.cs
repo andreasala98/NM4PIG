@@ -171,11 +171,6 @@ namespace NM4PIG
                 }
             }
 
-            if (luminosity != null) 
-            {
-                try { this.luminosity = Single.Parse(lumi)}
-            }
-
             if (angledeg != null)
             {
                 try
