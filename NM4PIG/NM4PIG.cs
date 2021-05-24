@@ -185,12 +185,11 @@ namespace NM4PIG
 
             Console.WriteLine("Creating the scene...");
             World world = new World();
+            List<float> Vertices = new List<float>() { -0.5f, 0.5f };
 
             switch (scene)
             {
                 case 1:
-                    List<float> Vertices = new List<float>() { -0.5f, 0.5f };
-
                     //One sphere for each vertex of the cube
                     foreach (var x in Vertices)
                     {
@@ -198,7 +197,7 @@ namespace NM4PIG
                         {
                             foreach (var z in Vertices)
                             {
-                                world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
+                                world.addShape(new Sphere(transformation: Transformation.Translation(new Vec(x, y, z))
                                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                             } // z
                         } // y
@@ -212,9 +211,32 @@ namespace NM4PIG
                     break;
 
                 case 2:
-                    world.addShape(new CSGDifference(new Sphere(Transformation.RotationX(Constant.PI) * Transformation.Translation(0f, 0f, -0.4f)),
-                                                     new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
-                                                                * Transformation.Translation(0f, 0f, 0.1f))));
+
+                    Material material1 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Yellow, Constant.Blue)));
+                    Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
+                    Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
+
+                    //One sphere for each vertex of the cube
+                    foreach (var x in Vertices)
+                    {
+                        foreach (var y in Vertices)
+                        {
+                            foreach (var z in Vertices)
+                            {
+                                world.addShape(new Sphere(transformation: Transformation.Translation(new Vec(x, y, z))
+                                                    * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f)),
+                                                    material1));
+                            } // z
+                        } // y
+                    }// x
+
+                    //Adding two more spheres to break simmetry
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
+                                             * Transformation.Scaling(0.1f), material2));
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
+                                             * Transformation.Scaling(0.1f), material3));
+
+                    renderer = new FlatRender(world);
                     break;
                 case 3:
                     HdrImage img = new HdrImage();

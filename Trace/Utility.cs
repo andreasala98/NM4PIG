@@ -113,6 +113,16 @@ namespace Trace
         /// </summary>
         public static Color Blue = new Color(0.0f, 0.0f, 1.0f);
 
+        /// <summary>
+        /// Yellow color
+        /// </summary>
+        public static Color Yellow = new Color(1.0f, 1.0f, 0.0f);
+
+        /// <summary>
+        /// Orange color
+        /// </summary>
+        public static Color Orange = new Color(1.0f, 0.5f, 0.0f);
+
 
         /// <summary>
         /// <see cref="Point"> object do describe the origin of axes, i.e. (0,0,0)
