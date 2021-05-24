@@ -262,8 +262,26 @@ namespace NM4PIG
                     break;
 
                 case 4:
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
-                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
+                    HdrImage img2 = new HdrImage();
+                    string inputpfm2 = "Texture/diceW.pfm";
+                    using (FileStream inputStream = File.OpenRead(inputpfm2))
+                    {
+                        img2.readPfm(inputStream);
+                        Console.WriteLine($"File {inputpfm2} has been correctly read from disk.");
+                    }
+
+                    world.addShape(
+                                    new Box(
+                                            transformation: Transformation.Scaling(0.5f),
+                                            material: new Material(
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img2)),
+                                                                EmittedRadiance: new UniformPigment(Constant.Black)
+                                                                )
+                                )
+                                );
+
+                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+
                     break;
                 case 5:
                     world.addShape(new Box(transformation: Transformation.Scaling(0.3f) * Transformation.RotationZ(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(new Color(0f, 1f, 0f), new Color(0f, 0f, 1f), 40), 0.7f))));
