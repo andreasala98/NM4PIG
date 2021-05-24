@@ -99,14 +99,30 @@ namespace Trace
         public static Color Black = new Color(0.0f, 0.0f, 0.0f);
 
         /// <summary>
+        /// Red color
+        /// </summary>
+        public static Color Red = new Color(1.0f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// Green color
+        /// </summary>
+        public static Color Green = new Color(0.0f, 1.0f, 0.0f);
+
+        /// <summary>
+        /// Blue color
+        /// </summary>
+        public static Color Blue = new Color(0.0f, 0.0f, 1.0f);
+
+
+        /// <summary>
         /// <see cref="Point"> object do describe the origin of axes, i.e. (0,0,0)
         /// </summary>
         public static Point Origin = new Point(0.0f, 0.0f, 0.0f);
 
 
 
-       // public static Pigment Pigment_WHITE = new UniformPigment(White);
-       // public static Pigment Pigment_BLACK = new UniformPigment(Black);
+        // public static Pigment Pigment_WHITE = new UniformPigment(White);
+        // public static Pigment Pigment_BLACK = new UniformPigment(Black);
 
     }
 

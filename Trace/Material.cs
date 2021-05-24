@@ -41,6 +41,11 @@ namespace Trace
             this.c = color;
         }
 
+        /// <summary>
+        /// Returns color of the object
+        /// </summary>
+        /// <param name="vec"></param>
+        /// <returns></returns>
         public Color getColor(Vec2D vec)
         {
             return this.c;
@@ -72,6 +77,9 @@ namespace Trace
         }
     }
 
+    /// <summary>
+    /// A pigment to project an Equirectangular projection (in form of a HdrImage) onto a shape. 
+    /// </summary>
     public class ImagePigment : IPigment
     {
         public HdrImage image;
@@ -81,40 +89,45 @@ namespace Trace
             this.image = i;
         }
 
+        /// <summary>
+        /// Bilinear interpolation to get the Color at coordinates specified by a Vec2D
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public Color getColor(Vec2D v)
         {
             // simple interpolation
-            int col = (int)(v.u * this.image.width);
-            int row = (int)(v.v * this.image.height);
+            // int col = (int)(v.u * this.image.width);
+            // int row = (int)(v.v * this.image.height);
 
-            if (col >= this.image.width) col = this.image.width - 1;
-            if (row >= this.image.height) row = this.image.height - 1;
+            // if (col >= this.image.width) col = this.image.width - 1;
+            // if (row >= this.image.height) row = this.image.height - 1;
 
-            return image.getPixel(col, row);
+            // return image.getPixel(col, row);
 
             // elegant bilinear interpolation, but not working
 
-            // float x = v.u * this.image.width;
-            // int x1 = (int) Math.Floor(v.u * this.image.width);
-            // int x2 = (int) Math.Ceiling(v.u * this.image.width);
+            float x = v.u * (this.image.width - 1);
+            int x1 = (int) Math.Floor(v.u * (this.image.width - 1));
+            if(x1 >= this.image.width - 1) x1 = (int) v.u * (this.image.width - 2);
+            int x2 = x1 + 1;
 
-            // float y = v.v * this.image.height;
-            // int y1 = (int) Math.Floor(v.v * this.image.height);
-            // int y2 = (int) Math.Ceiling(v.v * this.image.height);
+            float y = v.v * (this.image.height - 1);
+            int y1 = (int) Math.Floor(v.v * (this.image.height - 1));
+            if(y1 >= this.image.height - 1) y1 = (int) v.v * (this.image.height - 2);
+            int y2 = y1 + 1;
 
-            // float denominator = 1.0f / ((x2 - x1) * (y2 - y1));
+            // Console.WriteLine("(x1,y2) = "  + x1 + " " + y2 + "   (x2,y2) = " + x2 + " " + y2);
+            // Console.WriteLine("(x1,y1) = "  + x1 + " " + y1 + "   (x2,y1) = " + x2 + " " + y1);
 
-            // float r = (x2 - x) * (this.image.getPixel(x1, y1).r * (y2 - y) + this.image.getPixel(x1, y2).r * (y - y1));
-            // r += (x - x1) * (this.image.getPixel(x2, y1).r * (y2 - y) + this.image.getPixel(x2, y2).r * (y - y1));
+            Color c11 = this.image.getPixel(x1, y1);
+            Color c12 = this.image.getPixel(x1, y2);
+            Color c21 = this.image.getPixel(x2, y1);
+            Color c22 = this.image.getPixel(x2, y2);
 
-            // float g = (x2 - x) * (this.image.getPixel(x1, y1).g * (y2 - y) + this.image.getPixel(x1, y2).g * (y - y1));
-            // g += (x - x1) * (this.image.getPixel(x2, y1).g * (y2 - y) + this.image.getPixel(x2, y2).g * (y - y1));
+            float den = 1.0f /((x2 - x1) * (y2 - y1));
 
-            // float b = (x2 - x) * (this.image.getPixel(x1, y1).b * (y2 - y) + this.image.getPixel(x1, y2).b * (y - y1));
-            // b += (x - x1) * (this.image.getPixel(x2, y1).b * (y2 - y) + this.image.getPixel(x2, y2).b * (y - y1));
-
-            // return new Color(r, g, b);
-
+            return (x2 - x) * (c11 * (y2 - y) + c12 * (y - y1)) + (x - x1) * (c21 * (y2 - y) + c22 * (y - y1)) * den;
 
         }
     }

@@ -54,6 +54,7 @@ namespace NM4PIG
                 var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
                 var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera instead of perspective", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
+                var luminosity = command.Option("--luminosity|-l <LUMINOSITY>", "Force average luminosity to some value instead of calculating it", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
                 var scene = command.Option("--scene|-s <scene>", "number of the scene", CommandOptionType.SingleValue);
 
@@ -72,6 +73,7 @@ namespace NM4PIG
                                                         orthogonal.Value(),
                                                         pfmfile.Value(),
                                                         ldrfile.Value(),
+                                                        luminosity.Value(),
                                                         scene.Value()
                                                         );
                     }
@@ -88,7 +90,8 @@ namespace NM4PIG
                         readParam.orthogonal,
                         readParam.pfmFile,
                         readParam.ldrFile,
-                        readParam.scene
+                        readParam.scene,
+                        readParam.luminosity
                     );
                     return 0;
                 });
@@ -104,6 +107,7 @@ namespace NM4PIG
 
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+                var luminosity = command.Option("--luminosity|-l <LUMINOSITY>", "Force average luminosity to some value instead of calculating it", CommandOptionType.SingleValue);
                 var factor = command.Option("--factor|-f <FACTOR>", "scaling factor", CommandOptionType.SingleValue);
                 var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction", CommandOptionType.SingleValue);
 
@@ -116,7 +120,12 @@ namespace NM4PIG
                     Parameters readParam = new Parameters();
                     try
                     {
-                        readParam.parseCommandLineConvert(pfmfile.Value(), ldrfile.Value(), factor.Value(), gamma.Value());
+                        readParam.parseCommandLineConvert(
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value(),
+                                                        factor.Value(),
+                                                        gamma.Value(),
+                                                        luminosity.Value());
                     }
                     catch (CommandLineException e)
                     {
@@ -127,7 +136,8 @@ namespace NM4PIG
                             readParam.pfmFile,
                             readParam.ldrFile,
                             readParam.factor,
-                            readParam.gamma
+                            readParam.gamma,
+                            readParam.luminosity
                             );
                     return 0;
                 });
@@ -147,7 +157,7 @@ namespace NM4PIG
 
         // ############################################# //
 
-        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene)
+        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene, float? luminosity)
         {
 
             Console.WriteLine("Starting Demo with these parameters:\n");
@@ -162,6 +172,16 @@ namespace NM4PIG
             Console.WriteLine("\n");
 
             HdrImage image = new HdrImage(width, height);
+
+            // Camera initialization
+            Console.WriteLine("Creating the camera...");
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
+            Camera camera;
+            if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+            else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+
+            // Default value on/off renderer
+            Render? renderer = null;
 
             Console.WriteLine("Creating the scene...");
             World world = new World();
@@ -196,31 +216,38 @@ namespace NM4PIG
                                                      new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
                                                                 * Transformation.Translation(0f, 0f, 0.1f))));
                     break;
-                case 4:
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
-                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
-                    break;
-                case 5:
-                    world.addShape(new Plane(transformation: Transformation.RotationY(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(Constant.White, new Color(0f, 0f, 1f), 40), 0.7f))));
-                    break;
-                case 6:
+                case 3:
                     HdrImage img = new HdrImage();
-                    string inputpfm = "demoImage.pfm";
+                    string inputpfm = "Texture/minecraft.pfm";
                     using (FileStream inputStream = File.OpenRead(inputpfm))
                     {
                         img.readPfm(inputStream);
                         Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
                     }
+
                     world.addShape(
                                     new Box(
                                             transformation: Transformation.Scaling(0.5f),
                                             material: new Material(
-                                                                EmittedRadiance: new ImagePigment(img)
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img)),
+                                                                EmittedRadiance: new UniformPigment(Constant.Black)
                                                                 )
                                 )
                                 );
+
+                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+
                     break;
-                case 7:
+
+                case 4:
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
+                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
+                    break;
+                case 5:
+                    world.addShape(new Box(transformation: Transformation.Scaling(0.3f) * Transformation.RotationZ(Utility.DegToRad(30)), material: new Material(new DiffuseBRDF(new CheckeredPigment(new Color(0f, 1f, 0f), new Color(0f, 0f, 1f), 40), 0.7f))));
+                    world.addShape(new Plane(transformation: Transformation.RotationY(-0.1f), material: new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 0.5f, 0.5f))))));
+                    break;
+                case 6:
                     world.addShape(new CSGUnion(
                                             new Sphere(
                                                     Transformation.Translation(new Vec(0f, 0f, 1.2f))
@@ -233,19 +260,13 @@ namespace NM4PIG
                     break;
             }
 
-
-            // Camera initialization
-            Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
-            Camera camera;
-            if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
-            else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
-
             // Ray tracing
             Console.WriteLine("Rendering the scene...");
             var rayTracer = new ImageTracer(image, camera);
-            rayTracer.fireAllRays(new FlatRender(world));
-            //rayTracer.fireAllRays(OnOff());
+
+            if (renderer == null) renderer = new OnOffRender(world);
+
+            rayTracer.fireAllRays(renderer);
 
             // Write PFM image
             Console.WriteLine("Saving in pfm format...");
@@ -255,12 +276,12 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            Convert(pfmFile, ldrFile, Default.factor, Default.gamma);
+            Convert(pfmFile, ldrFile, Default.factor, Default.gamma, luminosity);
 
         }//Demo
 
         // ############################################# //
-        public static void Convert(string inputpfm, string outputldr, float factor, float gamma)
+        public static void Convert(string inputpfm, string outputldr, float factor, float gamma, float? luminosity)
         {
             string fmt = outputldr.Substring(outputldr.Length - 3, 3);
 
@@ -271,6 +292,7 @@ namespace NM4PIG
             Console.WriteLine("Format: " + fmt);
             Console.WriteLine("Factor: " + factor);
             Console.WriteLine("Gamma: " + gamma);
+            Console.WriteLine(luminosity.HasValue ? ("Manual luminosity: " + luminosity) : "Average luminosity");
 
             Console.WriteLine("\n");
 
@@ -294,7 +316,9 @@ namespace NM4PIG
             try
             {
                 Console.WriteLine("Normalizing image...");
-                myImg.normalizeImage(factor);
+
+                if (luminosity.HasValue) myImg.normalizeImage(factor, luminosity.Value);
+                else myImg.normalizeImage(factor);
 
                 Console.WriteLine("Clamping image...");
                 myImg.clampImage();

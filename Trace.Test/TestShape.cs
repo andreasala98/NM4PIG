@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System.Collections.Generic;
+using System;
 
 namespace Trace.Test
 {
@@ -198,10 +199,11 @@ namespace Trace.Test
             Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box.rayIntersection(ray1);
             Assert.True(intersection1 != null, "TestBoxesIntersectionBasic failed - assert 1/6");
+            // new Vec2D(0.375f, 0.8333334f) for other method UV mapping
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
                                             new Normal(-1.0f, 0.0f, 0.0f),
-                                            new Vec2D(0.375f, 0.8333334f),
+                                            new Vec2D(0.125f, 0.5f),
                                             4.0f,
                                             ray1
                                         );
@@ -210,10 +212,11 @@ namespace Trace.Test
             Ray ray2 = new Ray(new Point(0f, 0f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box.rayIntersection(ray2);
             Assert.True(intersection2 != null, "TestBoxesIntersectionBasic failed - assert 3/6");
+            // new Vec2D(0.625f, 0.5f) for other method UV mapping
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 1.0f),
                                             new Normal(0.0f, 0.0f, 1.0f),
-                                            new Vec2D(0.625f, 0.5f),
+                                            new Vec2D(0.875f, 0.5f),
                                             9.0f,
                                             ray2
                                         );
@@ -232,7 +235,6 @@ namespace Trace.Test
         [Fact]
         void TestBoxesIntersectionTransformation()
         {
-            // Box box1 = new Box(min: new Point(-5f, -5f, -5f), max: new Point(5f, 5f, 5f));
             Box box1 = new Box(transformation: Transformation.Scaling(5.0f));
             Ray ray1 = new Ray(new Point(-10f, 3f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box1.rayIntersection(ray1);
@@ -240,7 +242,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-5f, 3f, 0.0f),
                                             new Normal(-1.0f, 0.0f, 0.0f),
-                                            new Vec2D(0.45f, 0.8333334f),
+                                            new Vec2D(0.125f, 0.6f),
                                             5.0f,
                                             ray1
                                         );
