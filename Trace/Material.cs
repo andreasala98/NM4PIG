@@ -69,7 +69,8 @@ namespace Trace
             this.nSteps = nS;
         }
 
-        public Color getColor(Vec2D uv) {
+        public Color getColor(Vec2D uv)
+        {
 
             int u = (int)Math.Floor(uv.u * this.nSteps);
             int v = (int)Math.Floor(uv.v * this.nSteps);
@@ -108,13 +109,13 @@ namespace Trace
             // elegant bilinear interpolation, but not working
 
             float x = v.u * (this.image.width - 1);
-            int x1 = (int) Math.Floor(v.u * (this.image.width - 1));
-            if(x1 >= this.image.width - 1) x1 = (int) v.u * (this.image.width - 2);
+            int x1 = (int)Math.Floor(v.u * (this.image.width - 1));
+            if (x1 >= this.image.width - 1) x1 = (int)v.u * (this.image.width - 2);
             int x2 = x1 + 1;
 
             float y = v.v * (this.image.height - 1);
-            int y1 = (int) Math.Floor(v.v * (this.image.height - 1));
-            if(y1 >= this.image.height - 1) y1 = (int) v.v * (this.image.height - 2);
+            int y1 = (int)Math.Floor(v.v * (this.image.height - 1));
+            if (y1 >= this.image.height - 1) y1 = (int)v.v * (this.image.height - 2);
             int y2 = y1 + 1;
 
             // Console.WriteLine("(x1,y2) = "  + x1 + " " + y2 + "   (x2,y2) = " + x2 + " " + y2);
@@ -125,7 +126,7 @@ namespace Trace
             Color c21 = this.image.getPixel(x2, y1);
             Color c22 = this.image.getPixel(x2, y2);
 
-            float den = 1.0f /((x2 - x1) * (y2 - y1));
+            float den = 1.0f / ((x2 - x1) * (y2 - y1));
 
             return (x2 - x) * (c11 * (y2 - y) + c12 * (y - y1)) + (x - x1) * (c21 * (y2 - y) + c22 * (y - y1)) * den;
 
@@ -141,12 +142,12 @@ namespace Trace
     {
 
         public IPigment pigment;
-        public float reflectance;
+
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
 
         public abstract Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth);
 
-        public BRDF(IPigment? pig = null) 
+        public BRDF(IPigment? pig = null)
         {
             this.pigment = pig ?? new UniformPigment(Constant.White);
         }
@@ -160,6 +161,7 @@ namespace Trace
     public class DiffuseBRDF : BRDF
     {
 
+        public float reflectance;
         public DiffuseBRDF(IPigment? pig = null, float refl = 1.0f)
         {
             this.pigment = pig ?? new UniformPigment(Constant.White);
@@ -175,9 +177,47 @@ namespace Trace
         {
             throw new NotImplementedException();
         }
-
     }
 
+
+    /// <summary>
+    /// A class representing an ideal mirror BRDF
+    /// </summary>
+    public class SpecularBRDF : BRDF
+    {
+        public float thresholdAngleRad;
+        public SpecularBRDF(IPigment? pigment = null, float? thresholdAngleRad = null) : base(pigment)
+        {
+            this.thresholdAngleRad = thresholdAngleRad ?? Constant.PI / 1800.0f;
+        }
+
+        public override Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv)
+        {
+            float thetaIn = MathF.Acos(Utility.NormalizedDot(normal.ToVec(), inDir));
+            float thetaOut = MathF.Acos(Utility.NormalizedDot(normal.ToVec(), outDir));
+
+            if (MathF.Abs(thetaIn - thetaOut) < this.thresholdAngleRad)
+                return this.pigment.getColor(uv);
+            else
+                return new Color(0f, 0f, 0f);
+        }
+
+        public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
+        {
+            Vec rayDir = new Vec(incomingDir.x, incomingDir.y, incomingDir.z).Normalize();
+            Vec normalVec = normal.ToVec().Normalize();
+            float dotProd = normalVec * rayDir;
+
+            return new Ray(
+                            origin: interactionPoint,
+                            dir: rayDir - normalVec * 2f * dotProd,
+                            tm: 1e-5f,
+                            tM: Single.PositiveInfinity,
+                            dep: depth
+                        );
+        }
+
+    }
     /// <summary>
     /// A class that implements a material
     /// </summary>

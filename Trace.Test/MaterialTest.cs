@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
+using System;
 
 namespace Trace.Test
 {
@@ -67,5 +68,45 @@ namespace Trace.Test
             Assert.True(pig.getColor(new Vec2D(1f, 0f)).isClose(new Color(2.0f, 3.0f, 1.0f)), "Test failed, 3/4");
             Assert.True(pig.getColor(new Vec2D(1f, 1f)).isClose(new Color(3.0f, 2.0f, 1.0f)), "Test failed, 4/4");
         }
+    }
+
+    public class TestBRDF
+    {
+
+        [Fact]
+        public void TestSpecularBRDF()
+        {
+            Material material = new Material(Brdf: new SpecularBRDF());
+            Plane plane = new Plane(material: material);
+            PCG pgc = new PCG();
+
+            Vec direction1 = new Vec(1f, 0f, -1f).Normalize();
+            Vec direction2 = new Vec(1f, 1f, -1f).Normalize();
+            Normal normal = new Normal(0f, 0f, 1f);
+
+            Ray scatteredRay1 = plane.material.brdf.scatterRay(pgc, direction1, Constant.Origin, normal, 1);
+            Ray scatteredRay2 = plane.material.brdf.scatterRay(pgc, direction2, Constant.Origin, normal, 1);
+
+            Ray expectedRay1 = new Ray(
+                origin: Constant.Origin,
+                dir: new Vec(1f, 0f, 1f).Normalize(),
+                tm: 1e-5f,
+                tM: Single.PositiveInfinity,
+                dep: 1
+            );
+
+            Ray expectedRay2 = new Ray(
+                origin: Constant.Origin,
+                dir: new Vec(1f, 1f, 1f).Normalize(),
+                tm: 1e-5f,
+                tM: Single.PositiveInfinity,
+                dep: 1
+            );
+
+            Assert.True(scatteredRay1.isClose(expectedRay1), "TestSpecularBRDF failed - Assert 1/2");
+            Assert.True(scatteredRay2.isClose(expectedRay2), "TestSpecularBRDF failed - Assert 2/2");
+        }
+
+
     }
 }
