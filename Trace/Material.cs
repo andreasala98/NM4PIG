@@ -145,7 +145,7 @@ namespace Trace
 
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
 
-        public abstract Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth);
+        public abstract Ray scatterRay(PCG pcg, Vec incomingDir, Point interactionPoint, Normal normal, int depth);
 
         public BRDF(IPigment? pig = null)
         {
@@ -175,7 +175,7 @@ namespace Trace
 
         public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
         {
-            
+
             Vec e1 = new Vec(1f, 0f, 0f);
             Vec e2 = new Vec(1f, 0f, 0f);
             Vec e3 = new Vec(1f, 0f, 0f);
@@ -187,7 +187,7 @@ namespace Trace
             Vec dir = e1 * sinTheta * MathF.Cos(phi) + e2 * sinTheta * MathF.Sin(phi) + e3 * cosTheta;
 
             return new Ray(interactionPoint, dir, 1e-3f, depth);
-                
+
         }
     }
 
