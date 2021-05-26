@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections.Generic;
 #nullable enable
 
 namespace Trace
@@ -175,10 +176,11 @@ namespace Trace
 
         public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
         {
+            List<Vec> a = normal.createONBfromZ();
+            Vec e1 = a[0];
+            Vec e2 = a[1];
+            Vec e3 = a[2];
 
-            Vec e1 = new Vec(1f, 0f, 0f);
-            Vec e2 = new Vec(1f, 0f, 0f);
-            Vec e3 = new Vec(1f, 0f, 0f);
             float cosThetaSq = r.randomFloat();
             float cosTheta = MathF.Sqrt(cosThetaSq);
             float sinTheta = MathF.Sqrt(1.0f - cosThetaSq);
@@ -186,7 +188,7 @@ namespace Trace
 
             Vec dir = e1 * sinTheta * MathF.Cos(phi) + e2 * sinTheta * MathF.Sin(phi) + e3 * cosTheta;
 
-            return new Ray(interactionPoint, dir, 1e-3f, depth);
+            return new Ray(interactionPoint, dir, tm: 1e-3f, dep: depth);
 
         }
     }

@@ -106,9 +106,9 @@ namespace Trace.Test
                 Ray ray = new Ray(origin: new Point(0f, 0f, 0f), dir: new Vec(1f, 0f, 0f));
                 Color color = pathTracer.computeRadiance(ray);
                 float expected = emittedRadiance / (1.0f - reflectance);
-                Assert.True(Utility.areClose(expected, color.r, epsilon: 1e-3f), $"TestPathTracer failed - Assert {i * 3 + 1}/15");
-                Assert.True(Utility.areClose(expected, color.g, epsilon: 1e-3f), $"TestPathTracer failed - Assert {i * 3 + 2}/15");
-                Assert.True(Utility.areClose(expected, color.b, epsilon: 1e-3f), $"TestPathTracer failed - Assert {i * 3 + 3}/15");
+                Assert.True(Utility.areClose(expected, color.r, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 1/3");
+                Assert.True(Utility.areClose(expected, color.g, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 2/3");
+                Assert.True(Utility.areClose(expected, color.b, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 3/3");
             }
         }
     }
