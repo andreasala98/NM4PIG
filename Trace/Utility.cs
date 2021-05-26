@@ -58,6 +58,9 @@ namespace Trace
 
         public static float Max(float a, float b, float c)
             => Math.Max(a, Math.Max(b, c));
+
+        public static float NormalizedDot(Vec v1, Vec v2)
+            => v1.Normalize() * v2.Normalize();
     }
 
     /// <summary>

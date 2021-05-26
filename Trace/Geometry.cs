@@ -401,6 +401,11 @@ namespace Trace
         public bool isClose(Normal vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
 
+        /// <summary>
+        /// Transform <see cref="Normal"/> into <see cref="Vec"/>
+        /// </summary>
+        public Vec ToVec()
+            => new Vec(this.x, this.y, this.z);
 
 
         public List<Vec> createONBfromZ() 
