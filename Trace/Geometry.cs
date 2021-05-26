@@ -273,6 +273,18 @@ namespace Trace
         public List<float> ToList()
             => new List<float>() { this.x, this.y, this.z };
 
+        public List<Vec> createONBfromZ() 
+        {
+            float sign = MathF.CopySign(1f, this.z);
+            float a = -1.0f / (sign + this.z);
+            float b = this.x * this.y * a;
+
+            Vec e1 = new Vec(1.0f + sign * this.x * this.x * a, sign * b, -sign * this.x);
+            Vec e2 = new Vec(b, sign + this.y * this.y * a, -this.y);
+
+            return new List<Vec>() { e1, e2, this };
+        }
+
     }
 
 
@@ -369,6 +381,12 @@ namespace Trace
         public override string ToString() => $"Norm(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
+        /// Convert a Normal to a Vec
+        /// </summary>
+        /// <returns></returns>
+        public Vec toVec() => new Vec(this.x, this.y, this.z);
+
+        /// <summary>
         /// Change sign to all the components
         /// </summary>
         public static Normal operator -(Normal normal)
@@ -383,7 +401,21 @@ namespace Trace
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
 
 
-    }
+
+        public List<Vec> createONBfromZ() 
+        {
+            float sign = MathF.CopySign(1f, this.z);
+            float a = -1.0f / (sign + this.z);
+            float b = this.x * this.y * a;
+
+            Vec e1 = new Vec(1.0f + sign * this.x * this.x * a, sign * b, -sign * this.x);
+            Vec e2 = new Vec(b, sign + this.y * this.y * a, -this.y);
+            Vec e3 = this.toVec();
+
+            return new List<Vec>() { e1, e2, e3 };
+        }
+
+    } // end of Normal
 
     /// <summary>
     ///  Affine transformation. It is represented by a 4x4 matrix. 
