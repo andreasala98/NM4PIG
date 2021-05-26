@@ -18,6 +18,8 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Trace.Test
 {
@@ -107,6 +109,37 @@ namespace Trace.Test
             Assert.True(scatteredRay2.isClose(expectedRay2), "TestSpecularBRDF failed - Assert 2/2");
         }
 
+
+        [Fact]
+        public void TestDiffusiveBRDF()
+        {
+            Material m = new Material(Brdf: new DiffuseBRDF());
+            Sphere s = new Sphere(material: m);
+            PCG r = new PCG();
+           // List<Point?> a = new List<Point?>();
+            using (StreamWriter sw = File.AppendText("uniformSphere.txt"))
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Ray ray = s.material.brdf.scatterRay(r,
+                                                         new Vec(1f, 0f, 0f),
+                                                         new Point(0f, 0f, 0f),
+                                                         new Normal(0f, 0f, 1f),
+                                                         1);
+
+                    HitRecord? hit = s.rayIntersection(ray);
+                    //    a.Add(hit?.worldPoint);
+                    sw.WriteLine("Direzione raggio: ");
+                    sw.WriteLine(ray.dir.x + " " + ray.dir.y + " " + ray.dir.z);
+                    sw.WriteLine("Punto intersezione sfera: ");
+                    sw.WriteLine(hit?.worldPoint.ToString());
+
+                    //System.IO.File.WriteAllText("uniformSphere.txt", hit?.worldPoint.ToString());
+
+                }
+            }
+
+        }
 
     }
 }

@@ -56,7 +56,7 @@ namespace Trace
         /// Converts a Point to a string for printing.
         /// </summary>
         /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
-        public override string ToString() => $"Point(x={this.x}, y={this.y}, z={this.z})";
+        public override string ToString() => $"{this.x} {this.y} {this.z} ";
 
         /// <summary>
         /// Boolean to check if two Points are close enough
