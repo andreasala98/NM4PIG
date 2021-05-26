@@ -54,6 +54,15 @@ namespace Trace
         }
 
         /// <summary>
+        /// Generate a totally random color! This method is for the brave only.
+        /// </summary>
+        /// <returns> A random Color (we hope it is a pretty one)</returns>
+        public static Color random() {
+            var rnd = new Random();
+            return new Color((float)rnd.NextDouble(),(float)rnd.NextDouble(),(float)rnd.NextDouble() );
+        }
+
+        /// <summary>
         /// Element-wise sum of two Colors.
         /// </summary>
         /// <param name="col1"> The first Color</param>
