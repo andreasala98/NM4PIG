@@ -210,17 +210,38 @@ namespace Trace.Test
         }
 
         [Fact]
-        public void ONBRandomTesting()
+        public void ONBRandomTestingNormal()
         {
             PCG pcg = new PCG();
 
             for (int i = 0; i < 1E5; i++) {
-                Normal n = new Normal(pcg.randomFloat(), pcg.randomFloat(), pcg.randomFloat());
-                n.Normalize();
-                Console.WriteLine(n.ToString());
+                Normal n = new Normal(pcg.randomFloat(), pcg.randomFloat(), pcg.randomFloat()).Normalize();
+                
                 List<Vec> onb = n.createONBfromZ();
 
                 Assert.True(onb[2].isClose(n.toVec()), "ONBRandomTesting Failed! Assert 1");
+        
+                Assert.True(Utility.areClose(onb[0] * onb[1], 0f), $"{onb[0] * onb[1]} is not close to {0f}!!");
+                Assert.True(Utility.areClose(onb[1] * onb[2], 0f), $"{onb[1] * onb[2]} is not close to {0f}!!");
+                Assert.True(Utility.areClose(onb[0] * onb[2], 0f), $"{onb[0] * onb[2]} is not close to {0f}!!");
+
+                Assert.True(Utility.areClose(onb[0].getSquaredNorm(),1f), "ONBRandomTesting Failed! Assert 5");
+                Assert.True(Utility.areClose(onb[1].getSquaredNorm(),1f), "ONBRandomTesting Failed! Assert 6");
+                Assert.True(Utility.areClose(onb[2].getSquaredNorm(),1f), "ONBRandomTesting Failed! Assert 7");
+            }
+        }
+
+        [Fact]
+        public void ONBRandomTestingVec()
+        {
+            PCG pcg = new PCG();
+
+            for (int i = 0; i < 1E5; i++) {
+                Vec n = new Vec(pcg.randomFloat(), pcg.randomFloat(), pcg.randomFloat()).Normalize();
+                
+                List<Vec> onb = n.createONBfromZ();
+
+                Assert.True(onb[2].isClose(n), "ONBRandomTesting Failed! Assert 1");
         
                 Assert.True(Utility.areClose(onb[0] * onb[1], 0f), $"{onb[0] * onb[1]} is not close to {0f}!!");
                 Assert.True(Utility.areClose(onb[1] * onb[2], 0f), $"{onb[1] * onb[2]} is not close to {0f}!!");

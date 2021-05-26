@@ -275,14 +275,15 @@ namespace Trace
 
         public List<Vec> createONBfromZ() 
         {
-            float sign = MathF.CopySign(1f, this.z);
-            float a = -1.0f / (sign + this.z);
-            float b = this.x * this.y * a;
+            Vec e3 = this.Normalize();
+            float sign = MathF.CopySign(1f, e3.z);
+            float a = -1.0f / (sign + e3.z);
+            float b = e3.x * e3.y * a;
 
-            Vec e1 = new Vec(1.0f + sign * this.x * this.x * a, sign * b, -sign * this.x);
-            Vec e2 = new Vec(b, sign + this.y * this.y * a, -this.y);
+            Vec e1 = new Vec(1.0f + sign * e3.x * e3.x * a, sign * b, -sign * e3.x);
+            Vec e2 = new Vec(b, sign + e3.y * e3.y * a, -e3.y);
 
-            return new List<Vec>() { e1, e2, this };
+            return new List<Vec>() { e1, e2, e3 };
         }
 
     }
@@ -404,13 +405,15 @@ namespace Trace
 
         public List<Vec> createONBfromZ() 
         {
-            float sign = MathF.CopySign(1f, this.z);
-            float a = -1.0f / (sign + this.z);
-            float b = this.x * this.y * a;
+            Vec e3 = this.toVec().Normalize();
 
-            Vec e1 = new Vec(1.0f + sign * this.x * this.x * a, sign * b, -sign * this.x);
-            Vec e2 = new Vec(b, sign + this.y * this.y * a, -this.y);
-            Vec e3 = this.toVec();
+            float sign = MathF.CopySign(1f, e3.z);
+            float a = -1.0f / (sign + e3.z);
+            float b = e3.x * e3.y * a;
+
+            Vec e1 = new Vec(1.0f + sign * e3.x * e3.x * a, sign * b, -sign * e3.x);
+            Vec e2 = new Vec(b, sign + e3.y * e3.y * a, -e3.y);
+            
 
             return new List<Vec>() { e1, e2, e3 };
         }

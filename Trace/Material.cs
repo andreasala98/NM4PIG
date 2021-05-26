@@ -173,7 +173,7 @@ namespace Trace
 
         public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
         {
-            // creazione base onb e1, e2, e3
+            
             Vec e1 = new Vec(1f, 0f, 0f);
             Vec e2 = new Vec(1f, 0f, 0f);
             Vec e3 = new Vec(1f, 0f, 0f);
