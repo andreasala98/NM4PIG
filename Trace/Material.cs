@@ -144,6 +144,8 @@ namespace Trace
         public float reflectance;
         public abstract Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv);
 
+        public abstract Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth);
+
         public BRDF(IPigment? pig = null) 
         {
             this.pigment = pig ?? new UniformPigment(Constant.White);
@@ -167,6 +169,11 @@ namespace Trace
         public override Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv)
         {
             return this.pigment.getColor(uv) * (this.reflectance / Constant.PI);
+        }
+
+        public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
+        {
+            throw new NotImplementedException();
         }
 
     }
