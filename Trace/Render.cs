@@ -15,6 +15,10 @@ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 */
+
+using System;
+
+#nullable enable
 namespace Trace
 {
 
@@ -82,16 +86,77 @@ namespace Trace
         {
             HitRecord? hit = this.world.rayIntersection(r);
             if (hit == null) return backgroundColor;
-            Material mat = (hit.Value.shape).material;
+            Material mat = hit.Value.shape?.material!;
             return mat.brdf.pigment.getColor(hit.Value.surfacePoint) + mat.emittedRadiance.getColor(hit.Value.surfacePoint);
         }
 
     }
 
+    /// <summary>
+    /// A simple path-tracing renderer
+    /// The algorithm implemented here allows the caller to tune number of rays thrown at each iteration, as well as the
+    /// maximum depth.It implements Russian roulette, so in principle it will take a finite time to complete the
+    /// calculation even if you set max_depth to `math.inf`.
+    /// </summary>
+    public class PathTracer : Render
+    {
 
+        public PCG pcg;
+        public int numOfRays;
+        public int maxDepth;
+        public int russianRouletteLimit;
 
+        public PathTracer(World world, Color? background = null, PCG? pcg = null, int numOfRays = 10, int maxDepth = 2, int russianRouletteLimit = 3) : base(world, background)
+        {
+            this.pcg = pcg ?? new PCG();
+            this.numOfRays = numOfRays;
+            this.maxDepth = maxDepth;
+            this.russianRouletteLimit = russianRouletteLimit;
+        }
 
+        public override Color computeRadiance(Ray ray)
+        {
+            if (ray.depth > this.maxDepth)
+                return new Color(0f, 0f, 0f);
 
+            HitRecord? hitRecord = this.world.rayIntersection(ray);
+            if (hitRecord == null)
+                return this.backgroundColor;
 
+            Material hitMaterial = hitRecord.Value.shape?.material!;
+            Color hitColor = hitMaterial.brdf.pigment.getColor(hitRecord.Value.surfacePoint);
+            Color emittedRadiance = hitMaterial.emittedRadiance.getColor(hitRecord.Value.surfacePoint);
+
+            float hitColorLum = MathF.Max(hitColor.r, MathF.Max(hitColor.g, hitColor.b));
+
+            // Russian roulette
+            if (ray.depth >= this.russianRouletteLimit)
+                if (this.pcg.randomFloat() > hitColorLum)
+                    // Keep the recursion going, but compensate for other potentially discarded rays
+                    hitColor *= 1.0f / (1.0f - hitColorLum);
+                else
+                    // Terminate prematurely
+                    return emittedRadiance;
+
+            Color cumRadiance = new Color(0f, 0f, 0f);
+            if (hitColorLum > 0f)
+            { // Only do costly recursions if it's worth it
+                for (int rayIndex = 0; rayIndex < this.numOfRays; rayIndex++)
+                {
+                    Ray newRay = hitMaterial.brdf.scatterRay(
+                        pcg: this.pcg,
+                        incomingDir: hitRecord.Value.ray.dir,
+                        interactionPoint: hitRecord.Value.worldPoint,
+                        normal: hitRecord.Value.normal,
+                        depth: ray.depth + 1
+                    );
+                    // Recursive call
+                    Color newRadiance = this.computeRadiance(newRay);
+                    cumRadiance += hitColor * newRadiance;
+                }
+            }
+            return emittedRadiance + cumRadiance * (1.0f / this.numOfRays);
+        }
+    }
 
 } // trace
