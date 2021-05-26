@@ -187,7 +187,7 @@ namespace Trace
 
             Vec dir = e1 * sinTheta * MathF.Cos(phi) + e2 * sinTheta * MathF.Sin(phi) + e3 * cosTheta;
 
-            return new Ray(interactionPoint, dir, 1e-3f, depth);
+            return new Ray(interactionPoint, dir, tm : 1e-3f, dep : depth);
                 
         }
     }
