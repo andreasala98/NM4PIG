@@ -285,7 +285,7 @@ namespace NM4PIG
                     break;
                 case 5:
                     PCG pcg = new PCG();
-                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(Constant.Black)), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
+                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(Constant.Black)), new UniformPigment(new Color(1.0f, 0.9f, 0.8f)));
                     Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(new Color(0.3f,0.5f,0.1f), new Color(0.1f,0.2f,0.5f))), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
                     Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.05f, 0.6f, 0.6f))));
                     //Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.8f, 0.1f, 0.2f))));
@@ -294,8 +294,8 @@ namespace NM4PIG
 
 
                     world.addShape(new Sphere(Transformation.Scaling(200f), skyMat));
-                   // world.addShape(new CSGUnion(new Sphere(Transformation.Scaling(2f)*Transformation.Translation(0f,0f,0f), sph1Mat),
-                      //                                new Box(new Point(0f,0.5f,0.7f), new Point(3f,2f,2f), null, sph2Mat)));
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Scaling(2f)*Transformation.Translation(0f,0f,0f), sph1Mat),
+                                                      new Box(new Point(0f,0.5f,0.7f), new Point(3f,2f,2f), null, sph2Mat)));
                     world.addShape(new Sphere(Transformation.Translation(0f,3f,-0.6f)*Transformation.Scaling(1.0f), refMat));
                     
                     renderer = new PathTracer(world, Constant.Black, pcg);
