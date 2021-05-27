@@ -21,6 +21,10 @@ using System.IO;
 using Trace;
 using Microsoft.Extensions.CommandLineUtils;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+using Tsf = Trace.Transformation;
+using CC = Trace.Constant;
 
 namespace NM4PIG
 {
@@ -160,6 +164,9 @@ namespace NM4PIG
         public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene, float? luminosity)
         {
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             Console.WriteLine("Starting Demo with these parameters:\n");
 
             Console.WriteLine("Width: " + width);
@@ -285,19 +292,23 @@ namespace NM4PIG
                     break;
                 case 5:
                     PCG pcg = new PCG();
-                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(Constant.Black)), new UniformPigment(new Color(1.0f, 0.9f, 0.8f)));
-                    Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(new Color(0.3f,0.5f,0.1f), new Color(0.1f,0.2f,0.5f))), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
+                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.Black)), new UniformPigment(new Color(0.5294117647f, 0.80784313725f, 0.92156862745f)));
+                    Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, new Color(0.7f,0.2f,0.1f))), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
                     Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.05f, 0.6f, 0.6f))));
                     //Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.8f, 0.1f, 0.2f))));
                     Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(Color.random())));
                     Material refMat = new Material(new SpecularBRDF(new UniformPigment(new Color(0.65f, 0.0f, 0.1f))));
 
 
-                    world.addShape(new Sphere(Transformation.Scaling(200f), skyMat));
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Scaling(2f)*Transformation.Translation(0f,0f,0f), sph1Mat),
-                                                      new Box(new Point(0f,0.5f,0.7f), new Point(3f,2f,2f), null, sph2Mat)));
-                    world.addShape(new Sphere(Transformation.Translation(0f,3f,-0.6f)*Transformation.Scaling(1.0f), refMat));
-                    
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMat));
+                    world.addShape(new Plane(Tsf.Translation(0f,0f,-1f), groundMat));
+                    //world.addShape(new CSGUnion(new Sphere(Transformation.Scaling(2f)*Transformation.Translation(0f,0f,0f), sph1Mat),
+                    //                                 new Box(new Point(0f,0.5f,0.7f), new Point(3f,2f,2f), null, sph2Mat)));
+                    world.addShape(new Sphere(Tsf.Translation(3f,3f,-0.6f)*Tsf.Scaling(3.0f), refMat));
+                    world.addShape(new Sphere(Tsf.Translation(4f,-1f,1.3f)*Tsf.Scaling(1.0f), sph1Mat));
+                    //world.addShape(new CSGUnion(new Sphere(Tsf.Translation(-1.0f,0.8f,0.2f), sph2Mat), 
+                    //                            new Sphere(Tsf.Translation(-1.0f,0f,0.4f),sph2Mat)));
+                    world.addShape(new Sphere(Tsf.Translation(-4f, -0.5f, 1f)*Tsf.Scaling(2f), sph2Mat));
                     renderer = new PathTracer(world, Constant.Black, pcg);
                     break;
                 case 6:
@@ -330,6 +341,14 @@ namespace NM4PIG
             }
 
             Convert(pfmFile, ldrFile, Default.factor, Default.gamma, luminosity);
+
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
 
         }//Demo
 
@@ -389,8 +408,11 @@ namespace NM4PIG
 
         }
 
+        
 
     } //Program class
+
+    
 
 } //NM4PIG namespace
 

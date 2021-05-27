@@ -194,6 +194,8 @@ namespace Trace
                     Ray raggio = this.fireRay(j, i);
                     Color colore = rend.computeRadiance(raggio);
                     this.image.setPixel(j, i, colore);
+                    if (i%50==0 && i!=0)
+                    Console.Write(((float)(100*i)/image.height).ToString("0.00") + "% of rendering completed\r");
                 }
             }
 
@@ -209,6 +211,10 @@ namespace Trace
                     Color colore = lf(raggio);
                     this.image.setPixel(j, i, colore);
                 }
+
+                if (i%50==0 && i!=0)
+                Console.Write(((float)i/image.height).ToString("0.00") + " of rendering completed\r");
+
             }
 
         }
