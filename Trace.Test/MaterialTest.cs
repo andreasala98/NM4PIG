@@ -116,27 +116,40 @@ namespace Trace.Test
             Material m = new Material(Brdf: new DiffuseBRDF());
             Sphere s = new Sphere(material: m);
             PCG r = new PCG();
-           // List<Point?> a = new List<Point?>();
-            using (StreamWriter sw = File.AppendText("uniformSphere.txt"))
+
+            // this part of the code is used to check which are the first, few, casual directions
+            // so that a numeric test can be implemented.
+
+            // using (StreamWriter sw = File.AppendText("uniformSphere.txt"))
+            // {
+            //     for (int i = 0; i < 1000; i++)
+            //     {
+            //         Ray ray = s.material.brdf.scatterRay(r,
+            //                                              new Vec(1f, 0f, 0f),
+            //                                              new Point(0f, 0f, 0f),
+            //                                              new Normal(0f, 0f, 1f),
+            //                                              1);
+            //         HitRecord? hit = s.rayIntersection(ray);
+            //         sw.WriteLine(hit?.worldPoint.ToString());
+            //     }
+            // }
+
+            List<Ray> expectedRays = new List<Ray>();
+            expectedRays.Add(new Ray(Constant.Origin,
+                        new Vec(-0.6039477f, 0.07026359f, 0.7939208f)));
+            expectedRays.Add(new Ray(Constant.Origin,
+                        new Vec(-0.5201868f, -0.04896636f, 0.85264766f)));
+            expectedRays.Add(new Ray(Constant.Origin,
+                        new Vec(0.14469035f, -0.48006395f, 0.86521876f)));
+
+            for (int i = 0; i < 3; i++)
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    Ray ray = s.material.brdf.scatterRay(r,
-                                                         new Vec(1f, 0f, 0f),
-                                                         new Point(0f, 0f, 0f),
-                                                         new Normal(0f, 0f, 1f),
-                                                         1);
-
-                    HitRecord? hit = s.rayIntersection(ray);
-                    //    a.Add(hit?.worldPoint);
-                    sw.WriteLine("Direzione raggio: ");
-                    sw.WriteLine(ray.dir.x + " " + ray.dir.y + " " + ray.dir.z);
-                    sw.WriteLine("Punto intersezione sfera: ");
-                    sw.WriteLine(hit?.worldPoint.ToString());
-
-                    //System.IO.File.WriteAllText("uniformSphere.txt", hit?.worldPoint.ToString());
-
-                }
+                Ray ray = s.material.brdf.scatterRay(r,
+                                                     new Vec(1f, 0f, 0f),
+                                                     new Point(0f, 0f, 0f),
+                                                     new Normal(0f, 0f, 1f),
+                                                     1);
+                Assert.True(ray.isClose(expectedRays[i]), $"Attention: ray number {i+1} has a problem - Test Failed");
             }
 
         }
