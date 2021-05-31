@@ -148,6 +148,7 @@ namespace Trace
         /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.
         /// </summary>
         public Camera camera;
+        //ADD ANTIALIASING!!!
 
         /// <summary>
         /// Basic constructor for the class.
