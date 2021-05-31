@@ -56,7 +56,7 @@ namespace Trace
         /// Converts a Point to a string for printing.
         /// </summary>
         /// <returns> A string in the format Point(x=" ",y=" ",z=" ")</returns>
-        public override string ToString() => $"{this.x} {this.y} {this.z} ";
+        public override string ToString() => $"Point=(x={this.x}, y={this.y}, z={this.z})";
 
         /// <summary>
         /// Boolean to check if two Points are close enough
@@ -273,7 +273,7 @@ namespace Trace
         public List<float> ToList()
             => new List<float>() { this.x, this.y, this.z };
 
-        public List<Vec> createONBfromZ() 
+        public List<Vec> createONBfromZ()
         {
             Vec e3 = this.Normalize();
             float sign = MathF.CopySign(1f, e3.z);
@@ -408,7 +408,7 @@ namespace Trace
             => new Vec(this.x, this.y, this.z);
 
 
-        public List<Vec> createONBfromZ() 
+        public List<Vec> createONBfromZ()
         {
             Vec e3 = this.toVec().Normalize();
 
@@ -418,7 +418,7 @@ namespace Trace
 
             Vec e1 = new Vec(1.0f + sign * e3.x * e3.x * a, sign * b, -sign * e3.x);
             Vec e2 = new Vec(b, sign + e3.y * e3.y * a, -e3.y);
-            
+
 
             return new List<Vec>() { e1, e2, e3 };
         }

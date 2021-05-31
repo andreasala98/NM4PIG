@@ -291,7 +291,7 @@ namespace NM4PIG
 
                     break;
                 case 5:
-                    PCG pcg = new PCG();
+                    PCG pcg = new PCG(); 
                     Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.Black)), new UniformPigment(new Color(0.5294117647f, 0.80784313725f, 0.92156862745f)));
                     Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, new Color(0.7f,0.2f,0.1f))), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
                     Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.05f, 0.6f, 0.6f))));
