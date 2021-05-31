@@ -176,23 +176,45 @@ namespace Trace
             return this.camera.fireRay(u, v);
         }
 
-        public delegate Color myFunction(Ray r);
+        public delegate Color PFunction(Ray r);
+
+
         /// <summary>
         /// Method that calculates all pixels of the <see cref="HdrImage"/>
         /// datamember according to the rendering equation,
         /// specified by a <see cref="myFunction"/> object.
         /// </summary>
         /// <param name="Func"> The function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
-        public void fireAllRays(myFunction Func)
+        public void fireAllRays(Render rend)
         {
-            for (int r = 0; r < image.height; r++)
+            for (int i = 0; i < image.height; i++)
             {
-                for (int c = 0; c < image.width; c++)
+                for (int j = 0; j < image.width; j++)
                 {
-                    Ray raggio = this.fireRay(c, r);
-                    Color colore = Func(raggio);
-                    this.image.setPixel(c, r, colore);
+                    Ray raggio = this.fireRay(j, i);
+                    Color colore = rend.computeRadiance(raggio);
+                    this.image.setPixel(j, i, colore);
+                    if (i%50==0 && i!=0)
+                    Console.Write(((float)(100*i)/image.height).ToString("0.00") + "% of rendering completed\r");
                 }
+            }
+
+        }
+
+        public void fireAllRays(PFunction lf)
+        {
+            for (int i = 0; i < image.height; i++)
+            {
+                for (int j = 0; j < image.width; j++)
+                {
+                    Ray raggio = this.fireRay(j, i);
+                    Color colore = lf(raggio);
+                    this.image.setPixel(j, i, colore);
+                }
+
+                if (i%50==0 && i!=0)
+                Console.Write(((float)i/image.height).ToString("0.00") + " of rendering completed\r");
+
             }
 
         }

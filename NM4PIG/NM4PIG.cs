@@ -21,6 +21,10 @@ using System.IO;
 using Trace;
 using Microsoft.Extensions.CommandLineUtils;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+using Tsf = Trace.Transformation;
+using CC = Trace.Constant;
 
 namespace NM4PIG
 {
@@ -54,6 +58,7 @@ namespace NM4PIG
                 var angledeg = command.Option("--angle|-a <ANGLE>", "field-of-view angle, default is 0", CommandOptionType.SingleValue);
                 var orthogonal = command.Option("--orthogonal|-o", "Use an orthogonal camera instead of perspective", CommandOptionType.NoValue);
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
+                var luminosity = command.Option("--luminosity|-l <LUMINOSITY>", "Force average luminosity to some value instead of calculating it", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
                 var scene = command.Option("--scene|-s <scene>", "number of the scene", CommandOptionType.SingleValue);
 
@@ -72,6 +77,7 @@ namespace NM4PIG
                                                         orthogonal.Value(),
                                                         pfmfile.Value(),
                                                         ldrfile.Value(),
+                                                        luminosity.Value(),
                                                         scene.Value()
                                                         );
                     }
@@ -88,7 +94,8 @@ namespace NM4PIG
                         readParam.orthogonal,
                         readParam.pfmFile,
                         readParam.ldrFile,
-                        readParam.scene
+                        readParam.scene,
+                        readParam.luminosity
                     );
                     return 0;
                 });
@@ -104,6 +111,7 @@ namespace NM4PIG
 
                 var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
+                var luminosity = command.Option("--luminosity|-l <LUMINOSITY>", "Force average luminosity to some value instead of calculating it", CommandOptionType.SingleValue);
                 var factor = command.Option("--factor|-f <FACTOR>", "scaling factor", CommandOptionType.SingleValue);
                 var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction", CommandOptionType.SingleValue);
 
@@ -116,7 +124,12 @@ namespace NM4PIG
                     Parameters readParam = new Parameters();
                     try
                     {
-                        readParam.parseCommandLineConvert(pfmfile.Value(), ldrfile.Value(), factor.Value(), gamma.Value());
+                        readParam.parseCommandLineConvert(
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value(),
+                                                        factor.Value(),
+                                                        gamma.Value(),
+                                                        luminosity.Value());
                     }
                     catch (CommandLineException e)
                     {
@@ -127,7 +140,8 @@ namespace NM4PIG
                             readParam.pfmFile,
                             readParam.ldrFile,
                             readParam.factor,
-                            readParam.gamma
+                            readParam.gamma,
+                            readParam.luminosity
                             );
                     return 0;
                 });
@@ -147,8 +161,11 @@ namespace NM4PIG
 
         // ############################################# //
 
-        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene)
+        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, string ldrFile, int scene, float? luminosity)
         {
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             Console.WriteLine("Starting Demo with these parameters:\n");
 
@@ -163,14 +180,23 @@ namespace NM4PIG
 
             HdrImage image = new HdrImage(width, height);
 
+            // Camera initialization
+            Console.WriteLine("Creating the camera...");
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
+            Camera camera;
+            if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+            else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
+
+            // Default value on/off renderer
+            Render? renderer = null;
+
             Console.WriteLine("Creating the scene...");
             World world = new World();
+            List<float> Vertices = new List<float>() { -0.5f, 0.5f };
 
             switch (scene)
             {
                 case 1:
-                    List<float> Vertices = new List<float>() { -0.5f, 0.5f };
-
                     //One sphere for each vertex of the cube
                     foreach (var x in Vertices)
                     {
@@ -178,7 +204,7 @@ namespace NM4PIG
                         {
                             foreach (var z in Vertices)
                             {
-                                world.addShape(new Sphere(Transformation.Translation(new Vec(x, y, z))
+                                world.addShape(new Sphere(transformation: Transformation.Translation(new Vec(x, y, z))
                                                     * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                             } // z
                         } // y
@@ -188,55 +214,123 @@ namespace NM4PIG
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
                                              * Transformation.Scaling(0.1f)));
                     world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
-                                             * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
+                                             * Transformation.Scaling(0.1f)));
                     break;
 
                 case 2:
-                    world.addShape(new CSGDifference(new Sphere(Transformation.RotationX(Constant.PI) * Transformation.Translation(0f, 0f, -0.4f)),
-                                                     new Sphere(Transformation.Scaling(0.9f) * Transformation.RotationX(Constant.PI)
-                                                                * Transformation.Translation(0f, 0f, 0.1f))));
+
+                    Material material1 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Yellow, Constant.Blue)));
+                    Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
+                    Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
+
+                    //One sphere for each vertex of the cube
+                    foreach (var x in Vertices)
+                    {
+                        foreach (var y in Vertices)
+                        {
+                            foreach (var z in Vertices)
+                            {
+                                world.addShape(new Sphere(transformation: Transformation.Translation(new Vec(x, y, z))
+                                                    * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f)),
+                                                    material1));
+                            } // z
+                        } // y
+                    }// x
+
+                    //Adding two more spheres to break simmetry
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
+                                             * Transformation.Scaling(0.1f), material2));
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
+                                             * Transformation.Scaling(0.1f), material3));
+
+                    renderer = new FlatRender(world);
                     break;
                 case 3:
-                    world.addShape(new CSGIntersection(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
-                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
+                    HdrImage img = new HdrImage();
+                    string inputpfm = "Texture/minecraft.pfm";
+                    using (FileStream inputStream = File.OpenRead(inputpfm))
+                    {
+                        img.readPfm(inputStream);
+                        Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
+                    }
+
+                    world.addShape(
+                                    new Box(
+                                            transformation: Transformation.Scaling(0.5f),
+                                            material: new Material(
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img)),
+                                                                EmittedRadiance: new UniformPigment(Constant.Black)
+                                                                )
+                                )
+                                );
+
+                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+
                     break;
+
                 case 4:
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0f, 0.3f, 0f)),
-                                                 new Sphere(Transformation.Translation(0f, -0.3f, 0.0f))));
+                    HdrImage img2 = new HdrImage();
+                    string inputpfm2 = "Texture/diceW.pfm";
+                    using (FileStream inputStream = File.OpenRead(inputpfm2))
+                    {
+                        img2.readPfm(inputStream);
+                        Console.WriteLine($"File {inputpfm2} has been correctly read from disk.");
+                    }
+
+                    world.addShape(
+                                    new Box(
+                                            transformation: Transformation.Scaling(0.5f),
+                                            material: new Material(
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img2)),
+                                                                EmittedRadiance: new UniformPigment(Constant.Black)
+                                                                )
+                                )
+                                );
+
+                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+
                     break;
                 case 5:
-                    world.addShape(new CSGIntersection(new Sphere(), new Plane(Transformation.RotationY(0.5f))));
+                    PCG pcg = new PCG();
+                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.Black)), new UniformPigment(new Color(0.5294117647f, 0.80784313725f, 0.92156862745f)));
+                    Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, new Color(0.7f,0.2f,0.1f))), new UniformPigment(new Color(1.0f, 0.9f, 0.5f)));
+                    Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.05f, 0.6f, 0.6f))));
+                    //Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0.8f, 0.1f, 0.2f))));
+                    Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(Color.random())));
+                    Material refMat = new Material(new SpecularBRDF(new UniformPigment(new Color(0.65f, 0.0f, 0.1f))));
+
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMat));
+                    world.addShape(new Plane(Tsf.Translation(0f,0f,-1f), groundMat));
+                    //world.addShape(new CSGUnion(new Sphere(Transformation.Scaling(2f)*Transformation.Translation(0f,0f,0f), sph1Mat),
+                    //                                 new Box(new Point(0f,0.5f,0.7f), new Point(3f,2f,2f), null, sph2Mat)));
+                    world.addShape(new Sphere(Tsf.Translation(3f,3f,-0.6f)*Tsf.Scaling(3.0f), refMat));
+                    world.addShape(new Sphere(Tsf.Translation(4f,-1f,1.3f)*Tsf.Scaling(1.0f), sph1Mat));
+                    //world.addShape(new CSGUnion(new Sphere(Tsf.Translation(-1.0f,0.8f,0.2f), sph2Mat), 
+                    //                            new Sphere(Tsf.Translation(-1.0f,0f,0.4f),sph2Mat)));
+                    world.addShape(new Sphere(Tsf.Translation(-4f, -0.5f, 1f)*Tsf.Scaling(2f), sph2Mat));
+                    renderer = new PathTracer(world, Constant.Black, pcg);
                     break;
                 case 6:
-                    world.addShape(new Box(transformation: Transformation.Scaling(0.5f)));
-                    break;
-                case 7:
                     world.addShape(new CSGUnion(
                                             new Sphere(
                                                     Transformation.Translation(new Vec(0f, 0f, 1.2f))
                                                     * Transformation.Scaling(0.635f)),
-                                            new Box(transformation: Transformation.Scaling(0.5f,0.5f,1f))
+                                            new Box(transformation: Transformation.Scaling(0.5f, 0.5f, 1f))
                                             )
                                     );
-                    world.addShape(new Sphere(Transformation.Scaling(0.6f) * Transformation.Translation(new Vec(0f, 0.7f, -1.2f))));
-                    world.addShape(new Sphere((Transformation.Scaling(0.6f)*Transformation.Translation(new Vec(0f,-0.7f,-1.2f)))));
                     break;
                 default:
                     break;
             }
 
-
-            // Camera initialization
-            Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
-            Camera camera;
-            if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
-            else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
-
             // Ray tracing
             Console.WriteLine("Rendering the scene...");
             var rayTracer = new ImageTracer(image, camera);
-            rayTracer.fireAllRays((Ray r) => world.rayIntersection(r) != null ? Constant.White : Constant.Black);
+
+            if (renderer == null) renderer = new OnOffRender(world);
+
+            rayTracer.fireAllRays(renderer);
 
             // Write PFM image
             Console.WriteLine("Saving in pfm format...");
@@ -246,12 +340,20 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            Convert(pfmFile, ldrFile, Default.factor, Default.gamma);
+            Convert(pfmFile, ldrFile, Default.factor, Default.gamma, luminosity);
+
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
 
         }//Demo
 
         // ############################################# //
-        public static void Convert(string inputpfm, string outputldr, float factor, float gamma)
+        public static void Convert(string inputpfm, string outputldr, float factor, float gamma, float? luminosity)
         {
             string fmt = outputldr.Substring(outputldr.Length - 3, 3);
 
@@ -262,6 +364,7 @@ namespace NM4PIG
             Console.WriteLine("Format: " + fmt);
             Console.WriteLine("Factor: " + factor);
             Console.WriteLine("Gamma: " + gamma);
+            Console.WriteLine(luminosity.HasValue ? ("Manual luminosity: " + luminosity) : "Average luminosity");
 
             Console.WriteLine("\n");
 
@@ -285,7 +388,9 @@ namespace NM4PIG
             try
             {
                 Console.WriteLine("Normalizing image...");
-                myImg.normalizeImage(factor);
+
+                if (luminosity.HasValue) myImg.normalizeImage(factor, luminosity.Value);
+                else myImg.normalizeImage(factor);
 
                 Console.WriteLine("Clamping image...");
                 myImg.clampImage();
@@ -303,8 +408,11 @@ namespace NM4PIG
 
         }
 
+        
 
     } //Program class
+
+    
 
 } //NM4PIG namespace
 

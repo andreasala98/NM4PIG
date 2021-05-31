@@ -35,7 +35,7 @@ namespace NM4PIG
         public static int height = 480;
         public static int angledeg = 0;
         public static bool orthogonal = false;
-
+        public static float? luminosity = null;
         public static int scene = 1;
 
         //Convert
@@ -60,7 +60,7 @@ namespace NM4PIG
         public int height;
         public int angledeg;
         public bool orthogonal;
-
+        public float? luminosity;
         public int scene;
 
         public Parameters()
@@ -73,6 +73,7 @@ namespace NM4PIG
             this.height = Default.height;
             this.angledeg = Default.angledeg;
             this.orthogonal = Default.orthogonal;
+            this.luminosity = Default.luminosity;
             this.scene = Default.scene;
         }
 
@@ -83,7 +84,8 @@ namespace NM4PIG
         /// <param name="ldrfile"> name of the .png/.jpg file you want to save</param>
         /// <param name="factor"> scaling factor for every pixel in the image. Default is 0.18</param>
         /// <param name="gamma"> encoding/decoding factor due to monitor differences </param>
-        public void parseCommandLineConvert(string? pfmfile, string? ldrfile, string? factor, string? gamma)
+        /// <param name="luminosity"> automatic or manual average luminosity. Default is false (automatic) </param>
+        public void parseCommandLineConvert(string? pfmfile, string? ldrfile, string? factor, string? gamma, string? luminosity)
         {
 
             if (pfmfile != null) this.pfmFile = pfmfile;
@@ -113,6 +115,18 @@ namespace NM4PIG
                 }
             }
 
+            if (luminosity != null)
+            {
+                try
+                {
+                    this.luminosity = float.Parse(luminosity, CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
+                }
+            }
+
         } //parseCommandLineConvert
 
         /// <summary>
@@ -124,7 +138,8 @@ namespace NM4PIG
         /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
         /// <param name="pfmfile"> Name of the fm output file</param>
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
-        public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal, string? pfmfile, string? ldrfile, string? scene)
+        public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal,
+                                         string? pfmfile, string? ldrfile, string? luminosity, string? scene)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -177,6 +192,19 @@ namespace NM4PIG
                     throw new CommandLineException("Angle argument is not an int. Please enter an integer");
                 }
             }
+
+            if (luminosity != null)
+            {
+                try
+                {
+                    this.luminosity = float.Parse(luminosity, CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
+                }
+            }
+
         }
     } //Parameters class
 

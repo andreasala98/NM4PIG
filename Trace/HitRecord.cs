@@ -17,10 +17,11 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
 
 namespace Trace
 {
+#nullable enable
+
     /// <summary>
     ///  A class holding information about a ray-shape intersection
     /// </summary>
@@ -48,23 +49,29 @@ namespace Trace
         /// </summary>
         public Ray ray;
 
-        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r)
+        /// <summary>
+        /// The <see cref="Shape"> intersected by the Ray
+        /// </summary>
+        public Shape? shape;
+
+
+        public HitRecord(Point wp, Normal nm, Vec2D sp, float tt, Ray r, Shape? shape = null)
         {
             this.worldPoint = wp;
             this.normal = nm;
             this.surfacePoint = sp;
             this.t = tt;
             this.ray = r;
+            this.shape = shape;
         }
 
         public bool isClose(HitRecord? other)
         {
             if (other == null) return false;
-
-            else return (this.worldPoint.isClose((Point)other?.worldPoint)
-                            && this.normal.isClose((Normal)other?.normal)
-                            && this.surfacePoint.isClose((Vec2D)other?.surfacePoint)
-                            && this.ray.isClose((Ray)other?.ray)
+            return (this.worldPoint.isClose(other.Value.worldPoint)
+                            && this.normal.isClose(other.Value.normal)
+                            && this.surfacePoint.isClose(other.Value.surfacePoint)
+                            && this.ray.isClose(other.Value.ray)
                         );
         }
 
@@ -76,7 +83,7 @@ namespace Trace
         /// <returns></returns>
         public int CompareTo(HitRecord a)
         {
-                return this.t.CompareTo(a.t);
+            return this.t.CompareTo(a.t);
         }
     }
 

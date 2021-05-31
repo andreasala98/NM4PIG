@@ -58,6 +58,9 @@ namespace Trace
 
         public static float Max(float a, float b, float c)
             => Math.Max(a, Math.Max(b, c));
+
+        public static float NormalizedDot(Vec v1, Vec v2)
+            => v1.Normalize() * v2.Normalize();
     }
 
     /// <summary>
@@ -99,9 +102,43 @@ namespace Trace
         public static Color Black = new Color(0.0f, 0.0f, 0.0f);
 
         /// <summary>
+        /// Red color
+        /// </summary>
+        public static Color Red = new Color(1.0f, 0.0f, 0.0f);
+
+        /// <summary>
+        /// Green color
+        /// </summary>
+        public static Color Green = new Color(0.0f, 1.0f, 0.0f);
+
+        /// <summary>
+        /// Blue color
+        /// </summary>
+        public static Color Blue = new Color(0.0f, 0.0f, 1.0f);
+
+        /// <summary>
+        /// Yellow color
+        /// </summary>
+        public static Color Yellow = new Color(1.0f, 1.0f, 0.0f);
+
+        /// <summary>
+        /// Orange color
+        /// </summary>
+        public static Color Orange = new Color(1.0f, 0.5f, 0.0f);
+
+        public static Color SkyBlue = new Color(0.529f, 0.808f, 0.922f);
+        
+
+
+        /// <summary>
         /// <see cref="Point"> object do describe the origin of axes, i.e. (0,0,0)
         /// </summary>
         public static Point Origin = new Point(0.0f, 0.0f, 0.0f);
+
+
+
+        // public static Pigment Pigment_WHITE = new UniformPigment(White);
+        // public static Pigment Pigment_BLACK = new UniformPigment(Black);
 
     }
 
