@@ -392,11 +392,11 @@ namespace Trace
         {
             Normal result = new Normal();
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
-            if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
-            if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
-            if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
-            if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
-            if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
+            else if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
+            else if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
+            else if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
+            else if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
+            else if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
             if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;

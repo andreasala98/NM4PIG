@@ -32,7 +32,7 @@ namespace Trace
         /// <param name="a"> First number</param>
         /// <param name="b">< Second number/<param>
         /// <param name="epsilon"> Max distance allowed (default: 1e-6)</param>
-        public static bool areClose(float a, float b, float? epsilon = 1e-6f)
+        public static bool areClose(float a, float b, float? epsilon = 1e-5f)
             => Math.Abs(a - b) < epsilon;
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Trace
         public static Color Orange = new Color(1.0f, 0.5f, 0.0f);
 
         public static Color SkyBlue = new Color(0.529f, 0.808f, 0.922f);
-        
+
 
 
         /// <summary>
