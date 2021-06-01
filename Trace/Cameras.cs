@@ -157,13 +157,12 @@ namespace Trace
         /// </summary>
         /// <param name="i"><see cref="HdrImage"/> input parameter</param>
         /// <param name="c"><see cref="Camera"/> input parameter</param>
-        public ImageTracer(HdrImage i, Camera c, int? sps)
+        public ImageTracer(HdrImage i, Camera c, int sps=0)
         {
             this.image = i;
             this.camera = c;
             this.pcg = new PCG();
-
-            this.samplesPerSide = sps ?? 0;
+            this.samplesPerSide = sps;
         }
         /// <summary>
         /// Method that generates a <see cref="Ray"/> object on the virtual screen

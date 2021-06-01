@@ -32,7 +32,7 @@ namespace Trace.Test
                                         material: new Material(Brdf: new DiffuseBRDF(pig: new UniformPigment(Constant.White))));
             HdrImage image = new HdrImage(3, 3);
             OrthogonalCamera camera = new OrthogonalCamera();
-            ImageTracer tracer = new ImageTracer(i: image, c: camera, sps: null);
+            ImageTracer tracer = new ImageTracer(i: image, c: camera);
             World world = new World();
             world.addShape(sphere);
             OnOffRender renderer = new OnOffRender(world: world);
@@ -60,7 +60,7 @@ namespace Trace.Test
 
             HdrImage image = new HdrImage(3, 3);
             OrthogonalCamera camera = new OrthogonalCamera();
-            ImageTracer tracer = new ImageTracer(image, camera, null);
+            ImageTracer tracer = new ImageTracer(image, camera);
             World world = new World();
             world.addShape(sphere);
             FlatRender renderer = new FlatRender(world);
