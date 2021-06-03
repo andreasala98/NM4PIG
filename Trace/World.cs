@@ -30,14 +30,31 @@ namespace Trace
         /// </summary>
         public List<Trace.Shape> shapes;
 
+        /// <summary>
+        /// List of PointLight, needed for the point-light tracer
+        /// </summary>
+        public List<Trace.PointLight> lightSources;
+
         public World()
         {
             this.shapes = new List<Shape>();
+            this.lightSources = new List<PointLight>();
+        }
+
+        public World(List<Shape> ShapeList, List<PointLight> PointLightList)
+        {
+            this.shapes = ShapeList;
+            this.lightSources = PointLightList;
         }
 
         public World(List<Shape> ShapeList)
         {
             this.shapes = ShapeList;
+        }
+
+        public World(List<PointLight> PointLightList)
+        {
+            this.lightSources = PointLightList;
         }
 
         public World(Shape sh)
@@ -46,8 +63,17 @@ namespace Trace
             this.addShape(sh);
         }
 
+        public World(PointLight pl)
+        {
+            this.lightSources = new List<PointLight>();
+            this.addPointLight(pl);
+        }
+
         public void addShape(Shape sh)
           => shapes.Add(sh);
+
+        public void addPointLight(PointLight pl) 
+          => lightSources.Add(pl); 
 
 
         /// <summary>
