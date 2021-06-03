@@ -16,6 +16,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
+using System;
 using System.Collections.Generic;
 
 namespace Trace
@@ -130,6 +131,11 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             return firstShape.isPointInside(a) || secondShape.isPointInside(a);
+        }
+
+        public override bool quickRayIntersection(Ray ray)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -261,6 +267,11 @@ namespace Trace
             return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
         }
 
+        public override bool quickRayIntersection(Ray ray)
+        {
+            throw new NotImplementedException();
+        }
+
     } //CSGDifference
 
     /// <summary>
@@ -382,6 +393,11 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
+        }
+
+        public override bool quickRayIntersection(Ray ray)
+        {
+            throw new NotImplementedException();
         }
     } // CSGIntersection
 
