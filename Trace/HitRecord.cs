@@ -85,6 +85,17 @@ namespace Trace
         {
             return this.t.CompareTo(a.t);
         }
-    }
 
-}
+        public override string ToString()
+        {
+
+            string Cons = "wPoint: " + this.worldPoint.ToString() + "\n"
+                         + "Normal: " + this.normal.ToString() + "\n"
+                         + "sPoint: " + this.surfacePoint.ToString() + "\n";
+            return Cons;
+        }
+
+
+    } //HitRecord
+
+} //Trace

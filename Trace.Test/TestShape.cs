@@ -238,15 +238,15 @@ namespace Trace.Test
             Box box1 = new Box(transformation: Transformation.Scaling(5.0f));
             Ray ray1 = new Ray(new Point(-10f, 3f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box1.rayIntersection(ray1);
-            Assert.True(intersection1 != null, "TestBoxesIntersectionTransformation failed - assert 1/3");
+            Assert.True(intersection1 != null, "TestBoxesIntersectionTransformation failed - assert 1");
             HitRecord hit1 = new HitRecord(
                                             new Point(-5f, 3f, 0.0f),
-                                            new Normal(-1.0f, 0.0f, 0.0f),
+                                            new Normal(-0.2f, 0.0f, 0.0f),
                                             new Vec2D(0.125f, 0.6f),
                                             5.0f,
                                             ray1
                                         );
-            Assert.True(hit1.isClose(intersection1), "TestBoxesIntersectionBasic failed - assert 2/3");
+            Assert.True(hit1.isClose(intersection1), intersection1.ToString());
 
             Ray ray2 = new Ray(new Point(0f, 10f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box1.rayIntersection(ray2);

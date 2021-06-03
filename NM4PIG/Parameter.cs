@@ -37,6 +37,7 @@ namespace NM4PIG
         public static bool orthogonal = false;
         public static float? luminosity = null;
         public static int scene = 1;
+        public static int spp = 9;
 
         //Convert
         public static float factor = 0.18f;
@@ -62,6 +63,7 @@ namespace NM4PIG
         public bool orthogonal;
         public float? luminosity;
         public int scene;
+        public int spp;
 
         public Parameters()
         {
@@ -75,6 +77,7 @@ namespace NM4PIG
             this.orthogonal = Default.orthogonal;
             this.luminosity = Default.luminosity;
             this.scene = Default.scene;
+            this.spp = Default.spp;
         }
 
         /// <summary>
@@ -85,6 +88,7 @@ namespace NM4PIG
         /// <param name="factor"> scaling factor for every pixel in the image. Default is 0.18</param>
         /// <param name="gamma"> encoding/decoding factor due to monitor differences </param>
         /// <param name="luminosity"> automatic or manual average luminosity. Default is false (automatic) </param>
+        /// <param name="spp"> number of Monte Carlo exctracted samples per pixel. Default is 9</param>
         public void parseCommandLineConvert(string? pfmfile, string? ldrfile, string? factor, string? gamma, string? luminosity)
         {
 
@@ -139,7 +143,8 @@ namespace NM4PIG
         /// <param name="pfmfile"> Name of the fm output file</param>
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
         public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal,
-                                         string? pfmfile, string? ldrfile, string? luminosity, string? scene)
+                                         string? pfmfile, string? ldrfile, string? luminosity, string? scene,
+                                         string? SPP)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -202,6 +207,17 @@ namespace NM4PIG
                 catch
                 {
                     throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
+                }
+            }
+
+            if (SPP != null) 
+            {
+                try {
+                    int TEMP_SPP = Int32.Parse(SPP);
+                    this.spp = (int)Math.Pow((int)Math.Sqrt(TEMP_SPP), 2);
+                }
+                catch { 
+                    throw new CommandLineException("Samples per pixel: argument passed is not an integer");
                 }
             }
 

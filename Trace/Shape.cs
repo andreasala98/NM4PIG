@@ -310,8 +310,8 @@ namespace Trace
         /// <returns> Vec2D with u and v as coordinates</returns>
         private static Vec2D _stdPlanePointToUV(Point point)
         {
-            float u = point.x - Convert.ToInt32(point.x);
-            float v = point.y - Convert.ToInt32(point.y);
+            float u = point.x - (int)(point.x);
+            float v = point.y - (int)(point.y);
 
             return new Vec2D(u, v);
         }
@@ -390,7 +390,7 @@ namespace Trace
         /// <returns> The oriented normal</returns>
         private Normal _boxNormal(Point point, Vec rayDir)
         {
-            Normal result = new Normal();
+            Normal result = new Normal(0f,0f,1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
             else if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
             else if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
@@ -469,7 +469,7 @@ namespace Trace
 
             hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint0,
-                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)).Normalize(),
+                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)),
                 sp: this._boxPointToUV(hitPoint0),
                 tt: t0,
                 r: ray,
@@ -477,7 +477,7 @@ namespace Trace
             ));
             hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint1,
-                nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)).Normalize(),
+                nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)),
                 sp: this._boxPointToUV(hitPoint1),
                 tt: t1,
                 r: ray,

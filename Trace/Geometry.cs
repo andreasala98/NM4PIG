@@ -306,6 +306,11 @@ namespace Trace
         public bool isClose(Vec2D vector)
            => Utility.areClose(this.u, vector.u) && Utility.areClose(this.v, vector.v);
 
+        public override string ToString()
+        {
+            return "Vec2D :(" + this.u + ", " + this.v + ")";
+        }
+
     }
 
 

@@ -148,31 +148,36 @@ namespace Trace
         /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.
         /// </summary>
         public Camera camera;
+        int samplesPerSide;
+        PCG pcg;
+
 
         /// <summary>
         /// Basic constructor for the class.
         /// </summary>
         /// <param name="i"><see cref="HdrImage"/> input parameter</param>
         /// <param name="c"><see cref="Camera"/> input parameter</param>
-        public ImageTracer(HdrImage i, Camera c)
+        public ImageTracer(HdrImage i, Camera c, int sps=0)
         {
             this.image = i;
             this.camera = c;
+            this.pcg = new PCG();
+            this.samplesPerSide = sps;
         }
         /// <summary>
         /// Method that generates a <see cref="Ray"/> object on the virtual screen
-        /// at the coordinates (col + uPixel),(row+ vPixel), both normalized
+        /// at the coordinates (col + uPixel),(row + vPixel), both normalized
         /// to the <see cref="HdrImage"/> scale.
         /// </summary>
-        /// <param name="col"> Column number (start fom 0)</param>
-        /// <param name="row"> Row number (staet from 0) </param>
+        /// <param name="col"> Column number (starts fom 0)</param>
+        /// <param name="row"> Row number (starts from 0) </param>
         /// <param name="uPixel"> x coordinate inside the pixel (default: 0.5) </param>
         /// <param name="vPixel"> y coordinate inside the pixel (default: 0.5) </param>
         /// <returns> The fired <see cref="Ray"/>. </returns>
         public Ray fireRay(int col, int row, float uPixel = 0.5f, float vPixel = 0.5f)
         {
-            float u = (col + uPixel) / (this.image.width);
-            float v = 1.0f - (row + vPixel) / (this.image.height);
+            float u = (col + uPixel) / this.image.width;
+            float v = 1.0f - (row + vPixel) / this.image.height;
             return this.camera.fireRay(u, v);
         }
 
@@ -182,7 +187,8 @@ namespace Trace
         /// <summary>
         /// Method that calculates all pixels of the <see cref="HdrImage"/>
         /// datamember according to the rendering equation,
-        /// specified by a <see cref="myFunction"/> object.
+        /// specified by a <see cref="myFunction"/> object. It also implements
+        /// antialiasing to avoid Moirè fringes effects.
         /// </summary>
         /// <param name="Func"> The function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
         public void fireAllRays(Render rend)
@@ -191,25 +197,62 @@ namespace Trace
             {
                 for (int j = 0; j < image.width; j++)
                 {
-                    Ray raggio = this.fireRay(j, i);
-                    Color colore = rend.computeRadiance(raggio);
-                    this.image.setPixel(j, i, colore);
-                    if (i%50==0 && i!=0)
-                    Console.Write(((float)(100*i)/image.height).ToString("0.00") + "% of rendering completed\r");
+                    Color appo = Constant.Black;
+                    if (this.samplesPerSide > 0) {
+                        for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++) {
+                            for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++) {
+                                float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
+                                float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
+                                Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel:vPix);
+                                appo += rend.computeRadiance(rr);
+                            }
+
+                        }
+                        this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide,2)));
+                        
+                     }
+                    else
+                    {
+                        Ray raggio = this.fireRay(j, i);
+                        Color colore = rend.computeRadiance(raggio);
+                        this.image.setPixel(j, i, colore);
+                    }
+                    if (i % 20 == 0 && i != 0)
+                        Console.Write($"Row {i} of {this.image.height} rendered...\r");
                 }
             }
 
         }
 
-        public void fireAllRays(PFunction lf)
+        public void fireAllRays(PFunction fun)
         {
             for (int i = 0; i < image.height; i++)
             {
                 for (int j = 0; j < image.width; j++)
                 {
-                    Ray raggio = this.fireRay(j, i);
-                    Color colore = lf(raggio);
-                    this.image.setPixel(j, i, colore);
+                    Color appo = Constant.Black;
+                    if (this.samplesPerSide > 0) { //Stratified sampling! Automatically casts samplesPerSide into a perfect-square number
+                       // samplesPerSide = (int)Math.Pow(Math.Sqrt(samplesPerSide) - (int)Math.Sqrt(samplesPerSide), 2);
+
+                        for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++) {
+                            for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++) {
+                                float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
+                                float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
+                                Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel:vPix);
+                                appo += fun(rr);
+                            }
+
+                        }
+                        this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide,2)));
+
+                    }
+                    else
+                    {
+
+                        Ray raggio = this.fireRay(j, i);
+                        Color colore = fun(raggio);
+                        this.image.setPixel(j, i, colore);
+                    }
                 }
 
                 if (i%50==0 && i!=0)

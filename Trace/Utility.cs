@@ -128,7 +128,10 @@ namespace Trace
 
         public static Color SkyBlue = new Color(0.529f, 0.808f, 0.922f);
 
-
+        public static Color BroomYellow = new Color(1.0f, .9451f, .1490f);
+        public static Color BlueChill = new Color(0.05f, 0.6f, 0.6f);
+        public static Color BrightGreen = new Color(.41176f, .9647f, .17254f);
+        public static Color LightRed = new Color(1f, .3f, .3f);
 
         /// <summary>
         /// <see cref="Point"> object do describe the origin of axes, i.e. (0,0,0)
