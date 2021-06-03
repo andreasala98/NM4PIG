@@ -160,7 +160,6 @@ namespace NM4PIG
             return;
 
         } //Main
-       
 
     } //Program class
 
