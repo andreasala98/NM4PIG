@@ -133,9 +133,14 @@ namespace Trace
             return firstShape.isPointInside(a) || secondShape.isPointInside(a);
         }
 
+        /// <summary>
+        /// This method checks if a Ray intersects with the CSG Union shape.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
-            throw new NotImplementedException();
+            return this.firstShape.quickRayIntersection(ray) || this.secondShape.quickRayIntersection(ray);
         }
     }
 
@@ -267,9 +272,39 @@ namespace Trace
             return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
         }
 
+        /// <summary>
+        /// This method checks if a Ray intersects with the CSG Difference shape.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
-            throw new NotImplementedException();
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a[0] == null)
+                return false;
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
+                {
+                    return true;
+                }
+            }
+
+            if (b[0] != null)
+            {
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
     } //CSGDifference
@@ -395,9 +430,14 @@ namespace Trace
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
         }
 
+        /// <summary>
+        /// This method checks if a Ray intersects with the CSG Difference shape.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
-            throw new NotImplementedException();
+            return this.firstShape.quickRayIntersection(ray) && this.secondShape.quickRayIntersection(ray);
         }
     } // CSGIntersection
 

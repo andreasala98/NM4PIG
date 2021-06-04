@@ -16,6 +16,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
+using System;
 using Xunit;
 using System.Collections.Generic;
 
@@ -150,6 +151,33 @@ namespace Trace.Test
             Assert.False(u1.isPointInside(p5), "TestisPointInside failed - assert 5/4");
 
         }
+
+        [Fact]
+        public void TestQuickRayIntersection()
+        {
+            Sphere s1 = new Sphere();
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(0.0f, 1.7f, 0.0f)));
+
+            CSGUnion u1 = new CSGUnion(s1, s2);
+            Ray ray1 = new Ray(origin: new Point(3f, 0f, 0f), dir: -Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(ray1), "TestQuickRayIntersection failed! - Assert 1/5");
+
+            Ray ray2 = new Ray(new Point(6f, 1.7f, 0f), -Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(ray2), "TestQuickRayIntersection failed! - Assert 2/5");
+
+            Assert.False(u1.quickRayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)), "TestQuickRayIntersection failed! - Assert 3/5 ");
+
+            
+            Sphere s3 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+
+            CSGUnion u2 = new CSGUnion(s1, s2);
+            Ray ray3 = new Ray(origin: new Point(0.5f, 0f, 0f), dir: Constant.VEC_X);
+            Assert.True(u2.quickRayIntersection(ray3), "TestQuickRayIntersection failed! - Assert 4/5");
+
+            // now from the other side
+            Ray ray4 = new Ray(origin: new Point(0.5f, 0f, 0f), dir: -Constant.VEC_X);
+            Assert.True(u2.quickRayIntersection(ray4), "TestQuickRayIntersection failed! - Assert 5/5");
+        }
     } // CSG Union Tests
 
     public class TestCSGDifference
@@ -269,6 +297,31 @@ namespace Trace.Test
             Assert.True(u1.isPointInside(p2), "Test isPointInside failed - assert 2/4");
             Assert.False(u1.isPointInside(p3), "Test isPointInside failed - assert 4/4");
         }
+
+        [Fact]
+
+        public void TestQuickRayIntersection()
+        {
+            Sphere s1 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere();
+            CSGDifference u1 = new CSGDifference(s1, s2);
+
+            Ray r1 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r1), "TestQuickRayIntersection failed! - Assert 1/");
+
+            Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
+            Assert.False(u1.quickRayIntersection(r2), "Far away ray test failed - Asser 2/");
+
+            Ray r3 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            Assert.False(u1.quickRayIntersection(r3), "Ray through secondShape only test failed - Asser 3/");
+
+            Ray r4 = new Ray(origin: new Point(1.25f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r4), "TestQuickRayIntersection failed! - Assert 4/5");
+
+            Ray r5 = new Ray(origin: new Point(1.25f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r5), "TestQuickRayIntersection failed! - Assert 5/5");
+        
+        }
     } // CSG Difference Tests
 
     public class TestCSGIntersection
@@ -291,15 +344,20 @@ namespace Trace.Test
                 r1
             );
 
-            Assert.True(hit1.isClose(intersection1), "TestHit failed! - Assert 2/");
+            Ray r5 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            HitRecord? intersection5 = u1.rayIntersection(r5);
+            Console.WriteLine("ciao " + intersection5?.worldPoint.ToString());
+            //Assert.True(intersection5 != null, "TestHit failed! - Assert 5/");
+            
 
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
             HitRecord? intersection2 = u1.rayIntersection(r2);
-            Assert.True(intersection2 == null, "Far away ray test failed - Asser 3/");
+            Assert.True(intersection2 == null, "Far away ray test failed - Assert 3/");
 
-            Ray r3 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            Ray r3 = new Ray(origin: new Point(1.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
             HitRecord? intersection3 = u1.rayIntersection(r3);
-            Assert.True(intersection3 == null, "Ray through firstShape only test failed - Asser 4/");
+            Console.WriteLine("ciao " + intersection3?.worldPoint.x);
+            Assert.True(intersection3 == null, "Ray through firstShape only test failed - Assert 4/");
         }
 
         [Fact]
@@ -384,41 +442,24 @@ namespace Trace.Test
             Assert.True(u1.isPointInside(p2), "Test isPointInside failed - assert 2/4");
             Assert.False(u1.isPointInside(p3), "Test isPointInside failed - assert 4/4");
         }
+
+        [Fact]
+
+        public void TestQuickRayIntersection()
+        {
+            Sphere s1 = new Sphere(Transformation.Translation(new Vec(0.5f, 0.0f, 0.0f)));
+            Sphere s2 = new Sphere(Transformation.Translation(new Vec(-0.5f, 0.0f, 0.0f)));
+            CSGIntersection u1 = new CSGIntersection(s1, s2);
+
+            Ray r1 = new Ray(origin: new Point(1.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r1), "TestQuickRayIntersection failed! - Assert 1/");
+
+            Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
+            Assert.False(u1.quickRayIntersection(r2), "Far away ray test failed - Assert 3/");
+
+            Ray r3 = new Ray(origin: new Point(1.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            Assert.False(u1.quickRayIntersection(r3), "Ray through firstShape only test failed - Assert 4/");
+        }
     } // CSG Intersection Tests
 
 }
-
-/* Ray r1 = new Ray(origin: new Point(0.75f, 0.0f, 2.0f), dir: -Constant.VEC_Z);
-            
-            List<HitRecord?> intersection = u1.rayIntersectionList(r1);
-            List<HitRecord> hits = new List<HitRecord>();
-            hits.Add(new HitRecord(
-                                    new Point(0.75f, 0.0f, 0.96824584f),
-                                    new Normal(0.25f, 0.0f, 0.96824584f),
-                                    new Vec2D(0.0f, 0.30820222f),
-                                    3.0f,
-                                    r1)
-                                   );
-            hits.Add(new HitRecord(
-                                    new Point(0.0f, 1.5f, 0f),
-                                    new Normal(0.0f, 1.0f, 0f),
-                                    new Vec2D(0.25f, 0.5f),
-                                    0.5f,
-                                    r1)
-                                   );
-            hits.Add(new HitRecord(
-                                    new Point(0.0f, 1.5f, 0f),
-                                    new Normal(0.0f, 1.0f, 0f),
-                                    new Vec2D(0.25f, 0.5f),
-                                    0.5f,
-                                    r1)
-                                   );
-            hits.Add(new HitRecord(
-                                    new Point(0.75f, 0.0f, -0.96824584f),
-                                    new Normal(0.0f, 1.0f, 0f),
-                                    new Vec2D(0.25f, 0.5f),
-                                    0.5f,
-                                    r1)
-                                   );    
-*/
-
