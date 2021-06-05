@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ShellProgressBar" Version="5.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
   </ItemGroup>
 
