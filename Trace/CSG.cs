@@ -437,7 +437,32 @@ namespace Trace
         /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
-            return this.firstShape.quickRayIntersection(ray) && this.secondShape.quickRayIntersection(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a[0] == null)
+                return false;
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            if (b[0] == null)
+                return false;
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
+                {
+                    return true;
+                }
+            }
+
+            {
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    {
+                        return true;
+                    }
+                }
+            }
+                
+            return false;
         }
     } // CSGIntersection
 
