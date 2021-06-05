@@ -344,19 +344,12 @@ namespace Trace.Test
                 r1
             );
 
-            Ray r5 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
-            HitRecord? intersection5 = u1.rayIntersection(r5);
-            Console.WriteLine("ciao " + intersection5?.worldPoint.ToString());
-            //Assert.True(intersection5 != null, "TestHit failed! - Assert 5/");
-            
-
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
             HitRecord? intersection2 = u1.rayIntersection(r2);
             Assert.True(intersection2 == null, "Far away ray test failed - Assert 3/");
 
-            Ray r3 = new Ray(origin: new Point(1.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            Ray r3 = new Ray(origin: new Point(0.9f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
             HitRecord? intersection3 = u1.rayIntersection(r3);
-            Console.WriteLine("ciao " + intersection3?.worldPoint.x);
             Assert.True(intersection3 == null, "Ray through firstShape only test failed - Assert 4/");
         }
 
@@ -455,10 +448,16 @@ namespace Trace.Test
             Assert.True(u1.quickRayIntersection(r1), "TestQuickRayIntersection failed! - Assert 1/");
 
             Ray r2 = new Ray(origin: new Point(12.0f, 12.0f, 10.0f), dir: Constant.VEC_Z);
-            Assert.False(u1.quickRayIntersection(r2), "Far away ray test failed - Assert 3/");
+            Assert.False(u1.quickRayIntersection(r2), "Far away ray test failed - Assert 2/");
 
             Ray r3 = new Ray(origin: new Point(1.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
-            Assert.False(u1.quickRayIntersection(r3), "Ray through firstShape only test failed - Assert 4/");
+            Assert.False(u1.quickRayIntersection(r3), "Ray through firstShape only test failed - Assert 3/");
+
+            Ray r4 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r4), "TestQuickRayIntersection failed! - Assert 4/5");
+
+            Ray r5 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            Assert.True(u1.quickRayIntersection(r5), "TestQuickRayIntersection failed! - Assert 5/5");
         }
     } // CSG Intersection Tests
 
