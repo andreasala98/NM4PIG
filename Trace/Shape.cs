@@ -539,7 +539,8 @@ namespace Trace
         {
             List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return false;
-            return true;        }
+            return true;        
+        }
     }
 
 
