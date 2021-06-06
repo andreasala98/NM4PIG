@@ -65,7 +65,7 @@ namespace Trace
         /// <param name="a"></param>
         public abstract bool isPointInside(Point a);
 
-        
+
     }
 
 
@@ -433,7 +433,7 @@ namespace Trace
         /// <returns> The oriented normal</returns>
         private Normal _boxNormal(Point point, Vec rayDir)
         {
-            Normal result = new Normal(0f,0f,1f);
+            Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
             else if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
             else if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
@@ -537,9 +537,27 @@ namespace Trace
 
         public override bool quickRayIntersection(Ray ray)
         {
-            List<HitRecord?> intersections = rayIntersectionList(ray);
-            if (intersections.Count == 0) return false;
-            return true;        
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            float t0 = 0, t1 = ray.tmax;
+            for (int i = 0; i < 3; i++)
+            {
+                float invRayDir = 1 / invRay.dir.ToList()[i];
+                float tNear = (min.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+                float tFar = (max.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+
+                if (tNear > tFar)
+                {
+                    float tmp = tNear;
+                    tNear = tFar;
+                    tFar = tmp;
+                }
+
+                t0 = tNear > t0 ? tNear : t0;
+                t1 = tFar < t1 ? tFar : t1;
+                if (t0 > t1) return false;
+            }
+
+            return true;
         }
     }
 

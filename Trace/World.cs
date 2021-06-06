@@ -99,6 +99,26 @@ namespace Trace
             return closest;
         }
 
+        /// <summary>
+        /// Method that check is a light ray originated in Point point reaches the Point observerPoint.
+        /// Needed for the point light renderer.
+        /// </summary>
+        /// <param name="point">point where the ray originates</param>
+        /// <param name="observerPoint">the point the ray should reach</param>
+        /// <returns></returns>
+        public bool isPointVisible(Point point, Point observerPoint)
+        {
+            Vec direction = point - observerPoint;
+            float directionNorm = direction.getNorm();
+
+            Ray ray = new Ray(observerPoint, direction, tm: ((float) 1e-2 / directionNorm), tM: 1.0f);
+            foreach (var shape in shapes)
+            {
+                if (shape.quickRayIntersection(ray)) return false;
+            }
+            return true;
+        }
+
     } // end of World
 
 } // end of Trace
