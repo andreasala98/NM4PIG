@@ -25,6 +25,7 @@ This library uses some external libraries. The user should not worry as .NET aut
 
 - [ImageSharp][5] to convert `.pfm` images into LDR formats
 - [CommandLineUtils][8] to handle Command Line Interface
+- [ShellProgressBar][9] to show a nice progress bar while rendering
 
 ## Usage
 
@@ -86,3 +87,4 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
 [6]: https://dotnet.github.io/docfx/
 [7]: https://andreasala98.github.io/NM4PIG/
 [8]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.commandlineutils.commandlineapplication?view=dotnet-plat-ext-1.1
+[9]: https://github.com/Mpdreamz/shellprogressbar

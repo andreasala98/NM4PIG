@@ -17,13 +17,15 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Threading.Tasks;
+using ShellProgressBar;
 
 namespace Trace
 {
-        /// <summary>
-        /// An abstract class representing an observer <br/>
-        /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
-        /// </summary>
+    /// <summary>
+    /// An abstract class representing an observer <br/>
+    /// Concrete subclasses are <see cref="OrthogonalCamera"/> and <see cref="OrthogonalCamera"/>.
+    /// </summary>
     public abstract class Camera
     {
         /// <summary>
@@ -157,7 +159,7 @@ namespace Trace
         /// </summary>
         /// <param name="i"><see cref="HdrImage"/> input parameter</param>
         /// <param name="c"><see cref="Camera"/> input parameter</param>
-        public ImageTracer(HdrImage i, Camera c, int sps=0)
+        public ImageTracer(HdrImage i, Camera c, int sps = 0)
         {
             this.image = i;
             this.camera = c;
@@ -193,57 +195,70 @@ namespace Trace
         /// <param name="Func"> The function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
         public void fireAllRays(Render rend)
         {
-            for (int i = 0; i < image.height; i++)
+            int totalTicks = image.height;
+            var options = new ProgressBarOptions
             {
-                for (int j = 0; j < image.width; j++)
+                ProgressCharacter = '─',
+                ForegroundColor = ConsoleColor.Yellow,
+                ForegroundColorDone = ConsoleColor.Green,
+                ProgressBarOnBottom = true
+            };
+            using (var pbar = new ProgressBar(totalTicks, "", options))
+            {
+                Parallel.For(0, image.height, i =>
                 {
-                    Color appo = Constant.Black;
-                    if (this.samplesPerSide > 0) {
-                        for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++) {
-                            for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++) {
-                                float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
-                                float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
-                                Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel:vPix);
-                                appo += rend.computeRadiance(rr);
-                            }
-
-                        }
-                        this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide,2)));
-                        
-                     }
-                    else
+                    for (int j = 0; j < image.width; j++)
                     {
-                        Ray raggio = this.fireRay(j, i);
-                        Color colore = rend.computeRadiance(raggio);
-                        this.image.setPixel(j, i, colore);
+                        Color appo = Constant.Black;
+                        if (this.samplesPerSide > 0)
+                        {
+                            for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
+                            {
+                                for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                                {
+                                    float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
+                                    float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
+                                    Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
+                                    appo += rend.computeRadiance(rr);
+                                }
+                            }
+                            this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
+                        }
+                        else
+                        {
+                            Ray raggio = this.fireRay(j, i);
+                            Color colore = rend.computeRadiance(raggio);
+                            this.image.setPixel(j, i, colore);
+                        }
                     }
-                    if (i % 20 == 0 && i != 0)
-                        Console.Write($"Row {i} of {this.image.height} rendered...\r");
-                }
+                    pbar.Tick();
+                });
             }
-
         }
 
         public void fireAllRays(PFunction fun)
         {
-            for (int i = 0; i < image.height; i++)
+            Parallel.For(0, image.height, i =>
             {
                 for (int j = 0; j < image.width; j++)
                 {
                     Color appo = Constant.Black;
-                    if (this.samplesPerSide > 0) { //Stratified sampling! Automatically casts samplesPerSide into a perfect-square number
-                       // samplesPerSide = (int)Math.Pow(Math.Sqrt(samplesPerSide) - (int)Math.Sqrt(samplesPerSide), 2);
+                    if (this.samplesPerSide > 0)
+                    { //Stratified sampling! Automatically casts samplesPerSide into a perfect-square number
+                      // samplesPerSide = (int)Math.Pow(Math.Sqrt(samplesPerSide) - (int)Math.Sqrt(samplesPerSide), 2);
 
-                        for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++) {
-                            for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++) {
+                        for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
+                        {
+                            for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                            {
                                 float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
                                 float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
-                                Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel:vPix);
+                                Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
                                 appo += fun(rr);
                             }
 
                         }
-                        this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide,2)));
+                        this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
 
                     }
                     else
@@ -255,10 +270,10 @@ namespace Trace
                     }
                 }
 
-                if (i%50==0 && i!=0)
-                Console.Write(((float)i/image.height).ToString("0.00") + " of rendering completed\r");
+                // if (i % 50 == 0 && i != 0)
+                //     Console.Write(((float)i / image.height).ToString("0.00") + " of rendering completed\r");
 
-            }
+            });
 
         }
     }
