@@ -64,6 +64,26 @@ namespace Trace.Test
             Assert.True(w.isPointVisible(observerPoint, point2));
 
         }
+
+        [Fact]
+        public void TestIsPointVisible2()
+        {
+            World world = new World();
+            Sphere s1 = new Sphere(Transformation.Translation(Constant.VEC_X * 2f));
+            Sphere s2 = new Sphere(Transformation.Translation(Constant.VEC_X * 8f));
+
+            world.addShape(s1);
+            world.addShape(s2);
+
+            Assert.False(world.isPointVisible(new Point(10f, 0f, 0f), new Point(0f, 0f, 0f)));
+            Assert.False(world.isPointVisible(new Point(5f, 0f, 0f), new Point(0f, 0f, 0f)));
+
+            Assert.True(world.isPointVisible(new Point(5f, 0f, 0f), new Point(4f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0.5f, 0f, 0f), new Point(0f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0f, 10f, 0f), new Point(0f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0f, 0f, 10f), new Point(0f, 0f, 0f)));
+
+        }
     } //end of class
 
 } //end of namespace

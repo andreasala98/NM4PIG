@@ -157,6 +157,57 @@ namespace Trace
             }
             return emittedRadiance + cumRadiance * (1.0f / this.numOfRays);
         }
+
+        /// <summary>
+        /// Class that implements a Point Light renderer.
+        /// </summary>
+        public class PointLightRender : Render
+        {
+            public Color ambientColor;
+
+            public PointLightRender(World world, Color? background = null, Color? ambient = null) : base(world, background)
+            {
+                this.ambientColor = ambient ?? new Color(0.1f, 0.1f, 0.1f);
+            }
+
+            public override Color computeRadiance(Ray ray)
+            {
+                HitRecord? hitRecord = this.world.rayIntersection(ray);
+                if (hitRecord == null) return this.backgroundColor;
+
+                Material hitMaterial = hitRecord.Value.shape?.material!;
+
+                Color resultColor = this.ambientColor;
+
+                foreach(var curLight in world.lightSources)
+                {
+                    if (this.world.isPointVisible(curLight.position, (Point)hitRecord?.worldPoint!))
+                    {
+                        Vec distanceVec = (Point)hitRecord?.worldPoint! - curLight.position;
+                        float distance = distanceVec.getNorm();
+                        Vec inDir = distanceVec * (1f / distance);
+                        float cosTheta = MathF.Max(0f, Utility.NormalizedDot(-ray.dir, (Vec)hitRecord?.normal.toVec()!));
+
+                        float distanceFactor;
+                        if (curLight.linearRadius > 0)
+                            distanceFactor = (curLight.linearRadius / distance) * (curLight.linearRadius / distance);
+                        else
+                            distanceFactor = 1f;
+
+                        Color emittedColor = (Color)hitMaterial?.emittedRadiance.getColor(hitRecord.Value.surfacePoint)!;
+                        Color brdfColor = (Color)hitMaterial?.brdf.Eval(
+                                                                        (Normal)hitRecord?.normal!,
+                                                                        inDir,
+                                                                        -ray.dir,
+                                                                        (Vec2D)hitRecord?.surfacePoint!)!;
+                        resultColor += (emittedColor + brdfColor) * curLight.color * cosTheta * distanceFactor;
+                    }
+                }
+
+                return resultColor;
+
+            }
+        }
     }
 
 } // trace
