@@ -173,6 +173,18 @@ namespace NM4PIG
                                             )
                                     );
                     break;
+                case 7:
+                    Material skyMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(new Color(0.5294117647f, 0.80784313725f, 0.92156862745f)));
+                    Material groundMaterial = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Red, CC.Yellow)), new UniformPigment(CC.Black));
+                    Material sphereMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.White)));
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMaterial));
+                    world.addShape(new Sphere(Transformation.Translation(2f, 0f, 0f), sphereMaterial));
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), groundMaterial));
+                    world.addPointLight(new PointLight(new Point(0f, 2f, 2f), Constant.White));
+
+                    renderer = new PointLightRender(world);
+                    break;
                 default:
                     break;
             }

@@ -41,6 +41,13 @@ namespace Trace
         /// If non-zero, this linear radius r is used to compute the solid angle 
         /// subtended by the light at a given distance d through the formula (r / d)^2
         /// </summary>
-        public float linearRadius = 0f;
+        public float linearRadius;
+
+        public PointLight(Point position, Color color, float? linearRadius = null)
+        {
+            this.position = position;
+            this.color = color;
+            this.linearRadius = linearRadius ?? 0f;
+        }
     }
 }
