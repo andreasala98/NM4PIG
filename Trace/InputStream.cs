@@ -18,7 +18,10 @@ IN THE SOFTWARE.
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Globalization;
 
+#nullable enable
 namespace Trace
 {
     /// <summary>
@@ -32,7 +35,7 @@ namespace Trace
 
         public Stream stream;
         public SourceLocation location;
-        public string savedChar;
+        public char savedChar;
         public SourceLocation savedLocation;
         public int tabulations;
         public Token? savedToken;
@@ -41,22 +44,22 @@ namespace Trace
         {
             this.stream = stream;
             this.location = new SourceLocation(fileName: fileName, line: 1, col: 1);
-            this.savedChar = "";
+            this.savedChar = '\0';
             this.savedLocation = this.location;
             this.tabulations = tabulations;
             this.savedToken = null;
         }
 
-        private void _updatePosition(string ch)
+        private void _updatePosition(char ch)
         {
-            if (ch == "")
+            if (ch == '\0')
                 return;
-            else if (ch == "\n")
+            else if (ch == '\n')
             {
                 this.location.lineNum += 1;
                 this.location.colNum = 1;
             }
-            else if (ch == "\t")
+            else if (ch == '\t')
                 this.location.colNum += this.tabulations;
             else
                 this.location.colNum += 1;
@@ -65,27 +68,109 @@ namespace Trace
         /// <summary>
         /// Read a new character from the stream
         /// </summary>
-        public string readChar()
+        public char readChar()
         {
-            string ch;
-            if (this.savedChar != "")
+            char ch;
+            if (this.savedChar != '\0')
             {
                 ch = this.savedChar;
-                this.savedChar = "";
+                this.savedChar = '\0';
             }
             else
             {
                 int byteRead = this.stream.ReadByte(); // ReadByte returns -1 at the end of stream
                 if (byteRead == -1)
-                    ch = "";
+                    ch = '\0';
                 else
-                    ch = Convert.ToString(byteRead);
-
+                    ch = Convert.ToChar(byteRead);
             }
             this.savedLocation = this.location;
             this._updatePosition(ch);
             return ch;
         }
+
+        /// <summary>
+        /// Push a character back to the stream
+        /// </summary>
+        public void unreadChar(char ch)
+        {
+            this.savedChar = ch;
+            this.location = this.savedLocation;
+        }
+
+        /// <summary>
+        /// Keep reading characters until a non-whitespace character is found
+        /// </summary>
+        public void skipWhitespacesAndComments()
+        {
+            char[] WHITESPACE = { ' ', '\t', '\n', '\r' };
+            char[] ENDLINE = { '\n', '\r' };
+            char ch = this.readChar();
+            while (WHITESPACE.Contains(ch) || ch == '#')
+            {
+                if (ch == '#')
+                {
+                    // It's a comment! Keep reading until the end of the line (include the case "", the end-of-file)
+                    while (!ENDLINE.Contains(this.readChar()))
+                        continue;
+                }
+
+
+                ch = this.readChar();
+                if (ch == '\0')
+                    return;
+            }
+            this.unreadChar(ch);
+            return;
+        }
+
+        private StringToken _parseStringToken(SourceLocation tokenLocation)
+        {
+            string token = "";
+            while (true)
+            {
+                char ch = this.readChar();
+                if (ch == '"')
+                    break;
+                if (ch == '\0')
+                    throw new GrammarError(tokenLocation, "unterminated string");
+
+                token += ch;
+            }
+
+            return new StringToken(tokenLocation, token);
+        }
+
+        private LiteralNumberToken _parseFloatToken(char firstChar, SourceLocation tokenLocation)
+        {
+            string token = firstChar.ToString();
+            while (true)
+            {
+                char ch = this.readChar();
+                char[] SCIENTIFIC = { 'e', 'E' };
+                if (!(Char.IsDigit(ch) || ch == '.' || SCIENTIFIC.Contains(ch)))
+                {
+                    this.unreadChar(ch);
+                    break;
+                }
+
+                token += ch;
+            }
+            try
+            {
+                float value = float.Parse(token, CultureInfo.InvariantCulture);
+            }
+            catch (ValueError)
+            {
+                throw new GrammarError(this.tokenLocation, $"'{token}' is an invalid floating-point number");
+            }
+
+
+            return new LiteralNumberToken(this.tokenLocation, value);
+        }
+
+
+
     }
 
 
