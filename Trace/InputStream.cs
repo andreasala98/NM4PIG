@@ -199,20 +199,22 @@ namespace Trace
                 if (!(Char.IsLetterOrDigit(ch) || ch == '_'))
                 {
                     this.unreadChar(ch);
+                    break;
                 }
 
                 token += ch;
-
-                try
-                {
-                    return new KeywordToken(tokenLocation, KeywordToken.dict[token]);
-                }
-                catch (System.Exception)
-                {
-                    return new IdentifierToken(tokenLocation, token);
-                }
-
             }
+
+            try
+            {
+                return new KeywordToken(tokenLocation, KeywordToken.dict[token]);
+            }
+            catch (System.Exception)
+            {
+                return new IdentifierToken(tokenLocation, token);
+            }
+
+
 
         }
 

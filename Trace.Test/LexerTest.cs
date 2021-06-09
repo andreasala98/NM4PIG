@@ -28,9 +28,36 @@ namespace Trace.Test
     public class LexerTest
     {
 
-        //public bool AssertIsKeyword(Token tk, KeywordEnum kw ) {
+
+        private void AssertIsKeyword(Token token, KeywordEnum keyword)
+        {
+            Assert.True(token is KeywordToken, "The token is not a key word");
+            Assert.True(((KeywordToken)token).keyword == keyword, $"Token {token} is not equal to keyword {keyword}");
+        }
+
+        private void AssertIsIdentifier(Token token, string identifier)
+        {
+            Assert.True(token is IdentifierToken, "The token is not an identifier");
+            Assert.True(((IdentifierToken)token).id == identifier, $"Token {token} is not equal to an identifier {identifier}");
+        }
+
+        private void AssertIsSymbol(Token token, string symbol)
+        {
+            Assert.True(token is SymbolToken, "The token is not a symbol");
+            Assert.True(((SymbolToken)token).symbol == symbol, $"Token {token} is not equal to a symbol {symbol}");
+        }
 
 
+        private void AssertIsNumber(Token token, float number)
+        {
+            Assert.True(token is LiteralNumberToken, "The token is not a number");
+            Assert.True(((LiteralNumberToken)token).value == number, $"Token {token} is not equal to a number {number}");
+        }
+        private void AssertIsString(Token token, string frase)
+        {
+            Assert.True(token is StringToken, "The token is not a string");
+            Assert.True(((StringToken)token).str == frase, $"Token {token} is not equal to a string {frase}");
+        }
 
         [Fact]
         public void TestInputFile()
@@ -87,37 +114,33 @@ namespace Trace.Test
 
         }
 
-        // [Fact]
-        // public void TestParser()
-        // {
-        //     string test = @"float clock(150)
-        //                     material sky_material(
-        //                         diffuse(uniform(< 0, 0, 0 >)),
-        //                         uniform(< 0.7, 0.5, 1 >)
-        //                     )
-        //                     # Here is a comment
-        //                     material ground_material(
-        //                         diffuse(checkered(  < 0.3, 0.5, 0.1 >,
-        //                                             < 0.1, 0.2, 0.5 >, 
-        //                                             4)),
-        //                         uniform(< 0, 0, 0 >)
-        //                     )
-        //                     material sphere_material(
-        //                         specular(uniform(< 0.5, 0.5, 0.5 >)),
-        //                         uniform(< 0, 0, 0 >) 
-        //                     )
-        //                     plane(sky_material, translation([0, 0, 100]) * rotation_y(clock))
-        //                     plane(ground_material, identity)
-        //                     sphere(sphere_material, translation([0, 0, 1]))
-        //                     camera(perspective, rotation_z(30) * translation([-4, 0, 1]), 1.0, 1.0)";
-        //     byte[] byteArray = Encoding.ASCII.GetBytes(test);
-        //     MemoryStream stream = new MemoryStream(byteArray);
-        //     scene = parse_scene(input_file = InputStream(stream));
+        [Fact]
+        public void TestLexer()
+        {
+            string test = @" 
+                # This is a comment
+                # This is another comment
+                new material sky_material(
+                 diffuse(image(""my file.pfm"")),
+                 <5.0, 500.0, 300.0 >
+                ) # Comment at the end of the line";
 
-        // }
+            byte[] byteArray = Encoding.ASCII.GetBytes(test);
+            MemoryStream stream = new MemoryStream(byteArray);
 
+            InputStream inputStream = new InputStream(stream);
 
-
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.New);
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Material);
+            AssertIsIdentifier(inputStream.readToken(), "sky_material");
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Diffuse);
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Image);
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsString(inputStream.readToken(), "my file.pfm");
+            AssertIsSymbol(inputStream.readToken(), ")");
+        }
 
     }
 }
