@@ -70,7 +70,7 @@ namespace Trace
 
         public KeywordEnum keyword;
 
-        public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum> (){
+        public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum>(){
 
             {  "new", KeywordEnum.New },
             { "material", KeywordEnum.Material },
@@ -101,8 +101,8 @@ namespace Trace
 
         public override string ToString()
         {
-            if (!dict.ContainsKey(this.keyword)) throw new ArgumentException("Keyword not found");
-            else return dict[this.keyword];
+            if (!dict.ContainsValue(this.keyword)) throw new ArgumentException("Keyword not found");
+            else return this.keyword.ToString();
         }
 
     } //KeywordToken
@@ -156,11 +156,12 @@ namespace Trace
     /// <summary>
     /// A token containing a literal number
     /// </summary>
-    public class LiteralNumberToken: Token
+    public class LiteralNumberToken : Token
     {
         public float value;
 
-        public LiteralNumberToken(SourceLocation sL, float val) : base(sL) {
+        public LiteralNumberToken(SourceLocation sL, float val) : base(sL)
+        {
 
             this.value = val;
 
@@ -173,10 +174,12 @@ namespace Trace
 
     }
 
-    public class SymbolToken : Token {
+    public class SymbolToken : Token
+    {
         public string symbol;
 
-        public SymbolToken(SourceLocation sL, string sym) : base(sL) {
+        public SymbolToken(SourceLocation sL, string sym) : base(sL)
+        {
             this.symbol = sym;
         }
 
