@@ -171,7 +171,7 @@ namespace Trace
             return new LiteralNumberToken(tokenLocation, value);
         }
 
-        public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
+        private Token _parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
         {
             string token = firstChar.ToString();
             while (true)
@@ -198,34 +198,34 @@ namespace Trace
 
         }
 
-        // public Token readToken()
-        // {
-        //     if (this.savedToken != null)
-        //     {
-        //         Token result = this.savedToken;
-        //         this.savedToken = null;
-        //         return result;
-        //     }
+        public Token readToken()
+        {
+            if (this.savedToken != null)
+            {
+                Token result = this.savedToken;
+                this.savedToken = null;
+                return result;
+            }
 
-        //     this.skipWhitespaces();
+            this.skipWhitespacesAndComments();
 
-        //     char ch = this.readChar();
+            char ch = this.readChar();
 
-        //     if (ch == '') return new StopToken(this.location);
+            if (ch == '\0') return new StopToken(this.location);
 
-        //     if (ch == '#')
-        //     {
-        //         while(this.readChar() != '\r' && this.readChar() != '\n' && this.readChar() != '\0') 
-        //         {
-        //             continue;
-        //         }
-
-        //         this.skipWhitespaces();
-        //     }
-
-        //     else    this.unreadChar(ch);
-
-        // }
+            char[] SYMBOLS = { '(', ')', '<', '>', '[', ']', ',', '*' };
+            char[] OPERATIONS = { '+', '-', '.' };
+            if (SYMBOLS.Contains(ch)) 
+                return new SymbolToken(this.location, ch.ToString());
+            else if (ch == '"')
+                return this._parseStringToken(this.location);
+            else if (Char.IsDigit(ch) || OPERATIONS.Contains(ch))
+                return this._parseFloatToken(ch, this.location);
+            else if (Char.IsLetter(ch) || ch == '_')
+                return this._parseKeywordOrIdentifierToken(ch, this.location);
+            else
+                throw new GrammarError(this.location, $"Invalid character {ch}");
+        }
     }
 
 
