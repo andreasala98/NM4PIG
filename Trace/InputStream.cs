@@ -25,38 +25,38 @@ namespace Trace
     /// A high-level wrapper around a stream, used to parse scene files
     /// This class implements a wrapper around a stream, with the following additional capabilities:
     /// - It tracks the line number and column number;
-    /// - It permits to "un-read" characters and tokens.
+    /// - It permits to 'un-read' characters and tokens.
     /// </summary>
     public class InputStream
     {
 
         public Stream stream;
         public SourceLocation location;
-        public string savedChar;
+        public char savedChar;
         public SourceLocation savedLocation;
         public int tabulations;
         public Token? savedToken;
 
-        public InputStream(Stream stream, string fileName = "", int tabulations = 4)
+        public InputStream(Stream stream, char fileName = '\0', int tabulations = 4)
         {
             this.stream = stream;
             this.location = new SourceLocation(fileName: fileName, line: 1, col: 1);
-            this.savedChar = "";
+            this.savedChar = '\0';
             this.savedLocation = this.location;
             this.tabulations = tabulations;
             this.savedToken = null;
         }
 
-        private void _updatePosition(string ch)
+        private void _updatePosition(char ch)
         {
-            if (ch == "")
+            if (ch == '\0')
                 return;
-            else if (ch == "\n")
+            else if (ch == '\n')
             {
                 this.location.lineNum += 1;
                 this.location.colNum = 1;
             }
-            else if (ch == "\t")
+            else if (ch == '\t')
                 this.location.colNum += this.tabulations;
             else
                 this.location.colNum += 1;
@@ -65,27 +65,83 @@ namespace Trace
         /// <summary>
         /// Read a new character from the stream
         /// </summary>
-        public string readChar()
+        public char readChar()
         {
-            string ch;
-            if (this.savedChar != "")
+            char ch;
+            if (this.savedChar != '\0')
             {
                 ch = this.savedChar;
-                this.savedChar = "";
+                this.savedChar = '\0';
             }
             else
             {
                 int byteRead = this.stream.ReadByte(); // ReadByte returns -1 at the end of stream
                 if (byteRead == -1)
-                    ch = "";
+                    ch = '\0';
                 else
-                    ch = Convert.ToString(byteRead);
+                    ch = Convert.ToChar(byteRead);
 
             }
             this.savedLocation = this.location;
             this._updatePosition(ch);
             return ch;
         }
+
+        public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
+        {
+            char token = firstChar;
+            while(true)
+            {
+                char ch = this.readChar();
+
+                if (!(ch.isLetterOrDigit() || ch == '_'))
+                {
+                    this.unReadChar(ch);
+                }
+
+                token += ch;
+
+                try
+                {
+                    return new KeywordToken(tokenLocation, KEYWORDS[token]);
+                }
+                catch (System.Exception)
+                {
+                    return new IdentifierToken(tokenLocation, token);
+                }
+
+            }
+
+        }
+
+        // public Token readToken()
+        // {
+        //     if (this.savedToken != null)
+        //     {
+        //         Token result = this.savedToken;
+        //         this.savedToken = null;
+        //         return result;
+        //     }
+
+        //     this.skipWhitespaces();
+
+        //     char ch = this.readChar();
+
+        //     if (ch == '') return new StopToken(this.location);
+
+        //     if (ch == '#')
+        //     {
+        //         while(this.readChar() != '\r' && this.readChar() != '\n' && this.readChar() != '\0') 
+        //         {
+        //             continue;
+        //         }
+
+        //         this.skipWhitespaces();
+        //     }
+
+        //     else    this.unreadChar(ch);
+
+        // }
     }
 
 

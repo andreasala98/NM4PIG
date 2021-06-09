@@ -99,7 +99,7 @@ namespace Trace
 
         public string id;
 
-        public IdentifierToken(SourceLocation sourceLoc, string s) : base(sourceLoc)
+        public IdentifierToken(SourceLocation sourceLoc, char s) : base(sourceLoc)
         {
             this.id = s;
         }
