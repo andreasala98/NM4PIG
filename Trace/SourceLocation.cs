@@ -16,9 +16,6 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
-using System;
-using Trace;
-
 namespace Trace
 {
     /// <summary>
@@ -49,8 +46,8 @@ namespace Trace
 
         public SourceLocation shallowCopy()
         {
-            return (SourceLocation) this.MemberwiseClone();
+            return (SourceLocation)this.MemberwiseClone();
         }
-        
+
     }
 }

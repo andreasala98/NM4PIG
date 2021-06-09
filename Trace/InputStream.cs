@@ -33,11 +33,29 @@ namespace Trace
     public class InputStream
     {
 
+        /// <summary>
+        /// stream we read from
+        /// </summary>
         public Stream stream;
+        /// <summary>
+        /// Current location of the cursor
+        /// </summary>
         public SourceLocation location;
+        /// <summary>
+        /// Char read, so that is possible to unread the char
+        /// </summary>
         public char savedChar;
+        /// <summary>
+        /// Old position, so it is possible to unread the char
+        /// </summary>
         public SourceLocation savedLocation;
+        /// <summary>
+        /// number of spaces equivalent to tab, default is 4
+        /// </summary>
         public int tabulations;
+        /// <summary>
+        /// Token we just read
+        /// </summary>
         public Token? savedToken;
 
         public InputStream(Stream stream, string fileName = "", int tabulations = 4)
@@ -198,6 +216,9 @@ namespace Trace
 
         }
 
+        /// <summary>
+        /// Read and interpetate the token
+        /// </summary>
         public Token readToken()
         {
             if (this.savedToken != null)
@@ -215,7 +236,7 @@ namespace Trace
 
             char[] SYMBOLS = { '(', ')', '<', '>', '[', ']', ',', '*' };
             char[] OPERATIONS = { '+', '-', '.' };
-            if (SYMBOLS.Contains(ch)) 
+            if (SYMBOLS.Contains(ch))
                 return new SymbolToken(this.location, ch.ToString());
             else if (ch == '"')
                 return this._parseStringToken(this.location);
