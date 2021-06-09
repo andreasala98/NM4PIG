@@ -76,7 +76,7 @@ namespace Trace
         /// /// Constructor for GrammarError exception. This raises an exception with an error message
         /// </summary>
         /// <param name="Message">The error message</param>
-        public GrammarError(string Message, SourceLocation location) : base(Message) 
+        public GrammarError(SourceLocation location, string Message) : base(Message)
         {
             this.sourceLocation = location;
         }

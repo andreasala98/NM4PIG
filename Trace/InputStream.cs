@@ -18,7 +18,10 @@ IN THE SOFTWARE.
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Globalization;
 
+#nullable enable
 namespace Trace
 {
     /// <summary>
@@ -37,7 +40,7 @@ namespace Trace
         public int tabulations;
         public Token? savedToken;
 
-        public InputStream(Stream stream, char fileName = '\0', int tabulations = 4)
+        public InputStream(Stream stream, string fileName = "", int tabulations = 4)
         {
             this.stream = stream;
             this.location = new SourceLocation(fileName: fileName, line: 1, col: 1);
@@ -80,21 +83,102 @@ namespace Trace
                     ch = '\0';
                 else
                     ch = Convert.ToChar(byteRead);
-
             }
             this.savedLocation = this.location;
             this._updatePosition(ch);
             return ch;
         }
 
+        /// <summary>
+        /// Push a character back to the stream
+        /// </summary>
+        public void unreadChar(char ch)
+        {
+            this.savedChar = ch;
+            this.location = this.savedLocation;
+        }
+
+        /// <summary>
+        /// Keep reading characters until a non-whitespace character is found
+        /// </summary>
+        public void skipWhitespacesAndComments()
+        {
+            char[] WHITESPACE = { ' ', '\t', '\n', '\r' };
+            char[] ENDLINE = { '\n', '\r' };
+            char ch = this.readChar();
+            while (WHITESPACE.Contains(ch) || ch == '#')
+            {
+                if (ch == '#')
+                {
+                    // It's a comment! Keep reading until the end of the line (include the case "", the end-of-file)
+                    while (!ENDLINE.Contains(this.readChar()))
+                        continue;
+                }
+
+
+                ch = this.readChar();
+                if (ch == '\0')
+                    return;
+            }
+            this.unreadChar(ch);
+            return;
+        }
+
+        private StringToken _parseStringToken(SourceLocation tokenLocation)
+        {
+            string token = "";
+            while (true)
+            {
+                char ch = this.readChar();
+                if (ch == '"')
+                    break;
+                if (ch == '\0')
+                    throw new GrammarError(tokenLocation, "unterminated string");
+
+                token += ch;
+            }
+
+            return new StringToken(tokenLocation, token);
+        }
+
+        private LiteralNumberToken _parseFloatToken(char firstChar, SourceLocation tokenLocation)
+        {
+            string token = firstChar.ToString();
+            while (true)
+            {
+                char ch = this.readChar();
+                char[] SCIENTIFIC = { 'e', 'E' };
+                if (!(Char.IsDigit(ch) || ch == '.' || SCIENTIFIC.Contains(ch)))
+                {
+                    this.unreadChar(ch);
+                    break;
+                }
+
+                token += ch;
+            }
+
+            float value;
+            try
+            {
+                value = float.Parse(token, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
+            }
+
+
+            return new LiteralNumberToken(tokenLocation, value);
+        }
+
         public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
         {
             string token = firstChar.ToString();
-            while(true)
+            while (true)
             {
                 char ch = this.readChar();
 
-                if (!(ch.isLetterOrDigit() || ch == '_'))
+                if (!(Char.IsLetterOrDigit(ch) || ch == '_'))
                 {
                     this.unreadChar(ch);
                 }
