@@ -96,7 +96,7 @@ namespace Trace
 
                 if (!(ch.isLetterOrDigit() || ch == '_'))
                 {
-                    this.unReadChar(ch);
+                    this.unreadChar(ch);
                 }
 
                 token += ch;
