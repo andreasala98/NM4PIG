@@ -46,5 +46,11 @@ namespace Trace
             this.lineNum = line;
             this.colNum = col;
         }
+
+        public SourceLocation shallowCopy()
+        {
+            return (SourceLocation) this.MemberwiseClone();
+        }
+        
     }
 }

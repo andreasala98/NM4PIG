@@ -84,7 +84,7 @@ namespace Trace
                 else
                     ch = Convert.ToChar(byteRead);
             }
-            this.savedLocation = this.location;
+            this.savedLocation = this.location.shallowCopy();
             this._updatePosition(ch);
             return ch;
         }
