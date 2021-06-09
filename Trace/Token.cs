@@ -73,7 +73,7 @@ namespace Trace
         public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum>(){
 
             {  "new", KeywordEnum.New },
-            { "material", KeywordEnum.Material },
+            {  "material", KeywordEnum.Material },
             {  "plane" , KeywordEnum.Plane},
             {  "sphere" , KeywordEnum.Sphere},
             {  "diffuse" , KeywordEnum.Diffuse},

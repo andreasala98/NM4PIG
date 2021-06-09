@@ -28,11 +28,37 @@ namespace Trace.Test
     public class LexerTest
     {
 
-        //public bool AssertIsKeyword(Token tk, KeywordEnum kw ) {
+        
+        public void AssertIsKeyword(Token token, KeywordEnum keyword)
+        {
+            Assert.True((KeywordToken)token is KeywordToken, "The token is not a key word");
+            Assert.True(((KeywordToken)token).keyword == keyword, $"Token {token} is not equal to keyword {keyword}");
+        }
 
-    
+        public void AssertIsIdentifier(Token token, string identifier )
+        {
+            Assert.True(token is IdentifierToken, "The token is not an identifier");
+            Assert.True(((IdentifierToken)token).id == identifier, $"Token {token} is not equal to an identifier {identifier}");
+        }
+        
+        public void AssertIsSymbol(Token token, string symbol)
+        {
+            Assert.True(token is SymbolToken, "The token is not a symbol");
+            Assert.True(((SymbolToken)token).symbol == symbol, $"Token {token} is not equal to a symbol {symbol}");
+        }
 
-    [Fact]
+        public void AssertIsNumber(Token token, float number)
+        {
+            Assert.True(token is LiteralNumberToken, "The token is not a number");
+            Assert.True(((LiteralNumberToken)token).value == number, $"Token {token} is not equal to a number {number}");
+        }
+        public void AssertIsString(Token token, string frase)
+        {
+            Assert.True(token is StringToken, "The token is not a string");
+            Assert.True(((StringToken)token).str == frase, $"Token {token} is not equal to a string {frase}");
+        }
+
+        [Fact]
         public void TestInputFile() {
 
             byte[] byteArray = Encoding.ASCII.GetBytes("abc   \nd\nef");
@@ -84,6 +110,34 @@ namespace Trace.Test
             Assert.True(stream.readChar() == '\0', "TestInputFile failed! Assert 29");
 
 
+        }
+
+        [Fact]
+        public void TestLexer()
+        {
+            string test = @" 
+                # This is a comment
+                # This is another comment
+                new material sky_material(
+                 diffuse(image(""my file.pfm "")),
+                 <5.0, 500.0, 300.0 >
+                ) # Comment at the end of the line";
+            
+            byte[] byteArray = Encoding.ASCII.GetBytes(test);
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            InputStream inputStream = new InputStream(stream);
+
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.New);
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Material);
+            AssertIsIdentifier(inputStream.readToken(), "sky_material");
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Diffuse);
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Image);
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsString(inputStream.readToken(), "my file.pfm");
+            AssertIsSymbol(inputStream.readToken(), ")");
         }
 
 
