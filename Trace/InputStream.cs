@@ -89,7 +89,7 @@ namespace Trace
 
         public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
         {
-            char token = firstChar;
+            string token = firstChar.ToString();
             while(true)
             {
                 char ch = this.readChar();
