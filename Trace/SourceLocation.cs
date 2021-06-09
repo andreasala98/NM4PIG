@@ -40,9 +40,9 @@ namespace Trace
         /// </summary>
         public int colNum = 0;
 
-        public SourceLocation(string stringa, int line = 1, int col = 1)
+        public SourceLocation(string fileName, int line = 1, int col = 1)
         {
-            this.fileName = stringa;
+            this.fileName = fileName;
             this.lineNum = line;
             this.colNum = col;
         }
