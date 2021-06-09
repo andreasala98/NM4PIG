@@ -138,7 +138,7 @@ namespace Trace
                 token += ch;
             }
 
-            return new StringToken(tokenLocation, token);
+            return new StringToken(token, tokenLocation);
         }
 
         private LiteralNumberToken _parseFloatToken(char firstChar, SourceLocation tokenLocation)
@@ -187,7 +187,7 @@ namespace Trace
 
                 try
                 {
-                    return new KeywordToken(tokenLocation, KEYWORDS[token]);
+                    return new KeywordToken(tokenLocation, KeywordToken.dict[token]);
                 }
                 catch (System.Exception)
                 {

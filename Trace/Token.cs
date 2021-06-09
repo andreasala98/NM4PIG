@@ -70,27 +70,27 @@ namespace Trace
 
         public KeywordEnum keyword;
 
-        public static Dictionary<KeywordEnum, string> dict = new Dictionary<KeywordEnum, string>(){
+        public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum> (){
 
-            { KeywordEnum.New, "new" },
-            { KeywordEnum.Material, "material" },
-            { KeywordEnum.Plane, "plane" },
-            { KeywordEnum.Sphere, "sphere" },
-            { KeywordEnum.Diffuse, "diffuse" },
-            { KeywordEnum.Specular, "specular" },
-            { KeywordEnum.Uniform, "uniform" },
-            { KeywordEnum.Checkered, "checkered" },
-            { KeywordEnum.Image, "image" },
-            { KeywordEnum.Identity, "identity" },
-            { KeywordEnum.Translation, "translation" },
-            { KeywordEnum.RotationX, "rotationX" },
-            { KeywordEnum.RotationX, "rotationY" },
-            { KeywordEnum.RotationX, "rotationZ" },
-            { KeywordEnum.Scaling, "scaling" },
-            { KeywordEnum.Camera, "camera" },
-            { KeywordEnum.Orthogonal, "orthogonal" },
-            { KeywordEnum.Perspective, "perspective" },
-            { KeywordEnum.Float, "float" }
+            {  "new", KeywordEnum.New },
+            { "material", KeywordEnum.Material },
+            {  "plane" , KeywordEnum.Plane},
+            {  "sphere" , KeywordEnum.Sphere},
+            {  "diffuse" , KeywordEnum.Diffuse},
+            {  "specular" , KeywordEnum.Specular},
+            {  "uniform" , KeywordEnum.Uniform},
+            {  "checkered" , KeywordEnum.Checkered},
+            {  "image" , KeywordEnum.Image},
+            {  "identity" , KeywordEnum.Identity},
+            {  "translation" , KeywordEnum.Translation},
+            {  "rotationX" , KeywordEnum.RotationX},
+            {  "rotationY" , KeywordEnum.RotationY},
+            {  "rotationZ" , KeywordEnum.RotationZ},
+            {  "scaling" , KeywordEnum.Scaling},
+            {  "camera" , KeywordEnum.Camera},
+            {  "orthogonal" , KeywordEnum.Orthogonal},
+            {  "perspective" , KeywordEnum.Perspective},
+            {  "float" , KeywordEnum.Float}
         };
 
 
