@@ -28,7 +28,7 @@ namespace Trace
     /// A high-level wrapper around a stream, used to parse scene files
     /// This class implements a wrapper around a stream, with the following additional capabilities:
     /// - It tracks the line number and column number;
-    /// - It permits to "un-read" characters and tokens.
+    /// - It permits to 'un-read' characters and tokens.
     /// </summary>
     public class InputStream
     {
@@ -156,21 +156,76 @@ namespace Trace
 
                 token += ch;
             }
+
+            float value;
             try
             {
-                float value = float.Parse(token, CultureInfo.InvariantCulture);
+                value = float.Parse(token, CultureInfo.InvariantCulture);
             }
-            catch (ValueError)
+            catch (FormatException)
             {
-                throw new GrammarError(this.tokenLocation, $"'{token}' is an invalid floating-point number");
+                throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
             }
 
 
-            return new LiteralNumberToken(this.tokenLocation, value);
+            return new LiteralNumberToken(tokenLocation, value);
         }
 
+        public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
+        {
+            string token = firstChar.ToString();
+            while (true)
+            {
+                char ch = this.readChar();
 
+                if (!(Char.IsLetterOrDigit(ch) || ch == '_'))
+                {
+                    this.unreadChar(ch);
+                }
 
+                token += ch;
+
+                try
+                {
+                    return new KeywordToken(tokenLocation, KEYWORDS[token]);
+                }
+                catch (System.Exception)
+                {
+                    return new IdentifierToken(tokenLocation, token);
+                }
+
+            }
+
+        }
+
+        // public Token readToken()
+        // {
+        //     if (this.savedToken != null)
+        //     {
+        //         Token result = this.savedToken;
+        //         this.savedToken = null;
+        //         return result;
+        //     }
+
+        //     this.skipWhitespaces();
+
+        //     char ch = this.readChar();
+
+        //     if (ch == '') return new StopToken(this.location);
+
+        //     if (ch == '#')
+        //     {
+        //         while(this.readChar() != '\r' && this.readChar() != '\n' && this.readChar() != '\0') 
+        //         {
+        //             continue;
+        //         }
+
+        //         this.skipWhitespaces();
+        //     }
+
+        //     else    this.unreadChar(ch);
+
+        // }
     }
 
 
