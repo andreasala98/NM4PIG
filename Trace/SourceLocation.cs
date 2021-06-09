@@ -34,11 +34,11 @@ namespace Trace
         /// <summary>
         /// number of the line (starting from 1)
         /// </summary>
-        public int lineNum;
+        public int lineNum = 0;
         /// <summary>
         /// number of the column (starting from 1)
         /// </summary>
-        public int colNum;
+        public int colNum = 0;
 
         public SourceLocation(string stringa, int line = 1, int col = 1)
         {
