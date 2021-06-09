@@ -49,7 +49,7 @@ namespace Trace
 
         public StopToken(SourceLocation sourceLoc) : base(sourceLoc) { }
 
-    }
+    } //StopToken
 
 
     public enum KeywordEnum
@@ -62,10 +62,6 @@ namespace Trace
     }
 
 
-
-
-
-
     public class KeywordToken : Token
     {
         /// <summary>
@@ -74,20 +70,42 @@ namespace Trace
 
         public KeywordEnum keyword;
 
-        public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum>();
-        dict.Add("new",KeywordEnum.New);
+        public static Dictionary<KeywordEnum, string> dict = new Dictionary<KeywordEnum, string>(){
 
-        public KeywordToken(SourceLocation sourceLoc, KeywordEnum key) : base(sourceLoc) 
+            { KeywordEnum.New, "new" },
+            { KeywordEnum.Material, "material" },
+            { KeywordEnum.Plane, "plane" },
+            { KeywordEnum.Sphere, "sphere" },
+            { KeywordEnum.Diffuse, "diffuse" },
+            { KeywordEnum.Specular, "specular" },
+            { KeywordEnum.Uniform, "uniform" },
+            { KeywordEnum.Checkered, "checkered" },
+            { KeywordEnum.Image, "image" },
+            { KeywordEnum.Identity, "identity" },
+            { KeywordEnum.Translation, "translation" },
+            { KeywordEnum.RotationX, "rotationX" },
+            { KeywordEnum.RotationX, "rotationY" },
+            { KeywordEnum.RotationX, "rotationZ" },
+            { KeywordEnum.Scaling, "scaling" },
+            { KeywordEnum.Camera, "camera" },
+            { KeywordEnum.Orthogonal, "orthogonal" },
+            { KeywordEnum.Perspective, "perspective" },
+            { KeywordEnum.Float, "float" }
+        };
+
+
+        public KeywordToken(SourceLocation sourceLoc, KeywordEnum key) : base(sourceLoc)
         {
             this.keyword = key;
         }
 
-        public string GetStringKeyword(){
-
-            return Convert.ToString(this.keyword);
+        public override string ToString()
+        {
+            if (!dict.ContainsKey(this.keyword)) throw new ArgumentException("Keyword not found");
+            else return dict[this.keyword];
         }
 
-    }
+    } //KeywordToken
 
 
     public class IdentifierToken : Token
@@ -109,8 +127,58 @@ namespace Trace
         {
             return this.id;
         }
-       
 
+    } //IdentifierToken
+
+
+    /// <summary>
+    /// A token containing a literal string
+    /// </summary>
+    public class StringToken : Token
+    {
+
+        public string str;
+
+        public StringToken(string s, SourceLocation sL) : base(sL)
+        {
+
+            this.str = s;
+
+        }
+
+        public override string ToString()
+        {
+            return this.str;
+        }
+
+    }
+
+    /// <summary>
+    /// A token containing a literal number
+    /// </summary>
+    public class LiteralNumberToken: Token
+    {
+        public float value;
+
+        public LiteralNumberToken(SourceLocation sL, float val) : base(sL) {
+
+            this.value = val;
+
+        }
+
+        public override string ToString()
+        {
+            return this.value.ToString();
+        }
+
+    }
+
+    public class SymbolToken : Token {
+        public string symbol;
+
+        public SymbolToken(SourceLocation sL, string sym) : base(sL) {
+            this.symbol = sym;
+        }
 
     }
 
