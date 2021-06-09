@@ -30,10 +30,11 @@ namespace Trace.Test
 
         //public bool AssertIsKeyword(Token tk, KeywordEnum kw ) {
 
-    
 
-    [Fact]
-        public void TestInputFile() {
+
+        [Fact]
+        public void TestInputFile()
+        {
 
             byte[] byteArray = Encoding.ASCII.GetBytes("abc   \nd\nef");
             MemoryStream iS = new MemoryStream(byteArray);
@@ -43,7 +44,7 @@ namespace Trace.Test
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 1");
             Assert.True(stream.location.colNum == 1, "TestInputFile failed! Assert 2");
 
-            Assert.True(stream.readChar()=='a', "TestInputFile failed! Assert 3");
+            Assert.True(stream.readChar() == 'a', "TestInputFile failed! Assert 3");
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 4");
             Assert.True(stream.location.colNum == 2, "TestInputFile failed! Assert 5");
 
@@ -51,33 +52,33 @@ namespace Trace.Test
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 6");
             Assert.True(stream.location.colNum == 1, "TestInputFile failed! Assert 7");
 
-            Assert.True(stream.readChar()=='A', "TestInputFile failed! Assert 8");
+            Assert.True(stream.readChar() == 'A', "TestInputFile failed! Assert 8");
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 9");
             Assert.True(stream.location.colNum == 2, "TestInputFile failed! Assert 10");
 
-            Assert.True(stream.readChar()=='b', "TestInputFile failed! Assert 11");
+            Assert.True(stream.readChar() == 'b', "TestInputFile failed! Assert 11");
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 12");
             Assert.True(stream.location.colNum == 3, "TestInputFile failed! Assert 13");
 
-            Assert.True(stream.readChar()=='c', "TestInputFile failed! Assert 14");
+            Assert.True(stream.readChar() == 'c', "TestInputFile failed! Assert 14");
             Assert.True(stream.location.lineNum == 1, "TestInputFile failed! Assert 15");
             Assert.True(stream.location.colNum == 4, "TestInputFile failed! Assert 16");
 
             stream.skipWhitespacesAndComments();
 
-            Assert.True(stream.readChar()=='d', "TestInputFile failed! Assert 17");
+            Assert.True(stream.readChar() == 'd', "TestInputFile failed! Assert 17");
             Assert.True(stream.location.lineNum == 2, "TestInputFile failed! Assert 18");
             Assert.True(stream.location.colNum == 2, "TestInputFile failed! Assert 19");
 
-            Assert.True(stream.readChar()=='\n', "TestInputFile failed! Assert 20");
+            Assert.True(stream.readChar() == '\n', "TestInputFile failed! Assert 20");
             Assert.True(stream.location.lineNum == 3, "TestInputFile failed! Assert 21");
             Assert.True(stream.location.colNum == 1, "TestInputFile failed! Assert 22");
 
-            Assert.True(stream.readChar()=='e', "TestInputFile failed! Assert 23");
+            Assert.True(stream.readChar() == 'e', "TestInputFile failed! Assert 23");
             Assert.True(stream.location.lineNum == 3, "TestInputFile failed! Assert 24");
             Assert.True(stream.location.colNum == 2, "TestInputFile failed! Assert 25");
 
-            Assert.True(stream.readChar()=='f', "TestInputFile failed! Assert 26");
+            Assert.True(stream.readChar() == 'f', "TestInputFile failed! Assert 26");
             Assert.True(stream.location.lineNum == 3, "TestInputFile failed! Assert 27");
             Assert.True(stream.location.colNum == 3, "TestInputFile failed! Assert 28");
 
@@ -85,6 +86,36 @@ namespace Trace.Test
 
 
         }
+
+        // [Fact]
+        // public void TestParser()
+        // {
+        //     string test = @"float clock(150)
+        //                     material sky_material(
+        //                         diffuse(uniform(< 0, 0, 0 >)),
+        //                         uniform(< 0.7, 0.5, 1 >)
+        //                     )
+        //                     # Here is a comment
+        //                     material ground_material(
+        //                         diffuse(checkered(  < 0.3, 0.5, 0.1 >,
+        //                                             < 0.1, 0.2, 0.5 >, 
+        //                                             4)),
+        //                         uniform(< 0, 0, 0 >)
+        //                     )
+        //                     material sphere_material(
+        //                         specular(uniform(< 0.5, 0.5, 0.5 >)),
+        //                         uniform(< 0, 0, 0 >) 
+        //                     )
+        //                     plane(sky_material, translation([0, 0, 100]) * rotation_y(clock))
+        //                     plane(ground_material, identity)
+        //                     sphere(sphere_material, translation([0, 0, 1]))
+        //                     camera(perspective, rotation_z(30) * translation([-4, 0, 1]), 1.0, 1.0)";
+        //     byte[] byteArray = Encoding.ASCII.GetBytes(test);
+        //     MemoryStream stream = new MemoryStream(byteArray);
+        //     scene = parse_scene(input_file = InputStream(stream));
+
+        // }
+
 
 
 
