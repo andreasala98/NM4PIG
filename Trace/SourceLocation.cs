@@ -30,7 +30,7 @@ namespace Trace
         /// the name of the file, or the empty string if there is no file associated with this location
         /// (e.g., because the source code was provided as a memory stream, or through a network connection)
         /// </summary>
-        public char fileName;
+        public string fileName;
         /// <summary>
         /// number of the line (starting from 1)
         /// </summary>
@@ -40,7 +40,7 @@ namespace Trace
         /// </summary>
         public int colNum = 0;
 
-        public SourceLocation(char fileName, int line = 1, int col = 1)
+        public SourceLocation(string fileName, int line = 1, int col = 1)
         {
             this.fileName = fileName;
             this.lineNum = line;
