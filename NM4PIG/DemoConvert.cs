@@ -8,12 +8,12 @@ using System.Diagnostics;
 using Tsf = Trace.Transformation;
 using CC = Trace.Constant;
 
-namespace NM4PIG 
+namespace NM4PIG
 {
 
     class MainFuncs
     {
-        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, 
+        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile,
                                 string ldrFile, int scene, float? luminosity, int spp)
         {
 
@@ -78,27 +78,11 @@ namespace NM4PIG
                     Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
                     Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
 
-                    //One sphere for each vertex of the cube
-                    foreach (var x in Vertices)
-                    {
-                        foreach (var y in Vertices)
-                        {
-                            foreach (var z in Vertices)
-                            {
-                                world.addShape(new Sphere(transformation: Transformation.Translation(new Vec(x, y, z))
-                                                    * Transformation.Scaling(new Vec(0.1f, 0.1f, 0.1f)),
-                                                    material1));
-                            } // z
-                        } // y
-                    }// x
-
-                    //Adding two more spheres to break simmetry
-                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.5f))
-                                             * Transformation.Scaling(0.1f), material2));
-                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0.5f, 0f))
-                                             * Transformation.Scaling(0.1f), material3));
-
-                    renderer = new FlatRender(world);
+                    world.addShape(new Cylinder(
+                                                //transformation: Tsf.Translation(new Vec(5f, 0f, 1f)),
+                                                material: material1
+                                                ));
+                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
                     break;
                 case 3:
                     HdrImage img = new HdrImage();
@@ -157,9 +141,9 @@ namespace NM4PIG
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyMat));
                     world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), groundMat));
-                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0.5f,-2.6f,1f)*Transformation.Scaling(0.6f), sph2Mat),
-                                                     new Box(new Point(0f,-2.25f,0.9f), new Point(1f,-3.25f,1.8f), null, boxMat)));
-                    world.addShape(new Sphere(Tsf.Translation(3f, 5f, 1.6f) * Tsf.Scaling(2.0f,4.0f,2.0f), refMat));
+                    world.addShape(new CSGUnion(new Sphere(Transformation.Translation(0.5f, -2.6f, 1f) * Transformation.Scaling(0.6f), sph2Mat),
+                                                     new Box(new Point(0f, -2.25f, 0.9f), new Point(1f, -3.25f, 1.8f), null, boxMat)));
+                    world.addShape(new Sphere(Tsf.Translation(3f, 5f, 1.6f) * Tsf.Scaling(2.0f, 4.0f, 2.0f), refMat));
                     world.addShape(new Sphere(Tsf.Translation(4f, -1f, 1.3f) * Tsf.Scaling(1.0f), sph1Mat));
                     world.addShape(new Sphere(Tsf.Translation(-4f, -0.5f, 1f) * Tsf.Scaling(2f), sph2Mat));
                     renderer = new PathTracer(world, Constant.Black, pcg);

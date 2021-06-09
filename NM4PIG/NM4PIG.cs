@@ -17,13 +17,8 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.IO;
 using Trace;
 using Microsoft.Extensions.CommandLineUtils;
-using System.Collections.Generic;
-
-using Tsf = Trace.Transformation;
-using CC = Trace.Constant;
 
 namespace NM4PIG
 {
@@ -70,17 +65,17 @@ namespace NM4PIG
                     Parameters readParam = new Parameters();
                     try
                     {
-                    readParam.parseCommandLineDemo(
-                                                    width.Value(),
-                                                    height.Value(),
-                                                    angledeg.Value(),
-                                                    orthogonal.Value(),
-                                                    pfmfile.Value(),
-                                                    ldrfile.Value(),
-                                                    luminosity.Value(),
-                                                    scene.Value(),
-                                                    spp.Value()
-                                                        );
+                        readParam.parseCommandLineDemo(
+                                                        width.Value(),
+                                                        height.Value(),
+                                                        angledeg.Value(),
+                                                        orthogonal.Value(),
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value(),
+                                                        luminosity.Value(),
+                                                        scene.Value(),
+                                                        spp.Value()
+                                                            );
                     }
                     catch (CommandLineException e)
                     {
@@ -163,7 +158,7 @@ namespace NM4PIG
 
     } //Program class
 
-    
+
 
 } //NM4PIG namespace
 

@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 #nullable enable
@@ -364,7 +365,10 @@ namespace Trace
         /// <param name="a"> The point </param>
         /// <returns>True if the point is inside</returns>
         public override bool isPointInside(Point a)
-            => a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
+        {
+            a = this.transformation.getInverse() * a;
+            return a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
+        }
 
 
         /// <summary>
@@ -390,7 +394,7 @@ namespace Trace
         /// <returns> The oriented normal</returns>
         private Normal _boxNormal(Point point, Vec rayDir)
         {
-            Normal result = new Normal(0f,0f,1f);
+            Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
             else if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
             else if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
@@ -489,5 +493,134 @@ namespace Trace
 
     }
 
+    /// <summary>
+    /// Represent a cylinder. If no transformation is passed, it is a cylinder with axis aligned along z, -0.5 < z < 0.5 and radius 1
+    /// </summary>
+    public class Cylinder : Shape
+    {
+        public Cylinder(Transformation? transformation = null, Material? material = null) : base(transformation, material) { }
+
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            List<HitRecord?> intersections = rayIntersectionList(ray);
+            if (intersections.Count == 0) return null;
+            return intersections[0];
+        }
+
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            List<HitRecord?> hits = new List<HitRecord?>();
+
+            // Check if intersect lateral face
+            float a = invRay.dir.x * invRay.dir.x + invRay.dir.y * invRay.dir.y;
+            float b = invRay.dir.x * invRay.origin.x + invRay.dir.y * invRay.origin.y;
+            float c = invRay.origin.x * invRay.origin.x + invRay.origin.y * invRay.origin.y - 1;
+
+            float delta = b * b - a * c;
+            float? t1 = null, t2 = null;
+
+            if (delta > 0f)        // two solutions
+            {
+                t1 = (-b - MathF.Sqrt(delta)) / a;
+                t2 = (-b + MathF.Sqrt(delta)) / a;
+
+                if (t1 > 0f)
+                {
+                    Point hitPoint = invRay.at(t1.Value);
+                    if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+                        hits.Add(new HitRecord(
+                                wp: this.transformation * hitPoint,
+                                nm: (this.transformation * this._cylinderNormal(hitPoint, ray.dir)),
+                                sp: this._cylinderPointToUV(hitPoint),
+                                tt: t1.Value,
+                                r: ray,
+                                shape: this
+                        ));
+                }
+
+                if (t2 > 0)
+                {
+                    Point hitPoint = invRay.at(t2.Value);
+                    if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+                        hits.Add(new HitRecord(
+                                wp: this.transformation * hitPoint,
+                                nm: (this.transformation * this._cylinderNormal(hitPoint, ray.dir)),
+                                sp: this._cylinderPointToUV(hitPoint),
+                                tt: t2.Value,
+                                r: ray,
+                                shape: this
+                        ));
+                }
+
+
+            }
+
+            // Check if intersect bottom face
+            Plane planeBottom = new Plane(transformation: Transformation.Translation(0f, 0f, -0.5f));
+            HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+            if (hitBottom.HasValue)
+            {
+                Point pointInt = hitBottom.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+                    hits.Add(new HitRecord(
+                                wp: this.transformation * pointInt,
+                                nm: (this.transformation * this._cylinderNormal(pointInt, ray.dir)),
+                                sp: this._cylinderPointToUV(pointInt),
+                                tt: hitBottom.Value.t,
+                                r: ray,
+                                shape: this
+                    ));
+            }
+
+            // Check if intersect top face
+            Plane planeTop = new Plane(transformation: Transformation.Translation(0f, 0f, 0.5f));
+            HitRecord? hitTop = planeTop.rayIntersection(invRay);
+            if (hitTop.HasValue)
+            {
+                Point pointInt = hitTop.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+                    hits.Add(new HitRecord(
+                                wp: this.transformation * pointInt,
+                                nm: (this.transformation * this._cylinderNormal(pointInt, ray.dir)),
+                                sp: this._cylinderPointToUV(pointInt),
+                                tt: hitTop.Value.t,
+                                r: ray,
+                                shape: this
+                    ));
+            }
+
+            return hits.OrderBy(hit => hit?.t).ToList();
+        }
+
+        private Normal _cylinderNormal(Point point, Vec rayDir)
+        {
+            Point invPoint = this.transformation.getInverse() * point;
+            Vec invRayDir = this.transformation.getInverse() * rayDir;
+
+            Normal result = new Normal(invPoint.x, invPoint.y, 0f);
+
+            if (Utility.areClose(invPoint.z, 0.5f)) result = new Normal(0f, 0f, 1f);
+
+            if (Utility.areClose(invPoint.z, -0.5f)) result = new Normal(0f, 0f, -1f);
+
+            if (invPoint.x * invRayDir.x + invPoint.y * invRayDir.y > 0.0F)
+                result = -result;
+            return result;
+        }
+
+        private Vec2D _cylinderPointToUV(Point point)
+        {
+            float u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
+            float v = point.z + 0.5f;
+            return new Vec2D(u, v);
+        }
+        public override bool isPointInside(Point a)
+        {
+            Point inva = this.transformation.getInverse() * a;
+            float distance = inva.x * inva.x + inva.y * inva.y;
+            return inva.z < 0.5f && inva.z > -0.5f && distance < 1f;
+        }
+    }
 
 }

@@ -254,4 +254,76 @@ namespace Trace.Test
         }
     }
 
+
+    public class TestCylinder
+    {
+        [Fact]
+        void TestCylinderIntersectionBasic()
+        {
+            Cylinder cylinder = new Cylinder();
+            Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
+            HitRecord? intersection1 = cylinder.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestCylinderIntersectionBasic failed - assert 1/6");
+
+            HitRecord hit1 = new HitRecord(
+                                            new Point(-1.0f, 0.0f, 0.0f),
+                                            new Normal(-1f, 0.0f, 0.0f),
+                                            new Vec2D(0.5f, 0.5f),
+                                            4.0f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), "TestCylinderIntersectionBasic failed - assert 2/6");
+
+            // Intersect top
+            Ray ray2 = new Ray(new Point(0f, 0f, 10f), -Constant.VEC_Z);
+            HitRecord? intersection2 = cylinder.rayIntersection(ray2);
+            Assert.True(intersection2 != null, "TestCylinderIntersectionBasic failed - assert 3/6");
+            HitRecord hit2 = new HitRecord(
+                                            new Point(0.0f, 0.0f, 0.5f),
+                                            new Normal(0.0f, 0.0f, 1.0f),
+                                            new Vec2D(0f, 1f),
+                                            9.5f,
+                                            ray2
+                                        );
+            Assert.True(hit2.isClose(intersection2), "TestCylinderIntersectionBasic failed - assert 4/6");
+
+            // fire a ray just up
+            Ray ray3 = new Ray(new Point(-5f, 0f, 0.6f), Constant.VEC_X);
+            HitRecord? intersection3 = cylinder.rayIntersection(ray3);
+            Assert.True(intersection3 == null, "TestCylinderIntersectionBasic failed - assert 5/6");
+
+            // Intersect for t<0
+            Ray ray4 = new Ray(new Point(0f, 3f, 0f), Constant.VEC_Y);
+            HitRecord? intersection4 = cylinder.rayIntersection(ray4);
+            Assert.True(intersection4 == null, "TestBoxesIntersectionBasic failed - assert 6/6");
+        }
+
+        [Fact]
+        void TestCylindersIntersectionTransformation()
+        {
+
+            // Cylinder -2.5 < z < 2.5, radius 5
+            Cylinder cylinder1 = new Cylinder(transformation: Transformation.Scaling(5.0f));
+            Ray ray1 = new Ray(new Point(-10f, 4.5f, 2.4f), Constant.VEC_X);
+            HitRecord? intersection1 = cylinder1.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestCylindersIntersectionTransformation failed - assert 1");
+            HitRecord hit1 = new HitRecord(
+                                            new Point(-2.179451f, 4.5f, 2.4f),
+                                            new Normal(-0.017435608f, 0.036000002f, 0.0f),
+                                            new Vec2D(0.32178319f, 0.98f),
+                                            7.820549f,
+                                            ray1
+                                        );
+            Assert.True(hit1.isClose(intersection1), intersection1.ToString());
+
+            Ray ray2 = new Ray(new Point(0f, 5f, 5f), -Constant.VEC_Z);
+            HitRecord? intersection2 = cylinder1.rayIntersection(ray2);
+            Assert.True(intersection2 == null, "TestCylindersIntersectionTransformation failed - assert 3/3");
+
+            // Cylinder -2.5 < z < 2.5, radius 5
+            Ray ray3 = new Ray(new Point(-10f, 0f, 0f), new Vec(1f, 2f, 0f));
+            HitRecord? intersection3 = cylinder1.rayIntersection(ray3);
+            Assert.True(intersection3 == null, "TestCylindersIntersectionTransformation failed - assert 1");
+        }
+    }
 } // end of namespace
