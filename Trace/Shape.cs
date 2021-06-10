@@ -63,6 +63,14 @@ namespace Trace
         /// </summary>
         /// <param name="a"></param>
         public abstract bool isPointInside(Point a);
+
+        public static CSGDifference operator -(Shape left, Shape right)
+            => new CSGDifference(left,right);
+        public static CSGUnion operator +(Shape left, Shape right)
+            => new CSGUnion(left,right);
+
+        public static CSGIntersection operator *(Shape left, Shape right)
+            => new CSGIntersection(left,right);
     }
 
 
@@ -218,12 +226,10 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             a = this.transformation.getInverse() * a;
-            return a.x * a.x + a.y * a.y + a.z * a.z < 1;
+            return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
         }
     }
-
     // ################################
-
 
     /// <summary>
     /// A 2D plane that you can put in the scene. Unless transformations are applied, the z=0 plane is constructed
@@ -367,7 +373,7 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             a = this.transformation.getInverse() * a;
-            return a.x > min.x && a.x < max.x && a.y > min.y && a.y < max.y && a.z > min.z && a.z < max.z;
+            return a.x >= min.x && a.x <= max.x && a.y >= min.y && a.y <= max.y && a.z >= min.z && a.z <= max.z;
         }
 
 
@@ -604,7 +610,7 @@ namespace Trace
 
             if (Utility.areClose(invPoint.z, -0.5f)) result = new Normal(0f, 0f, -1f);
 
-            if (invPoint.x * invRayDir.x + invPoint.y * invRayDir.y > 0.0F)
+            if (invPoint.x * invRayDir.x + invPoint.y * invRayDir.y > 0.0f)
                 result = -result;
             return result;
         }
@@ -619,7 +625,7 @@ namespace Trace
         {
             Point inva = this.transformation.getInverse() * a;
             float distance = inva.x * inva.x + inva.y * inva.y;
-            return inva.z < 0.5f && inva.z > -0.5f && distance < 1f;
+            return inva.z <= 0.5f && inva.z >= -0.5f && distance <= 1f;
         }
     }
 
