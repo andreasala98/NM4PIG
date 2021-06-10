@@ -14,7 +14,7 @@ namespace NM4PIG
     class MainFuncs
     {
         public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile,
-                                string ldrFile, int scene, float? luminosity, int spp)
+                                string ldrFile, int scene, float? luminosity, int spp, char rendType)
         {
 
             Stopwatch sw = new Stopwatch();
@@ -30,6 +30,7 @@ namespace NM4PIG
             Console.WriteLine("pfmFile: " + pfmFile);
             Console.WriteLine("ldrFile: " + ldrFile);
             Console.WriteLine("Samples per pixel: " + sqSpp);
+            Console.WriteLine("Render type: " + dictRend[rendType]);
 
             Console.WriteLine("\n");
 
@@ -37,7 +38,7 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-1.0f, 0.0f, 0.0f);
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.0f);
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
@@ -82,7 +83,7 @@ namespace NM4PIG
                                                 //transformation: Tsf.Translation(new Vec(5f, 0f, 1f)),
                                                 material: material1
                                                 ));
-                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+                    //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
                     break;
                 case 3:
                     HdrImage img = new HdrImage();
@@ -103,7 +104,7 @@ namespace NM4PIG
                                 )
                                 );
 
-                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+                    //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
 
                     break;
 
@@ -126,12 +127,12 @@ namespace NM4PIG
                                 )
                                 );
 
-                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+                    //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
 
                     break;
                 case 5:
                     PCG pcg = new PCG();
-                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(new Color(0.5294117647f, 0.80784313725f, 0.92156862745f)));
+                    Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
                     Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.BroomYellow)), new UniformPigment(CC.Black));
                     Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(CC.BlueChill)));
                     Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(Color.random())));
@@ -146,7 +147,7 @@ namespace NM4PIG
                     world.addShape(new Sphere(Tsf.Translation(3f, 5f, 1.6f) * Tsf.Scaling(2.0f, 4.0f, 2.0f), refMat));
                     world.addShape(new Sphere(Tsf.Translation(4f, -1f, 1.3f) * Tsf.Scaling(1.0f), sph1Mat));
                     world.addShape(new Sphere(Tsf.Translation(-4f, -0.5f, 1f) * Tsf.Scaling(2f), sph2Mat));
-                    renderer = new PathTracer(world, Constant.Black, pcg);
+                    //renderer = new PathTracer(world, Constant.Black, pcg);
                     break;
                 case 6:
                     world.addShape(new CSGUnion(
@@ -156,6 +157,33 @@ namespace NM4PIG
                                             new Box(transformation: Transformation.Scaling(0.5f, 0.5f, 1f))
                                             )
                                     );
+                    break;
+                case 7:
+                    Material cylMat = new Material(new DiffuseBRDF(new UniformPigment(CC.BroomYellow)));
+                    Material grndMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.BroomYellow)), new UniformPigment(CC.Black));
+                    Material skyMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMaterial));
+                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, 2f), grndMat));
+                    world.addShape(new Cylinder(Tsf.Translation(0f, 0f, 0.3f), cylMat));
+                    //renderer = new PathTracer(world, Constant.Black, new PCG(), 6);
+                    break;
+                default:
+                    break;
+            }
+
+            switch (rendType) { 
+                case 'o':
+                    renderer = new OnOffRender(world);
+                    break;
+                case 'f':
+                    renderer = new FlatRender(world);
+                    break;
+                //case 'p':
+                   // renderer = new PointLightTracer(world);
+                    //break;
+                case 'r':
+                    renderer = new PathTracer(world, CC.Black, new PCG());
                     break;
                 default:
                     break;
@@ -188,7 +216,15 @@ namespace NM4PIG
         }//Demo
 
 
-        public static void Convert(string inputpfm, string outputldr, float factor, float gamma, float? luminosity)
+        public static Dictionary<char, string> dictRend = new Dictionary<char, string>(){
+            {'o', "On-Off Renderer"},
+            {'f',"Flat Renderer"},
+            {'p', "Point-Light Tracer"},
+            {'r', "Path Tracer"}
+
+        };
+
+    public static void Convert(string inputpfm, string outputldr, float factor, float gamma, float? luminosity)
         {
             string fmt = outputldr.Substring(outputldr.Length - 3, 3);
 

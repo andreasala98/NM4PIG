@@ -37,7 +37,8 @@ namespace NM4PIG
         public static bool orthogonal = false;
         public static float? luminosity = null;
         public static int scene = 1;
-        public static int spp = 9;
+        public static int spp = 4;
+        public static char render = 'r';
 
         //Convert
         public static float factor = 0.18f;
@@ -64,6 +65,7 @@ namespace NM4PIG
         public float? luminosity;
         public int scene;
         public int spp;
+        public char render;
 
         public Parameters()
         {
@@ -78,6 +80,7 @@ namespace NM4PIG
             this.luminosity = Default.luminosity;
             this.scene = Default.scene;
             this.spp = Default.spp;
+            this.render = Default.render;
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace NM4PIG
         /// <param name="gamma"> encoding/decoding factor due to monitor differences </param>
         /// <param name="luminosity"> automatic or manual average luminosity. Default is false (automatic) </param>
         /// <param name="spp"> number of Monte Carlo exctracted samples per pixel. Default is 9</param>
+        /// <param name="render"> Tyoe of rendering: on-off, flat, pathtracing or pointlight tracing</param>
         public void parseCommandLineConvert(string? pfmfile, string? ldrfile, string? factor, string? gamma, string? luminosity)
         {
 
@@ -144,7 +148,7 @@ namespace NM4PIG
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
         public void parseCommandLineDemo(string? width, string? height, string? angledeg, string? orthogonal,
                                          string? pfmfile, string? ldrfile, string? luminosity, string? scene,
-                                         string? SPP)
+                                         string? SPP, string? rend)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -220,9 +224,24 @@ namespace NM4PIG
                     throw new CommandLineException("Samples per pixel: argument passed is not an integer");
                 }
             }
+            if (rend!=null) 
+            {
+                if (rend == "o" | rend == "p" | rend == "f" | rend == "r")
+                {
+                    try
+                    {
+                        this.render = Char.Parse(rend);
+                    }
+                    catch
+                    {
+                        throw new CommandLineException("Render type: argument passed is not a valid char");
+                    }
+                }
+                else throw new CommandLineException("Render type: argument passed is not a valid char");
+            }
 
         }
     } //Parameters class
 
 
-}
+} //namespace
