@@ -91,8 +91,24 @@ namespace Trace
 
             string Cons = "wPoint: " + this.worldPoint.ToString() + "\n"
                          + "Normal: " + this.normal.ToString() + "\n"
-                         + "sPoint: " + this.surfacePoint.ToString() + "\n";
+                         + "sPoint: " + this.surfacePoint.ToString() + "\n"
+                         + "t: " + this.t + "\n";
             return Cons;
+        }
+
+        /// <summary>
+        /// Method that compares two HitRecord object by the t parameter.
+        /// It returns the lesser one.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static HitRecord lesserComparison (HitRecord a, HitRecord b)
+        {
+            if (a.t < b.t)
+                return a;
+            else
+                return b;
         }
 
 

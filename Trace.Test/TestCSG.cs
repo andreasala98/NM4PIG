@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using Xunit;
 using System.Collections.Generic;
+using System;
 
 
 namespace Trace.Test
@@ -297,7 +298,7 @@ namespace Trace.Test
             HitRecord? intersection2 = u1.rayIntersection(r2);
             Assert.True(intersection2 == null, "Far away ray test failed - Asser 3/");
 
-            Ray r3 = new Ray(origin: new Point(0.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
+            Ray r3 = new Ray(origin: new Point(1.0f, 0.0f, 1.0f), dir: -Constant.VEC_Z);
             HitRecord? intersection3 = u1.rayIntersection(r3);
             Assert.True(intersection3 == null, "Ray through firstShape only test failed - Asser 4/");
         }

@@ -155,17 +155,17 @@ namespace NM4PIG
                                             )
                                     );
                     break;
-                case 7:
+                case 8:
                     Material cylMat = new Material(new DiffuseBRDF(new UniformPigment(CC.BrightGreen)));
                     Material BrightRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f/255,1f/255,20f/255))));
                     Material BrightBlueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f,78f/255,255f/255))));
                     Material grndMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
-                    Material skyMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
+                    Material skyMtrl = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
 
 
 
 
-                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMaterial));
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMtrl));
                     world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), grndMat));
 
                     Shape C1 = new Cylinder(Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
@@ -184,6 +184,19 @@ namespace NM4PIG
                     // world.addShape(new Cylinder(Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     // world.addShape(new Cylinder(Tsf.RotationY(Utility.DegToRad(45))*Tsf.RotationX(CC.PI/2f)*Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     //renderer = new PathTracer(world, Constant.Black, new PCG(), 6);
+                    break;
+                case 9:
+                    Material skyM = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
+                    Material BRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f/255,1f/255,20f/255))));
+                    Material ground = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
+                 
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyM));
+                    world.addShape(new Cone(r: 0.5f, material: BRedMat, transformation: Transformation.RotationY(Constant.PI/2f) * 
+                                                                                Transformation.Scaling(0.5f)));
+                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), ground));
+
+
                     break;
                 default:
                     break;

@@ -228,7 +228,7 @@ namespace Trace
             a = this.transformation.getInverse() * a;
             return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
         }
-    }
+    } // end of sphere
     // ################################
 
     /// <summary>
@@ -335,7 +335,7 @@ namespace Trace
             else return false;
         }
 
-    }
+    } // end of plane
 
     /// <summary>
     /// A 3D axis-aligned box (AAB)
@@ -497,7 +497,7 @@ namespace Trace
         }
 
 
-    }
+    } // end of box
 
     /// <summary>
     /// Represent a cylinder. If no transformation is passed, it is a cylinder with axis aligned along z, -0.5 < z < 0.5 and radius 1
@@ -627,7 +627,7 @@ namespace Trace
             float distance = inva.x * inva.x + inva.y * inva.y;
             return inva.z <= 0.5f && inva.z >= -0.5f && distance <= 1f;
         }
-    }
+    } // end of cylinder
 
     /// <summary>
     /// Class that implements a Cone shape.
@@ -673,18 +673,24 @@ namespace Trace
         /// <param name="point"><see cref="Point"> on the surface of the cone</param>
         /// <param name="rayDir"><see cref="Vec"> direction of the incoming ray</param>
         /// <returns><see cref="Normal"> object</returns>
-        private Normal _coneNormal(Point point, Vec rayDir)
+        private Normal _coneNormal(Point point, Vec rayDir, bool a)
         {
             Vec2D uv = this._conePointToUV(point);
             Normal result;
-            if (uv.v == 0)
+            if (uv.v == 0f & a == true)
             {
                 result = new Normal(0f, 0f, -1.0f);
             }
+            else if (uv.v == 0f & a == false)
+            {
+                result = new Normal(MathF.Cos(2f * Constant.PI * uv.u),
+                                    MathF.Sin(2f * Constant.PI * uv.u),
+                                                    0f).Normalize();
+            }
             else
             {
-                result = new Normal(MathF.Cos(Constant.PI * uv.u),
-                                    MathF.Sin(Constant.PI * uv.u),
+                result = new Normal(MathF.Cos(2f * Constant.PI * uv.u),
+                                    MathF.Sin(2f * Constant.PI * uv.u),
                                     this.radius / this.height).Normalize();
             }
             if (point.toVec() * rayDir > 0.0f)
@@ -697,19 +703,23 @@ namespace Trace
 
             Plane planeBottom = new Plane();
             HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+            bool plane;
+            HitRecord? planeHit = null;
+
             if (hitBottom.HasValue)
             {
+                plane = true;
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 2f * this.radius)
-                    return new HitRecord(
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y <  this.radius)
+                    planeHit = new HitRecord(
                                 wp: this.transformation * pointInt,
-                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
+                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
                                 sp: this._conePointToUV(pointInt),
                                 tt: hitBottom.Value.t,
                                 r: ray,
-                                shape: this
-                    );
+                                shape: this);
             }
+            HitRecord? coneHit = null;
 
             float dx = invRay.dir.x;
             float dy = invRay.dir.y;
@@ -727,46 +737,253 @@ namespace Trace
 
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
-                return null;
+            {   
+                goto NoConeHit;
+            }
 
             float sqrtDelta = MathF.Sqrt(delta);
-            float tmin = (-b - sqrtDelta) / (2.0f * a);
-            float tmax = (-b + sqrtDelta) / (2.0f * a);
+            float tmin;
+            float tmax;
+            // needed if a ray has the same slope of the cone! (---> a would be 0)
+            if (a == 0)
+            {
+                tmin = -c / b;
+                tmax = Single.PositiveInfinity;
+            }
+            else
+            {
+                tmin = (-b - sqrtDelta) / (2.0f * a);
+                tmax = (-b + sqrtDelta) / (2.0f * a);
+            }
 
             float firstHitT;
-            if (tmin > invRay.tmin && tmin < invRay.tmax)
-                firstHitT = tmin;
-            else if (tmax > invRay.tmin && tmax < invRay.tmax)
-                firstHitT = tmax;
-            else
-                return null;
             
 
-            Point hitPoint = invRay.at(firstHitT);
-            HitRecord t = new HitRecord(
-                this.transformation * hitPoint,
-                this.transformation * _coneNormal(hitPoint, ray.dir),
-                _conePointToUV(hitPoint),
-                firstHitT,
-                ray,
-                this
-            );
 
-            if (t.surfacePoint.v >= 0f && t.surfacePoint.v <= 1f)
-                return t;
+            if (tmin > invRay.tmin && tmin < invRay.tmax)
+            {
+                firstHitT = tmin;
+                plane = false;
+                Point hitPoint = invRay.at(firstHitT);
+                coneHit = new HitRecord(
+                                        this.transformation * hitPoint,
+                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        _conePointToUV(hitPoint),
+                                        firstHitT,
+                                        ray,
+                                        this);
+                if (!(coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
+                    coneHit = null;
+            }
+            else if (tmax > invRay.tmin && tmax < invRay.tmax && coneHit == null)
+            {
+                firstHitT = tmax;
+                plane = false;
+                Point hitPoint = invRay.at(firstHitT);
+                coneHit = new HitRecord(
+                                        this.transformation * hitPoint,
+                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        _conePointToUV(hitPoint),
+                                        firstHitT,
+                                        ray,
+                                        this);
+                if (!(coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
+                    coneHit = null;
+            }
+           
+            NoConeHit: 
+            if (coneHit == null)
+                return planeHit;
+            else if (planeHit == null)
+                return coneHit;
             else
-                return null;
+                return HitRecord.lesserComparison((HitRecord)planeHit, (HitRecord)coneHit);
         }
 
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
-            throw new NotImplementedException();
-        }
+            List<HitRecord?> hits = new List<HitRecord?>();
+            Ray invRay = ray.Transform(this.transformation.getInverse());
 
+            Plane planeBottom = new Plane();
+            HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+            bool plane;
+
+            if (hitBottom.HasValue)
+            {
+                plane = true;
+                Point pointInt = hitBottom.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y <  this.radius)
+                    hits.Add(new HitRecord(
+                                wp: this.transformation * pointInt,
+                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
+                                sp: this._conePointToUV(pointInt),
+                                tt: hitBottom.Value.t,
+                                r: ray,
+                                shape: this)
+                            );
+            }
+            
+
+            float dx = invRay.dir.x;
+            float dy = invRay.dir.y;
+            float dz = invRay.dir.z;
+
+            float ox = invRay.origin.x;
+            float oy = invRay.origin.y;
+            float oz = invRay.origin.z;
+
+            float hr = MathF.Pow((this.height / this.radius), 2f);
+
+            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz,2f);
+            float b = 2f * (hr * (ox*dx + oy*dy) - dz * oz + this.height * dz);
+            float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+            {
+                if(hits.Count == 0)
+                {
+                    hits.Add(null);
+                    return hits;
+                }
+                else return hits;
+            }
+                
+
+            float sqrtDelta = MathF.Sqrt(delta);
+            float tmin;
+            float tmax;
+            if (a == 0)
+            {
+                tmin = -c / b;
+                tmax = Single.PositiveInfinity;
+            }
+            else
+            {
+                tmin = (-b - sqrtDelta) / (2.0f * a);
+                tmax = (-b + sqrtDelta) / (2.0f * a);
+            }
+
+            HitRecord? coneHit;
+            if (tmin > invRay.tmin && tmin < invRay.tmax)
+            {
+                plane = false;
+                Point hitPoint = invRay.at(tmin);
+                coneHit = new HitRecord(
+                                        this.transformation * hitPoint,
+                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        _conePointToUV(hitPoint),
+                                        tmin,
+                                        ray,
+                                        this);
+                if ((coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
+                    hits.Add(coneHit);
+            }
+            if (tmax > invRay.tmin && tmax < invRay.tmax)
+            {
+                plane = false;
+                Point hitPoint = invRay.at(tmax);
+                coneHit = new HitRecord(
+                                        this.transformation * hitPoint,
+                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        _conePointToUV(hitPoint),
+                                        tmax,
+                                        ray,
+                                        this);
+                if ((coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
+                    hits.Add(coneHit);
+            }
+           
+            if (hits.Count == 0)
+            {
+                hits.Add(null);
+                return hits;
+            }
+            else
+            {
+                hits.Sort();
+                return hits;
+            }
+
+        }
         public override bool isPointInside(Point a)
         {
-            throw new NotImplementedException();
+            Point invPoint = this.transformation.getInverse() * a;
+            float x = invPoint.x * this.height / this.radius;
+            float y = invPoint.y * this.height / this.radius;
+            float z = invPoint.z - this.height;
+            if (z * z >= x * x + y * y && this._conePointToUV(invPoint).v < this.height)
+                return true;
+            else
+                return false;
         }
-    }
+    } // end of Cone
 
-}
+} // end of Shapes
+// public override HitRecord? rayIntersection(Ray ray)
+//          {
+//              Ray invRay = ray.Transform(this.transformation.getInverse());
+
+//              Plane planeBottom = new Plane();
+//              HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+//              if (hitBottom.HasValue)
+//              {
+//                  Point pointInt = hitBottom.Value.worldPoint;
+//                  if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 2f * this.radius)
+//                      return new HitRecord(
+//                                  wp: this.transformation * pointInt,
+//                                  nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
+//                                  sp: this._conePointToUV(pointInt),
+//                                  tt: hitBottom.Value.t,
+//                                  r: ray,
+//                                  shape: this
+//                      );
+//              }
+
+//              float dx = invRay.dir.x;
+//              float dy = invRay.dir.y;
+//              float dz = invRay.dir.z;
+
+//              float ox = invRay.origin.x;
+//              float oy = invRay.origin.y;
+//              float oz = invRay.origin.z;
+
+//              float hr = MathF.Pow((this.height / this.radius), 2f);
+
+//              float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz,2f);
+//              float b = 2f * (hr * (ox*dx + oy*dy) - dz * oz + this.height * dz);
+//              float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
+
+//              float delta = b * b - 4.0f * a * c;
+//              if (delta <= 0.0f)
+//                  return null;
+
+//              float sqrtDelta = MathF.Sqrt(delta);
+//              float tmin = (-b - sqrtDelta) / (2.0f * a);
+//              float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+//              float firstHitT;
+//              if (tmin > invRay.tmin && tmin < invRay.tmax)
+//                  firstHitT = tmin;
+//              else if (tmax > invRay.tmin && tmax < invRay.tmax)
+//                  firstHitT = tmax;
+//              else
+//                  return null;
+
+
+//              Point hitPoint = invRay.at(firstHitT);
+//              HitRecord t = new HitRecord(
+//                  this.transformation * hitPoint,
+//                  this.transformation * _coneNormal(hitPoint, ray.dir),
+//                  _conePointToUV(hitPoint),
+//                  firstHitT,
+//                  ray,
+//                  this
+//              );
+
+//              if (t.surfacePoint.v >= 0f && t.surfacePoint.v <= 1f)
+//                  return t;
+//              else
+//                  return null;
+//          }
