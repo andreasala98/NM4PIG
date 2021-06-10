@@ -188,7 +188,7 @@ namespace Trace
         /// direction with respect to `ray_dir`.
         /// </summary>
         /// <param name="point"><see cref="Point"> on the surface of the sphere</param>
-        /// <param name="rayDir"><see cref="Vec"> radius of the sphere</param>
+        /// <param name="rayDir"><see cref="Vec"> direction of the incoming ray</param>
         /// <returns><see cref="Normal"> object</returns>
         private static Normal _sphereNormal(Point point, Vec rayDir)
         {
@@ -620,6 +620,146 @@ namespace Trace
             Point inva = this.transformation.getInverse() * a;
             float distance = inva.x * inva.x + inva.y * inva.y;
             return inva.z < 0.5f && inva.z > -0.5f && distance < 1f;
+        }
+    }
+
+    /// <summary>
+    /// Class that implements a Cone shape.
+    /// Its datamembars are (float) radius and (float) height
+    /// </summary>
+    public class Cone : Shape
+    {
+
+        public float radius;
+        public float height;
+
+        /// <summary>
+        /// Basic constructor.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="h"></param>
+        /// <param name="transformation"></param>
+        /// <param name="material"></param>
+        public Cone(float r = 1f, float h = 1f, Transformation?  transformation = null, Material? material = null) : base(transformation, material)
+        {
+            this.radius = r;
+            this.height = h;
+        }
+
+
+        /// <summary>
+        /// Convert a 3D point on the surface of the cone into a (u, v) 2D point
+        /// </summary>
+        /// <param name="point">3D <see cref="Point"/></param>
+        /// <returns><see cref="Vec2D"/></returns>
+        private Vec2D _conePointToUV(Point point)
+            => new Vec2D(
+                    (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
+                    (point.z) / this.height
+                );
+
+        /// <summary>
+        /// Compute the normal of cone<br/>
+        /// The normal is computed for <see cref="Point"> (a point on the surface of the
+        /// cone), and it is chosen so that it is always in the opposite
+        /// direction with respect to `ray_dir`.
+        /// </summary>
+        /// <param name="point"><see cref="Point"> on the surface of the cone</param>
+        /// <param name="rayDir"><see cref="Vec"> direction of the incoming ray</param>
+        /// <returns><see cref="Normal"> object</returns>
+        private Normal _coneNormal(Point point, Vec rayDir)
+        {
+            Vec2D uv = this._conePointToUV(point);
+            Normal result;
+            if (uv.v == 0)
+            {
+                result = new Normal(0f, 0f, -1.0f);
+            }
+            else
+            {
+                result = new Normal(MathF.Cos(Constant.PI * uv.u),
+                                    MathF.Sin(Constant.PI * uv.u),
+                                    this.radius / this.height).Normalize();
+            }
+            if (point.toVec() * rayDir > 0.0f)
+                result = -result;
+            return result;
+        }
+        public override HitRecord? rayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            Plane planeBottom = new Plane();
+            HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+            if (hitBottom.HasValue)
+            {
+                Point pointInt = hitBottom.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 2f * this.radius)
+                    return new HitRecord(
+                                wp: this.transformation * pointInt,
+                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
+                                sp: this._conePointToUV(pointInt),
+                                tt: hitBottom.Value.t,
+                                r: ray,
+                                shape: this
+                    );
+            }
+
+            float dx = invRay.dir.x;
+            float dy = invRay.dir.y;
+            float dz = invRay.dir.z;
+
+            float ox = invRay.origin.x;
+            float oy = invRay.origin.y;
+            float oz = invRay.origin.z;
+
+            float hr = MathF.Pow((this.height / this.radius), 2f);
+
+            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz,2f);
+            float b = 2f * (hr * (ox*dx + oy*dy) - dz * oz + this.height * dz);
+            float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+                return null;
+
+            float sqrtDelta = MathF.Sqrt(delta);
+            float tmin = (-b - sqrtDelta) / (2.0f * a);
+            float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+            float firstHitT;
+            if (tmin > invRay.tmin && tmin < invRay.tmax)
+                firstHitT = tmin;
+            else if (tmax > invRay.tmin && tmax < invRay.tmax)
+                firstHitT = tmax;
+            else
+                return null;
+            
+
+            Point hitPoint = invRay.at(firstHitT);
+            HitRecord t = new HitRecord(
+                this.transformation * hitPoint,
+                this.transformation * _coneNormal(hitPoint, ray.dir),
+                _conePointToUV(hitPoint),
+                firstHitT,
+                ray,
+                this
+            );
+
+            if (t.surfacePoint.v >= 0f && t.surfacePoint.v <= 1f)
+                return t;
+            else
+                return null;
+        }
+
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool isPointInside(Point a)
+        {
+            throw new NotImplementedException();
         }
     }
 
