@@ -56,7 +56,7 @@ namespace NM4PIG
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
                 var scene = command.Option("--scene|-s <scene>", "number of the scene", CommandOptionType.SingleValue);
                 var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel", CommandOptionType.SingleValue);
-                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering", CommandOptionType.SingleValue);
+                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r)", CommandOptionType.SingleValue);
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
                 {
