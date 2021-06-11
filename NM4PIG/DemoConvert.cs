@@ -175,12 +175,12 @@ namespace NM4PIG
                     Shape S1 = new Sphere(transformation: Tsf.Scaling(1.5f),material: BrightBlueMat);
                     Shape B1 = new Box(material: BrightRedMat);
 
-                    //Shape left = S1 * B1;
-                    //Shape right = (C1 + C2) + C3;
+                    Shape left = S1 - B1;
+                    Shape right = (C1 + C2) + C3;
 
-                    //Shape tot = left - right;
+                    Shape tot = left - right;
 
-                    world.addShape(S1*B1);
+                    world.addShape(left);
                     // world.addShape(new Cylinder(Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     // world.addShape(new Cylinder(Tsf.RotationY(Utility.DegToRad(45))*Tsf.RotationX(CC.PI/2f)*Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     //renderer = new PathTracer(world, Constant.Black, new PCG(), 6);
