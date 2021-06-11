@@ -78,8 +78,10 @@ namespace NM4PIG
                     Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
                     Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
 
-                    world.addShape(new Cylinder(
-                                                //transformation: Tsf.RotationY(MathF.PI / 2f),
+                    world.addShape(new Cylinder(center: new Point(1f, -1f, 1f),
+                                                radius: 0.5f,
+                                                heigth: 3f,
+                                                direction: new Vec(1f, 1f, 1f),
                                                 material: material1
                                                 ));
                     //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
