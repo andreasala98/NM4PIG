@@ -145,8 +145,7 @@ namespace Trace
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
             {
-                intersections.Add(null);
-                return intersections;
+                return intersections;       // Here is empty
             }
 
             float sqrtDelta = (float)Math.Sqrt((float)delta);
@@ -183,10 +182,7 @@ namespace Trace
                                                 );
             }
 
-            if (intersections.Count == 0)
-                intersections.Add(null);
-
-            return intersections;
+            return intersections;       // If there are no intersections return an empty list
         }
 
         /// <summary>
