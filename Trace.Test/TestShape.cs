@@ -268,7 +268,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
                                             new Normal(-1f, 0.0f, 0.0f),
-                                            new Vec2D(0.5f, 0.5f),
+                                            new Vec2D(0.5f, 0.25f),
                                             4.0f,
                                             ray1
                                         );
@@ -281,7 +281,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 0.5f),
                                             new Normal(0.0f, 0.0f, 1.0f),
-                                            new Vec2D(0f, 1f),
+                                            new Vec2D(0.75f, 0.75f),
                                             9.5f,
                                             ray2
                                         );
@@ -310,7 +310,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-2.179451f, 4.5f, 2.4f),
                                             new Normal(-0.017435608f, 0.036000002f, 0.0f),
-                                            new Vec2D(0.32178319f, 0.98f),
+                                            new Vec2D(0.32178319f, 0.49f),
                                             7.820549f,
                                             ray1
                                         );
@@ -332,18 +332,19 @@ namespace Trace.Test
         [Fact]
         public void TestHitCone()
         {
-            Cone cone = new Cone(r: 1f, h : 1f);
+            Cone cone = new Cone(r: 1f, h: 1f);
 
             Ray ray1 = new Ray(origin: new Point(1.5f, 0f, 0.5f), dir: -Constant.VEC_X);
             HitRecord? intersection1 = cone.rayIntersection(ray1);
             Assert.True(intersection1 != null, "TestHitCone failed! - Assert 1/5");
             HitRecord hit1 = new HitRecord(
                 new Point(0.5f, 0f, 0.5f),
-                new Normal(MathF.Sqrt(2f)/2f, 0f, MathF.Sqrt(2f)/2f),
+                new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
                 new Vec2D(0f, 0.5f),
                 1f,
                 ray1
             );
+
             Assert.True(hit1.isClose(intersection1), "TestHitCone failed! - Assert 2/5");
 
             Ray ray2 = new Ray(new Point(0f, 0f, -1f), Constant.VEC_Z);
@@ -366,26 +367,94 @@ namespace Trace.Test
             Assert.True(intersection3 != null, "TestHitCone failed! - Assert 6/5");
             HitRecord hit3 = new HitRecord(
                 new Point(0f, 5.5f, 0.5f),
-                new Normal(0f, MathF.Sqrt(2f)/2f, MathF.Sqrt(2f)/2f),
+                new Normal(0f, MathF.Sqrt(2f) / 2f, MathF.Sqrt(2f) / 2f),
                 new Vec2D(0.25f, 0.5f),
                 1f,
                 ray3
             );
-            Console.WriteLine("intersection.surfacPoint = " + intersection3?.surfacePoint.ToString());
-            Console.WriteLine("hit.surfacPoint = " + hit3.surfacePoint.ToString());
-            Console.WriteLine(" ");
-            Console.WriteLine("intersection.worldPoint = " +intersection3?.worldPoint.ToString());
-            Console.WriteLine("hit.worldPoint = " +hit3.worldPoint.ToString());
-            Console.WriteLine(" ");
-            Console.WriteLine("intersection.normal = " +intersection3?.normal.ToString());
-            Console.WriteLine("hit.normal = " +hit3.normal.ToString());
-            Console.WriteLine(" ");
-            Console.WriteLine("intersection.t = " +intersection3?.t);
-            Console.WriteLine("hit.t = " +hit3.t);
-            Console.WriteLine(" ");
+
             Assert.True(hit3.isClose(intersection3), "TestHitCone failed! - Assert 7/5");
 
+            Ray ray4 = new Ray(origin: new Point(0f, 6.5f, 0.0f), dir: -Constant.VEC_Y);
+            HitRecord? intersection4 = cone2.rayIntersection(ray4);
+            Assert.True(intersection4 != null, "TestHitCone failed! - Assert 8/5");
+            HitRecord hit4 = new HitRecord(
+                new Point(0f, 6f, 0f),
+                new Normal(0f, 1f, 0f),
+                new Vec2D(0.25f, 0f),
+                0.5f,
+                ray4
+            );
+            Assert.True(hit4.isClose(intersection4), "TestHitCone failed! - Assert 9/5");
 
+            Vec direzione = (-Constant.VEC_X - Constant.VEC_Z).Normalize();
+            Ray ray5 = new Ray(origin: new Point(1.5f, 0f, 1.5f), dir: direzione);
+            HitRecord? intersection5 = cone.rayIntersection(ray5);
+            Assert.True(intersection5 != null, "TestHitCone failed! - Assert 10/5");
+            HitRecord hit5 = new HitRecord(
+                new Point(0.5f, 0f, 0.5f),
+                new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
+                new Vec2D(0f, 0.5f),
+                MathF.Sqrt(2f),
+                ray5
+            );
+            Assert.True(hit5.isClose(intersection5), "TestHitCone failed! - Assert 11/5");
+
+            Vec dir = (-0.5f * Constant.VEC_X - MathF.Sqrt(3) / 2f * Constant.VEC_Z).Normalize();
+            Ray ray6 = new Ray(origin: new Point(1.0f, 0f, (0.5f + MathF.Sqrt(3) / 2f)), dir: dir);
+            HitRecord? intersection6 = cone.rayIntersection(ray6);
+            Assert.True(intersection6 != null, "TestHitCone failed! - Assert 12/5");
+            HitRecord hit6 = new HitRecord(
+                new Point(0.5f, 0f, 0.5f),
+                new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
+                new Vec2D(0f, 0.5f),
+                1f,
+                ray6
+            );
+            Assert.True(hit6.isClose(intersection6), "TestHitCone failed! - Assert 13/5");
+        }
+
+        [Fact]
+        public void TestInnerHitCone()
+        {
+            Cone cone = new Cone(r: 1f, h: 1f);
+
+            Ray ray1 = new Ray(origin: new Point(0f, 0f, 0.5f), dir: (Constant.VEC_X));
+            HitRecord? intersection1 = cone.rayIntersection(ray1);
+            Assert.True(intersection1 != null, "TestHitCone failed! - Assert 1/5");
+            HitRecord hit1 = new HitRecord(
+                new Point(0.5f, 0.0f, 0.5f),
+                new Normal(-MathF.Sqrt(2) / 2, 0f, -MathF.Sqrt(2) / 2),
+                new Vec2D(0f, 0.5f),
+                0.5f,
+                ray1
+            );
+
+
+
+            Assert.True(hit1.isClose(intersection1), "TestHitCone failed! - Assert 2/5");
+            // Console.WriteLine("intersection.surfacPoint = " + intersection2?.surfacePoint.ToString());
+            // Console.WriteLine("hit.surfacPoint = " + hit2.surfacePoint.ToString());
+            // Console.WriteLine(" ");
+            // Console.WriteLine("intersection.worldPoint = " +intersection2?.worldPoint.ToString());
+            // Console.WriteLine("hit.worldPoint = " +hit2.worldPoint.ToString());
+            // Console.WriteLine(" ");
+            // Console.WriteLine("intersection.normal = " +intersection2?.normal.ToString());
+            // Console.WriteLine("hit.normal = " +hit2.normal.ToString());
+            // Console.WriteLine(" ");
+            // Console.WriteLine("intersection.t = " +intersection2?.t);
+            // Console.WriteLine("hit.t = " +hit2.t);
+            // Console.WriteLine(" ");
+
+        }
+
+        [Fact]
+        public void TestisPointInside()
+        {
+            Cone cone = new Cone(r: 0.5f, h: 2);
+            Assert.True(cone.isPointInside(new Point(0f, 0f, 1.5f)));
+            Assert.True(cone.isPointInside(new Point(0.25f, 0.25f, 0f)));
+            Assert.False(cone.isPointInside(new Point(0.5f, 0.5f, 1f)));
         }
     } // end of cone tests
 } // end of namespace

@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System.Collections.Generic;
+using System;
 
 namespace Trace
 {
@@ -169,6 +170,16 @@ namespace Trace
         /// </summary>
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
+        /// 
+        public override HitRecord? rayIntersection(Ray ray) {
+            List<HitRecord?> intersections = rayIntersectionList(ray);
+            if (intersections.Count == 0) return null;
+            return intersections[0];
+        }
+
+        
+
+        /*
         public override HitRecord? rayIntersection(Ray ray)
         {
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
@@ -207,6 +218,7 @@ namespace Trace
 
             return legalHits[iHit];
         }
+        */
 
         /// <summary>
         /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
@@ -217,6 +229,7 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
+
             List<HitRecord?> legalHits = new List<HitRecord?>();
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
             if (a[0] == null)
@@ -246,6 +259,10 @@ namespace Trace
             }
 
             legalHits.Sort();
+            foreach (HitRecord? LH in legalHits)
+            {
+                Console.WriteLine(LH.ToString());
+            }
             return legalHits;
         }
 
