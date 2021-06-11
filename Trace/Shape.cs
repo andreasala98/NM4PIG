@@ -117,6 +117,7 @@ namespace Trace
                 return null;
 
             Point hitPoint = invRay.at(firstHitT);
+            
             return new HitRecord(
                 this.transformation * hitPoint,
                 this.transformation * _sphereNormal(hitPoint, ray.dir),
