@@ -385,6 +385,31 @@ namespace Trace.Test
             Assert.True(u1.isPointInside(p2), "Test isPointInside failed - assert 2/4");
             Assert.False(u1.isPointInside(p3), "Test isPointInside failed - assert 4/4");
         }
+
+        [Fact]
+        public void TestCSGCubeSphere()
+        {
+            Shape S1 = new Sphere(transformation: Transformation.Scaling(1.5f));
+            Shape B1 = new Box();
+
+            CSGIntersection u1 = S1 * B1;
+
+            Ray r1 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
+            HitRecord? intersection1 = B1.rayIntersection(r1);
+            Assert.True(intersection1 != null, "TestCSGCubeSphere failed! - Assert 1/5");
+            HitRecord hit1 = new HitRecord(
+                new Point(-1.0f, 0.0f, 0.0f),
+                new Normal(-1.0f, 0.0f, 0.0f),
+                new Vec2D(0.125f, 0.5f),
+                4f,
+                r1
+            );
+            Console.WriteLine("hit : " + hit1.ToString());
+            Console.WriteLine("intersection : " + intersection1.ToString());
+
+            Assert.True(hit1.isClose(intersection1), "TestCSGCubeSphere failed! - Assert 2/5");
+
+        }
     } // CSG Intersection Tests
 
 }
