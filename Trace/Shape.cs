@@ -398,7 +398,7 @@ namespace Trace
         /// <param name="point"> The point of intersection</param>
         /// <param name="rayDir"> Intersecting ray </param>
         /// <returns> The oriented normal</returns>
-        private Normal _boxNormal(Point point, Vec rayDir)
+        private Normal _boxNormal(Point point, Point rayOrigin)
         {
             Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
@@ -407,7 +407,7 @@ namespace Trace
             else if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
             else if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
             else if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
-            if (point.toVec() * rayDir > 0.0f)
+            if (isPointInside(rayOrigin))
                 result = -result;
             return result;
         }
@@ -474,25 +474,33 @@ namespace Trace
             }
 
             List<HitRecord?> hits = new List<HitRecord?>();
-            Point hitPoint0 = invRay.at(t0);
-            Point hitPoint1 = invRay.at(t1);
 
-            hits.Add(new HitRecord(
+            if (t0 > 0f)
+            {
+                Point hitPoint0 = invRay.at(t0);
+                hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint0,
-                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)),
+                nm: (this.transformation * this._boxNormal(hitPoint0, ray.origin)),
                 sp: this._boxPointToUV(hitPoint0),
                 tt: t0,
                 r: ray,
                 shape: this
             ));
-            hits.Add(new HitRecord(
-                wp: this.transformation * hitPoint1,
-                nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)),
-                sp: this._boxPointToUV(hitPoint1),
-                tt: t1,
-                r: ray,
-                shape: this
-            ));
+            }
+
+            if (t1 > 0f)
+            {
+                Point hitPoint1 = invRay.at(t1);
+                hits.Add(new HitRecord(
+                    wp: this.transformation * hitPoint1,
+                    nm: (this.transformation * this._boxNormal(hitPoint1, ray.origin)),
+                    sp: this._boxPointToUV(hitPoint1),
+                    tt: t1,
+                    r: ray,
+                    shape: this
+                ));
+            }
+
             return hits;
         }
 
