@@ -117,6 +117,7 @@ namespace Trace
                 return null;
 
             Point hitPoint = invRay.at(firstHitT);
+            
             return new HitRecord(
                 this.transformation * hitPoint,
                 this.transformation * _sphereNormal(hitPoint, ray.dir),
@@ -145,8 +146,7 @@ namespace Trace
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
             {
-                intersections.Add(null);
-                return intersections;
+                return intersections;       // Here is empty
             }
 
             float sqrtDelta = (float)Math.Sqrt((float)delta);
@@ -183,10 +183,7 @@ namespace Trace
                                                 );
             }
 
-            if (intersections.Count == 0)
-                intersections.Add(null);
-
-            return intersections;
+            return intersections;       // If there are no intersections return an empty list
         }
 
         /// <summary>
@@ -513,6 +510,78 @@ namespace Trace
     public class Cylinder : Shape
     {
         public Cylinder(Transformation? transformation = null, Material? material = null) : base(transformation, material) { }
+
+        public Cylinder(Point center, float radius, float height, Vec direction, Material? material = null) : base(null, material)
+        {
+            Transformation scaling = Transformation.Scaling(new Vec(radius, radius, height));
+            Transformation translation = Transformation.Translation(center.toVec());
+
+            // Euler's angles
+            direction = direction.Normalize();
+            float cos = direction * Constant.VEC_Z;
+            float thetaX = MathF.Atan2(-direction.y, direction.z);
+            float thetaY = MathF.Atan2(direction.x, MathF.Sqrt(direction.y * direction.y + direction.z * direction.z));
+            float thetaZ = MathF.Atan2(-(direction.x * direction.y) / (1 + direction.z), 1f - (direction.x * direction.x) / (1 + direction.z));
+            Transformation rotation = Transformation.RotationZ(thetaZ) * Transformation.RotationY(thetaY) * Transformation.RotationX(thetaX);
+            this.transformation = translation * rotation * scaling;
+        }
+
+        // public override bool quickRayIntersection(Ray ray)
+        // {
+        //     Ray invRay = ray.Transform(this.transformation.getInverse());
+
+        //     // Check if intersect lateral face
+        //     float a = invRay.dir.x * invRay.dir.x + invRay.dir.y * invRay.dir.y;
+        //     float b = invRay.dir.x * invRay.origin.x + invRay.dir.y * invRay.origin.y;
+        //     float c = invRay.origin.x * invRay.origin.x + invRay.origin.y * invRay.origin.y - 1;
+
+        //     float delta = b * b - a * c;
+        //     float? t1 = null, t2 = null;
+
+        //     if (delta > 0f)        // two solutions
+        //     {
+        //         t1 = (-b - MathF.Sqrt(delta)) / a;
+        //         t2 = (-b + MathF.Sqrt(delta)) / a;
+
+        //         if (t1 > 0f)
+        //         {
+        //             Point hitPoint = invRay.at(t1.Value);
+        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+        //                 return true;
+        //         }
+
+        //         if (t2 > 0)
+        //         {
+        //             Point hitPoint = invRay.at(t2.Value);
+        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+        //                 return true;
+        //         }
+
+
+        //     }
+
+        //     // Check if intersect bottom face
+        //     Plane planeBottom = new Plane(transformation: Transformation.Translation(0f, 0f, -0.5f));
+        //     HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+        //     if (hitBottom.HasValue)
+        //     {
+        //         Point pointInt = hitBottom.Value.worldPoint;
+        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+        //             return true;
+        //     }
+
+        //     // Check if intersect top face
+        //     Plane planeTop = new Plane(transformation: Transformation.Translation(0f, 0f, 0.5f));
+        //     HitRecord? hitTop = planeTop.rayIntersection(invRay);
+        //     if (hitTop.HasValue)
+        //     {
+        //         Point pointInt = hitTop.Value.worldPoint;
+        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+        //             return true;
+        //     }
+
+        //     return false;
+        // }
 
         public override HitRecord? rayIntersection(Ray ray)
         {

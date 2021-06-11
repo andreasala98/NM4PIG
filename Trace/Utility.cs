@@ -107,6 +107,11 @@ namespace Trace
         public static Color Red = new Color(1.0f, 0.0f, 0.0f);
 
         /// <summary>
+        /// Pink color
+        /// </summary>
+        public static Color Pink = new Color(1.0f, 0.7529f, 0.7961f);
+
+        /// <summary>
         /// Green color
         /// </summary>
         public static Color Green = new Color(0.0f, 1.0f, 0.0f);

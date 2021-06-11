@@ -22,9 +22,9 @@ namespace NM4PIG
 
             Console.WriteLine("Starting Demo with these parameters:\n");
 
-            Console.WriteLine("Width: " + width);
-            Console.WriteLine("Height: " + height);
-            Console.WriteLine("Angle: " + angle);
+            Console.WriteLine("Width: " + width + " pixels");
+            Console.WriteLine("Height: " + height + " pixels");
+            Console.WriteLine("Angle: " + angle + " degrees");
             Console.WriteLine(orthogonal ? "Orthogonal Camera" : "Perspective Camera");
             Console.WriteLine("pfmFile: " + pfmFile);
             Console.WriteLine("ldrFile: " + ldrFile);
@@ -74,14 +74,15 @@ namespace NM4PIG
 
                 case 2:
 
-                    Material material1 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Yellow, Constant.Blue)));
-                    Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
-                    Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
+                    Material grass = new Material(Brdf: new DiffuseBRDF(new UniformPigment(new Color(0.5f, 1f, 0f))));
+                    Material red = new Material(Brdf: new DiffuseBRDF(new UniformPigment(CC.Red)));
+                    Material skyMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
 
-                    world.addShape(new Cylinder(
-                                                //transformation: Tsf.RotationY(MathF.PI / 2f),
-                                                material: material1
-                                                ));
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMaterial));
+
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), grass));
+
+                    //world.addShape(new Pig());
                     //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
                     break;
                 case 3:
@@ -132,7 +133,7 @@ namespace NM4PIG
                 case 5:
                     PCG pcg = new PCG();
                     Material skyMat = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
-                    Material groundMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.BroomYellow)), new UniformPigment(CC.Black));
+                    Material groundMat = new Material(new DiffuseBRDF(),new CheckeredPigment(CC.BrightGreen, CC.BroomYellow));
                     Material sph1Mat = new Material(new DiffuseBRDF(new UniformPigment(CC.BlueChill)));
                     Material sph2Mat = new Material(new DiffuseBRDF(new UniformPigment(Color.random())));
                     Material boxMat = new Material(new DiffuseBRDF(new UniformPigment(CC.BrightGreen)));
@@ -149,12 +150,17 @@ namespace NM4PIG
                     //renderer = new PathTracer(world, Constant.Black, pcg);
                     break;
                 case 6:
-                    world.addShape(new CSGUnion(
+                    Material BrightRedMat2 = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
+                    Material BrightBlueMat2 = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 78f / 255, 255f / 255))));
+                    Material skyMtrl2 = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMtrl2));
+                    world.addShape(new CSGDifference(
+                                            new Box(transformation: Transformation.Scaling(0.5f, 0.5f, 1f), material: BrightBlueMat2),
                                             new Sphere(
                                                     Transformation.Translation(new Vec(0f, 0f, 1.2f))
-                                                    * Transformation.Scaling(0.635f)),
-                                            new Box(transformation: Transformation.Scaling(0.5f, 0.5f, 1f))
-                                            )
+                                                    * Transformation.Scaling(0.635f), BrightRedMat2)
+                                    )
                                     );
                     break;
                 case 8:
@@ -165,17 +171,32 @@ namespace NM4PIG
                     Material skyMtrl = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
 
 
-                    Shape C1 = new Cylinder(Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
-                    Shape C2 = new Cylinder(Tsf.RotationY(Utility.DegToRad(45)) * Tsf.RotationX(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
-                    Shape C3 = new Cylinder(Tsf.RotationX(Utility.DegToRad(-45)) * Tsf.RotationY(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
 
-                    Shape S1 = new Sphere(transformation: Tsf.Scaling(1.5f), material: BrightBlueMat);
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMtrl));
+                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), grndMat));
+
+                    Shape C1 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_X, cylMat);
+                    Shape C2 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_Y, cylMat);
+                    Shape C3 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_Z, cylMat);
+                    // Shape C1 = new Cylinder(Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
+                    // Shape C2 = new Cylinder(Tsf.RotationY(Utility.DegToRad(45)) *
+                    //                         Tsf.RotationX(CC.PI / 2f) *
+                    //                         Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
+                    // Shape C3 = new Cylinder(Tsf.RotationX(Utility.DegToRad(-45)) *
+                    //                         Tsf.RotationY(CC.PI / 2f) *
+                    //                         Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
+
+                    Shape S1 = new Sphere(Tsf.Scaling(1.4f), BrightBlueMat);
                     Shape B1 = new Box(material: BrightRedMat);
 
-                    Shape left = S1 - B1;
-                    Shape right = (C1 + C2) + C3;
+                    Shape left = S1 * B1; // intersection
+                    Shape right = (C1 + C2) + C3; //union
 
+                    Shape tot = left - right; //difference
+                    tot.transformation = Tsf.Translation(-new Vec(0f, 0f, -10f));
                     world.addShape(left);
+                    // world.addShape(S1 * B1);
                     // world.addShape(new Cylinder(Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     // world.addShape(new Cylinder(Tsf.RotationY(Utility.DegToRad(45))*Tsf.RotationX(CC.PI/2f)*Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     //renderer = new PathTracer(world, Constant.Black, new PCG(), 6);
