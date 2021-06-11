@@ -65,12 +65,12 @@ namespace Trace
         public abstract bool isPointInside(Point a);
 
         public static CSGDifference operator -(Shape left, Shape right)
-            => new CSGDifference(left,right);
+            => new CSGDifference(left, right);
         public static CSGUnion operator +(Shape left, Shape right)
-            => new CSGUnion(left,right);
+            => new CSGUnion(left, right);
 
         public static CSGIntersection operator *(Shape left, Shape right)
-            => new CSGIntersection(left,right);
+            => new CSGIntersection(left, right);
     }
 
 
@@ -615,10 +615,39 @@ namespace Trace
             return result;
         }
 
+
+        // U, V mapping for cylinder
+        // (0,1)        (0.5, 1)         (1,1)
+        // +----------------------------+
+        // |              |             |
+        // |     bottom   |     top     |
+        // |              |             |
+        // |              |             |
+        // +----------------------------+ (1, 0.5)
+        // |                            |
+        // |        lateral face        |
+        // |                            |
+        // |                            |
+        // +----------------------------+
+        // (0,0)                        (1,0)
         private Vec2D _cylinderPointToUV(Point point)
         {
-            float u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
-            float v = point.z + 0.5f;
+            float u, v;
+            if (Utility.areClose(point.z, 0.5f))
+            {
+                u = 0.75f + point.x / 2f;
+                v = 0.75f + point.y / 2f;
+            }
+            else if (Utility.areClose(point.z, -0.5f))
+            {
+                u = 0.25f + point.x / 2f;
+                v = 0.75f + point.y / 2f;
+            }
+            else
+            {
+                u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
+                v = (point.z + 0.5f) / 2f;
+            }
             return new Vec2D(u, v);
         }
         public override bool isPointInside(Point a)
@@ -646,7 +675,7 @@ namespace Trace
         /// <param name="h"></param>
         /// <param name="transformation"></param>
         /// <param name="material"></param>
-        public Cone(float r = 1f, float h = 1f, Transformation?  transformation = null, Material? material = null) : base(transformation, material)
+        public Cone(float r = 1f, float h = 1f, Transformation? transformation = null, Material? material = null) : base(transformation, material)
         {
             this.radius = r;
             this.height = h;
@@ -710,7 +739,7 @@ namespace Trace
             {
                 plane = true;
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y <  this.radius)
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
                     planeHit = new HitRecord(
                                 wp: this.transformation * pointInt,
                                 nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
@@ -731,13 +760,13 @@ namespace Trace
 
             float hr = MathF.Pow((this.height / this.radius), 2f);
 
-            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz,2f);
-            float b = 2f * (hr * (ox*dx + oy*dy) - dz * oz + this.height * dz);
+            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz, 2f);
+            float b = 2f * (hr * (ox * dx + oy * dy) - dz * oz + this.height * dz);
             float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
 
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
-            {   
+            {
                 goto NoConeHit;
             }
 
@@ -757,7 +786,7 @@ namespace Trace
             }
 
             float firstHitT;
-            
+
 
 
             if (tmin > invRay.tmin && tmin < invRay.tmax)
@@ -790,8 +819,8 @@ namespace Trace
                 if (!(coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
                     coneHit = null;
             }
-           
-            NoConeHit: 
+
+        NoConeHit:
             if (coneHit == null)
                 return planeHit;
             else if (planeHit == null)
@@ -813,7 +842,7 @@ namespace Trace
             {
                 plane = true;
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y <  this.radius)
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
                     hits.Add(new HitRecord(
                                 wp: this.transformation * pointInt,
                                 nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
@@ -823,7 +852,7 @@ namespace Trace
                                 shape: this)
                             );
             }
-            
+
 
             float dx = invRay.dir.x;
             float dy = invRay.dir.y;
@@ -835,21 +864,21 @@ namespace Trace
 
             float hr = MathF.Pow((this.height / this.radius), 2f);
 
-            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz,2f);
-            float b = 2f * (hr * (ox*dx + oy*dy) - dz * oz + this.height * dz);
+            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz, 2f);
+            float b = 2f * (hr * (ox * dx + oy * dy) - dz * oz + this.height * dz);
             float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
 
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
             {
-                if(hits.Count == 0)
+                if (hits.Count == 0)
                 {
                     hits.Add(null);
                     return hits;
                 }
                 else return hits;
             }
-                
+
 
             float sqrtDelta = MathF.Sqrt(delta);
             float tmin;
@@ -894,7 +923,7 @@ namespace Trace
                 if ((coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
                     hits.Add(coneHit);
             }
-           
+
             if (hits.Count == 0)
             {
                 hits.Add(null);
@@ -921,9 +950,9 @@ namespace Trace
     } // end of Cone
 
 } // end of Shapes
-// public override HitRecord? rayIntersection(Ray ray)
-//          {
-//              Ray invRay = ray.Transform(this.transformation.getInverse());
+  // public override HitRecord? rayIntersection(Ray ray)
+  //          {
+  //              Ray invRay = ray.Transform(this.transformation.getInverse());
 
 //              Plane planeBottom = new Plane();
 //              HitRecord? hitBottom = planeBottom.rayIntersection(invRay);

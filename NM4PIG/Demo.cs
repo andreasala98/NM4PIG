@@ -1,4 +1,3 @@
-
 using System;
 using System.IO;
 using Trace;
@@ -11,9 +10,9 @@ using CC = Trace.Constant;
 namespace NM4PIG
 {
 
-    class MainFuncs
+    class Demo
     {
-        public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile,
+        public static void ExecuteDemo(int width, int height, int angle, bool orthogonal, string pfmFile,
                                 string ldrFile, int scene, float? luminosity, int spp, char rendType)
         {
 
@@ -54,9 +53,12 @@ namespace NM4PIG
             {
                 case 1:
                     //One sphere for each vertex of the cube
-                    foreach (var x in Vertices){
-                        foreach (var y in Vertices){
-                            foreach (var z in Vertices){
+                    foreach (var x in Vertices)
+                    {
+                        foreach (var y in Vertices)
+                        {
+                            foreach (var z in Vertices)
+                            {
                                 world.addShape(new Sphere(Tsf.Translation(new Vec(x, y, z))
                                                     * Tsf.Scaling(new Vec(0.1f, 0.1f, 0.1f))));
                             } // z
@@ -77,7 +79,7 @@ namespace NM4PIG
                     Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
 
                     world.addShape(new Cylinder(
-                                                //transformation: Tsf.Translation(new Vec(5f, 0f, 1f)),
+                                                //transformation: Tsf.RotationY(MathF.PI / 2f),
                                                 material: material1
                                                 ));
                     //renderer = new FlatRender(world, new Color(0f, 1f, 1f));
@@ -157,8 +159,8 @@ namespace NM4PIG
                     break;
                 case 8:
                     Material cylMat = new Material(new DiffuseBRDF(new UniformPigment(CC.BrightGreen)));
-                    Material BrightRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f/255,1f/255,20f/255))));
-                    Material BrightBlueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f,78f/255,255f/255))));
+                    Material BrightRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
+                    Material BrightBlueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 78f / 255, 255f / 255))));
                     Material grndMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
                     Material skyMtrl = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
 
@@ -172,7 +174,7 @@ namespace NM4PIG
                     Shape C2 = new Cylinder(Tsf.RotationY(Utility.DegToRad(45)) * Tsf.RotationX(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
                     Shape C3 = new Cylinder(Tsf.RotationX(Utility.DegToRad(-45)) * Tsf.RotationY(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
 
-                    Shape S1 = new Sphere(transformation: Tsf.Scaling(1.5f),material: BrightBlueMat);
+                    Shape S1 = new Sphere(transformation: Tsf.Scaling(1.5f), material: BrightBlueMat);
                     Shape B1 = new Box(material: BrightRedMat);
 
                     //Shape left = S1 * B1;
@@ -180,19 +182,19 @@ namespace NM4PIG
 
                     //Shape tot = left - right;
 
-                    world.addShape(S1*B1);
+                    world.addShape(S1 * B1);
                     // world.addShape(new Cylinder(Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     // world.addShape(new Cylinder(Tsf.RotationY(Utility.DegToRad(45))*Tsf.RotationX(CC.PI/2f)*Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     //renderer = new PathTracer(world, Constant.Black, new PCG(), 6);
                     break;
                 case 9:
                     Material skyM = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
-                    Material BRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f/255,1f/255,20f/255))));
+                    Material BRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
                     Material ground = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
-                 
+
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyM));
-                    world.addShape(new Cone(r: 0.5f, material: BRedMat, transformation: Transformation.RotationY(Constant.PI/2f) * 
+                    world.addShape(new Cone(r: 0.5f, material: BRedMat, transformation: Transformation.RotationY(Constant.PI / 2f) *
                                                                                 Transformation.Scaling(0.5f)));
                     world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), ground));
 
@@ -202,7 +204,8 @@ namespace NM4PIG
                     break;
             }
 
-            switch (rendType) { 
+            switch (rendType)
+            {
                 case 'o':
                     renderer = new OnOffRender(world);
                     break;
@@ -210,8 +213,8 @@ namespace NM4PIG
                     renderer = new FlatRender(world);
                     break;
                 //case 'p':
-                   // renderer = new PointLightTracer(world);
-                    //break;
+                // renderer = new PointLightTracer(world);
+                //break;
                 case 'r':
                     renderer = new PathTracer(world, CC.Black, new PCG());
                     break;
@@ -235,7 +238,7 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            Convert(pfmFile, ldrFile, Default.factor, Default.gamma, luminosity);
+            Convert.ExecuteConvert(pfmFile, ldrFile, Default.factor, Default.gamma, luminosity);
 
             sw.Stop();
             TimeSpan ts = sw.Elapsed;
@@ -253,62 +256,6 @@ namespace NM4PIG
             {'r', "Path Tracer"}
 
         };
+    }
 
-    public static void Convert(string inputpfm, string outputldr, float factor, float gamma, float? luminosity)
-        {
-            string fmt = outputldr.Substring(outputldr.Length - 3, 3);
-
-            Console.WriteLine("\n\nStarting file conversion using these parameters:\n");
-
-            Console.WriteLine("pfmFile: " + inputpfm);
-            Console.WriteLine("ldrFile: " + outputldr);
-            Console.WriteLine("Format: " + fmt);
-            Console.WriteLine("Factor: " + factor);
-            Console.WriteLine("Gamma: " + gamma);
-            Console.WriteLine(luminosity.HasValue ? ("Manual luminosity: " + luminosity) : "Average luminosity");
-
-            Console.WriteLine("\n");
-
-            HdrImage myImg = new HdrImage();
-
-            try
-            {
-                using (FileStream inputStream = File.OpenRead(inputpfm))
-                {
-                    myImg.readPfm(inputStream);
-                    Console.WriteLine($"File {inputpfm} has been correctly read from disk.");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
-
-            Console.WriteLine("Starting Tone Mapping...");
-            try
-            {
-                Console.WriteLine("Normalizing image...");
-
-                if (luminosity.HasValue) myImg.normalizeImage(factor, luminosity.Value);
-                else myImg.normalizeImage(factor);
-
-                Console.WriteLine("Clamping image...");
-                myImg.clampImage();
-
-                Console.WriteLine("Saving LDR image...");
-                myImg.writeLdrImage(outputldr, fmt, gamma);
-
-                Console.WriteLine($"File {outputldr} has been correctly written to disk.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
-
-        } //Convert
-
-    } //Main Funcs
-
-} //NM4PIG
+}

@@ -84,7 +84,7 @@ namespace NM4PIG
                         return 0;
                     }
 
-                    MainFuncs.Demo(
+                    Demo.ExecuteDemo(
                         readParam.width,
                         readParam.height,
                         readParam.angledeg,
@@ -135,7 +135,7 @@ namespace NM4PIG
                         Console.WriteLine(e.Message);
                         return 0;
                     }
-                    MainFuncs.Convert(
+                    Convert.ExecuteConvert(
                             readParam.pfmFile,
                             readParam.ldrFile,
                             readParam.factor,
