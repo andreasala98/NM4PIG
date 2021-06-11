@@ -172,7 +172,7 @@ namespace NM4PIG
                     Shape C2 = new Cylinder(Tsf.RotationY(Utility.DegToRad(45)) * Tsf.RotationX(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
                     Shape C3 = new Cylinder(Tsf.RotationX(Utility.DegToRad(-45)) * Tsf.RotationY(CC.PI / 2f) * Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
 
-                    Shape S1 = new Sphere(transformation: Tsf.Scaling(1.5f),material: BrightBlueMat);
+                    Shape S1 = new Sphere(transformation: Tsf.Scaling(1.2f),material: BrightBlueMat);
                     Shape B1 = new Box(material: BrightRedMat);
 
                     //Shape left = S1 * B1;

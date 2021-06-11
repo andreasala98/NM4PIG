@@ -389,13 +389,13 @@ namespace Trace.Test
         [Fact]
         public void TestCSGCubeSphere()
         {
-            Shape S1 = new Sphere(transformation: Transformation.Scaling(1.5f));
+            Shape S1 = new Sphere(transformation: Transformation.Scaling(1.2f));
             Shape B1 = new Box();
 
             CSGIntersection u1 = S1 * B1;
 
-            Ray r1 = new Ray(origin: new Point(0.0f, 0.0f, 0.0f), dir: -Constant.VEC_X);
-            HitRecord? intersection1 = B1.rayIntersection(r1);
+            Ray r1 = new Ray(origin: new Point(-5.0f, 0.0f, 0.0f), dir: Constant.VEC_X);
+            HitRecord? intersection1 = u1.rayIntersection(r1);
             Assert.True(intersection1 != null, "TestCSGCubeSphere failed! - Assert 1/5");
             HitRecord hit1 = new HitRecord(
                 new Point(-1.0f, 0.0f, 0.0f),
@@ -404,10 +404,27 @@ namespace Trace.Test
                 4f,
                 r1
             );
-            Console.WriteLine("hit : " + hit1.ToString());
-            Console.WriteLine("intersection : " + intersection1.ToString());
 
             Assert.True(hit1.isClose(intersection1), "TestCSGCubeSphere failed! - Assert 2/5");
+
+            Ray r2 = new Ray(origin: new Point(2f, 2f, 0.0f), dir: (-Constant.VEC_X - Constant.VEC_Y).Normalize());
+            HitRecord? intersection2 = u1.rayIntersection(r2);
+            Assert.True(intersection2 != null, "TestCSGCubeSphere failed! - Assert 1/5");
+            HitRecord hit2 = new HitRecord(
+                (S1.transformation * new Point(MathF.Sqrt(2)/2f , MathF.Sqrt(2)/2f , 0.0f)),
+                (S1.transformation * new Normal(MathF.Sqrt(2)/2f, MathF.Sqrt(2)/2f, 0.0f)),
+                new Vec2D(0.125f, 0.5f),
+                1.6284273f,
+                r2
+            );
+
+            Console.WriteLine("hit : " + hit2.ToString());
+            Console.WriteLine("intersection : " + intersection2.ToString());
+            Console.WriteLine(MathF.Sqrt(2) / 2f / 0.5892556f);
+
+            Assert.True(hit2.isClose(intersection2), "TestCSGCubeSphere failed! - Assert 2/5");
+
+
 
         }
     } // CSG Intersection Tests
