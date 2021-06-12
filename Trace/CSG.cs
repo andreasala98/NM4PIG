@@ -17,7 +17,6 @@ IN THE SOFTWARE.
 */
 
 using System.Collections.Generic;
-using System;
 
 namespace Trace
 {
@@ -45,7 +44,7 @@ namespace Trace
         /// </summary>
         /// <param name="a">First Shape</param>
         /// <param name="b">Second Shape</param>
-        public CSGUnion(Shape a, Shape b)
+        public CSGUnion(Shape a, Shape b) : base(null, null)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -170,13 +169,14 @@ namespace Trace
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         /// 
-        public override HitRecord? rayIntersection(Ray ray) {
+        public override HitRecord? rayIntersection(Ray ray)
+        {
             List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
 
-        
+
 
         /*
         public override HitRecord? rayIntersection(Ray ray)
@@ -239,7 +239,8 @@ namespace Trace
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
+                // Keep only the intersection points not inside the second shape
+                if (!this.secondShape.isPointInside(a[i].Value.worldPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -247,9 +248,10 @@ namespace Trace
 
             if (b.Count != 0)
             {
+                // Keep only the intersection inside the first shape
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    if (this.firstShape.isPointInside(b[i].Value.worldPoint))
                     {
                         legalHits.Add(b[i]);
                     }
@@ -257,7 +259,6 @@ namespace Trace
             }
 
             legalHits.Sort();
-            
             return legalHits;
         }
 
