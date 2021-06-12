@@ -170,15 +170,15 @@ namespace NM4PIG
                     Material grndMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
                     Material skyMtrl = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
 
-
+                    
 
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyMtrl));
                     world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), grndMat));
 
-                    Shape C1 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_X, cylMat);
-                    Shape C2 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_Y, cylMat);
-                    Shape C3 = new Cylinder(CC.Origin, radius: 0.8f, height: 2f, Constant.VEC_Z, cylMat);
+                    Shape C1 = new Cylinder(CC.Origin, radius: 0.8f, height: 2.2f, Constant.VEC_X, cylMat);
+                    Shape C2 = new Cylinder(CC.Origin, radius: 0.8f, height: 2.2f, Constant.VEC_Y, cylMat);
+                    Shape C3 = new Cylinder(CC.Origin, radius: 0.8f, height: 2.2f, Constant.VEC_Z, cylMat);
                     // Shape C1 = new Cylinder(Tsf.Scaling(0.5f, 0.5f, 1.5f), cylMat);
                     // Shape C2 = new Cylinder(Tsf.RotationY(Utility.DegToRad(45)) *
                     //                         Tsf.RotationX(CC.PI / 2f) *
@@ -195,7 +195,7 @@ namespace NM4PIG
 
                     Shape tot = left - right; //difference
                     tot.transformation = Tsf.Translation(-new Vec(0f, 0f, -10f));
-                    world.addShape(left);
+                    world.addShape(right);
                     // world.addShape(S1 * B1);
                     // world.addShape(new Cylinder(Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
                     // world.addShape(new Cylinder(Tsf.RotationY(Utility.DegToRad(45))*Tsf.RotationX(CC.PI/2f)*Tsf.Scaling(0.5f, 0.5f, 2f), cylMat));
