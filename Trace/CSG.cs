@@ -17,7 +17,6 @@ IN THE SOFTWARE.
 */
 
 using System.Collections.Generic;
-using System;
 
 namespace Trace
 {
@@ -45,7 +44,7 @@ namespace Trace
         /// </summary>
         /// <param name="a">First Shape</param>
         /// <param name="b">Second Shape</param>
-        public CSGUnion(Shape a, Shape b)
+        public CSGUnion(Shape a, Shape b) : base(null, null)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -170,29 +169,21 @@ namespace Trace
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         /// 
-        public override HitRecord? rayIntersection(Ray ray) {
+        public override HitRecord? rayIntersection(Ray ray)
+        {
             List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
 
-        /// <summary>
-        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
-        /// The HitRecord are than order by the t datamember, in crescent order.
-        /// It's overriden from the abstract Shape class. 
-        /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
-        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        /*
+        public override HitRecord? rayIntersection(Ray ray)
         {
-
-            List<HitRecord?> legalHits = new List<HitRecord?>();
             List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
             if (a.Count == 0)
-            {
-                return legalHits;
-            }
+                return null;
             List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> legalHits = new List<HitRecord?>();
 
             for (int i = 0; i < a.Count; i++)
             {
@@ -213,8 +204,58 @@ namespace Trace
                 }
             }
 
+            if (legalHits.Count == 0)
+                return null;
+
+            int iHit = 0;
+            for (int i = 1; i < legalHits.Count; i++)
+                if (legalHits[i]?.t < legalHits[iHit]?.t)
+                    iHit = i;
+
+
+            return legalHits[iHit];
+        }
+        */
+
+        /// <summary>
+        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
+        /// It's overriden from the abstract Shape class. 
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public override List<HitRecord?> rayIntersectionList(Ray ray)
+        {
+
+            List<HitRecord?> legalHits = new List<HitRecord?>();
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a.Count == 0)
+            {
+                return legalHits;
+            }
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                // Keep only the intersection points not inside the second shape
+                if (!this.secondShape.isPointInside(a[i].Value.worldPoint))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            if (b.Count != 0)
+            {
+                // Keep only the intersection inside the first shape
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside(b[i].Value.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+                }
+            }
+
             legalHits.Sort();
-            
             return legalHits;
         }
 
