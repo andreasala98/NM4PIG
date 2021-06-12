@@ -117,7 +117,7 @@ namespace Trace
                 return null;
 
             Point hitPoint = invRay.at(firstHitT);
-            
+
             return new HitRecord(
                 this.transformation * hitPoint,
                 this.transformation * _sphereNormal(hitPoint, ray.dir),
@@ -395,7 +395,7 @@ namespace Trace
         /// <param name="point"> The point of intersection</param>
         /// <param name="rayDir"> Intersecting ray </param>
         /// <returns> The oriented normal</returns>
-        private Normal _boxNormal(Point point, Point rayOrigin)
+        private Normal _boxNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
@@ -404,7 +404,7 @@ namespace Trace
             else if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
             else if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
             else if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
-            if (isPointInside(rayOrigin))
+            if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
         }
@@ -477,7 +477,7 @@ namespace Trace
                 Point hitPoint0 = invRay.at(t0);
                 hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint0,
-                nm: (this.transformation * this._boxNormal(hitPoint0, ray.origin)),
+                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)),
                 sp: this._boxPointToUV(hitPoint0),
                 tt: t0,
                 r: ray,
@@ -490,7 +490,7 @@ namespace Trace
                 Point hitPoint1 = invRay.at(t1);
                 hits.Add(new HitRecord(
                     wp: this.transformation * hitPoint1,
-                    nm: (this.transformation * this._boxNormal(hitPoint1, ray.origin)),
+                    nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)),
                     sp: this._boxPointToUV(hitPoint1),
                     tt: t1,
                     r: ray,

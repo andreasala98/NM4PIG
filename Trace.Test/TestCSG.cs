@@ -398,7 +398,7 @@ namespace Trace.Test
             Assert.True(intersection1 != null, "TestCSGCubeSphere failed! - Assert 1/5");
             HitRecord hit1 = new HitRecord(
                 new Point(-1.0f, 0.0f, 0.0f),
-                new Normal(1.0f, 0.0f, 0.0f),
+                new Normal(-1.0f, 0.0f, 0.0f),
                 new Vec2D(0.125f, 0.5f),
                 4f,
                 r1
@@ -410,8 +410,8 @@ namespace Trace.Test
             HitRecord? intersection2 = IntCubeSphere.rayIntersection(r2);
             Assert.True(intersection2 != null, "TestCSGCubeSphere failed! - Assert 1/5");
             HitRecord hit2 = new HitRecord(
-                (S1.transformation * new Point(MathF.Sqrt(2)/2f , MathF.Sqrt(2)/2f , 0.0f)),
-                (S1.transformation * new Normal(MathF.Sqrt(2)/2f, MathF.Sqrt(2)/2f, 0.0f)),
+                (S1.transformation * new Point(MathF.Sqrt(2) / 2f, MathF.Sqrt(2) / 2f, 0.0f)),
+                (S1.transformation * new Normal(MathF.Sqrt(2) / 2f, MathF.Sqrt(2) / 2f, 0.0f)),
                 new Vec2D(0.125f, 0.5f),
                 1.6284273f,
                 r2
