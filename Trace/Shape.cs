@@ -117,7 +117,7 @@ namespace Trace
                 return null;
 
             Point hitPoint = invRay.at(firstHitT);
-            
+
             return new HitRecord(
                 this.transformation * hitPoint,
                 this.transformation * _sphereNormal(hitPoint, ray.dir),
@@ -146,8 +146,7 @@ namespace Trace
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
             {
-                intersections.Add(null);
-                return intersections;
+                return intersections;       // Here is empty
             }
 
             float sqrtDelta = (float)Math.Sqrt((float)delta);
@@ -184,10 +183,7 @@ namespace Trace
                                                 );
             }
 
-            if (intersections.Count == 0)
-                intersections.Add(null);
-
-            return intersections;
+            return intersections;       // If there are no intersections return an empty list
         }
 
         /// <summary>
@@ -399,7 +395,7 @@ namespace Trace
         /// <param name="point"> The point of intersection</param>
         /// <param name="rayDir"> Intersecting ray </param>
         /// <returns> The oriented normal</returns>
-        private Normal _boxNormal(Point point, Point rayOrigin)
+        private Normal _boxNormal(Point point, Vec rayDir)
         {
             Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
@@ -408,7 +404,7 @@ namespace Trace
             else if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
             else if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
             else if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
-            if (isPointInside(rayOrigin))
+            if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
         }
@@ -481,7 +477,7 @@ namespace Trace
                 Point hitPoint0 = invRay.at(t0);
                 hits.Add(new HitRecord(
                 wp: this.transformation * hitPoint0,
-                nm: (this.transformation * this._boxNormal(hitPoint0, ray.origin)),
+                nm: (this.transformation * this._boxNormal(hitPoint0, ray.dir)),
                 sp: this._boxPointToUV(hitPoint0),
                 tt: t0,
                 r: ray,
@@ -494,7 +490,7 @@ namespace Trace
                 Point hitPoint1 = invRay.at(t1);
                 hits.Add(new HitRecord(
                     wp: this.transformation * hitPoint1,
-                    nm: (this.transformation * this._boxNormal(hitPoint1, ray.origin)),
+                    nm: (this.transformation * this._boxNormal(hitPoint1, ray.dir)),
                     sp: this._boxPointToUV(hitPoint1),
                     tt: t1,
                     r: ray,
@@ -514,6 +510,78 @@ namespace Trace
     public class Cylinder : Shape
     {
         public Cylinder(Transformation? transformation = null, Material? material = null) : base(transformation, material) { }
+
+        public Cylinder(Point center, float radius, float height, Vec direction, Material? material = null) : base(null, material)
+        {
+            Transformation scaling = Transformation.Scaling(new Vec(radius, radius, height));
+            Transformation translation = Transformation.Translation(center.toVec());
+
+            // Euler's angles
+            direction = direction.Normalize();
+            float cos = direction * Constant.VEC_Z;
+            float thetaX = MathF.Atan2(-direction.y, direction.z);
+            float thetaY = MathF.Atan2(direction.x, MathF.Sqrt(direction.y * direction.y + direction.z * direction.z));
+            float thetaZ = MathF.Atan2(-(direction.x * direction.y) / (1 + direction.z), 1f - (direction.x * direction.x) / (1 + direction.z));
+            Transformation rotation = Transformation.RotationZ(thetaZ) * Transformation.RotationY(thetaY) * Transformation.RotationX(thetaX);
+            this.transformation = translation * rotation * scaling;
+        }
+
+        // public override bool quickRayIntersection(Ray ray)
+        // {
+        //     Ray invRay = ray.Transform(this.transformation.getInverse());
+
+        //     // Check if intersect lateral face
+        //     float a = invRay.dir.x * invRay.dir.x + invRay.dir.y * invRay.dir.y;
+        //     float b = invRay.dir.x * invRay.origin.x + invRay.dir.y * invRay.origin.y;
+        //     float c = invRay.origin.x * invRay.origin.x + invRay.origin.y * invRay.origin.y - 1;
+
+        //     float delta = b * b - a * c;
+        //     float? t1 = null, t2 = null;
+
+        //     if (delta > 0f)        // two solutions
+        //     {
+        //         t1 = (-b - MathF.Sqrt(delta)) / a;
+        //         t2 = (-b + MathF.Sqrt(delta)) / a;
+
+        //         if (t1 > 0f)
+        //         {
+        //             Point hitPoint = invRay.at(t1.Value);
+        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+        //                 return true;
+        //         }
+
+        //         if (t2 > 0)
+        //         {
+        //             Point hitPoint = invRay.at(t2.Value);
+        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+        //                 return true;
+        //         }
+
+
+        //     }
+
+        //     // Check if intersect bottom face
+        //     Plane planeBottom = new Plane(transformation: Transformation.Translation(0f, 0f, -0.5f));
+        //     HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+        //     if (hitBottom.HasValue)
+        //     {
+        //         Point pointInt = hitBottom.Value.worldPoint;
+        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+        //             return true;
+        //     }
+
+        //     // Check if intersect top face
+        //     Plane planeTop = new Plane(transformation: Transformation.Translation(0f, 0f, 0.5f));
+        //     HitRecord? hitTop = planeTop.rayIntersection(invRay);
+        //     if (hitTop.HasValue)
+        //     {
+        //         Point pointInt = hitTop.Value.worldPoint;
+        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+        //             return true;
+        //     }
+
+        //     return false;
+        // }
 
         public override HitRecord? rayIntersection(Ray ray)
         {
@@ -626,18 +694,18 @@ namespace Trace
 
 
         // U, V mapping for cylinder
-        // (0,1)        (0.5, 1)         (1,1)
-        // +----------------------------+
-        // |              |             |
-        // |     bottom   |     top     |
-        // |              |             |
-        // |              |             |
-        // +----------------------------+ (1, 0.5)
-        // |                            |
-        // |        lateral face        |
-        // |                            |
-        // |                            |
-        // +----------------------------+
+        // (0,1)     (0.5, 1)         (1,1)
+        // +---------------------------+
+        // |             |             |
+        // |    bottom   |     top     |
+        // |             |             |
+        // |             |             |
+        // +---------------------------+ (1, 0.5)
+        // |                           |
+        // |        lateral face       |
+        // |                           |
+        // |                           |
+        // +---------------------------+
         // (0,0)                        (1,0)
         private Vec2D _cylinderPointToUV(Point point)
         {
