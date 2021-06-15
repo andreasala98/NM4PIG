@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
+using System;
 using System.Collections.Generic;
 
 namespace Trace.Test
@@ -70,7 +71,7 @@ namespace Trace.Test
             Assert.True(image.getPixel(1, 0).isClose(Constant.Black), "TestFlatRender failed - Assert 2/9");
             Assert.True(image.getPixel(2, 0).isClose(Constant.Black), "TestFlatRender failed - Assert 3/9");
             Assert.True(image.getPixel(0, 1).isClose(Constant.Black), "TestFlatRender failed - Assert 4/9");
-            Assert.True(image.getPixel(1, 1).isClose(sphereColor), "TestFlatRender failed - Assert 5/9");
+            Assert.True(image.getPixel(1, 1).isClose(sphereColor),    "TestFlatRender failed - Assert 5/9");
             Assert.True(image.getPixel(2, 1).isClose(Constant.Black), "TestFlatRender failed - Assert 6/9");
             Assert.True(image.getPixel(0, 2).isClose(Constant.Black), "TestFlatRender failed - Assert 7/9");
             Assert.True(image.getPixel(1, 2).isClose(Constant.Black), "TestFlatRender failed - Assert 8/9");
@@ -110,6 +111,55 @@ namespace Trace.Test
                 Assert.True(Utility.areClose(expected, color.g, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 2/3");
                 Assert.True(Utility.areClose(expected, color.b, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 3/3");
             }
+        }
+
+        [Fact]
+        public void TestPointLightRenderer1()
+        {
+            World world = new World();
+            world.addPointLight(new PointLight(new Point(10f, 10f, 10f), Constant.White));
+            world.addShape(new Sphere(Transformation.Translation(new Vec(10f, 10f, 10f))));
+
+            Sphere sphere = new Sphere(
+                                        transformation: Transformation.Translation(new Vec(2f, 0f, 0f)) * Transformation.Scaling(new Vec(0.2f, 0.2f, 0.2f)),
+                                        material: new Material(Brdf: new DiffuseBRDF(pig: new UniformPigment(Constant.White))));
+            HdrImage image = new HdrImage(3, 3);
+            OrthogonalCamera camera = new OrthogonalCamera();
+            ImageTracer tracer = new ImageTracer(i: image, c: camera);
+            world.addShape(sphere);
+            PointLightRender renderer = new PointLightRender(world);
+            tracer.fireAllRays(renderer);
+
+            Assert.True(image.getPixel(0, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 1/9");
+            Assert.True(image.getPixel(1, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 2/9");
+            Assert.True(image.getPixel(2, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 3/9");
+            Assert.True(image.getPixel(0, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 4/9");
+            Assert.True(image.getPixel(1, 1).isClose(renderer.ambientColor),    "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 5/9");
+            Assert.True(image.getPixel(2, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 6/9");
+            Assert.True(image.getPixel(0, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 7/9");
+            Assert.True(image.getPixel(1, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 8/9");
+            Assert.True(image.getPixel(2, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 9/9");
+
+        }
+
+        [Fact]
+
+        public void TestPointLightRenderer2()
+        {
+            World world = new World();
+            Material planeMaterial = new Material(new DiffuseBRDF(new UniformPigment(new Color(1f, 2f, 3f))));
+            world.addShape(new Plane(Transformation.RotationX(MathF.PI / 4f), planeMaterial));
+            world.addPointLight(new PointLight(new Point(0f, 0f, 5f), new Color(1f, 10f, 100f)));
+
+            PointLightRender render = new PointLightRender(world);
+
+            Ray ray = new Ray(new Point(0f, 5f, 0f), -Constant.VEC_Y);
+
+            Color hitColor = render.computeRadiance(ray);
+            Color expected = new Color(MathF.Sqrt(2) / 2f / MathF.PI, 10f * MathF.Sqrt(2) / MathF.PI, 150f * MathF.Sqrt(2) / MathF.PI);
+            expected = expected + render.ambientColor;
+
+            Assert.True(hitColor.isClose(expected), "TestPointLightRenderer2 failed");
         }
     }
 

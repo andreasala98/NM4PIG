@@ -57,11 +57,15 @@ namespace Trace
         public abstract HitRecord? rayIntersection(Ray ray);
         public abstract List<HitRecord?> rayIntersectionList(Ray ray);
 
+        public abstract bool quickRayIntersection(Ray ray);
+
         /// <summary>
         /// Computes whether a point is inside the shape. It must be redefinde in derived classes.
         /// </summary>
         /// <param name="a"></param>
         public abstract bool isPointInside(Point a);
+
+
     }
 
 
@@ -219,6 +223,30 @@ namespace Trace
             a = this.transformation.getInverse() * a;
             return a.x * a.x + a.y * a.y + a.z * a.z < 1;
         }
+
+        /// <summary>
+        /// Method that checks if a Ray intersects the sphere
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            Vec originVec = invRay.origin.toVec();
+            float a = invRay.dir.getSquaredNorm();
+            float b = 2.0f * originVec * invRay.dir;
+            float c = originVec.getSquaredNorm() - 1.0f;
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+                return false;
+
+            float sqrtDelta = (float)Math.Sqrt((float)delta);
+            float tmin = (-b - sqrtDelta) / (2.0f * a);
+            float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+            return (tmin > invRay.tmin && tmin < invRay.tmax) || (tmax > invRay.tmin && tmax < invRay.tmax);
+        }
     }
 
     // ################################
@@ -328,6 +356,21 @@ namespace Trace
             else return false;
         }
 
+        /// <summary>
+        /// Method that checks if a Ray intersects the plane
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            if (invRay.dir.z == 0) return false;
+
+            float tHit = -invRay.origin.z / invRay.dir.z;
+            return (tHit > invRay.tmin && tHit < invRay.tmax);
+        }
+
     }
 
     /// <summary>
@@ -390,7 +433,7 @@ namespace Trace
         /// <returns> The oriented normal</returns>
         private Normal _boxNormal(Point point, Vec rayDir)
         {
-            Normal result = new Normal(0f,0f,1f);
+            Normal result = new Normal(0f, 0f, 1f);
             if (Utility.areClose(point.x, this.min.x)) result = -Constant.VEC_X_N;
             else if (Utility.areClose(point.x, this.max.x)) result = Constant.VEC_X_N;
             else if (Utility.areClose(point.y, this.min.y)) result = -Constant.VEC_Y_N;
@@ -486,7 +529,36 @@ namespace Trace
             return hits;
         }
 
+        /// <summary>
+        /// Method that checks if a Ray intersects the box
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
 
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            float t0 = 0, t1 = ray.tmax;
+            for (int i = 0; i < 3; i++)
+            {
+                float invRayDir = 1 / invRay.dir.ToList()[i];
+                float tNear = (min.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+                float tFar = (max.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+
+                if (tNear > tFar)
+                {
+                    float tmp = tNear;
+                    tNear = tFar;
+                    tFar = tmp;
+                }
+
+                t0 = tNear > t0 ? tNear : t0;
+                t1 = tFar < t1 ? tFar : t1;
+                if (t0 > t1) return false;
+            }
+
+            return true;
+        }
     }
 
 

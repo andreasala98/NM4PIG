@@ -161,6 +161,23 @@ namespace Trace.Test
 
         }
 
+        [Fact]
+        public void TestQuickRayIntersection()
+        {
+            Sphere sphere = new Sphere();
+
+            Ray ray1 = new Ray(origin: new Point(0f, 0f, 2f), dir: -Constant.VEC_Z);
+            Assert.True(sphere.quickRayIntersection(ray1), "TestHitSphere failed! - Assert 1/");
+
+            Ray ray2 = new Ray(new Point(3f, 0f, 0f), -Constant.VEC_X);
+            Assert.True(sphere.quickRayIntersection(ray2), "TestHitSphere failed! - Assert 2/");
+
+            Assert.False(sphere.quickRayIntersection(new Ray(new Point(0f, 10f, 2f), -Constant.VEC_Z)), "TestHitSphere failed! - Assert 3/ ");
+
+            Ray ray = new Ray(origin: new Point(0f, 0f, 0f), dir: Constant.VEC_X);
+            Assert.True(sphere.quickRayIntersection(ray), "TestInnerHit failed! - Assert 4/");
+        }
+
     }
 
     /// <summary>
@@ -188,6 +205,17 @@ namespace Trace.Test
             Assert.True(trueHit.isClose(YesHit), "TestHitPlane failed! - Assert 3/3");
 
         }
+
+        [Fact]
+        public void TestQuickRayIntersection()
+        {
+            Plane plane = new Plane(Transformation.Translation(new Vec(0.0f, 0.0f, -0.2f)));
+            Ray intRay = new Ray(origin: new Point(0.5f, 0.5f, 2.5f), dir: -Constant.VEC_Z);
+            Ray notIntRay = new Ray(origin: new Point(0.0f, 0.0f, 2.5f), dir: Constant.VEC_Z);
+
+            Assert.True(plane.quickRayIntersection(intRay), "TestHitPlane failed! - Assert 1/");
+            Assert.False(plane.quickRayIntersection(notIntRay), "TestHitPlane failed! - Assert 2");
+        }
     }
 
     public class TestBoxes
@@ -198,7 +226,7 @@ namespace Trace.Test
             Box box = new Box();
             Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box.rayIntersection(ray1);
-            Assert.True(intersection1 != null, "TestBoxesIntersectionBasic failed - assert 1/6");
+            Assert.True(intersection1 != null, "TestBoxesIntersectionBasic failed - assert 1/10");
             // new Vec2D(0.375f, 0.8333334f) for other method UV mapping
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
@@ -207,11 +235,12 @@ namespace Trace.Test
                                             4.0f,
                                             ray1
                                         );
-            Assert.True(hit1.isClose(intersection1), "TestBoxesIntersectionBasic failed - assert 2/6");
+            Assert.True(hit1.isClose(intersection1), "TestBoxesIntersectionBasic failed - assert 2/10");
+            Assert.True(box.quickRayIntersection(ray1), "TestBoxesIntersectionBasic failed - assert 3/10");
 
             Ray ray2 = new Ray(new Point(0f, 0f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box.rayIntersection(ray2);
-            Assert.True(intersection2 != null, "TestBoxesIntersectionBasic failed - assert 3/6");
+            Assert.True(intersection2 != null, "TestBoxesIntersectionBasic failed - assert 4/10");
             // new Vec2D(0.625f, 0.5f) for other method UV mapping
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 1.0f),
@@ -220,16 +249,19 @@ namespace Trace.Test
                                             9.0f,
                                             ray2
                                         );
-            Assert.True(hit2.isClose(intersection2), "TestBoxesIntersectionBasic failed - assert 4/6");
+            Assert.True(hit2.isClose(intersection2), "TestBoxesIntersectionBasic failed - assert 5/10");
+            Assert.True(box.quickRayIntersection(ray2), "TestBoxesIntersectionBasic failed - assert 6/10");
 
             Ray ray3 = new Ray(new Point(-5f, 0f, 10f), Constant.VEC_X);
             HitRecord? intersection3 = box.rayIntersection(ray3);
-            Assert.True(intersection3 == null, "TestBoxesIntersectionBasic failed - assert 5/6");
+            Assert.True(intersection3 == null, "TestBoxesIntersectionBasic failed - assert 7/10");
+            Assert.False(box.quickRayIntersection(ray3), "TestBoxesIntersectionBasic failed - assert 8/10");
 
             // Intersect for t<0
             Ray ray4 = new Ray(new Point(0f, 3f, 0f), Constant.VEC_Y);
             HitRecord? intersection4 = box.rayIntersection(ray4);
-            Assert.True(intersection4 == null, "TestBoxesIntersectionBasic failed - assert 6/6");
+            Assert.True(intersection4 == null, "TestBoxesIntersectionBasic failed - assert 9/10");
+            Assert.False(box.quickRayIntersection(ray4), "TestBoxesIntersectionBasic failed - assert 10/10");
         }
 
         [Fact]
@@ -238,7 +270,7 @@ namespace Trace.Test
             Box box1 = new Box(transformation: Transformation.Scaling(5.0f));
             Ray ray1 = new Ray(new Point(-10f, 3f, 0f), Constant.VEC_X);
             HitRecord? intersection1 = box1.rayIntersection(ray1);
-            Assert.True(intersection1 != null, "TestBoxesIntersectionTransformation failed - assert 1");
+            Assert.True(intersection1 != null, "TestBoxesIntersectionTransformation failed - assert 1/4");
             HitRecord hit1 = new HitRecord(
                                             new Point(-5f, 3f, 0.0f),
                                             new Normal(-0.2f, 0.0f, 0.0f),
@@ -247,10 +279,37 @@ namespace Trace.Test
                                             ray1
                                         );
             Assert.True(hit1.isClose(intersection1), intersection1.ToString());
+            Assert.True(box1.quickRayIntersection(ray1), "TestBoxesIntersectionTransformation failed - assert 2/4");
 
             Ray ray2 = new Ray(new Point(0f, 10f, 10f), -Constant.VEC_Z);
             HitRecord? intersection2 = box1.rayIntersection(ray2);
-            Assert.True(intersection2 == null, "TestBoxesIntersectionTransformation failed - assert 3/3");
+            Assert.True(intersection2 == null, "TestBoxesIntersectionTransformation failed - assert 3/4");
+            Assert.False(box1.quickRayIntersection(ray2), "TestBoxesIntersectionTransformation failed - assert 4/4");
+        }
+
+        [Fact]
+        public void TestQuickRayIntersection()
+        {
+            Box box = new Box();
+            Ray ray1 = new Ray(new Point(-5f, 0f, 0f), Constant.VEC_X);
+            Assert.True(box.quickRayIntersection(ray1), "TestQuickRayIntersection failed - assert 1/6");
+
+            Ray ray2 = new Ray(new Point(0f, 0f, 10f), -Constant.VEC_Z);
+            Assert.True(box.quickRayIntersection(ray2), "TestQuickRayIntersection failed - assert 2/6");
+
+            Ray ray3 = new Ray(new Point(-5f, 0f, 10f), Constant.VEC_X);
+            Assert.False(box.quickRayIntersection(ray3), "TestQuickRayIntersection failed - assert 3/6");
+
+            // Intersect for t<0
+            Ray ray4 = new Ray(new Point(0f, 3f, 0f), Constant.VEC_Y);
+            Assert.False(box.quickRayIntersection(ray4), "TestQuickRayIntersection failed - assert 4/6");
+
+            Box box1 = new Box(transformation: Transformation.Scaling(5.0f));
+            Ray ray5 = new Ray(new Point(-10f, 3f, 0f), Constant.VEC_X);
+            Assert.True(box.quickRayIntersection(ray2), "TestQuickRayIntersection failed - assert 5/6");
+
+            Ray ray6 = new Ray(new Point(0f, 10f, 10f), -Constant.VEC_Z);
+            Assert.False(box.quickRayIntersection(ray6), "TestQuickRayIntersection failed - assert 6/6");
         }
     }
 

@@ -173,6 +173,32 @@ namespace NM4PIG
                                             )
                                     );
                     break;
+                case 7:
+                    Material skyMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.White)), new UniformPigment(CC.SkyBlue));
+                    Material groundMaterial = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Red, CC.Yellow)), new UniformPigment(CC.Black));
+                    Material sphereMaterial = new Material(new DiffuseBRDF(new UniformPigment(CC.White)));
+
+                    world.addShape(new Sphere(Tsf.Scaling(500f), skyMaterial));
+                    world.addShape(new Sphere(Transformation.Translation(new Vec(0f, 0f, -0.75f)) * Transformation.Scaling(0.25f), sphereMaterial));
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), groundMaterial));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+                    world.addPointLight(new PointLight(new Point(4f, 44f, 44f), Constant.White));
+
+                    renderer = new PointLightRender(world);
+                    break;
                 default:
                     break;
             }
