@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using Xunit;
+using System;
 using System.Collections.Generic;
 
 namespace Trace.Test
@@ -139,6 +140,26 @@ namespace Trace.Test
             Assert.True(image.getPixel(1, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 8/9");
             Assert.True(image.getPixel(2, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 9/9");
 
+        }
+
+        [Fact]
+
+        public void TestPointLightRenderer2()
+        {
+            World world = new World();
+            Material planeMaterial = new Material(new DiffuseBRDF(new UniformPigment(new Color(1f, 2f, 3f))));
+            world.addShape(new Plane(Transformation.RotationX(MathF.PI / 4f), planeMaterial));
+            world.addPointLight(new PointLight(new Point(0f, 0f, 5f), new Color(1f, 10f, 100f)));
+
+            PointLightRender render = new PointLightRender(world);
+
+            Ray ray = new Ray(new Point(0f, 5f, 0f), -Constant.VEC_Y);
+
+            Color hitColor = render.computeRadiance(ray);
+            Color expected = new Color(MathF.Sqrt(2) / 2f / MathF.PI, 10f * MathF.Sqrt(2) / MathF.PI, 150f * MathF.Sqrt(2) / MathF.PI);
+            expected = expected + render.ambientColor;
+
+            Assert.True(hitColor.isClose(expected), "TestPointLightRenderer2 failed");
         }
     }
 

@@ -176,7 +176,7 @@ namespace Trace
             HitRecord? hitRecord = this.world.rayIntersection(ray);
             if (hitRecord == null) return this.backgroundColor;
 
-            Material hitMaterial = hitRecord.Value.shape?.material!;
+            Material hitMaterial = hitRecord?.shape?.material!;
 
             Color resultColor = this.ambientColor;
 
