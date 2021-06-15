@@ -398,11 +398,14 @@ namespace Trace.Test
             Assert.True(intersection1 != null, "TestCSGCubeSphere failed! - Assert 1/5");
             HitRecord hit1 = new HitRecord(
                 new Point(-1.0f, 0.0f, 0.0f),
-                new Normal(1.0f, 0.0f, 0.0f),
+                new Normal(-1.0f, 0.0f, 0.0f),
                 new Vec2D(0.125f, 0.5f),
                 4f,
                 r1
             );
+
+            // Console.WriteLine("hit : " + hit1.ToString());
+            // Console.WriteLine("intersection : " + intersection1.ToString());
 
             Assert.True(hit1.isClose(intersection1), "TestCSGCubeSphere failed! - Assert 2/5");
 
@@ -417,9 +420,8 @@ namespace Trace.Test
                 r2
             );
 
-            Console.WriteLine("hit : " + hit2.ToString());
-            Console.WriteLine("intersection : " + intersection2.ToString());
-            Console.WriteLine(MathF.Sqrt(2) / 2f / 0.5892556f);
+            
+            // Console.WriteLine(MathF.Sqrt(2) / 2f / 0.5892556f);
 
             Assert.True(hit2.isClose(intersection2), "TestCSGCubeSphere failed! - Assert 2/5");
 

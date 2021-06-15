@@ -456,5 +456,40 @@ namespace Trace.Test
             Assert.True(cone.isPointInside(new Point(0.25f, 0.25f, 0f)));
             Assert.False(cone.isPointInside(new Point(0.5f, 0.5f, 1f)));
         }
+
+        [Fact]
+        public void TestConeIntersectionList()
+        {
+            Cone cone = new Cone(r: 1f, h: 1f);
+
+            Ray ray = new Ray(origin: new Point(1.5f, 0f, 0.5f), dir: -Constant.VEC_X);
+
+            List<HitRecord?> hits = cone.rayIntersectionList(ray);
+            List<HitRecord?> expected = new List<HitRecord?>();
+
+            expected.Add(new HitRecord(
+                                        new Point(0.5f, 0f, 0.5f),
+                                        new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
+                                        new Vec2D(0f, 0.5f),
+                                        1f,
+                                        ray)
+                        );
+            expected.Add(new HitRecord(
+                                        new Point(-0.5f, 0f, 0.5f),
+                                        new Normal(MathF.Sqrt(2f) / 2f, 0f, -MathF.Sqrt(2f) / 2f),
+                                        new Vec2D(0.5f, 0.5f),
+                                        2f,
+                                        ray)
+                        );
+
+            expected.Sort();
+
+            Assert.True(expected.Count == hits.Count);
+            for (int i = 0; i < 2; i++)
+            {
+                Assert.True(hits[i]?.isClose((HitRecord)expected[i]), $"TestRayIntersectionList {i} failed");
+            }
+
+        }
     } // end of cone tests
 } // end of namespace
