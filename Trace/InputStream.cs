@@ -20,6 +20,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Globalization;
+using System.Collections.Generic;
+
 
 #nullable enable
 namespace Trace
@@ -246,6 +248,34 @@ namespace Trace
                 return this._parseKeywordOrIdentifierToken(ch, this.location);
             else
                 throw new GrammarError(this.location, $"Invalid character {ch}");
+        }
+
+        /// <summary>
+        /// Read a token from `input_file` and check that it is one of the keywords in keywords.
+        /// Return the keyword as a Class KeywordEnum object.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="keywords"></param>
+        /// <returns></returns>
+        public KeywordEnum expectKeywords(InputStream inputFile, List<KeywordEnum> keywords)
+        {
+            Token token = inputFile.readToken();
+
+            if (!(token is KeywordToken))
+            {
+                throw new GrammarError(token.sourceLoc, $"expected keyword insead of {token}");
+            }
+            KeywordToken keyToken = (KeywordToken)token;
+            if (!(dict.Contains(keyToken.keyword)))
+            {
+                throw new GrammarError(keyToken.sourceLoc, $"expected one of the keywords ... instead of {token}");
+            }
+        }
+
+
+        public void unreadToken(Token token)
+        {
+            this.savedToken = token;
         }
     }
 
