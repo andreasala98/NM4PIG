@@ -266,10 +266,51 @@ namespace Trace
                 throw new GrammarError(token.sourceLoc, $"expected keyword insead of {token}");
             }
             KeywordToken keyToken = (KeywordToken)token;
-            if (!(dict.Contains(keyToken.keyword)))
+            if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
             {
-                throw new GrammarError(keyToken.sourceLoc, $"expected one of the keywords ... instead of {token}");
+                throw new GrammarError(keyToken.sourceLoc, $"non so scrivere questo errore!");
             }
+
+            return keyToken.keyword;
+        }
+
+        /// <summary>
+        /// Read a token from inputFile and check that it matches symbol.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="symbol"></param>
+        public void expectSymbol(InputStream inputFile, string symbol)
+        {
+            Token token = inputFile.readToken();
+            if (!(token is SymbolToken) || ((SymbolToken)token).symbol != symbol)
+            {
+                throw new GrammarError(token.sourceLoc, $"got{token} insted of {symbol}");
+            }
+        }
+
+        /// <summary>
+        /// Read a token from inputFile and check that it is either a literal number or a variable in scene.
+        /// Return the number as a float.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="scene"></param>
+        /// <returns></returns>
+        public float expectNumber(InputStream inputFile, Scene scene)
+        {
+            Token token = inputFile.readToken();
+
+            if (token is LiteralNumberToken)
+                return ((LiteralNumberToken)token).value;
+            else if (token is IdentifierToken)
+            {
+                string variableName = ((IdentifierToken)token).id;
+                if (!(Scene.floatVariables.ContainsValue(variableName)))
+                    throw new GrammarError(token.sourceLoc, $"unknown variable {token}");
+
+                return Scene.floatVariables(variableName);
+            }
+
+            throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
         }
 
 
