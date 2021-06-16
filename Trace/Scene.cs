@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+#nullable enable
 namespace Trace
 {
     /// <summary>
@@ -28,10 +29,11 @@ namespace Trace
     public class Scene
     {
         public World world;
-
-        public Camera camera;
+        public Camera? camera = null;
         public Dictionary<string, Material> materials;
         public Dictionary<string, float> floatVariables;
+
+        public HashSet<string> overriddenVaribles;
 
 
 
