@@ -60,6 +60,8 @@ namespace Trace.Test
 
             byte[] byteArray = Encoding.ASCII.GetBytes(test);
             MemoryStream stream = new MemoryStream(byteArray);
+
+            Scene scene = Scene.parseScene(stream);
         }
     }
 }
