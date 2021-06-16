@@ -142,5 +142,33 @@ namespace Trace.Test
             AssertIsSymbol(inputStream.readToken(), ")");
         }
 
+
+        [Fact]
+        public void TestLexer2() 
+        {
+            string test = @"
+            #Comment: skip this.
+            float clock(150)
+            # I love to write comments
+            string hey          (""Hello World"")
+            ";
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(test);
+            MemoryStream stream = new MemoryStream(byteArray);
+            InputStream inputStream = new InputStream(stream);
+
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.Float);
+            AssertIsIdentifier(inputStream.readToken(), "clock");
+            AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsNumber(inputStream.readToken(), 150.0f);
+            AssertIsSymbol(inputStream.readToken(), ")");
+            AssertIsKeyword(inputStream.readToken(), KeywordEnum.String);
+            AssertIsIdentifier(inputStream.readToken(), "hey");
+             AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsString(inputStream.readToken(), "Hello World");
+             AssertIsSymbol(inputStream.readToken(), ")");
+
+        }
+
     }
 }

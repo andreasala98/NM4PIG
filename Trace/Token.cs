@@ -57,7 +57,7 @@ namespace Trace
 
         New = 1, Material, Plane, Sphere, Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
-        Camera, Orthogonal, Perspective, Float
+        Camera, Orthogonal, Perspective, Float, String
 
     }
 
@@ -90,7 +90,8 @@ namespace Trace
             {  "camera" , KeywordEnum.Camera},
             {  "orthogonal" , KeywordEnum.Orthogonal},
             {  "perspective" , KeywordEnum.Perspective},
-            {  "float" , KeywordEnum.Float}
+            {  "float" , KeywordEnum.Float},
+            {   "string", KeywordEnum.String}
         };
 
 
