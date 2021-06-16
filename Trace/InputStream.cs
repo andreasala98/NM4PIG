@@ -271,6 +271,12 @@ namespace Trace
                 throw new GrammarError(keyToken.sourceLoc, $"expected one of the keywords ... instead of {token}");
             }
         }
+
+
+        public void unreadToken(Token token)
+        {
+            this.savedToken = token;
+        }
     }
 
 
