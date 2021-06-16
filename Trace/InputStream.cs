@@ -271,7 +271,7 @@ namespace Trace
             KeywordToken keyToken = (KeywordToken)token;
             if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
             {
-                throw new GrammarError(keyToken.sourceLoc, $"non so scrivere questo errore!");
+                throw new GrammarError(keyToken.sourceLoc, "unexpected kwyword");
             }
 
             return keyToken.keyword;
