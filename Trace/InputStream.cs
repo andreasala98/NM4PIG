@@ -249,6 +249,14 @@ namespace Trace
             else
                 throw new GrammarError(this.location, $"Invalid character {ch}");
         }
+
+        /// <summary>
+        /// Make as if `token` were never read from `input_file`
+        /// </summary>
+        public void unreadToken(Token token)
+        {
+            this.savedToken = token;
+        }
     }
 
 
