@@ -316,14 +316,25 @@ namespace Trace
             throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
         }
 
-        public string expectString(){
-
-            return "ciao";
+        /// <summary>
+        /// Read a token from inputFile and check that it is a literal string.
+        /// Return the value of the string (a string).
+        /// </summary>
+        /// <returns></returns>
+        public string expectString()
+        {
+            Token token = this.readToken();
+            if (!(token is StringToken))
+                throw new GrammarError(token.sourceLoc, $"got {token} instead of a string");
+            return ((StringToken)token).str;
         }
 
-        public string expectIdentifier() {
-
-            return "ciao2";
+        public string expectIdentifier() 
+        {
+            Token token = this.readToken();
+            if (!(token is IdentifierToken))
+                throw new GrammarError(token.sourceLoc, $"got {token}, instead of an Identifier");
+            return ((IdentifierToken)token).id;
         }
 
         public void unreadToken(Token token)
