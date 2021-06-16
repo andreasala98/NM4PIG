@@ -19,6 +19,7 @@ IN THE SOFTWARE.
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 #nullable enable
 namespace Trace
@@ -28,44 +29,44 @@ namespace Trace
     /// </summary>
     public class Scene
     {
-        public World world;
+        public World world = new World();
         public Camera? camera = null;
-        public Dictionary<string, Material> materials;
-        public Dictionary<string, float> floatVariables;
-        public Array overriddenVariables;
+        public Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        public Dictionary<string, float> floatVariables = new Dictionary<string, float>();
+        public string[] overriddenVariables = new string[]{};
 
 
 
 
-        public Vec parseVector(InputStream inputFile)
+        public static Vec parseVector(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("[");
-            float x = inputFile.expectNumber(this);
+            float x = inputFile.expectNumber(scene);
             inputFile.expectSymbol(",");
-            float y = inputFile.expectNumber(this);
+            float y = inputFile.expectNumber(scene);
             inputFile.expectSymbol(",");
-            float z = inputFile.expectNumber(this);
+            float z = inputFile.expectNumber(scene);
             inputFile.expectSymbol("]");
 
             return new Vec(x,y,z);
         }
 
 
-        public Color parseColor(InputStream inputFile)
+        public static Color parseColor(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("<");
-            float x = inputFile.expectNumber(this);
+            float r = inputFile.expectNumber(scene);
             inputFile.expectSymbol(",");
-            float y = inputFile.expectNumber(this);
+            float g = inputFile.expectNumber(scene);
             inputFile.expectSymbol(",");
-            float z = inputFile.expectNumber(this);
+            float b = inputFile.expectNumber(scene);
             inputFile.expectSymbol(">");
 
-            return new Color(x, y, z);
+            return new Color(r,g,b);
         }
 
 
-        public IPigment parsePigment(InputStream inputFile){
+        public static IPigment parsePigment(InputStream inputFile, Scene scene){
             KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Uniform, KeywordEnum.Checkered, KeywordEnum.Image });
             inputFile.expectSymbol("(");
             IPigment result;
@@ -73,17 +74,17 @@ namespace Trace
 
             if (key == KeywordEnum.Uniform)
             {
-                Color color = parseColor(inputFile);
+                Color color = parseColor(inputFile, scene);
                 result = new UniformPigment(color: color);
             }
             else if (key == KeywordEnum.Checkered)
             {
-                Color col1 = parseColor(inputFile);
+                Color col1 = parseColor(inputFile, scene);
                 inputFile.expectSymbol(",");
-                Color col2 = parseColor(inputFile);
+                Color col2 = parseColor(inputFile, scene);
                 inputFile.expectSymbol(",");
-                // optiona parameter?
-                int steps = (int)inputFile.expectNumber(this);
+                // optional parameter?
+                int steps = (int)inputFile.expectNumber(scene);
                 result = new CheckeredPigment(col1, col2, steps);
 
             }
@@ -99,7 +100,7 @@ namespace Trace
             }
             else
             {
-                throw new ParsingError("This line should be unreachable");
+                throw new GrammarError(inputFile.location, "This line should be unreachable");
             }
 
             inputFile.expectSymbol(")");
@@ -109,12 +110,12 @@ namespace Trace
         }
 
 
-        public BRDF parseBRDF(InputStream inputFile)
+        public static BRDF parseBRDF(InputStream inputFile, Scene scene)
         {
             BRDF result;
             KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() {KeywordEnum.Diffuse, KeywordEnum.Specular});
             inputFile.expectSymbol("(");
-            IPigment pigment = parsePigment(inputFile);
+            IPigment pigment = parsePigment(inputFile, scene);
             inputFile.expectSymbol(")");
 
 
@@ -122,7 +123,7 @@ namespace Trace
                 result = new DiffuseBRDF(pigment);
             else if (key == KeywordEnum.Specular)
                 result = new DiffuseBRDF(pigment);
-            else throw new ParsingError("This line should be unreachable");
+            else throw new GrammarError(inputFile.location, "This line should be unreachable");
 
 
             return result;
@@ -130,21 +131,21 @@ namespace Trace
         }
 
 
-        public Tuple<string, Material> parseMaterial(InputStream inputFile)
+        public static Tuple<string, Material> parseMaterial(InputStream inputFile, Scene scene)
         {
             string name = inputFile.expectIdentifier();
 
             inputFile.expectSymbol("(");
-            BRDF brdf = parseBRDF(inputFile);
+            BRDF brdf = parseBRDF(inputFile, scene);
             inputFile.expectSymbol(",");
-            IPigment emRad = parsePigment(inputFile);
+            IPigment emRad = parsePigment(inputFile, scene);
             inputFile.expectSymbol(")");
 
             return new Tuple<string, Material>(name, new Material(brdf, emRad));
         }
 
 
-        public Transformation parseTransformation(InputStream inputFile){
+        public static Transformation parseTransformation(InputStream inputFile, Scene scene){
 
             Transformation result = new Transformation(1);
             List<KeywordEnum> keyList = new List<KeywordEnum>() { KeywordEnum.Identity, KeywordEnum.Translation, KeywordEnum.Scaling,
@@ -159,31 +160,31 @@ namespace Trace
                 else if (key == KeywordEnum.Translation)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.Translation(parseVector(inputFile));
+                    result = result * Transformation.Translation(parseVector(inputFile, scene));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.RotationX)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationX(inputFile.expectNumber(this));
+                    result = result * Transformation.RotationX(inputFile.expectNumber(scene));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.RotationY)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationY(inputFile.expectNumber(this));
+                    result = result * Transformation.RotationY(inputFile.expectNumber(scene));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.RotationZ)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationZ(inputFile.expectNumber(this));
+                    result = result * Transformation.RotationZ(inputFile.expectNumber(scene));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.Scaling)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.Scaling(parseVector(inputFile));
+                    result = result * Transformation.Scaling(parseVector(inputFile, scene));
                     inputFile.expectSymbol(")");
                 }
 
@@ -201,45 +202,45 @@ namespace Trace
             return result;
         } //parseTranformation
 
-        public Sphere parseSphere(InputStream inputFile) {
+        public static Sphere parseSphere(InputStream inputFile, Scene scene) {
 
             inputFile.expectSymbol("(");
             string matName = inputFile.expectIdentifier();
 
-            if (!this.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+            if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
 
             inputFile.expectSymbol(",");
-            Transformation tr = parseTransformation(inputFile);
+            Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(")");
 
-            return new Sphere(tr, this.materials[matName]);
+            return new Sphere(tr, scene.materials[matName]);
         }
 
 
-        public Plane parsePlane(InputStream inputFile) {
+        public static Plane parsePlane(InputStream inputFile, Scene scene) {
 
             inputFile.expectSymbol("(");
             string matName = inputFile.expectIdentifier();
 
-            if (!this.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+            if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
 
             inputFile.expectSymbol(",");
-            Transformation tr = parseTransformation(inputFile);
+            Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(")");
 
-            return new Plane(tr, this.materials[matName]);
+            return new Plane(tr, scene.materials[matName]);
         }
 
-        public Camera parseCamera(InputStream inputFile) {
+        public static Camera parseCamera(InputStream inputFile, Scene scene) {
 
             inputFile.expectSymbol("(");
             KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Perspective, KeywordEnum.Orthogonal});
             inputFile.expectSymbol(",");
-            Transformation tr = parseTransformation(inputFile);
+            Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(",");
-            float aspectRatio = inputFile.expectNumber(this);
+            float aspectRatio = inputFile.expectNumber(scene);
             inputFile.expectSymbol(",");
-            float distance = inputFile.expectNumber(this);
+            float distance = inputFile.expectNumber(scene);
             inputFile.expectSymbol(")");
 
             Camera result;
@@ -253,11 +254,62 @@ namespace Trace
         }
 
 
-        public Scene parseScene(InputStream inputFile, Dictionary<string, float> vars)
+        public static Scene parseScene(InputStream inputFile, Dictionary<string, float> vars)
         {
             Scene scene = new Scene();
             scene.floatVariables = vars;
-            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables);
+            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables,0);
+
+            while (true)
+            {
+                Token tok = inputFile.readToken();
+                string varName = "";
+
+                if (tok is StopToken) break;
+                if (tok is not KeywordToken) throw new GrammarError(inputFile.location, $"Expected keyword, got {tok} instead");
+
+                if (((KeywordToken)tok).keyword == KeywordEnum.Float)
+                {
+                    varName = inputFile.expectIdentifier();
+                    SourceLocation varLoc = inputFile.location;
+                    inputFile.expectSymbol("(");
+                    float varValue = inputFile.expectNumber(scene);
+                    inputFile.expectSymbol(")");
+
+                    if (scene.floatVariables.ContainsKey(varName) && !scene.overriddenVariables.Contains(varName))
+                    {
+                        throw new GrammarError(inputFile.location, $"You cannot redefine variable {varName}");
+                    }
+                    if (scene.overriddenVariables.Contains(varName))
+                    {
+                        scene.floatVariables[varName] = varValue;
+                    }
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Sphere)
+                {
+                    scene.world.addShape(parseSphere(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Plane)
+                {
+                    scene.world.addShape(parsePlane(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Camera)
+                {
+                    if (scene.camera != null)
+                    {
+                        throw new GrammarError(inputFile.location, "Youn cannot define more than one camera! :'(");
+                    }
+
+                    scene.camera = parseCamera(inputFile, scene);
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Material)
+                {
+                    Tuple<string, Material> t = parseMaterial(inputFile, scene);
+                    scene.materials[t.Item1] = t.Item2;
+                }
+            }
+
+            return scene;
         }
 
     }
