@@ -31,11 +31,11 @@ namespace Trace.Test
         public void TestParser()
         {
             string test = @" 
-                float cloack(150)
+                float clock(150)
  
                 material sky_material(
                  diffuse(uniform(<0, 0, 0>)),
-                 uniform(0.7, 0.5, 1>)
+                 uniform(<0.7, 0.5, 1>)
                 ) 
                 
                 # here is a comment
@@ -51,17 +51,22 @@ namespace Trace.Test
                             uniform(<0, 0, 0>)
                                         )
     
-                plane (sky_material, translation([0, 0, 100]) * rotation_y(clock))
+                plane (sky_material, translation([0, 0, 100]) * rotationY(clock))
                 plane (ground_material, identity)
     
                 sphere(sphere_material, translation([0, 0, 1]))
     
-                camera(perspective, rotation_z(30) * translation([-4, 0, 1]), 1.0, 2.0)";
+                camera(perspective, rotationZ(30) * translation([-4, 0, 1]), 1.0, 2.0)";
 
             byte[] byteArray = Encoding.ASCII.GetBytes(test);
             MemoryStream stream = new MemoryStream(byteArray);
+            InputStream inputStream = new InputStream(stream);
+            Scene scene = Scene.parseScene(inputStream);
 
-            Scene scene = Scene.parseScene(stream);
+            Assert.True( scene.floatVariables.Count == 1, "TestParser failed! Assert 1");
+            Assert.True( scene.floatVariables.ContainsKey("clock"), "TestParser failed! Assert 2");
+            Assert.True( scene.floatVariables["clock"]==150.0f, "TestParser failed! Assert 3");
+
         }
     }
 }

@@ -254,10 +254,10 @@ namespace Trace
         }
 
 
-        public static Scene parseScene(InputStream inputFile, Dictionary<string, float> vars)
+        public static Scene parseScene(InputStream inputFile)
         {
             Scene scene = new Scene();
-            scene.floatVariables = vars;
+            scene.floatVariables = new Dictionary<string, float>();
             scene.floatVariables.Keys.CopyTo(scene.overriddenVariables,0);
 
             while (true)
@@ -282,7 +282,8 @@ namespace Trace
                     }
                     if (scene.overriddenVariables.Contains(varName))
                     {
-                        scene.floatVariables[varName] = varValue;
+                        scene.floatVariables.Add(varName, varValue);
+                        //scene.floatVariables[varName] = varValue;
                     }
                 }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Sphere)
