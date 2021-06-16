@@ -32,8 +32,7 @@ namespace Trace
         public Camera? camera = null;
         public Dictionary<string, Material> materials;
         public Dictionary<string, float> floatVariables;
-
-        public HashSet<string> overriddenVaribles;
+        public Array overriddenVariables;
 
 
 
@@ -258,7 +257,7 @@ namespace Trace
         {
             Scene scene = new Scene();
             scene.floatVariables = vars;
-            scene.over
+            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables);
         }
 
     }
