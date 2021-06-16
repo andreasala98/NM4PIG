@@ -44,5 +44,62 @@ namespace Trace
             if ()
         }
 
+
+        public Vec parseVector(InputStream inputFile)
+        {
+            inputFile.expectSymbol("[");
+            float x = inputFile.expectNumber();
+            inputFile.expectSymbol(",");
+            float y = inputFile.expectNumber();
+            inputFile.expectSymbol(",");
+            float z = inputFile.expectNumber();
+            inputFile.expectSymbol("]");
+
+            return new Vec(x,y,z);
+        }
+
+
+        public Color parseColor(InputStream inputFile)
+        {
+            inputFile.expectSymbol("<");
+            float x = inputFile.expectNumber();
+            inputFile.expectSymbol(",");
+            float y = inputFile.expectNumber();
+            inputFile.expectSymbol(",");
+            float z = inputFile.expectNumber();
+            inputFile.expectSymbol(">");
+
+            return new Color(x, y, z);
+        }
+
+
+        public IPigment parsePigment(InputStream inputFile){
+            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Uniform, KeywordEnum.Checkered, KeywordEnum.Image });
+            inputFile.expectSymbol("(");
+            if (key == KeywordEnum.Uniform)
+            {
+                Color color = parseColor(inputFile);
+                IPigment result = new UniformPigment(color: color);
+            }
+            else if (key == KeywordEnum.Checkered)
+            {
+                Color col1 = parseColor(inputFile);
+                inputFile.expectSymbol(",");
+                Color col2 = parseColor(inputFile);
+                inputFile.expectSymbol(",");
+                // optiona parameter?
+                int steps = (int)inputFile.expectNumber();
+                IPigment result = new CheckeredPigment(col1, col2, steps);
+
+            }
+            else if (key == KeywordEnum.Image)
+            {
+                string fileName = inputFile.expectString();
+                using (FileStream imageStream = FileStream.OpenRead())
+                {}
+            }
+
+        }
+
     }
 }
