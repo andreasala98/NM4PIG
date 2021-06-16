@@ -20,8 +20,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Globalization;
-using System.Collections.Generic;
-
 
 #nullable enable
 namespace Trace
@@ -35,32 +33,14 @@ namespace Trace
     public class InputStream
     {
 
-        /// <summary>
-        /// stream we read from
-        /// </summary>
         public Stream stream;
-        /// <summary>
-        /// Current location of the cursor
-        /// </summary>
         public SourceLocation location;
-        /// <summary>
-        /// Char read, so that is possible to unread the char
-        /// </summary>
         public char savedChar;
-        /// <summary>
-        /// Old position, so it is possible to unread the char
-        /// </summary>
         public SourceLocation savedLocation;
-        /// <summary>
-        /// number of spaces equivalent to tab, default is 4
-        /// </summary>
         public int tabulations;
-        /// <summary>
-        /// Token we just read
-        /// </summary>
         public Token? savedToken;
 
-        public InputStream(Stream stream, string fileName = "", int tabulations = 4)
+        public InputStream(Stream stream, char fileName = '\0', int tabulations = 4)
         {
             this.stream = stream;
             this.location = new SourceLocation(fileName: fileName, line: 1, col: 1);
@@ -104,7 +84,7 @@ namespace Trace
                 else
                     ch = Convert.ToChar(byteRead);
             }
-            this.savedLocation = this.location.shallowCopy();
+            this.savedLocation = this.location;
             this._updatePosition(ch);
             return ch;
         }
@@ -158,7 +138,7 @@ namespace Trace
                 token += ch;
             }
 
-            return new StringToken(token, tokenLocation);
+            return new StringToken(tokenLocation, token);
         }
 
         private LiteralNumberToken _parseFloatToken(char firstChar, SourceLocation tokenLocation)
@@ -176,148 +156,76 @@ namespace Trace
 
                 token += ch;
             }
-
-            float value;
             try
             {
-                value = float.Parse(token, CultureInfo.InvariantCulture);
+                float value = float.Parse(token, CultureInfo.InvariantCulture);
             }
-            catch (FormatException)
+            catch (ValueError)
             {
-                throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
+                throw new GrammarError(this.tokenLocation, $"'{token}' is an invalid floating-point number");
             }
-            return new LiteralNumberToken(tokenLocation, value);
+
+
+            return new LiteralNumberToken(this.tokenLocation, value);
         }
 
-        private Token _parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
+
+
+        public Token parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
         {
-            string token = firstChar.ToString();
-            while (true)
+            char token = firstChar;
+            while(true)
             {
                 char ch = this.readChar();
 
-                if (!(Char.IsLetterOrDigit(ch) || ch == '_'))
+                if (!(ch.isLetterOrDigit() || ch == '_'))
                 {
-                    this.unreadChar(ch);
-                    break;
+                    this.unReadChar(ch);
                 }
 
                 token += ch;
-            }
 
-            try
-            {
-                return new KeywordToken(tokenLocation, KeywordToken.dict[token]);
-            }
-            catch (System.Exception)
-            {
-                return new IdentifierToken(tokenLocation, token);
-            }
+                try
+                {
+                    return new KeywordToken(tokenLocation, KEYWORDS[token]);
+                }
+                catch (System.Exception)
+                {
+                    return new IdentifierToken(tokenLocation, token);
+                }
 
-
+            }
 
         }
 
-        /// <summary>
-        /// Read and interpetate the token
-        /// </summary>
-        public Token readToken()
-        {
-            if (this.savedToken != null)
-            {
-                Token result = this.savedToken;
-                this.savedToken = null;
-                return result;
-            }
+        // public Token readToken()
+        // {
+        //     if (this.savedToken != null)
+        //     {
+        //         Token result = this.savedToken;
+        //         this.savedToken = null;
+        //         return result;
+        //     }
 
-            this.skipWhitespacesAndComments();
+        //     this.skipWhitespaces();
 
-            char ch = this.readChar();
+        //     char ch = this.readChar();
 
-            if (ch == '\0') return new StopToken(this.location);
+        //     if (ch == '') return new StopToken(this.location);
 
-            char[] SYMBOLS = { '(', ')', '<', '>', '[', ']', ',', '*' };
-            char[] OPERATIONS = { '+', '-', '.' };
-            if (SYMBOLS.Contains(ch))
-                return new SymbolToken(this.location, ch.ToString());
-            else if (ch == '"')
-                return this._parseStringToken(this.location);
-            else if (Char.IsDigit(ch) || OPERATIONS.Contains(ch))
-                return this._parseFloatToken(ch, this.location);
-            else if (Char.IsLetter(ch) || ch == '_')
-                return this._parseKeywordOrIdentifierToken(ch, this.location);
-            else
-                throw new GrammarError(this.location, $"Invalid character {ch}");
-        }
+        //     if (ch == '#')
+        //     {
+        //         while(this.readChar() != '\r' && this.readChar() != '\n' && this.readChar() != '\0') 
+        //         {
+        //             continue;
+        //         }
 
-        /// <summary>
-        /// Read a token from `input_file` and check that it is one of the keywords in keywords.
-        /// Return the keyword as a Class KeywordEnum object.
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="keywords"></param>
-        /// <returns></returns>
-        public KeywordEnum expectKeywords(InputStream inputFile, List<KeywordEnum> keywords)
-        {
-            Token token = inputFile.readToken();
+        //         this.skipWhitespaces();
+        //     }
 
-            if (!(token is KeywordToken))
-            {
-                throw new GrammarError(token.sourceLoc, $"expected keyword insead of {token}");
-            }
-            KeywordToken keyToken = (KeywordToken)token;
-            if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
-            {
-                throw new GrammarError(keyToken.sourceLoc, $"non so scrivere questo errore!");
-            }
+        //     else    this.unreadChar(ch);
 
-            return keyToken.keyword;
-        }
-
-        /// <summary>
-        /// Read a token from inputFile and check that it matches symbol.
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="symbol"></param>
-        public void expectSymbol(InputStream inputFile, string symbol)
-        {
-            Token token = inputFile.readToken();
-            if (!(token is SymbolToken) || ((SymbolToken)token).symbol != symbol)
-            {
-                throw new GrammarError(token.sourceLoc, $"got{token} insted of {symbol}");
-            }
-        }
-
-        /// <summary>
-        /// Read a token from inputFile and check that it is either a literal number or a variable in scene.
-        /// Return the number as a float.
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="scene"></param>
-        /// <returns></returns>
-        public float expectNumber(InputStream inputFile, Scene scene)
-        {
-            Token token = inputFile.readToken();
-
-            if (token is LiteralNumberToken)
-                return ((LiteralNumberToken)token).value;
-            else if (token is IdentifierToken)
-            {
-                string variableName = ((IdentifierToken)token).id;
-                if (!(Scene.floatVariables.ContainsValue(variableName)))
-                    throw new GrammarError(token.sourceLoc, $"unknown variable {token}");
-
-                return Scene.floatVariables(variableName);
-            }
-
-            throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
-        }
-
-
-        public void unreadToken(Token token)
-        {
-            this.savedToken = token;
-        }
+        // }
     }
 
 

@@ -140,7 +140,24 @@ namespace Trace
 
 
         public Transformation parseTransformation(InputStream inputFile){
-            
+
+            Transformation result = new Transformation(1);
+            List<KeywordEnum> keyList = new List<KeywordEnum>() { KeywordEnum.Identity, KeywordEnum.Translation, KeywordEnum.Scaling,
+                                                                  KeywordEnum.RotationX, KeywordEnum.RotationY, KeywordEnum.RotationZ };
+
+            // now we look for transformation until there is no more *
+            while (true)
+            {
+                
+                KeywordEnum key = inputFile.expectKeywords(inputFile, keyList);
+
+                if (key == KeywordEnum.Identity) continue;
+                else if (key == KeywordEnum.Translation)
+                {
+                    inputFile.expectSymbol();
+                }
+            }
+
         }
 
     }
