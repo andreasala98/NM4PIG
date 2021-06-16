@@ -41,8 +41,8 @@ namespace NM4PIG
         public static char render = 'r';
 
         //Convert
-        public static float factor = 0.18f;
-        public static float gamma = 1.0f;
+        public static float factor = 0.9f; //0.18f;
+        public static float gamma = 2.0f; //1.0f;
 
         //General
         public static string pfmFile = "demoImage.pfm";

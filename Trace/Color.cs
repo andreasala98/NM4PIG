@@ -122,5 +122,10 @@ namespace Trace
         /// <returns> A <see cref="float"/> represeting luminosity of the pixel </returns>
         public float Luminosity()
             => (float)(Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
+
+        public override string ToString()
+        {
+            return $"Red: {this.r}, Green: {this.g}, Blue: {this.b}";
+        }
     }
 }

@@ -58,6 +58,8 @@ namespace Trace
         public abstract HitRecord? rayIntersection(Ray ray);
         public abstract List<HitRecord?> rayIntersectionList(Ray ray);
 
+        public abstract bool quickRayIntersection(Ray ray);
+
         /// <summary>
         /// Computes whether a point is inside the shape. It must be redefinde in derived classes.
         /// </summary>
@@ -225,7 +227,32 @@ namespace Trace
             a = this.transformation.getInverse() * a;
             return a.x * a.x + a.y * a.y + a.z * a.z <= 1;
         }
-    } // end of sphere
+
+        /// <summary>
+        /// Method that checks if a Ray intersects the sphere
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            Vec originVec = invRay.origin.toVec();
+            float a = invRay.dir.getSquaredNorm();
+            float b = 2.0f * originVec * invRay.dir;
+            float c = originVec.getSquaredNorm() - 1.0f;
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+                return false;
+
+            float sqrtDelta = (float)Math.Sqrt((float)delta);
+            float tmin = (-b - sqrtDelta) / (2.0f * a);
+            float tmax = (-b + sqrtDelta) / (2.0f * a);
+
+            return (tmin > invRay.tmin && tmin < invRay.tmax) || (tmax > invRay.tmin && tmax < invRay.tmax);
+        }
+    }
+
     // ################################
 
     /// <summary>
@@ -332,7 +359,22 @@ namespace Trace
             else return false;
         }
 
-    } // end of plane
+        /// <summary>
+        /// Method that checks if a Ray intersects the plane
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            if (invRay.dir.z == 0) return false;
+
+            float tHit = -invRay.origin.z / invRay.dir.z;
+            return (tHit > invRay.tmin && tHit < invRay.tmax);
+        }
+
+    }
 
     /// <summary>
     /// A 3D axis-aligned box (AAB)
@@ -440,6 +482,33 @@ namespace Trace
             return new Vec2D(u, v);
         }
 
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            float t0 = 0, t1 = ray.tmax;
+            for (int i = 0; i < 3; i++)
+            {
+                float invRayDir = 1 / invRay.dir.ToList()[i];
+                float tNear = (min.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+                float tFar = (max.ToList()[i] - invRay.origin.ToList()[i]) * invRayDir;
+
+                if (tNear > tFar)
+                {
+                    float tmp = tNear;
+                    tNear = tFar;
+                    tFar = tmp;
+                }
+
+                t0 = tNear > t0 ? tNear : t0;
+                t1 = tFar < t1 ? tFar : t1;
+                if (t0 > t1) return false;
+            }
+
+            if (t0 > 0f || t1 < 0f)
+                return true;
+
+            return false;
+        }
 
         /// <summary>
         /// Intersect a <see cref="Ray"/> object with the box and returns a 
@@ -501,6 +570,11 @@ namespace Trace
             return hits;
         }
 
+        /// <summary>
+        /// Method that checks if a Ray intersects the box
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
 
     } // end of box
 
@@ -526,62 +600,62 @@ namespace Trace
             this.transformation = translation * rotation * scaling;
         }
 
-        // public override bool quickRayIntersection(Ray ray)
-        // {
-        //     Ray invRay = ray.Transform(this.transformation.getInverse());
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
 
-        //     // Check if intersect lateral face
-        //     float a = invRay.dir.x * invRay.dir.x + invRay.dir.y * invRay.dir.y;
-        //     float b = invRay.dir.x * invRay.origin.x + invRay.dir.y * invRay.origin.y;
-        //     float c = invRay.origin.x * invRay.origin.x + invRay.origin.y * invRay.origin.y - 1;
+            // Check if intersect lateral face
+            float a = invRay.dir.x * invRay.dir.x + invRay.dir.y * invRay.dir.y;
+            float b = invRay.dir.x * invRay.origin.x + invRay.dir.y * invRay.origin.y;
+            float c = invRay.origin.x * invRay.origin.x + invRay.origin.y * invRay.origin.y - 1;
 
-        //     float delta = b * b - a * c;
-        //     float? t1 = null, t2 = null;
+            float delta = b * b - a * c;
+            float? t1 = null, t2 = null;
 
-        //     if (delta > 0f)        // two solutions
-        //     {
-        //         t1 = (-b - MathF.Sqrt(delta)) / a;
-        //         t2 = (-b + MathF.Sqrt(delta)) / a;
+            if (delta > 0f)        // two solutions
+            {
+                t1 = (-b - MathF.Sqrt(delta)) / a;
+                t2 = (-b + MathF.Sqrt(delta)) / a;
 
-        //         if (t1 > 0f)
-        //         {
-        //             Point hitPoint = invRay.at(t1.Value);
-        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
-        //                 return true;
-        //         }
+                if (t1 > 0f)
+                {
+                    Point hitPoint = invRay.at(t1.Value);
+                    if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+                        return true;
+                }
 
-        //         if (t2 > 0)
-        //         {
-        //             Point hitPoint = invRay.at(t2.Value);
-        //             if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
-        //                 return true;
-        //         }
+                if (t2 > 0)
+                {
+                    Point hitPoint = invRay.at(t2.Value);
+                    if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
+                        return true;
+                }
 
 
-        //     }
+            }
 
-        //     // Check if intersect bottom face
-        //     Plane planeBottom = new Plane(transformation: Transformation.Translation(0f, 0f, -0.5f));
-        //     HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
-        //     if (hitBottom.HasValue)
-        //     {
-        //         Point pointInt = hitBottom.Value.worldPoint;
-        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
-        //             return true;
-        //     }
+            // Check if intersect bottom face
+            Plane planeBottom = new Plane(transformation: Transformation.Translation(0f, 0f, -0.5f));
+            HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+            if (hitBottom.HasValue)
+            {
+                Point pointInt = hitBottom.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+                    return true;
+            }
 
-        //     // Check if intersect top face
-        //     Plane planeTop = new Plane(transformation: Transformation.Translation(0f, 0f, 0.5f));
-        //     HitRecord? hitTop = planeTop.rayIntersection(invRay);
-        //     if (hitTop.HasValue)
-        //     {
-        //         Point pointInt = hitTop.Value.worldPoint;
-        //         if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
-        //             return true;
-        //     }
+            // Check if intersect top face
+            Plane planeTop = new Plane(transformation: Transformation.Translation(0f, 0f, 0.5f));
+            HitRecord? hitTop = planeTop.rayIntersection(invRay);
+            if (hitTop.HasValue)
+            {
+                Point pointInt = hitTop.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < 1f)
+                    return true;
+            }
 
-        //     return false;
-        // }
+            return false;
+        }
 
         public override HitRecord? rayIntersection(Ray ray)
         {
@@ -819,6 +893,62 @@ namespace Trace
             if (point.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
+        }
+
+        public override bool quickRayIntersection(Ray ray)
+        {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            Plane planeBottom = new Plane();
+            HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
+
+            if (hitBottom.HasValue)
+            {
+                Point pointInt = hitBottom.Value.worldPoint;
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
+                    return true;
+            }
+
+            float dx = invRay.dir.x;
+            float dy = invRay.dir.y;
+            float dz = invRay.dir.z;
+
+            float ox = invRay.origin.x;
+            float oy = invRay.origin.y;
+            float oz = invRay.origin.z;
+
+            float hr = MathF.Pow((this.height / this.radius), 2f);
+
+            float a = hr * (MathF.Pow(dx, 2f) + MathF.Pow(dy, 2f)) - MathF.Pow(dz, 2f);
+            float b = 2f * (hr * (ox * dx + oy * dy) - dz * oz + this.height * dz);
+            float c = hr * (MathF.Pow(ox, 2f) + MathF.Pow(oy, 2f)) + 2f * oz * this.height - MathF.Pow(oz, 2f) - MathF.Pow(this.height, 2f);
+
+            float delta = b * b - 4.0f * a * c;
+            if (delta <= 0.0f)
+            {
+                return false;
+            }
+
+            float sqrtDelta = MathF.Sqrt(delta);
+            float tmin;
+            float tmax;
+            // needed if a ray has the same slope of the cone! (---> a would be 0)
+            if (a == 0)
+            {
+                tmin = -c / b;
+                tmax = Single.PositiveInfinity;
+            }
+            else
+            {
+                tmin = (-b - sqrtDelta) / (2.0f * a);
+                tmax = (-b + sqrtDelta) / (2.0f * a);
+            }
+
+            if (tmin > invRay.tmin && tmin < invRay.tmax)
+                return true;
+
+            return false;
+
         }
         public override HitRecord? rayIntersection(Ray ray)
         {

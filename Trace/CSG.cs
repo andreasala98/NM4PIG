@@ -74,6 +74,18 @@ namespace Trace
         }
 
         /// <summary>
+        /// This method checks if a Ray intersects with the CSG Union shape.
+        /// </summary>
+        public override bool quickRayIntersection(Ray ray)
+        {
+            HitRecord? a = this.firstShape.rayIntersection(ray);
+            HitRecord? b = this.secondShape.rayIntersection(ray);
+
+            if (a == null && b == null) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
         /// The HitRecord are than order by the t datamember, in crescent order.
         ///It's overriden from the abstract Shape class. 
@@ -130,6 +142,7 @@ namespace Trace
         {
             return firstShape.isPointInside(a) || secondShape.isPointInside(a);
         }
+
     }
 
     /// <summary>
@@ -176,46 +189,6 @@ namespace Trace
             return intersections[0];
         }
 
-        /*
-        public override HitRecord? rayIntersection(Ray ray)
-        {
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
-            if (a.Count == 0)
-                return null;
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
-            List<HitRecord?> legalHits = new List<HitRecord?>();
-
-            for (int i = 0; i < a.Count; i++)
-            {
-                if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
-                {
-                    legalHits.Add(a[i]);
-                }
-            }
-
-            if (b.Count != 0)
-            {
-                for (int i = 0; i < b.Count; i++)
-                {
-                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
-                    {
-                        legalHits.Add(b[i]);
-                    }
-                }
-            }
-
-            if (legalHits.Count == 0)
-                return null;
-
-            int iHit = 0;
-            for (int i = 1; i < legalHits.Count; i++)
-                if (legalHits[i]?.t < legalHits[iHit]?.t)
-                    iHit = i;
-
-
-            return legalHits[iHit];
-        }
-        */
 
         /// <summary>
         /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
@@ -271,6 +244,46 @@ namespace Trace
             return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
         }
 
+        /// <summary>
+        /// This method checks if a Ray intersects with the CSG Difference shape.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public override bool quickRayIntersection(Ray ray)
+        {
+            List<HitRecord?> legalHits = new List<HitRecord?>();
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a.Count == 0)
+            {
+                return false;
+            }
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                // Keep only the intersection points not inside the second shape
+                if (!this.secondShape.isPointInside(a[i].Value.worldPoint))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            if (b.Count != 0)
+            {
+                // Keep only the intersection inside the first shape
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside(b[i].Value.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+                }
+            }
+
+            if (legalHits.Count == 0) return false;
+            return true;
+        }
+
     } //CSGDifference
 
     /// <summary>
@@ -297,7 +310,7 @@ namespace Trace
         /// </summary>
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
-        
+
 
         /// <summary>
         /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
@@ -349,7 +362,8 @@ namespace Trace
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         /// 
-        public override HitRecord? rayIntersection(Ray ray) {
+        public override HitRecord? rayIntersection(Ray ray)
+        {
             List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return null;
             return intersections[0];
@@ -365,6 +379,47 @@ namespace Trace
         public override bool isPointInside(Point a)
         {
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
+        }
+
+        /// <summary>
+        /// This method checks if a Ray intersects with the CSG Difference shape.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
+        public override bool quickRayIntersection(Ray ray)
+        {
+            List<HitRecord?> legalHits = new List<HitRecord?>();
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            if (a.Count == 0)
+            {
+                return false;
+            }
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            if (b.Count == 0)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
+                {
+                    legalHits.Add(a[i]);
+                }
+            }
+
+            {
+                for (int i = 0; i < b.Count; i++)
+                {
+                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    {
+                        legalHits.Add(b[i]);
+                    }
+                }
+            }
+
+            if (legalHits.Count == 0) return false;
+            return true;
         }
     } // CSGIntersection
 

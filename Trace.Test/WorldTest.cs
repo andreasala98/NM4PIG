@@ -49,6 +49,41 @@ namespace Trace.Test
             HitRecord? TrueHitRecord = w.shapes[1].rayIntersection(myRay);
             Assert.True(TrueHitRecord?.isClose(w.rayIntersection(myRay)));
         }
+
+        [Fact]
+        public void TestIsPointVisible()
+        {
+            World w = new World();
+            Point observerPoint = new Point(1f, 0f, 0f);
+            Point point = new Point(1f, 0f, 11f);
+            Point point2 = new Point(3f, 2f, 0f);
+
+            w.addShape(new Box(new Point(0f, -1f, 1f), new Point(2f, 1f, 3f)));
+            w.addShape(new Sphere(Transformation.Translation(new Vec(3f, 0f, 0f))));
+            Assert.False(w.isPointVisible(observerPoint, point));
+            Assert.True(w.isPointVisible(observerPoint, point2));
+
+        }
+
+        [Fact]
+        public void TestIsPointVisible2()
+        {
+            World world = new World();
+            Sphere s1 = new Sphere(Transformation.Translation(Constant.VEC_X * 2f));
+            Sphere s2 = new Sphere(Transformation.Translation(Constant.VEC_X * 8f));
+
+            world.addShape(s1);
+            world.addShape(s2);
+
+            Assert.False(world.isPointVisible(new Point(10f, 0f, 0f), new Point(0f, 0f, 0f)));
+            Assert.False(world.isPointVisible(new Point(5f, 0f, 0f), new Point(0f, 0f, 0f)));
+
+            Assert.True(world.isPointVisible(new Point(5f, 0f, 0f), new Point(4f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0.5f, 0f, 0f), new Point(0f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0f, 10f, 0f), new Point(0f, 0f, 0f)));
+            Assert.True(world.isPointVisible(new Point(0f, 0f, 10f), new Point(0f, 0f, 0f)));
+
+        }
     } //end of class
 
 } //end of namespace
