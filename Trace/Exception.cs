@@ -82,6 +82,22 @@ namespace Trace
         }
     }
 
+    [Serializable]
+    public class ParsingError : Exception
+    {
+        /// <summary>
+        /// Constructor for ParsingError exception. This raises a generic exception, i.e. does not contain an error message
+        /// </summary>
+        public ParsingError() : base() { }
+
+        /// <summary>
+        /// /// Constructor for ParsingError exception. This raises an exception with an error message
+        /// </summary>
+        /// <param name="Message">The error message</param>
+        public ParsingError(string Message) : base(Message) { }
+
+    }
+
     /*
         Example:
 

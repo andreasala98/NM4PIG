@@ -20,6 +20,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Globalization;
+using System.Collections.Generic;
 
 #nullable enable
 namespace Trace
@@ -249,7 +250,90 @@ namespace Trace
             else
                 throw new GrammarError(this.location, $"Invalid character {ch}");
         }
+
+
+
+        /// <summary>
+        /// Read a token from input_file and check that it is one of the keywords in keywords.
+        /// Return the keyword as a Class KeywordEnum object.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="keywords"></param>
+        /// <returns></returns>
+        public KeywordEnum expectKeywords(List<KeywordEnum> keywords)
+        {
+            Token token = this.readToken();
+
+            if (!(token is KeywordToken))
+            {
+                throw new GrammarError(token.sourceLoc, $"expected keyword insead of {token}");
+            }
+            KeywordToken keyToken = (KeywordToken)token;
+            if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
+            {
+                throw new GrammarError(keyToken.sourceLoc, $"non so scrivere questo errore!");
+            }
+
+            return keyToken.keyword;
+        }
+
+        /// <summary>
+        /// Read a token from inputFile and check that it matches symbol.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="symbol"></param>
+        public void expectSymbol(string symbol)
+        {
+            Token token = this.readToken();
+            if (!(token is SymbolToken) || ((SymbolToken)token).symbol != symbol)
+            {
+                throw new GrammarError(token.sourceLoc, $"got{token} insted of {symbol}");
+            }
+        }
+
+        /// <summary>
+        /// Read a token from inputFile and check that it is either a literal number or a variable in scene.
+        /// Return the number as a float.
+        /// </summary>
+        /// <param name="inputFile"></param>
+        /// <param name="scene"></param>
+        /// <returns></returns>
+        public float expectNumber(Scene scene)
+        {
+            Token token = readToken();
+
+            if (token is LiteralNumberToken)
+                return ((LiteralNumberToken)token).value;
+            else if (token is IdentifierToken)
+            {
+                string variableName = ((IdentifierToken)token).id;
+                if (!(scene.floatVariables.ContainsKey(variableName)))
+                    throw new GrammarError(token.sourceLoc, $"unknown variable {token}");
+
+                return scene.floatVariables[variableName];
+            }
+
+            throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
+        }
+
+        public string expectString(){
+
+            return "ciao";
+        }
+
+        public string expectIdentifier() {
+
+            return "ciao2";
+        }
+
+        public void unreadToken(Token token)
+        {
+            this.savedToken = token;
+        }
     }
 
 
+
 }
+
+
