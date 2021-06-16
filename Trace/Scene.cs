@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Trace
@@ -64,10 +65,13 @@ namespace Trace
         public IPigment parsePigment(InputStream inputFile){
             KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Uniform, KeywordEnum.Checkered, KeywordEnum.Image });
             inputFile.expectSymbol("(");
+            IPigment result;
+
+
             if (key == KeywordEnum.Uniform)
             {
                 Color color = parseColor(inputFile);
-                IPigment result = new UniformPigment(color: color);
+                result = new UniformPigment(color: color);
             }
             else if (key == KeywordEnum.Checkered)
             {
@@ -77,16 +81,66 @@ namespace Trace
                 inputFile.expectSymbol(",");
                 // optiona parameter?
                 int steps = (int)inputFile.expectNumber();
-                IPigment result = new CheckeredPigment(col1, col2, steps);
+                result = new CheckeredPigment(col1, col2, steps);
 
             }
             else if (key == KeywordEnum.Image)
             {
                 string fileName = inputFile.expectString();
-                using (FileStream imageStream = FileStream.OpenRead())
-                {}
+                using (Stream imageStream = File.OpenWrite(fileName))
+                {
+                    HdrImage img = new HdrImage(imageStream);
+                    result = new ImagePigment(img);
+                }
+                
+            }
+            else
+            {
+                throw new ParsingError("This line should be unreachable");
             }
 
+            inputFile.expectSymbol(")");
+
+            return result;
+
+        }
+
+
+        public BRDF parseBRDF(InputStream inputFile)
+        {
+            BRDF result;
+            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() {KeywordEnum.Diffuse, KeywordEnum.Specular});
+            inputFile.expectSymbol("(");
+            IPigment pigment = parsePigment(inputFile);
+            inputFile.expectSymbol(")");
+
+
+            if (key == KeywordEnum.Diffuse)
+                result = new DiffuseBRDF(pigment);
+            else if (key == KeywordEnum.Specular)
+                result = new DiffuseBRDF(pigment);
+            else throw new ParsingError("This line should be unreachable");
+
+
+        }
+
+
+        public Tuple<string, Material> parseMaterial(InputStream inputFile)
+        {
+            string name = inputFile.expectIdentifier();
+
+            inputFile.expectSymbol("(");
+            BRDF brdf = parseBRDF(inputFile);
+            inputFile.expectSymbol(",");
+            IPigment emRad = parsePigment(inputFile);
+            inputFile.expectSymbol(")");
+
+            return new Tuple<string, Material>(name, new Material(brdf, emRad));
+        }
+
+
+        public Transformation parseTransformation(InputStream inputFile){
+            
         }
 
     }
