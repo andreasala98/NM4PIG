@@ -184,8 +184,6 @@ namespace Trace
             {
                 throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
             }
-
-
             return new LiteralNumberToken(tokenLocation, value);
         }
 
