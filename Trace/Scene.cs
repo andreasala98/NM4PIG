@@ -30,19 +30,7 @@ namespace Trace
 
         public Camera camera;
 
-        /// <summary>
-        /// Read a token from `input_file` and check that it is one of the keywords in keywords.
-        /// Return the keyword as a Class KeywordEnum object.
-        /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="keywords"></param>
-        /// <returns></returns>
-        public KeywordEnum expectKeywords(InputStream inputFile, List<KeywordEnum> keywords)
-        {
-            Token token = inputFile.readToken();
-
-            if ()
-        }
+        
 
     }
 }
