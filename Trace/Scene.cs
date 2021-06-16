@@ -151,17 +151,112 @@ namespace Trace
 
             // now we look for transformation until there is no more *
             while (true)
-            {
-                
+            {      
                 KeywordEnum key = inputFile.expectKeywords(keyList);
 
                 if (key == KeywordEnum.Identity) continue;
                 else if (key == KeywordEnum.Translation)
                 {
                     inputFile.expectSymbol("(");
+                    result = result * Transformation.Translation(parseVector(inputFile));
+                    inputFile.expectSymbol(")");
                 }
-            }
+                else if (key == KeywordEnum.RotationX)
+                {
+                    inputFile.expectSymbol("(");
+                    result = result * Transformation.RotationX(inputFile.expectNumber(this));
+                    inputFile.expectSymbol(")");
+                }
+                else if (key == KeywordEnum.RotationY)
+                {
+                    inputFile.expectSymbol("(");
+                    result = result * Transformation.RotationY(inputFile.expectNumber(this));
+                    inputFile.expectSymbol(")");
+                }
+                else if (key == KeywordEnum.RotationZ)
+                {
+                    inputFile.expectSymbol("(");
+                    result = result * Transformation.RotationZ(inputFile.expectNumber(this));
+                    inputFile.expectSymbol(")");
+                }
+                else if (key == KeywordEnum.Scaling)
+                {
+                    inputFile.expectSymbol("(");
+                    result = result * Transformation.Scaling(parseVector(inputFile));
+                    inputFile.expectSymbol(")");
+                }
 
+
+                Token nextKey = inputFile.readToken();
+
+                if (!(nextKey is SymbolToken) || ((SymbolToken)nextKey).symbol != "*")
+                {
+                    inputFile.unreadToken(nextKey);
+                    break;
+                }
+
+            } //while
+
+            return result;
+        } //parseTranformation
+
+        public Sphere parseSphere(InputStream inputFile) {
+
+            inputFile.expectSymbol("(");
+            string matName = inputFile.expectIdentifier();
+
+            if (!this.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile);
+            inputFile.expectSymbol(")");
+
+            return new Sphere(tr, this.materials[matName]);
+        }
+
+
+        public Plane parsePlane(InputStream inputFile) {
+
+            inputFile.expectSymbol("(");
+            string matName = inputFile.expectIdentifier();
+
+            if (!this.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile);
+            inputFile.expectSymbol(")");
+
+            return new Plane(tr, this.materials[matName]);
+        }
+
+        public Camera parseCamera(InputStream inputFile) {
+
+            inputFile.expectSymbol("(");
+            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Perspective, KeywordEnum.Orthogonal});
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile);
+            inputFile.expectSymbol(",");
+            float aspectRatio = inputFile.expectNumber(this);
+            inputFile.expectSymbol(",");
+            float distance = inputFile.expectNumber(this);
+            inputFile.expectSymbol(")");
+
+            Camera result;
+
+            if (key == KeywordEnum.Perspective) result = new PerspectiveCamera(distance, aspectRatio, tr);
+            else if (key == KeywordEnum.Orthogonal) result = new OrthogonalCamera(aspectRatio, tr);
+
+            else throw new GrammarError(inputFile.location, "Unknown Camera type!");
+
+            return result;
+        }
+
+
+        public Scene parseScene(InputStream inputFile, Dictionary<string, float> vars)
+        {
+            Scene scene = new Scene();
+            scene.floatVariables = vars;
+            scene.over
         }
 
     }
