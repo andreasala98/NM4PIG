@@ -17,6 +17,7 @@ IN THE SOFTWARE.
 */
 
 using System;
+using System.Collections;
 
 namespace Trace
 {
@@ -75,6 +76,35 @@ namespace Trace
                         );
         }
 
+
+
+        // Nested class to do descending sort on year property.
+      private class sortHelper: IComparer
+      {
+         int IComparer.Compare(object? a1, object? b1)
+         {
+
+                HitRecord? a = (HitRecord?)a1;
+                HitRecord? b = (HitRecord?)b1;
+
+                if (a?.t < b?.t)
+               return 1;
+
+            else if (a?.t > b?.t)
+               return -1;
+
+            else
+               return 0;
+         }
+      }
+
+      public static IComparer sortDescending()
+        {
+            return (IComparer) new sortHelper();
+        }
+
+
+
         /// <summary>
         /// Default method to compare two HitRecord objects. 
         /// One HitRecord is "bigger" than another one if its t parameter is bigger.
@@ -86,13 +116,30 @@ namespace Trace
             return this.t.CompareTo(a.t);
         }
 
+
         public override string ToString()
         {
 
             string Cons = "wPoint: " + this.worldPoint.ToString() + "\n"
                          + "Normal: " + this.normal.ToString() + "\n"
-                         + "sPoint: " + this.surfacePoint.ToString() + "\n";
+                         + "sPoint: " + this.surfacePoint.ToString() + "\n"
+                         + "t: " + this.t + "\n";
             return Cons;
+        }
+
+        /// <summary>
+        /// Method that compares two HitRecord object by the t parameter.
+        /// It returns the lesser one.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static HitRecord lesserComparison (HitRecord a, HitRecord b)
+        {
+            if (a.t < b.t)
+                return a;
+            else
+                return b;
         }
 
 

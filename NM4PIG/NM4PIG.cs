@@ -17,13 +17,8 @@ IN THE SOFTWARE.
 */
 
 using System;
-using System.IO;
 using Trace;
 using Microsoft.Extensions.CommandLineUtils;
-using System.Collections.Generic;
-
-using Tsf = Trace.Transformation;
-using CC = Trace.Constant;
 
 namespace NM4PIG
 {
@@ -60,8 +55,8 @@ namespace NM4PIG
                 var luminosity = command.Option("--luminosity|-l <LUMINOSITY>", "Force average luminosity to some value instead of calculating it", CommandOptionType.SingleValue);
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
                 var scene = command.Option("--scene|-s <scene>", "number of the scene", CommandOptionType.SingleValue);
-                var spp = command.Option("--samples-per-pixel|-spp", "number of extracted samples per pixel", CommandOptionType.SingleValue);
-
+                var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel", CommandOptionType.SingleValue);
+                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r)", CommandOptionType.SingleValue);
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
                 {
@@ -70,17 +65,18 @@ namespace NM4PIG
                     Parameters readParam = new Parameters();
                     try
                     {
-                    readParam.parseCommandLineDemo(
-                                                    width.Value(),
-                                                    height.Value(),
-                                                    angledeg.Value(),
-                                                    orthogonal.Value(),
-                                                    pfmfile.Value(),
-                                                    ldrfile.Value(),
-                                                    luminosity.Value(),
-                                                    scene.Value(),
-                                                    spp.Value()
-                                                        );
+                        readParam.parseCommandLineDemo(
+                                                        width.Value(),
+                                                        height.Value(),
+                                                        angledeg.Value(),
+                                                        orthogonal.Value(),
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value(),
+                                                        luminosity.Value(),
+                                                        scene.Value(),
+                                                        spp.Value(),
+                                                        rendType.Value()
+                                                            );
                     }
                     catch (CommandLineException e)
                     {
@@ -88,7 +84,7 @@ namespace NM4PIG
                         return 0;
                     }
 
-                    MainFuncs.Demo(
+                    Demo.ExecuteDemo(
                         readParam.width,
                         readParam.height,
                         readParam.angledeg,
@@ -97,7 +93,8 @@ namespace NM4PIG
                         readParam.ldrFile,
                         readParam.scene,
                         readParam.luminosity,
-                        readParam.spp
+                        readParam.spp,
+                        readParam.render
                     );
                     return 0;
                 });
@@ -138,7 +135,7 @@ namespace NM4PIG
                         Console.WriteLine(e.Message);
                         return 0;
                     }
-                    MainFuncs.Convert(
+                    Convert.ExecuteConvert(
                             readParam.pfmFile,
                             readParam.ldrFile,
                             readParam.factor,
@@ -163,7 +160,7 @@ namespace NM4PIG
 
     } //Program class
 
-    
+
 
 } //NM4PIG namespace
 
