@@ -84,8 +84,8 @@ namespace Trace
         /// <returns>A <see cref="Trace.Ray"/> object.</returns>
         public override Ray fireRay(float u, float v)
         {
-            Point origin = new Point(-1.0f, (1.0f - 2f * u) * this.aspectRatio, 2.0f * v - 1.0f);
-            Vec direction = new Vec(1.0f, 0.0f, 0.0f);
+            Point origin = new Point(-1f, (1f - 2f * u) * this.aspectRatio, 2f * v - 1f);
+            Vec direction = Constant.VEC_X;
             return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
     }
@@ -124,8 +124,8 @@ namespace Trace
         /// <returns>A <see cref="Trace.Ray"/> object.</returns>
         public override Ray fireRay(float u, float v)
         {
-            Point origin = new Point(-this.screenDistance, 0.0f, 0.0f);
-            Vec direction = new Vec(this.screenDistance, (1.0f - 2.0f * u) * this.aspectRatio, 2.0f * v - 1.0f);
+            Point origin = new Point(-this.screenDistance, 0f, 0f);
+            Vec direction = new Vec(this.screenDistance, (1f - 2f * u) * this.aspectRatio, 2f * v - 1f);
             return new Ray(origin, direction, 1.0f).Transform(this.transformation);
         }
 

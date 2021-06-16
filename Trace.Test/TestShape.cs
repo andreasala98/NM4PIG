@@ -340,7 +340,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                 new Point(0.5f, 0f, 0.5f),
                 new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
-                new Vec2D(0f, 0.5f),
+                new Vec2D(0.5f, 0.5f),
                 1f,
                 ray1
             );
@@ -353,7 +353,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                 new Point(0.0f, 0.0f, 0.0f),
                 new Normal(0.0f, 0.0f, -1.0f),
-                new Vec2D(0.0f, 0.0f),
+                new Vec2D(0.25f, 0.5f),
                 1.0f,
                 ray2
             );
@@ -368,7 +368,7 @@ namespace Trace.Test
             HitRecord hit3 = new HitRecord(
                 new Point(0f, 5.5f, 0.5f),
                 new Normal(0f, MathF.Sqrt(2f) / 2f, MathF.Sqrt(2f) / 2f),
-                new Vec2D(0.25f, 0.5f),
+                new Vec2D(0.625f, 0.5f),
                 1f,
                 ray3
             );
@@ -380,8 +380,8 @@ namespace Trace.Test
             Assert.True(intersection4 != null, "TestHitCone failed! - Assert 8/5");
             HitRecord hit4 = new HitRecord(
                 new Point(0f, 6f, 0f),
-                new Normal(0f, 1f, 0f),
-                new Vec2D(0.25f, 0f),
+                new Normal(0f, 0f, -1f),
+                new Vec2D(0.25f, 1f),
                 0.5f,
                 ray4
             );
@@ -394,7 +394,7 @@ namespace Trace.Test
             HitRecord hit5 = new HitRecord(
                 new Point(0.5f, 0f, 0.5f),
                 new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
-                new Vec2D(0f, 0.5f),
+                new Vec2D(0.5f, 0.5f),
                 MathF.Sqrt(2f),
                 ray5
             );
@@ -407,7 +407,7 @@ namespace Trace.Test
             HitRecord hit6 = new HitRecord(
                 new Point(0.5f, 0f, 0.5f),
                 new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
-                new Vec2D(0f, 0.5f),
+                new Vec2D(0.5f, 0.5f),
                 1f,
                 ray6
             );
@@ -425,27 +425,12 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                 new Point(0.5f, 0.0f, 0.5f),
                 new Normal(-MathF.Sqrt(2) / 2, 0f, -MathF.Sqrt(2) / 2),
-                new Vec2D(0f, 0.5f),
+                new Vec2D(0.5f, 0.5f),
                 0.5f,
                 ray1
             );
 
-
-
             Assert.True(hit1.isClose(intersection1), "TestHitCone failed! - Assert 2/5");
-            // Console.WriteLine("intersection.surfacPoint = " + intersection2?.surfacePoint.ToString());
-            // Console.WriteLine("hit.surfacPoint = " + hit2.surfacePoint.ToString());
-            // Console.WriteLine(" ");
-            // Console.WriteLine("intersection.worldPoint = " +intersection2?.worldPoint.ToString());
-            // Console.WriteLine("hit.worldPoint = " +hit2.worldPoint.ToString());
-            // Console.WriteLine(" ");
-            // Console.WriteLine("intersection.normal = " +intersection2?.normal.ToString());
-            // Console.WriteLine("hit.normal = " +hit2.normal.ToString());
-            // Console.WriteLine(" ");
-            // Console.WriteLine("intersection.t = " +intersection2?.t);
-            // Console.WriteLine("hit.t = " +hit2.t);
-            // Console.WriteLine(" ");
-
         }
 
         [Fact]
@@ -470,14 +455,14 @@ namespace Trace.Test
             expected.Add(new HitRecord(
                                         new Point(0.5f, 0f, 0.5f),
                                         new Normal(MathF.Sqrt(2f) / 2f, 0f, MathF.Sqrt(2f) / 2f),
-                                        new Vec2D(0f, 0.5f),
+                                        new Vec2D(0.5f, 0.5f),
                                         1f,
                                         ray)
                         );
             expected.Add(new HitRecord(
                                         new Point(-0.5f, 0f, 0.5f),
                                         new Normal(MathF.Sqrt(2f) / 2f, 0f, -MathF.Sqrt(2f) / 2f),
-                                        new Vec2D(0.5f, 0.5f),
+                                        new Vec2D(0.75f, 0.5f),
                                         2f,
                                         ray)
                         );

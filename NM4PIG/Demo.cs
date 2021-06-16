@@ -115,20 +115,20 @@ namespace NM4PIG
                     world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), CC.groundMat));
 
                     world.addShape(CC.wikiShape());
-                
+
                     break;
                 case 5:
                     Material skyM = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
-                    Material BRedMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
+                    Material checkered = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Blue, CC.Yellow)), new UniformPigment(CC.Black));
                     Material ground = new Material(new DiffuseBRDF(new CheckeredPigment(CC.LightRed, CC.Orange)), new UniformPigment(CC.Black));
 
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyM));
-                    world.addShape(new Cone(r: 0.5f, material: BRedMat, transformation: Transformation.RotationY(Constant.PI / 2f) *
-                                                                                Transformation.Scaling(0.5f)));
-                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), ground));
+                    world.addShape(new Cone(r: 0.5f, material: checkered, transformation: Tsf.Translation(new Vec(0f, 0f, -0.5f))));
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), ground));
 
                     break;
+
                 default:
                     break;
             }

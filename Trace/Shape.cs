@@ -764,11 +764,33 @@ namespace Trace
         /// </summary>
         /// <param name="point">3D <see cref="Point"/></param>
         /// <returns><see cref="Vec2D"/></returns>
+        // +-----------------------------+
+        // |              |              |
+        // |     bottom   |    lateral   |
+        // |              |              |
+        // |     face     |     face     |
+        // |              |              |
+        // |              |              |
+        // |              |              |
+        // +-----------------------------+
         private Vec2D _conePointToUV(Point point)
-            => new Vec2D(
-                    (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI),
-                    (point.z) / this.height
-                );
+        {
+            float u = 0f, v = 0f;
+            if (Utility.areClose(point.z, 0f))
+            {
+                // point is on the base
+                u = (point.x + this.radius) / (4f * this.radius);       // u in [0,0.5]
+                v = (point.y + this.radius) / (2f * this.radius);       // v in [0,1]
+            }
+            else
+            {
+                // lateral face
+                u = ((MathF.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
+                u = 0.5f + (u / 2f);
+                v = (point.z) / this.height;
+            }
+            return new Vec2D(u, v);
+        }
 
         /// <summary>
         /// Compute the normal of cone<br/>
@@ -779,24 +801,19 @@ namespace Trace
         /// <param name="point"><see cref="Point"> on the surface of the cone</param>
         /// <param name="rayDir"><see cref="Vec"> direction of the incoming ray</param>
         /// <returns><see cref="Normal"> object</returns>
-        private Normal _coneNormal(Point point, Vec rayDir, bool a)
+        private Normal _coneNormal(Point point, Vec rayDir)
         {
-            Vec2D uv = this._conePointToUV(point);
             Normal result;
-            if (uv.v == 0f & a == true)
+            // point on the bottom plane
+            if (Utility.areClose(point.z, 0f))
             {
                 result = new Normal(0f, 0f, -1.0f);
             }
-            else if (uv.v == 0f & a == false)
-            {
-                result = new Normal(MathF.Cos(2f * Constant.PI * uv.u),
-                                    MathF.Sin(2f * Constant.PI * uv.u),
-                                                    0f).Normalize();
-            }
             else
             {
-                result = new Normal(MathF.Cos(2f * Constant.PI * uv.u),
-                                    MathF.Sin(2f * Constant.PI * uv.u),
+                float rad = MathF.Sqrt(point.x * point.x + point.y * point.y);
+                result = new Normal(point.x / rad,
+                                    point.y / rad,
                                     this.radius / this.height).Normalize();
             }
             if (point.toVec() * rayDir > 0.0f)
@@ -809,17 +826,15 @@ namespace Trace
 
             Plane planeBottom = new Plane();
             HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
-            bool plane;
             HitRecord? planeHit = null;
 
             if (hitBottom.HasValue)
             {
-                plane = true;
                 Point pointInt = hitBottom.Value.worldPoint;
                 if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
                     planeHit = new HitRecord(
                                 wp: this.transformation * pointInt,
-                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
+                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
                                 sp: this._conePointToUV(pointInt),
                                 tt: hitBottom.Value.t,
                                 r: ray,
@@ -869,11 +884,10 @@ namespace Trace
             if (tmin > invRay.tmin && tmin < invRay.tmax)
             {
                 firstHitT = tmin;
-                plane = false;
                 Point hitPoint = invRay.at(firstHitT);
                 coneHit = new HitRecord(
                                         this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        this.transformation * _coneNormal(hitPoint, ray.dir),
                                         _conePointToUV(hitPoint),
                                         firstHitT,
                                         ray,
@@ -884,11 +898,10 @@ namespace Trace
             else if (tmax > invRay.tmin && tmax < invRay.tmax && coneHit == null)
             {
                 firstHitT = tmax;
-                plane = false;
                 Point hitPoint = invRay.at(firstHitT);
                 coneHit = new HitRecord(
                                         this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        this.transformation * _coneNormal(hitPoint, ray.dir),
                                         _conePointToUV(hitPoint),
                                         firstHitT,
                                         ray,
@@ -913,16 +926,14 @@ namespace Trace
 
             Plane planeBottom = new Plane();
             HitRecord? hitBottom = planeBottom.rayIntersection(invRay);
-            bool plane;
 
             if (hitBottom.HasValue)
             {
-                plane = true;
                 Point pointInt = hitBottom.Value.worldPoint;
                 if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
                     hits.Add(new HitRecord(
                                 wp: this.transformation * pointInt,
-                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir, plane)),
+                                nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
                                 sp: this._conePointToUV(pointInt),
                                 tt: hitBottom.Value.t,
                                 r: ray,
@@ -974,11 +985,10 @@ namespace Trace
             HitRecord? coneHit;
             if (tmin > invRay.tmin && tmin < invRay.tmax)
             {
-                plane = false;
                 Point hitPoint = invRay.at(tmin);
                 coneHit = new HitRecord(
                                         this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        this.transformation * _coneNormal(hitPoint, ray.dir),
                                         _conePointToUV(hitPoint),
                                         tmin,
                                         ray,
@@ -988,11 +998,10 @@ namespace Trace
             }
             if (tmax > invRay.tmin && tmax < invRay.tmax)
             {
-                plane = false;
                 Point hitPoint = invRay.at(tmax);
                 coneHit = new HitRecord(
                                         this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir, plane),
+                                        this.transformation * _coneNormal(hitPoint, ray.dir),
                                         _conePointToUV(hitPoint),
                                         tmax,
                                         ray,
