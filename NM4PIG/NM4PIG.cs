@@ -22,9 +22,6 @@ using Trace;
 using Microsoft.Extensions.CommandLineUtils;
 using System.Collections.Generic;
 
-using Tsf = Trace.Transformation;
-using CC = Trace.Constant;
-
 namespace NM4PIG
 {
 
