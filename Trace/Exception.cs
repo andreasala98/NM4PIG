@@ -82,6 +82,15 @@ namespace Trace
         }
     }
 
+
+    [Serializable]
+    public class ParsingError : Exception
+    {
+        public ParsingError(string Message) : base(Message)
+        { }
+
+    }
+
     /*
         Example:
 
