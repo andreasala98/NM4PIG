@@ -32,7 +32,8 @@ namespace Trace.Test
         {
             string test = @" 
                 float clock(150)
- 
+                camera(perspective, rotationZ(30) * translation([-4, 0, 1]), 1.0, 2.0)
+
                 material sky_material(
                  diffuse(uniform(<0, 0, 0>)),
                  uniform(<0.7, 0.5, 1>)
@@ -56,7 +57,7 @@ namespace Trace.Test
     
                 sphere(sphere_material, translation([0, 0, 1]))
     
-                camera(perspective, rotationZ(30) * translation([-4, 0, 1]), 1.0, 2.0)";
+                ";
 
             byte[] byteArray = Encoding.ASCII.GetBytes(test);
             MemoryStream stream = new MemoryStream(byteArray);

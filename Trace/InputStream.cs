@@ -266,7 +266,7 @@ namespace Trace
 
             if (!(token is KeywordToken))
             {
-                throw new GrammarError(token.sourceLoc, $"expected keyword insead of {token}");
+                throw new GrammarError(token.sourceLoc, $"expected keyword instead of {token}");
             }
             KeywordToken keyToken = (KeywordToken)token;
             if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
