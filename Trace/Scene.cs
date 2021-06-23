@@ -280,7 +280,7 @@ namespace Trace
                     {
                         throw new GrammarError(inputFile.location, $"You cannot redefine variable {varName}");
                     }
-                    if (scene.overriddenVariables.Contains(varName))
+                    if (!(scene.overriddenVariables.Contains(varName)))
                     {
                         scene.floatVariables.Add(varName, varValue);
                         //scene.floatVariables[varName] = varValue;
