@@ -91,7 +91,7 @@ namespace Trace
             {  "orthogonal" , KeywordEnum.Orthogonal},
             {  "perspective" , KeywordEnum.Perspective},
             {  "float" , KeywordEnum.Float},
-            {   "string", KeywordEnum.String}
+            {  "string", KeywordEnum.String}
         };
 
 

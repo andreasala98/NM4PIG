@@ -295,12 +295,11 @@ namespace Trace
         /// Read a token from inputFile and check that it is either a literal number or a variable in scene.
         /// Return the number as a float.
         /// </summary>
-        /// <param name="inputFile"></param>
         /// <param name="scene"></param>
         /// <returns></returns>
         public float expectNumber(Scene scene)
         {
-            Token token = readToken();
+            Token token = this.readToken();
 
             if (token is LiteralNumberToken)
                 return ((LiteralNumberToken)token).value;

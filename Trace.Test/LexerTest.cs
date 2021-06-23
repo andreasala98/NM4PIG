@@ -164,9 +164,9 @@ namespace Trace.Test
             AssertIsSymbol(inputStream.readToken(), ")");
             AssertIsKeyword(inputStream.readToken(), KeywordEnum.String);
             AssertIsIdentifier(inputStream.readToken(), "hey");
-             AssertIsSymbol(inputStream.readToken(), "(");
+            AssertIsSymbol(inputStream.readToken(), "(");
             AssertIsString(inputStream.readToken(), "Hello World");
-             AssertIsSymbol(inputStream.readToken(), ")");
+            AssertIsSymbol(inputStream.readToken(), ")");
 
         }
 
