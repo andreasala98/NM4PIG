@@ -151,7 +151,7 @@ namespace Trace
             List<KeywordEnum> keyList = new List<KeywordEnum>() { KeywordEnum.Identity, KeywordEnum.Translation, KeywordEnum.Scaling,
                                                                   KeywordEnum.RotationX, KeywordEnum.RotationY, KeywordEnum.RotationZ };
 
-            // now we look for transformation until there is no more *
+            // now we look for transformations until there is no more *
             while (true)
             {      
                 KeywordEnum key = inputFile.expectKeywords(keyList);
@@ -283,7 +283,6 @@ namespace Trace
                     if (!(scene.overriddenVariables.Contains(varName)))
                     {
                         scene.floatVariables.Add(varName, varValue);
-                        //scene.floatVariables[varName] = varValue;
                     }
                 }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Sphere)

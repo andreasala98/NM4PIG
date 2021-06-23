@@ -53,7 +53,7 @@ namespace Trace.Test
                                         )
     
                 plane (sky_material, translation([0, 0, 100]) * rotationY(clock))
-                plane (ground_material, identity)
+                
     
                 sphere(sphere_material, translation([0, 0, 1]))
     

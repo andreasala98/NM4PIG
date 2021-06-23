@@ -257,9 +257,8 @@ namespace Trace
         /// Read a token from input_file and check that it is one of the keywords in keywords.
         /// Return the keyword as a Class KeywordEnum object.
         /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="keywords"></param>
-        /// <returns></returns>
+        /// <param name="keywords"> The list of accepted keywords</param>
+        /// <returns> The parsed keyword in KeywordEnum format</returns>
         public KeywordEnum expectKeywords(List<KeywordEnum> keywords)
         {
             Token token = this.readToken();
@@ -269,19 +268,18 @@ namespace Trace
                 throw new GrammarError(token.sourceLoc, $"expected keyword instead of {token}");
             }
             KeywordToken keyToken = (KeywordToken)token;
-            if (!(KeywordToken.dict.ContainsValue(keyToken.keyword)))
+            if (!keywords.Contains(keyToken.keyword)) //keyToken is not in keywords
             {
-                throw new GrammarError(keyToken.sourceLoc, "unexpected kwyword");
+                throw new GrammarError(keyToken.sourceLoc, "unexpected keyword");
             }
 
             return keyToken.keyword;
         }
 
         /// <summary>
-        /// Read a token from inputFile and check that it matches symbol.
+        /// Read a token from inputFile and check that it matches a certain symbol.
         /// </summary>
-        /// <param name="inputFile"></param>
-        /// <param name="symbol"></param>
+        /// <param name="symbol"> The symbol to be parsed</param>
         public void expectSymbol(string symbol)
         {
             Token token = this.readToken();
@@ -295,7 +293,7 @@ namespace Trace
         /// Read a token from inputFile and check that it is either a literal number or a variable in scene.
         /// Return the number as a float.
         /// </summary>
-        /// <param name="scene"></param>
+        /// <param name="scene"> The scene to be analysed</param>
         /// <returns></returns>
         public float expectNumber(Scene scene)
         {
