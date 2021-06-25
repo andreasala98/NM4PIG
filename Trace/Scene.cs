@@ -122,7 +122,7 @@ namespace Trace
             if (key == KeywordEnum.Diffuse)
                 result = new DiffuseBRDF(pigment);
             else if (key == KeywordEnum.Specular)
-                result = new DiffuseBRDF(pigment);
+                result = new SpecularBRDF(pigment);
             else throw new GrammarError(inputFile.location, "This line should be unreachable");
 
 

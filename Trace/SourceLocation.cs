@@ -49,5 +49,9 @@ namespace Trace
             return (SourceLocation)this.MemberwiseClone();
         }
 
+        public override string ToString()
+        {
+            return $"({lineNum}, {colNum})";
+        }
     }
 }

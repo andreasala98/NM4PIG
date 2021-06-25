@@ -265,7 +265,7 @@ namespace Trace
 
             if (!(token is KeywordToken))
             {
-                throw new GrammarError(token.sourceLoc, $"expected keyword instead of {token}");
+                throw new GrammarError(token.sourceLoc, $"expected keyword instead of {token} at {token.sourceLoc.ToString()}");
             }
             KeywordToken keyToken = (KeywordToken)token;
             if (!keywords.Contains(keyToken.keyword)) //keyToken is not in keywords
