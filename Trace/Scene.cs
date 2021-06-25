@@ -156,7 +156,7 @@ namespace Trace
             {      
                 KeywordEnum key = inputFile.expectKeywords(keyList);
 
-                if (key == KeywordEnum.Identity) continue;
+                if (key == KeywordEnum.Identity) break;
                 else if (key == KeywordEnum.Translation)
                 {
                     inputFile.expectSymbol("(");

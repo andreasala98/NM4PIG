@@ -54,7 +54,7 @@ namespace Trace.Test
     
                 plane (sky_material, translation([0, 0, 100]) * rotationY(clock))
                 plane (ground_material, identity)
-    
+                # hi
                 sphere(sphere_material, translation([0, 0, 1]))
     
                 ";
@@ -111,15 +111,18 @@ namespace Trace.Test
             Assert.True(scene.world.shapes[1] is Plane, "TestParser failed! Assert 26");
             Assert.True(scene.world.shapes[2] is Sphere, "TestParser failed! Assert 27");
 
-            Assert.True(scene.world.shapes[0].transformation.isClose(Transformation.Translation(new Vec(0f,0f,100f)) * Transformation.RotationY(Utility.DegToRad(150))),
+            Transformation tr1 = Transformation.Translation(new Vec(0f, 0f, 100f)) * Transformation.RotationY(150);
+            Transformation tr2 = Transformation.Translation(new Vec(0f,0f,1f));
+
+            Assert.True(scene.world.shapes[0].transformation.isClose(tr1),
              $"TestParser failed! Assert 28");
             Assert.True(scene.world.shapes[1].transformation.isClose(new Transformation(1)), "TestParser failed! Assert 29");
-            Assert.True(scene.world.shapes[1].transformation.isClose(Transformation.Translation(new Vec(0f,0f,1f))), "TestParser failed! Assert 30");
+            Assert.True(scene.world.shapes[2].transformation.isClose(tr2), "TestParser failed! Assert 30");
 
             // Camera
 
             Assert.True(scene.camera is PerspectiveCamera, "TestParser failed! Assert 31");
-            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(Utility.DegToRad(30)) * Transformation.Translation(new Vec(-4f,0f,1f))), "TestParser failed! Assert 32");
+            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(30) * Transformation.Translation(new Vec(-4f,0f,1f))), "TestParser failed! Assert 32");
             Assert.True(Utility.areClose(scene.camera.aspectRatio, 1f), "TestParser failed! Assert 33");
             Assert.True(Utility.areClose(((PerspectiveCamera)scene.camera).screenDistance, 2f), "TestParser failed! Assert 34");
         }
