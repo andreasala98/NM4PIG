@@ -126,5 +126,57 @@ namespace Trace.Test
             Assert.True(Utility.areClose(scene.camera.aspectRatio, 1f), "TestParser failed! Assert 33");
             Assert.True(Utility.areClose(((PerspectiveCamera)scene.camera).screenDistance, 2f), "TestParser failed! Assert 34");
         }
+
+        [Fact]
+        void TestUndefinedMaterial() 
+        {
+            string test = @" 
+                material sky_material(
+                 diffuse(uniform(<0, 0, 0>)),
+                 uniform(<0.7, 0.5, 1>)
+                ) 
+
+                sphere(non_existing_material, translation([0, 0, 1]))
+                ";
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(test);
+            MemoryStream stream = new MemoryStream(byteArray);
+            InputStream inputStream = new InputStream(stream);
+
+            try
+            {
+                Scene scene = Scene.parseScene(inputStream);
+                Assert.False(true, "The test did not throw an exception");
+            }
+            catch (GrammarError){
+                // if we land here it's ok
+            }
+            return;
+        }
+
+        [Fact]
+        void TestMultipleCamera()
+        {
+            string test = @" 
+                camera(perspective, rotationZ(30) * translation([-4, 0, 1]), 1.0, 2.0)
+                camera(orthogonal, identity, 1.0, 2.0)
+                ";
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(test);
+            MemoryStream stream = new MemoryStream(byteArray);
+            InputStream inputStream = new InputStream(stream);
+            try
+            {
+                Scene scene = Scene.parseScene(inputStream);
+                Assert.False(true, "The test did not throw an exception");
+            }
+            catch (GrammarError){
+                // if we land here it's ok
+            }
+            return;
+
+        }
+
+
     }
 }
