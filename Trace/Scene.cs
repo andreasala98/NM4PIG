@@ -275,9 +275,9 @@ namespace Trace
            public static CSGUnion parseCSGUnion(InputStream inputFile, Scene scene)
         {
             List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
-                                                                                KeywordEnum.Box, KeywordEnum.Cylinder,
-                                                                                KeywordEnum.Cone, KeywordEnum.CSGUnion,
-                                                                                KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
+                                                                     KeywordEnum.Box, KeywordEnum.Cylinder,
+                                                                     KeywordEnum.Cone, KeywordEnum.CSGUnion,
+                                                                     KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
 
             Shape lShape, rShape;
             inputFile.expectSymbol("(");
@@ -439,9 +439,9 @@ namespace Trace
       public static CSGIntersection parseCSGIntersection(InputStream inputFile, Scene scene)
         {
             List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
-                                                                                KeywordEnum.Box, KeywordEnum.Cylinder,
-                                                                                KeywordEnum.Cone, KeywordEnum.CSGUnion,
-                                                                                KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
+                                                                    KeywordEnum.Box, KeywordEnum.Cylinder,
+                                                                      KeywordEnum.Cone, KeywordEnum.CSGUnion,
+                                                                    KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
 
             Shape lShape, rShape;
             inputFile.expectSymbol("(");
@@ -518,6 +518,16 @@ namespace Trace
             return new CSGIntersection(lShape, rShape, tr);
         }
 
+        public static Shape parseWikiShape(InputStream inputFile, Scene scene)
+        {
+            inputFile.expectSymbol("(");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            Shape result = Constant.wikiShape(tr);
+            return result;
+
+        }
 
         public static Camera parseCamera(InputStream inputFile, Scene scene) {
 
@@ -581,11 +591,39 @@ namespace Trace
                 {
                     scene.world.addShape(parsePlane(inputFile, scene));
                 }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Box)
+                {
+                    scene.world.addShape(parseBox(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Cylinder)
+                {
+                    scene.world.addShape(parseCylinder(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Cone)
+                {
+                    scene.world.addShape(parseCone(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.CSGUnion)
+                {
+                    scene.world.addShape(parseCSGUnion(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.CSGIntersection)
+                {
+                    scene.world.addShape(parseCSGIntersection(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.CSGDifference)
+                {
+                    scene.world.addShape(parseCSGDifference(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Wikishape)
+                {
+                    scene.world.addShape(parseWikiShape(inputFile, scene));
+                }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Camera)
                 {
                     if (scene.camera != null)
                     {
-                        throw new GrammarError(inputFile.location, "Youn cannot define more than one camera! :'(");
+                        throw new GrammarError(inputFile.location, "You cannot define more than one camera! :'(");
                     }
 
                     scene.camera = parseCamera(inputFile, scene);
@@ -597,7 +635,7 @@ namespace Trace
                 }
             }
 
-            return scene; // ok 
+            return scene;
         }
 
     }
