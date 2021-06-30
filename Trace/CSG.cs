@@ -44,7 +44,8 @@ namespace Trace
         /// </summary>
         /// <param name="a">First Shape</param>
         /// <param name="b">Second Shape</param>
-        public CSGUnion(Shape a, Shape b) : base(null, null)
+        /// <param name="transf">Transformation</param>
+        public CSGUnion(Shape a, Shape b, Transformation? transf = null) : base(transf, null)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -58,8 +59,10 @@ namespace Trace
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            HitRecord? a = this.firstShape.rayIntersection(invRay);
+            HitRecord? b = this.secondShape.rayIntersection(invRay);
 
             if (a == null) return b;
             else if (b == null) return a;
@@ -78,8 +81,10 @@ namespace Trace
         /// </summary>
         public override bool quickRayIntersection(Ray ray)
         {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            HitRecord? a = this.firstShape.rayIntersection(invRay);
+            HitRecord? b = this.secondShape.rayIntersection(invRay);
 
             if (a == null && b == null) return false;
             return true;
@@ -94,9 +99,11 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
 
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
 
             List<HitRecord?> hits = new List<HitRecord?>();
 

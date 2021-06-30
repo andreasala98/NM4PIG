@@ -2,7 +2,7 @@ using System;
 
 namespace Trace
 {
- /// <summary>
+    /// <summary>
     /// A class that contains some useful constants, which are used many times inside the library.
     /// </summary>
     public class Constant
@@ -70,7 +70,8 @@ namespace Trace
         public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 78f / 255, 255f / 255))));
 
 
-        public static Shape wikiShape() { 
+        public static Shape wikiShape(Transformation? transf = null)
+        {
 
             Shape C1 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_X, greenMat);
             Shape C2 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_Y, greenMat);
@@ -81,6 +82,7 @@ namespace Trace
 
             Shape tot = (S1 * B1) - ((C1 + C2) + C3);
 
+            if (transf.HasValue) tot.transformation = transf.Value;
             return tot;
         }
 
