@@ -242,8 +242,282 @@ namespace Trace
             Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(")");
 
-            return new Cylinder();
+            return new Cylinder(tr, scene.materials[matName]);
         }
+
+           public static Box parseBox(InputStream inputFile, Scene scene)
+        {
+            // cylinder(material, transformation)
+            inputFile.expectSymbol("(");
+            string matName = inputFile.expectIdentifier();
+            if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new Box(new Point(-1f,-1f,-1f), new Point(1f,1f,1f), tr, scene.materials[matName]);
+        }
+
+        public static Cone parseCone(InputStream inputFile, Scene scene)
+        {
+            inputFile.expectSymbol("(");
+            string matName = inputFile.expectIdentifier();
+            if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new Cone(1f,1f,tr, scene.materials[matName]);
+        }
+
+           public static CSGUnion parseCSGUnion(InputStream inputFile, Scene scene)
+        {
+            List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
+                                                                                KeywordEnum.Box, KeywordEnum.Cylinder,
+                                                                                KeywordEnum.Cone, KeywordEnum.CSGUnion,
+                                                                                KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
+
+            Shape lShape, rShape;
+            inputFile.expectSymbol("(");
+            KeywordEnum lShapeKey = inputFile.expectKeywords(allowedKeys);
+            switch (lShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    lShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    lShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    lShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    lShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    lShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    lShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    lShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    lShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            KeywordEnum rShapeKey = inputFile.expectKeywords(allowedKeys);
+
+            switch (rShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    rShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    rShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    rShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    rShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    rShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    rShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    rShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    rShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new CSGUnion(lShape, rShape, tr);
+        }
+
+        public static CSGDifference parseCSGDifference(InputStream inputFile, Scene scene)
+        {
+            List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
+                                                                                KeywordEnum.Box, KeywordEnum.Cylinder,
+                                                                                KeywordEnum.Cone, KeywordEnum.CSGUnion,
+                                                                                KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
+
+            Shape lShape, rShape;
+            inputFile.expectSymbol("(");
+            KeywordEnum lShapeKey = inputFile.expectKeywords(allowedKeys);
+            switch (lShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    lShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    lShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    lShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    lShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    lShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    lShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    lShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    lShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            KeywordEnum rShapeKey = inputFile.expectKeywords(allowedKeys);
+
+            switch (rShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    rShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    rShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    rShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    rShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    rShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    rShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    rShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    rShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new CSGDifference(lShape, rShape, tr);
+        }
+
+      public static CSGIntersection parseCSGIntersection(InputStream inputFile, Scene scene)
+        {
+            List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
+                                                                                KeywordEnum.Box, KeywordEnum.Cylinder,
+                                                                                KeywordEnum.Cone, KeywordEnum.CSGUnion,
+                                                                                KeywordEnum.CSGIntersection, KeywordEnum.CSGDifference};
+
+            Shape lShape, rShape;
+            inputFile.expectSymbol("(");
+            KeywordEnum lShapeKey = inputFile.expectKeywords(allowedKeys);
+            switch (lShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    lShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    lShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    lShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    lShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    lShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    lShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    lShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    lShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            KeywordEnum rShapeKey = inputFile.expectKeywords(allowedKeys);
+
+            switch (rShapeKey)
+            {
+                case KeywordEnum.Plane:
+                    rShape = parsePlane(inputFile, scene);
+                    break;
+                case KeywordEnum.Sphere:
+                    rShape = parseSphere(inputFile, scene);
+                    break;
+                case KeywordEnum.Box:
+                    rShape = parseBox(inputFile, scene);
+                    break;
+                case KeywordEnum.Cylinder:
+                    rShape = parseCylinder(inputFile, scene);
+                    break;
+                case KeywordEnum.Cone:
+                    rShape = parseCone(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGUnion:
+                    rShape = parseCSGUnion(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGDifference:
+                    rShape = parseCSGDifference(inputFile, scene);
+                    break;
+                case KeywordEnum.CSGIntersection:
+                    rShape = parseCSGIntersection(inputFile, scene);
+                    break;
+                default:
+                    throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
+                    
+            }
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new CSGIntersection(lShape, rShape, tr);
+        }
+
 
         public static Camera parseCamera(InputStream inputFile, Scene scene) {
 
@@ -323,7 +597,7 @@ namespace Trace
                 }
             }
 
-            return scene; // ok
+            return scene; // ok 
         }
 
     }
