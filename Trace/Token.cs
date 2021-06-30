@@ -55,10 +55,10 @@ namespace Trace
     public enum KeywordEnum
     {
 
-        New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection, CSGDifference,
-        Diffuse, Specular, Uniform, Checkered,
+        New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection, 
+        CSGDifference, Box,  Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
-        Camera, Orthogonal, Perspective, Float, String
+        Camera, Orthogonal, Perspective, Float, String, Wikishape
 
     }
 
