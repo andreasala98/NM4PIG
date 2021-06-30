@@ -58,8 +58,10 @@ namespace Trace
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
-            HitRecord? a = this.firstShape.rayIntersection(ray);
-            HitRecord? b = this.secondShape.rayIntersection(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            HitRecord? a = this.firstShape.rayIntersection(invRay);
+            HitRecord? b = this.secondShape.rayIntersection(invRay);
 
             if (a == null) return b;
             else if (b == null) return a;
@@ -82,9 +84,11 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
 
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
 
             List<HitRecord?> hits = new List<HitRecord?>();
 
@@ -171,10 +175,12 @@ namespace Trace
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a[0] == null)
                 return null;
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
             List<HitRecord?> legalHits = new List<HitRecord?>();
 
             for (int i = 0; i < a.Count; i++)
@@ -217,14 +223,16 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a[0] == null)
             {
                 legalHits.Add(null);
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
 
             for (int i = 0; i < a.Count; i++)
             {
@@ -289,10 +297,12 @@ namespace Trace
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a[0] == null)
                 return null;
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
             if (b[0] == null)
                 return null;
             List<HitRecord?> legalHits = new List<HitRecord?>();
@@ -336,14 +346,16 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a[0] == null)
             {
                 legalHits.Add(null);
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
             if (b[0] == null)
             {
                 legalHits.Add(null);
