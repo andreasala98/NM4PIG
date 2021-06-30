@@ -124,25 +124,17 @@ namespace NM4PIG
                     break;
 
                 case 4:
-                    HdrImage img2 = new HdrImage();
-                    string inputpfm2 = "Texture/diceW.pfm";
-                    using (FileStream inputStream = File.OpenRead(inputpfm2))
-                    {
-                        img2.readPfm(inputStream);
-                        Console.WriteLine($"File {inputpfm2} has been correctly read from disk.");
-                    }
 
-                    world.addShape(
-                                    new Box(
-                                            transformation: Transformation.Scaling(0.5f),
-                                            material: new Material(
-                                                                Brdf: new DiffuseBRDF(new ImagePigment(img2)),
-                                                                EmittedRadiance: new UniformPigment(Constant.Black)
-                                                                )
-                                )
-                                );
+                    Material skyMatr = new Material(new DiffuseBRDF(new UniformPigment(CC.SkyBlue)), new UniformPigment(CC.SkyBlue));
+                    Material gndMat = new Material(new DiffuseBRDF(new CheckeredPigment(CC.White, CC.Black)), new CheckeredPigment(CC.White, CC.Black));
+                    Material pigMat = new Material(new DiffuseBRDF(new UniformPigment(CC.PiggyPink)));
 
-                    renderer = new FlatRender(world, new Color(0f, 1f, 1f));
+                    world.addShape(new Sphere(Tsf.Scaling(150f), skyMatr));
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), gndMat));
+                    world.addShape(CC.Body);
+                    
+
+                    renderer = new PathTracer(world: world,background: new Color(0.2f, 0.2f, 0.2f), pcg: new PCG());
 
                     break;
                 case 5:

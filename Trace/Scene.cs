@@ -231,6 +231,20 @@ namespace Trace
             return new Plane(tr, scene.materials[matName]);
         }
 
+        public static Cylinder parseCylinder(InputStream inputFile, Scene scene)
+        {
+            // cylinder(material, transformation)
+            inputFile.expectSymbol("(");
+            string matName = inputFile.expectIdentifier();
+            if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
+
+            inputFile.expectSymbol(",");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            return new Cylinder();
+        }
+
         public static Camera parseCamera(InputStream inputFile, Scene scene) {
 
             inputFile.expectSymbol("(");
