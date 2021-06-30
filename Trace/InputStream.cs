@@ -333,6 +333,7 @@ namespace Trace
                 throw new GrammarError(token.sourceLoc, $"got {token}, instead of an Identifier");
             return ((IdentifierToken)token).id;
         }
+        
 
         public void unreadToken(Token token)
         {
