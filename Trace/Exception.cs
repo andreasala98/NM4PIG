@@ -59,6 +59,45 @@ namespace Trace
         public CommandLineException(string Message) : base(Message) { }
     }
 
+    [Serializable]
+    public class GrammarError : Exception
+    {
+        public SourceLocation sourceLocation;
+
+        /// <summary>
+        /// Constructor for GrammarError exception. This raises a generic exception, i.e. does not contain an error message
+        /// </summary>
+        public GrammarError(SourceLocation location) : base()
+        {
+            this.sourceLocation = location;
+        }
+
+        /// <summary>
+        /// /// Constructor for GrammarError exception. This raises an exception with an error message
+        /// </summary>
+        /// <param name="Message">The error message</param>
+        public GrammarError(SourceLocation location, string Message) : base(Message)
+        {
+            this.sourceLocation = location;
+        }
+    }
+
+    [Serializable]
+    public class ParsingError : Exception
+    {
+        /// <summary>
+        /// Constructor for ParsingError exception. This raises a generic exception, i.e. does not contain an error message
+        /// </summary>
+        public ParsingError() : base() { }
+
+        /// <summary>
+        /// /// Constructor for ParsingError exception. This raises an exception with an error message
+        /// </summary>
+        /// <param name="Message">The error message</param>
+        public ParsingError(string Message) : base(Message) { }
+
+    }
+
     /*
         Example:
 
