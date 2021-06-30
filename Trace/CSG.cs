@@ -381,6 +381,7 @@ namespace Trace
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
         }
 
+
         /// <summary>
         /// This method checks if a Ray intersects with the CSG Difference shape.
         /// </summary>
