@@ -323,7 +323,7 @@ namespace Trace
                 }
             }
 
-            return scene;
+            return scene; // ok
         }
 
     }
