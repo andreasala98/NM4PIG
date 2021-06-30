@@ -271,7 +271,7 @@ namespace Trace
         /// with the details of the intersection, or null if there is no intersection
         /// </summary>
         /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <returns> Hit Record with the intersection</returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());

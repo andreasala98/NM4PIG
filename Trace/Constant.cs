@@ -58,6 +58,7 @@ namespace Trace
         public static Color BlueChill = new Color(0.05f, 0.6f, 0.6f);
         public static Color BrightGreen = new Color(.41176f, .9647f, .17254f);
         public static Color LightRed = new Color(1f, .3f, .3f);
+        public static Color PiggyPink = new Color(.99f, .71f, .756f);
 
 
 
@@ -87,6 +88,11 @@ namespace Trace
         }
 
         public static Sphere SKY = new Sphere(Transformation.Scaling(500f), skyMat);
+
+        public static Shape Body = new Sphere(Transformation.Translation(1f, 0f, 0f) * Transformation.RotationZ(10) * Transformation.Scaling(1f, 1.6f, 1f),
+                                                new Material(new DiffuseBRDF(new UniformPigment(PiggyPink)),
+                                                                            new UniformPigment(new Color(0f, 0f, 0f))));
+
 
 
 
