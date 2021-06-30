@@ -37,7 +37,7 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.0f);
+            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.5f) * Tsf.RotationY(Utility.DegToRad(15));
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
@@ -110,11 +110,11 @@ namespace NM4PIG
 
                     break;
                 case 4:
-
+                    Material mat = new Material(null, new UniformPigment(new Color(10f, 10f, 10f)));
                     world.addShape(CC.SKY);
-                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), CC.groundMat));
+                    world.addShape(new Plane(Tsf.Scaling(-3f, 0f, 0f) * Tsf.RotationY(Utility.DegToRad(270)), mat));
 
-                    world.addShape(CC.wikiShape(Tsf.Scaling(0.95f)));
+                    world.addShape(CC.wikiShape(Tsf.Scaling(0.75f)));
 
                     break;
                 case 5:

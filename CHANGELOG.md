@@ -1,7 +1,6 @@
-# Next Release
-Implement BRDF with different pigments
+# Version 1.0.0 - Latest release
 
-# Last Release
+PR [#6](https://github.com/andreasala98/NM4PIG/pull/6) Implemented a path tracing algorithm to render an image. This includes the following classes: Material, BRDF, Pigment, PCG random number generator
 PR [#5](https://github.com/andreasala98/NM4PIG/pull/5) implements a series of improvements to the project, including:
 - Command Line Interface. See [README](https://github.com/andreasala98/NM4PIG/blob/master/README.md) for usage and examples 
 - Implemented `Shape` objects: Sphere, Plane, Axis-Aligned Box and Constructive Solid Geometry

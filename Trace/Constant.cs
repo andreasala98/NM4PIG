@@ -66,12 +66,29 @@ namespace Trace
         public static Material groundMat = new Material(new DiffuseBRDF(), new CheckeredPigment(BrightGreen, BlueChill));
         public static Material BWgroundMat = new Material(new DiffuseBRDF(), new CheckeredPigment(White, Black));
         public static Material refMat = new Material(new SpecularBRDF(new UniformPigment(BroomYellow)));
-        public static Material greenMat = new Material(new DiffuseBRDF(new UniformPigment(BrightGreen)));
-        public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
-        public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 78f / 255, 255f / 255))));
+        public static Material greenMat = new Material(new DiffuseBRDF(new UniformPigment(Green)));
+        public static Material yellowMat = new Material(new DiffuseBRDF(new UniformPigment(Yellow)));
+        public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(255f / 255, 0f / 255, 0f / 255))));
+        public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(Blue)));
 
 
         public static Shape wikiShape(Transformation? transf = null)
+        {
+
+            Shape C1 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_X, yellowMat);
+            Shape C2 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_Y, yellowMat);
+            Shape C3 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_Z, yellowMat);
+
+            Shape S1 = new Sphere(Transformation.Scaling(1.35f), blueMat);
+            Shape B1 = new Box(material: redMat);
+
+            Shape tot = (S1 * B1) - ((C1 + C2) + C3);
+
+            if (transf.HasValue) tot.transformation = transf.Value;
+            return tot;
+        }
+
+        public static Shape Pig(Transformation? transf = null)
         {
 
             Shape C1 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_X, greenMat);
@@ -86,6 +103,7 @@ namespace Trace
             if (transf.HasValue) tot.transformation = transf.Value;
             return tot;
         }
+
 
         public static Sphere SKY = new Sphere(Transformation.Scaling(500f), skyMat);
 
