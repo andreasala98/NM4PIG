@@ -350,6 +350,11 @@ namespace Trace
             return new Normal(a.x / alfa, a.y / alfa, a.z / alfa);
         }
 
+        public static Normal operator *(Normal a, float alfa)
+        {
+            return new Normal(a.x * alfa, a.y * alfa, a.z * alfa);
+        }
+
         /// <summary>
         ///  Euclidean scalar product between two <see cref="Normal"/>s.
         /// </summary>
