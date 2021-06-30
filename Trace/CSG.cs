@@ -176,7 +176,7 @@ namespace Trace
         /// </summary>
         /// <param name="a">first Shape (the one FROM which you subtract)</param>
         /// <param name="b">second Shape (the one you subtract)</param>
-        public CSGDifference(Shape a, Shape b)
+        public CSGDifference(Shape a, Shape b, Transformation? transf = null) : base(transf, null)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -191,7 +191,8 @@ namespace Trace
         /// 
         public override HitRecord? rayIntersection(Ray ray)
         {
-            List<HitRecord?> intersections = rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            List<HitRecord?> intersections = rayIntersectionList(invRay);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
@@ -205,14 +206,14 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
-
+            Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a.Count == 0)
             {
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
 
             for (int i = 0; i < a.Count; i++)
             {
@@ -258,13 +259,14 @@ namespace Trace
         /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a.Count == 0)
             {
                 return false;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
 
             for (int i = 0; i < a.Count; i++)
             {
@@ -305,7 +307,7 @@ namespace Trace
 
         public Shape secondShape;
 
-        public CSGIntersection(Shape a, Shape b)
+        public CSGIntersection(Shape a, Shape b, Transformation? transf = null) : base(transf, null)
         {
             this.firstShape = a;
             this.secondShape = b;
@@ -328,13 +330,14 @@ namespace Trace
         /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a.Count == 0)
             {
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
             if (b.Count == 0)
             {
                 return legalHits;
@@ -371,7 +374,8 @@ namespace Trace
         /// 
         public override HitRecord? rayIntersection(Ray ray)
         {
-            List<HitRecord?> intersections = rayIntersectionList(ray);
+            Ray invRay = ray.Transform(this.transformation.getInverse());
+            List<HitRecord?> intersections = rayIntersectionList(invRay);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
@@ -396,13 +400,14 @@ namespace Trace
         /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
+            Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(ray);
+            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
             if (a.Count == 0)
             {
                 return false;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(ray);
+            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
             if (b.Count == 0)
             {
                 return false;
