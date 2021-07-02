@@ -786,13 +786,13 @@ namespace Trace
             float u, v;
             if (Utility.areClose(point.z, 0.5f))
             {
-                u = 0.75f + point.x / 2f;
-                v = 0.75f + point.y / 2f;
+                u = 0.75f + (point.x + 1f) / 2f;
+                v = 0.75f + (point.y + 1f) / 2f;
             }
             else if (Utility.areClose(point.z, -0.5f))
             {
-                u = 0.25f + point.x / 2f;
-                v = 0.75f + point.y / 2f;
+                u = 0.25f + (point.x + 1f) / 2f;
+                v = 0.75f + (point.y + 1f) / 2f;
             }
             else
             {
