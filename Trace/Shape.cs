@@ -784,21 +784,29 @@ namespace Trace
         private Vec2D _cylinderPointToUV(Point point)
         {
             float u, v;
-            if (Utility.areClose(point.z, 0.5f))
+
+
+            if (Utility.areClose(point.z, 0.5f)) 
             {
-                u = 0.75f + point.x / 2f;
-                v = 0.75f + point.y / 2f;
+                 Console.WriteLine("Top face " + point.ToString());
+                 u = 0.75f + (point.x + 1f) / 2f; 
+                 v = 0.75f + (point.y + 1f) / 2f;
+             } 
+             else if (Utility.areClose(point.z, -0.5f)) 
+             {
+                Console.WriteLine("Bottom face " + point.ToString());
+                u = 0.25f + (point.x + 1f) / 2f;
+                v = 0.75f + (point.y + 1f) / 2f; 
             }
-            else if (Utility.areClose(point.z, -0.5f))
-            {
-                u = 0.25f + point.x / 2f;
-                v = 0.75f + point.y / 2f;
-            }
+
             else
             {
+                 Console.WriteLine("Lateral face " + point.ToString());
                 u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
                 v = (point.z + 0.5f) / 2f;
             }
+
+            Console.WriteLine($"u={u}, v={v}");
             return new Vec2D(u, v);
         }
         public override bool isPointInside(Point a)

@@ -74,16 +74,17 @@ namespace NM4PIG
 
                 case 2:
                     HdrImage img = new HdrImage();
-                    string inputpfm = "Texture/minecraft.pfm";
+                    string inputpfm = "Texture/Coketexture.pfm";
                     using (FileStream inputStream = File.OpenRead(inputpfm))
                     {
                         img.readPfm(inputStream);
                         Console.WriteLine($"Texture {inputpfm} has been correctly read from disk.");
                     }
 
+                    world.addShape(CC.SKY);
                     world.addShape(
-                                    new Box(
-                                            transformation: Transformation.Scaling(0.5f),
+                                    new Cylinder(
+                                            transformation: Transformation.Scaling(1.0f),
                                             material: new Material(
                                                                 Brdf: new DiffuseBRDF(new ImagePigment(img)),
                                                                 EmittedRadiance: new UniformPigment(Constant.Black)

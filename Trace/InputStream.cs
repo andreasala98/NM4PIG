@@ -33,7 +33,6 @@ namespace Trace
     /// </summary>
     public class InputStream
     {
-
         /// <summary>
         /// stream we read from
         /// </summary>
@@ -156,7 +155,6 @@ namespace Trace
 
                 token += ch;
             }
-
             return new StringToken(token, tokenLocation);
         }
 
@@ -186,7 +184,6 @@ namespace Trace
                 throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
             }
 
-
             return new LiteralNumberToken(tokenLocation, value);
         }
 
@@ -202,7 +199,6 @@ namespace Trace
                     this.unreadChar(ch);
                     break;
                 }
-
                 token += ch;
             }
 
@@ -214,8 +210,6 @@ namespace Trace
             {
                 return new IdentifierToken(tokenLocation, token);
             }
-
-
 
         }
 
@@ -309,7 +303,6 @@ namespace Trace
 
                 return scene.floatVariables[variableName];
             }
-
             throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
         }
 
@@ -340,8 +333,6 @@ namespace Trace
             this.savedToken = token;
         }
     }
-
-
 
 }
 

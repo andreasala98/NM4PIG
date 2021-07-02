@@ -10,7 +10,6 @@ using CC = Trace.Constant;
 
 namespace NM4PIG 
 {
-
     class MainFuncs
     {
         public static void Demo(int width, int height, int angle, bool orthogonal, string pfmFile, 
@@ -74,7 +73,7 @@ namespace NM4PIG
 
                 case 2:
 
-                    Material material1 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Yellow, Constant.Blue)));
+                    Material material1 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(CC.Yellow, Constant.Blue)));
                     Material material2 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Red, Constant.White)));
                     Material material3 = new Material(Brdf: new DiffuseBRDF(new CheckeredPigment(Constant.Orange, Constant.Green)));
 
