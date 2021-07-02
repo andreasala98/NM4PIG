@@ -19,8 +19,9 @@ IN THE SOFTWARE.
 #nullable enable
 using System;
 using System.IO;
-using Trace;
+using System.Collections.Generic;
 using System.Globalization;
+using Trace;
 
 namespace NM4PIG
 {
@@ -72,6 +73,7 @@ namespace NM4PIG
         public int spp;
         public char render;
         public string file;
+        public Dictionary<string, float> variables;
 
         public Parameters()
         {
@@ -88,6 +90,7 @@ namespace NM4PIG
             this.spp = Default.spp;
             this.render = Default.render;
             this.file = Default.file;
+            this.variables = new Dictionary<string, float>();
         }
 
         /// <summary>
@@ -106,41 +109,9 @@ namespace NM4PIG
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
 
-            if (factor != null)
-            {
-                try
-                {
-                    this.factor = float.Parse(factor, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Factor argument is not a float. Please enter floating-point numbers");
-                }
-            }
-
-            if (gamma != null)
-            {
-                try
-                {
-                    this.gamma = float.Parse(gamma, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Gamma argument is not a float. Please enter floating-point numbers");
-                }
-            }
-
-            if (luminosity != null)
-            {
-                try
-                {
-                    this.luminosity = float.Parse(luminosity, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
-                }
-            }
+            _readFactor(factor);
+            _readGamma(gamma);
+            _readLuminosity(luminosity);
 
         } //parseCommandLineConvert
 
@@ -161,6 +132,39 @@ namespace NM4PIG
             if (ldrfile != null) this.ldrFile = ldrfile;
             if (orthogonal != null) this.orthogonal = true;
 
+            _readWidth(width);
+            _readHeight(height);
+            _readScene(scene);
+            _readAngleDeg(angledeg);
+            _readLuminosity(luminosity);
+            _readSPP(SPP);
+            _readRend(rend);
+        }
+
+        /// <summary>
+        ///  Parse parameters from the command line in 'render' mode
+        /// </summary>
+        /// <param name="file"> File that describes the scene </param>
+        /// <param name="width"> Width of the image</param>
+        /// <param name="height"> Height of the image</param>
+        /// <param name="angledeg"> Field of view angle in degrees</param>
+        /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
+        /// <param name="pfmfile"> Name of the fm output file</param>
+        /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
+        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend, List<string> declareFloat)
+        {
+            if (pfmfile != null) this.pfmFile = pfmfile;
+            if (ldrfile != null) this.ldrFile = ldrfile;
+            _readFile(file);
+            _readWidth(width);
+            _readHeight(height);
+            _readSPP(SPP);
+            _readRend(rend);
+            _readFloat(declareFloat);
+        }
+
+        private void _readWidth(string? width)
+        {
             if (width != null)
             {
                 try
@@ -172,43 +176,40 @@ namespace NM4PIG
                     throw new CommandLineException("Width argument is not an int. Please enter an integer");
                 }
             }
+        }
 
-            if (scene != null)
+        private void _readFactor(string? factor)
+        {
+            if (factor != null)
             {
                 try
                 {
-                    this.scene = Int32.Parse(scene);
+                    this.factor = float.Parse(factor, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
-                    throw new CommandLineException("Scene argument is not an int. Please enter an integer");
+                    throw new CommandLineException("Factor argument is not a float. Please enter floating-point numbers");
                 }
             }
+        }
 
-            if (height != null)
+        private void _readGamma(string? gamma)
+        {
+            if (gamma != null)
             {
                 try
                 {
-                    this.height = Int32.Parse(height);
+                    this.gamma = float.Parse(gamma, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
-                    throw new CommandLineException("Height argument is not an int. Please enter an integer");
+                    throw new CommandLineException("Gamma argument is not a float. Please enter floating-point numbers");
                 }
             }
+        }
 
-            if (angledeg != null)
-            {
-                try
-                {
-                    this.angledeg = Int32.Parse(angledeg);
-                }
-                catch
-                {
-                    throw new CommandLineException("Angle argument is not an int. Please enter an integer");
-                }
-            }
-
+        private void _readLuminosity(string? luminosity)
+        {
             if (luminosity != null)
             {
                 try
@@ -220,19 +221,72 @@ namespace NM4PIG
                     throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
                 }
             }
+        }
 
+        private void _readScene(string? scene)
+        {
+            if (scene != null)
+            {
+                try
+                {
+                    this.scene = Int32.Parse(scene);
+                }
+                catch
+                {
+                    throw new CommandLineException("Scene argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readHeight(string? height)
+        {
+            if (height != null)
+            {
+                try
+                {
+                    this.height = Int32.Parse(height);
+                }
+                catch
+                {
+                    throw new CommandLineException("Height argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readAngleDeg(string? angledeg)
+        {
+            if (angledeg != null)
+            {
+                try
+                {
+                    this.angledeg = Int32.Parse(angledeg);
+                }
+                catch
+                {
+                    throw new CommandLineException("Angle argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readSPP(string? SPP)
+        {
             if (SPP != null)
             {
                 try
                 {
                     int TEMP_SPP = Int32.Parse(SPP);
                     this.spp = (int)Math.Pow((int)Math.Sqrt(TEMP_SPP), 2);
+                    if (TEMP_SPP != this.spp) Console.WriteLine($"The number of samples per pixel ({TEMP_SPP}) must be a perfect square. It has been corrected to {this.spp}");
                 }
                 catch
                 {
                     throw new CommandLineException("Samples per pixel: argument passed is not an integer");
                 }
             }
+        }
+
+        private void _readRend(string? rend)
+        {
             if (rend != null)
             {
                 if (rend == "o" | rend == "p" | rend == "f" | rend == "r")
@@ -248,20 +302,9 @@ namespace NM4PIG
                 }
                 else throw new CommandLineException("Render type: argument passed is not a valid char");
             }
-
         }
 
-        /// <summary>
-        ///  Parse parameters from the command line in 'render' mode
-        /// </summary>
-        /// <param name="file"> File that describes the scene </param>
-        /// <param name="width"> Width of the image</param>
-        /// <param name="height"> Height of the image</param>
-        /// <param name="angledeg"> Field of view angle in degrees</param>
-        /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
-        /// <param name="pfmfile"> Name of the fm output file</param>
-        /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
-        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend)
+        private void _readFile(string? file)
         {
             if (file == null) throw new CommandLineException("Insert a scene to render!");
             try
@@ -273,6 +316,28 @@ namespace NM4PIG
                 throw new CommandLineException($"File {file} not found!");
             }
             this.file = file;
+        }
+
+        private void _readFloat(List<string> declareFloat)
+        {
+            Dictionary<string, float> variables = new Dictionary<string, float>();
+            foreach (string declaration in declareFloat)
+            {
+                string[] tmp = declaration.Split(':', 2);
+                if (tmp.Length != 2) throw new CommandLineException($"error, the definition «{ declaration }» does not follow the pattern NAME:VALUE");
+                string name = tmp[0];
+                float value;
+                try
+                {
+                    value = float.Parse(tmp[1], CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new CommandLineException($"Value for variable {name} is not a float ({tmp[0]}). Please enter a float");
+                }
+                variables.Add(name, value);
+            }
+            this.variables = variables;
         }
     } //Parameters class
 

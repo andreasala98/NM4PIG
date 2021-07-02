@@ -16,9 +16,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 IN THE SOFTWARE.
 */
 
-using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using Xunit;
@@ -62,13 +60,13 @@ namespace Trace.Test
             byte[] byteArray = Encoding.ASCII.GetBytes(test);
             MemoryStream stream = new MemoryStream(byteArray);
             InputStream inputStream = new InputStream(stream);
-            Scene scene = Scene.parseScene(inputStream);
+            Scene scene = Scene.parseScene(inputStream, new Dictionary<string, float>());
 
             // variables
 
-            Assert.True( scene.floatVariables.Count == 1, "TestParser failed! Assert 1");
-            Assert.True( scene.floatVariables.ContainsKey("clock"), "TestParser failed! Assert 2");
-            Assert.True( scene.floatVariables["clock"]==150.0f, "TestParser failed! Assert 3");
+            Assert.True(scene.floatVariables.Count == 1, "TestParser failed! Assert 1");
+            Assert.True(scene.floatVariables.ContainsKey("clock"), "TestParser failed! Assert 2");
+            Assert.True(scene.floatVariables["clock"] == 150.0f, "TestParser failed! Assert 3");
 
             // materials
 
@@ -84,24 +82,24 @@ namespace Trace.Test
             Assert.True(sphMat.brdf is SpecularBRDF, $"TestParser failed! Assert 8 (SpecularBrdf is not {sphMat.brdf.GetType()})");
             Assert.True(skyMat.brdf is DiffuseBRDF, "TestParser failed! Assert 9");
             Assert.True(gndMat.brdf is DiffuseBRDF, "TestParser failed! Assert 10");
-            
+
 
             Assert.True(sphMat.brdf.pigment is UniformPigment, "TestParser failed! Assert 11");
             Assert.True(skyMat.brdf.pigment is UniformPigment, "TestParser failed! Assert 12");
             Assert.True(gndMat.brdf.pigment is CheckeredPigment, "TestParser failed! Assert 13");
 
-            Assert.True(((UniformPigment)sphMat.brdf.pigment).c.isClose(new Color(0.5f,0.5f,0.5f)), "TestParser failed! Assert 14");
-            Assert.True(((CheckeredPigment)gndMat.brdf.pigment).color1.isClose(new Color(0.3f,0.5f,0.1f)), "TestParser failed! Assert 15");
-            Assert.True(((CheckeredPigment)gndMat.brdf.pigment).color2.isClose(new Color(0.1f,0.2f,0.5f)), "TestParser failed! Assert 16");
+            Assert.True(((UniformPigment)sphMat.brdf.pigment).c.isClose(new Color(0.5f, 0.5f, 0.5f)), "TestParser failed! Assert 14");
+            Assert.True(((CheckeredPigment)gndMat.brdf.pigment).color1.isClose(new Color(0.3f, 0.5f, 0.1f)), "TestParser failed! Assert 15");
+            Assert.True(((CheckeredPigment)gndMat.brdf.pigment).color2.isClose(new Color(0.1f, 0.2f, 0.5f)), "TestParser failed! Assert 16");
             Assert.True(((CheckeredPigment)gndMat.brdf.pigment).nSteps == 4, "TestParser failed! Assert 17");
-            Assert.True(((UniformPigment)skyMat.emittedRadiance).c.isClose(new Color(0.7f,0.5f,1f)), "TestParser failed! Assert 18");
+            Assert.True(((UniformPigment)skyMat.emittedRadiance).c.isClose(new Color(0.7f, 0.5f, 1f)), "TestParser failed! Assert 18");
 
             Assert.True(skyMat.emittedRadiance is UniformPigment, "TestParser failed! Assert 19");
             Assert.True(gndMat.emittedRadiance is UniformPigment, "TestParser failed! Assert 20");
             Assert.True(sphMat.emittedRadiance is UniformPigment, "TestParser failed! Assert 21");
 
-            Assert.True(((UniformPigment)gndMat.emittedRadiance).c.isClose(new Color(0f,0f,0f)), "TestParser failed! Assert 22");
-            Assert.True(((UniformPigment)sphMat.emittedRadiance).c.isClose(new Color(0f,0f,0f)), "TestParser failed! Assert 23");
+            Assert.True(((UniformPigment)gndMat.emittedRadiance).c.isClose(new Color(0f, 0f, 0f)), "TestParser failed! Assert 22");
+            Assert.True(((UniformPigment)sphMat.emittedRadiance).c.isClose(new Color(0f, 0f, 0f)), "TestParser failed! Assert 23");
 
 
             // Shapes
@@ -112,7 +110,7 @@ namespace Trace.Test
             Assert.True(scene.world.shapes[2] is Sphere, "TestParser failed! Assert 27");
 
             Transformation tr1 = Transformation.Translation(new Vec(0f, 0f, 100f)) * Transformation.RotationY(150);
-            Transformation tr2 = Transformation.Translation(new Vec(0f,0f,1f));
+            Transformation tr2 = Transformation.Translation(new Vec(0f, 0f, 1f));
 
             Assert.True(scene.world.shapes[0].transformation.isClose(tr1),
              $"TestParser failed! Assert 28");
@@ -122,13 +120,13 @@ namespace Trace.Test
             // Camera
 
             Assert.True(scene.camera is PerspectiveCamera, "TestParser failed! Assert 31");
-            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(30) * Transformation.Translation(new Vec(-4f,0f,1f))), "TestParser failed! Assert 32");
+            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(30) * Transformation.Translation(new Vec(-4f, 0f, 1f))), "TestParser failed! Assert 32");
             Assert.True(Utility.areClose(scene.camera.aspectRatio, 1f), "TestParser failed! Assert 33");
             Assert.True(Utility.areClose(((PerspectiveCamera)scene.camera).screenDistance, 2f), "TestParser failed! Assert 34");
         }
 
         [Fact]
-        void TestUndefinedMaterial() 
+        void TestUndefinedMaterial()
         {
             string test = @" 
                 material sky_material(
@@ -145,10 +143,11 @@ namespace Trace.Test
 
             try
             {
-                Scene scene = Scene.parseScene(inputStream);
+                Scene scene = Scene.parseScene(inputStream, new Dictionary<string, float>());
                 Assert.False(true, "The test did not throw an exception");
             }
-            catch (GrammarError){
+            catch (GrammarError)
+            {
                 // if we land here it's ok
             }
             return;
@@ -167,10 +166,11 @@ namespace Trace.Test
             InputStream inputStream = new InputStream(stream);
             try
             {
-                Scene scene = Scene.parseScene(inputStream);
+                Scene scene = Scene.parseScene(inputStream, new Dictionary<string, float>());
                 Assert.False(true, "The test did not throw an exception");
             }
-            catch (GrammarError){
+            catch (GrammarError)
+            {
                 // if we land here it's ok
             }
             return;

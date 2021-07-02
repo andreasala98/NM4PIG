@@ -33,7 +33,7 @@ namespace Trace
         public Camera? camera = null;
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
         public Dictionary<string, float> floatVariables = new Dictionary<string, float>();
-        public string[] overriddenVariables = new string[]{};
+        public string[] overriddenVariables = new string[] { };
 
 
 
@@ -48,7 +48,7 @@ namespace Trace
             float z = inputFile.expectNumber(scene);
             inputFile.expectSymbol("]");
 
-            return new Vec(x,y,z);
+            return new Vec(x, y, z);
         }
 
 
@@ -62,11 +62,12 @@ namespace Trace
             float b = inputFile.expectNumber(scene);
             inputFile.expectSymbol(">");
 
-            return new Color(r,g,b);
+            return new Color(r, g, b);
         }
 
 
-        public static IPigment parsePigment(InputStream inputFile, Scene scene){
+        public static IPigment parsePigment(InputStream inputFile, Scene scene)
+        {
             KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Uniform, KeywordEnum.Checkered, KeywordEnum.Image });
             inputFile.expectSymbol("(");
             IPigment result;
@@ -91,12 +92,12 @@ namespace Trace
             else if (key == KeywordEnum.Image)
             {
                 string fileName = inputFile.expectString();
-                using (Stream imageStream = File.OpenWrite(fileName))
+                using (Stream imageStream = File.OpenRead(fileName))
                 {
                     HdrImage img = new HdrImage(imageStream);
                     result = new ImagePigment(img);
                 }
-                
+
             }
             else
             {
@@ -113,7 +114,7 @@ namespace Trace
         public static BRDF parseBRDF(InputStream inputFile, Scene scene)
         {
             BRDF result;
-            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() {KeywordEnum.Diffuse, KeywordEnum.Specular});
+            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Diffuse, KeywordEnum.Specular });
             inputFile.expectSymbol("(");
             IPigment pigment = parsePigment(inputFile, scene);
             inputFile.expectSymbol(")");
@@ -145,7 +146,8 @@ namespace Trace
         }
 
 
-        public static Transformation parseTransformation(InputStream inputFile, Scene scene){
+        public static Transformation parseTransformation(InputStream inputFile, Scene scene)
+        {
 
             Transformation result = new Transformation(1);
             List<KeywordEnum> keyList = new List<KeywordEnum>() { KeywordEnum.Identity, KeywordEnum.Translation, KeywordEnum.Scaling,
@@ -153,7 +155,7 @@ namespace Trace
 
             // now we look for transformations until there is no more *
             while (true)
-            {      
+            {
                 KeywordEnum key = inputFile.expectKeywords(keyList);
 
                 if (key == KeywordEnum.Identity) break;
@@ -202,7 +204,8 @@ namespace Trace
             return result;
         } //parseTranformation
 
-        public static Sphere parseSphere(InputStream inputFile, Scene scene) {
+        public static Sphere parseSphere(InputStream inputFile, Scene scene)
+        {
 
             inputFile.expectSymbol("(");
             string matName = inputFile.expectIdentifier();
@@ -217,7 +220,8 @@ namespace Trace
         }
 
 
-        public static Plane parsePlane(InputStream inputFile, Scene scene) {
+        public static Plane parsePlane(InputStream inputFile, Scene scene)
+        {
 
             inputFile.expectSymbol("(");
             string matName = inputFile.expectIdentifier();
@@ -245,7 +249,7 @@ namespace Trace
             return new Cylinder(tr, scene.materials[matName]);
         }
 
-           public static Box parseBox(InputStream inputFile, Scene scene)
+        public static Box parseBox(InputStream inputFile, Scene scene)
         {
             // cylinder(material, transformation)
             inputFile.expectSymbol("(");
@@ -256,7 +260,7 @@ namespace Trace
             Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(")");
 
-            return new Box(new Point(-1f,-1f,-1f), new Point(1f,1f,1f), tr, scene.materials[matName]);
+            return new Box(new Point(-1f, -1f, -1f), new Point(1f, 1f, 1f), tr, scene.materials[matName]);
         }
 
         public static Cone parseCone(InputStream inputFile, Scene scene)
@@ -269,10 +273,10 @@ namespace Trace
             Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(")");
 
-            return new Cone(1f,1f,tr, scene.materials[matName]);
+            return new Cone(1f, 1f, tr, scene.materials[matName]);
         }
 
-           public static CSGUnion parseCSGUnion(InputStream inputFile, Scene scene)
+        public static CSGUnion parseCSGUnion(InputStream inputFile, Scene scene)
         {
             List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
                                                                      KeywordEnum.Box, KeywordEnum.Cylinder,
@@ -310,7 +314,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -344,7 +348,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -392,7 +396,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -426,7 +430,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -436,7 +440,7 @@ namespace Trace
             return new CSGDifference(lShape, rShape, tr);
         }
 
-      public static CSGIntersection parseCSGIntersection(InputStream inputFile, Scene scene)
+        public static CSGIntersection parseCSGIntersection(InputStream inputFile, Scene scene)
         {
             List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
                                                                     KeywordEnum.Box, KeywordEnum.Cylinder,
@@ -474,7 +478,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -508,7 +512,7 @@ namespace Trace
                     break;
                 default:
                     throw new GrammarError(inputFile.location, $"Shape not found at {inputFile.location.ToString()}");
-                    
+
             }
 
             inputFile.expectSymbol(",");
@@ -529,10 +533,11 @@ namespace Trace
 
         }
 
-        public static Camera parseCamera(InputStream inputFile, Scene scene) {
+        public static Camera parseCamera(InputStream inputFile, Scene scene)
+        {
 
             inputFile.expectSymbol("(");
-            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Perspective, KeywordEnum.Orthogonal});
+            KeywordEnum key = inputFile.expectKeywords(new List<KeywordEnum>() { KeywordEnum.Perspective, KeywordEnum.Orthogonal });
             inputFile.expectSymbol(",");
             Transformation tr = parseTransformation(inputFile, scene);
             inputFile.expectSymbol(",");
@@ -552,11 +557,11 @@ namespace Trace
         }
 
 
-        public static Scene parseScene(InputStream inputFile)
+        public static Scene parseScene(InputStream inputFile, Dictionary<string, float> variables)
         {
             Scene scene = new Scene();
-            scene.floatVariables = new Dictionary<string, float>();
-            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables,0);
+            scene.floatVariables = variables;
+            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables, 0);
 
             while (true)
             {

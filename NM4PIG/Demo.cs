@@ -18,7 +18,6 @@ namespace NM4PIG
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            int sqSpp = (int)Math.Pow((int)Math.Sqrt(spp), 2);
 
             Console.WriteLine("Starting Demo with these parameters:\n");
 
@@ -28,7 +27,7 @@ namespace NM4PIG
             Console.WriteLine(orthogonal ? "Orthogonal Camera" : "Perspective Camera");
             Console.WriteLine("pfmFile: " + pfmFile);
             Console.WriteLine("ldrFile: " + ldrFile);
-            Console.WriteLine("Samples per pixel: " + sqSpp);
+            Console.WriteLine("Samples per pixel: " + spp);
             Console.WriteLine("Render type: " + dictRend[rendType]);
 
             Console.WriteLine("\n");
@@ -142,9 +141,9 @@ namespace NM4PIG
                 case 'f':
                     renderer = new FlatRender(world);
                     break;
-                //case 'p':
-                // renderer = new PointLightTracer(world);
-                //break;
+                case 'p':
+                    renderer = new PointLightRender(world);
+                    break;
                 case 'r':
                     renderer = new PathTracer(world, CC.Black, new PCG());
                     break;
@@ -154,7 +153,7 @@ namespace NM4PIG
 
             // Ray tracing
             Console.WriteLine("Rendering the scene...");
-            var rayTracer = new ImageTracer(image, camera, (int)Math.Sqrt(sqSpp));
+            var rayTracer = new ImageTracer(image, camera, (int)Math.Sqrt(spp));
 
             if (renderer == null) renderer = new OnOffRender(world);
 
