@@ -30,7 +30,7 @@ namespace Trace.Test
         {
             string test = @" 
                 float clock(150)
-                camera(perspective, rotationZ(30) * translation([-4, 0, 1]), 1.0, 2.0)
+                camera(perspective, rotation_z(30) * translation([-4, 0, 1]), 1.0, 2.0)
 
                 material sky_material(
                  diffuse(uniform(<0, 0, 0>)),
@@ -50,7 +50,7 @@ namespace Trace.Test
                             uniform(<0, 0, 0>)
                                         )
     
-                plane (sky_material, translation([0, 0, 100]) * rotationY(clock))
+                plane (sky_material, translation([0, 0, 100]) * rotation_y(clock))
                 plane (ground_material, identity)
                 # hi
                 sphere(sphere_material, translation([0, 0, 1]))
