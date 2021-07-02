@@ -125,7 +125,8 @@ namespace NM4PIG
 
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyM));
-                    world.addShape(new Cone(r: 0.5f, material: checkered, transformation: Tsf.Translation(new Vec(0f, 0f, -0.5f))));
+                    world.addShape(new Cylinder(Tsf.Translation(0f, 2f, -0.5f) * Tsf.Scaling(0.5f), checkered));
+                    world.addShape(new Cone(r: 0.5f, material: checkered));
                     world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), ground));
 
                     break;

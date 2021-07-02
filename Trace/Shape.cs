@@ -784,19 +784,15 @@ namespace Trace
         private Vec2D _cylinderPointToUV(Point point)
         {
             float u, v;
-
-
-            if (Utility.areClose(point.z, 0.5f)) 
+            if (Utility.areClose(point.z, 0.5f))
             {
-                 Console.WriteLine("Top face " + point.ToString());
-                 u = 0.75f + (point.x + 1f) / 2f; 
-                 v = 0.75f + (point.y + 1f) / 2f;
-             } 
-             else if (Utility.areClose(point.z, -0.5f)) 
-             {
-                Console.WriteLine("Bottom face " + point.ToString());
-                u = 0.25f + (point.x + 1f) / 2f;
-                v = 0.75f + (point.y + 1f) / 2f; 
+                u = 0.75f + (point.x + 1f) / 8f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/8 in [0,0.25]
+                v = 0.75f + (point.y + 1f) / 8f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/8 in [0,0.25]
+            }
+            else if (Utility.areClose(point.z, -0.5f))
+            {
+                u = 0.25f + (point.x + 1f) / 8f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/8 in [0,0.25]
+                v = 0.75f + (point.y + 1f) / 8f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/8 in [0,0.25]
             }
 
             else
@@ -806,7 +802,6 @@ namespace Trace
                 v = (point.z + 0.5f) / 2f;
             }
 
-            Console.WriteLine($"u={u}, v={v}");
             return new Vec2D(u, v);
         }
         public override bool isPointInside(Point a)
@@ -849,10 +844,10 @@ namespace Trace
         // +-----------------------------+
         // |              |              |
         // |     bottom   |    lateral   |
+        // |     face     |              |
+        // |--------------|     face     |
         // |              |              |
-        // |     face     |     face     |
-        // |              |              |
-        // |              |              |
+        // |   nothing    |              |
         // |              |              |
         // +-----------------------------+
         private Vec2D _conePointToUV(Point point)
@@ -862,7 +857,7 @@ namespace Trace
             {
                 // point is on the base
                 u = (point.x + this.radius) / (4f * this.radius);       // u in [0,0.5]
-                v = (point.y + this.radius) / (2f * this.radius);       // v in [0,1]
+                v = (point.y + this.radius) / (4f * this.radius);       // v in [0,0.5]
             }
             else
             {
@@ -871,6 +866,7 @@ namespace Trace
                 u = 0.5f + (u / 2f);
                 v = (point.z) / this.height;
             }
+
             return new Vec2D(u, v);
         }
 
@@ -913,7 +909,7 @@ namespace Trace
             if (hitBottom.HasValue)
             {
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius * this.radius)
                     return true;
             }
 
@@ -969,7 +965,8 @@ namespace Trace
             if (hitBottom.HasValue)
             {
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius * this.radius)
+                {
                     planeHit = new HitRecord(
                                 wp: this.transformation * pointInt,
                                 nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
@@ -977,6 +974,7 @@ namespace Trace
                                 tt: hitBottom.Value.t,
                                 r: ray,
                                 shape: this);
+                }
             }
             HitRecord? coneHit = null;
 
@@ -1023,29 +1021,31 @@ namespace Trace
             {
                 firstHitT = tmin;
                 Point hitPoint = invRay.at(firstHitT);
-                coneHit = new HitRecord(
-                                        this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir),
-                                        _conePointToUV(hitPoint),
-                                        firstHitT,
-                                        ray,
-                                        this);
-                if (!(coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
-                    coneHit = null;
+                if (hitPoint.z >= 0f && hitPoint.z <= this.height)
+                {
+                    coneHit = new HitRecord(
+                                            this.transformation * hitPoint,
+                                            this.transformation * _coneNormal(hitPoint, ray.dir),
+                                            _conePointToUV(hitPoint),
+                                            firstHitT,
+                                            ray,
+                                            this);
+                }
             }
             else if (tmax > invRay.tmin && tmax < invRay.tmax && coneHit == null)
             {
                 firstHitT = tmax;
                 Point hitPoint = invRay.at(firstHitT);
-                coneHit = new HitRecord(
-                                        this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir),
-                                        _conePointToUV(hitPoint),
-                                        firstHitT,
-                                        ray,
-                                        this);
-                if (!(coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
-                    coneHit = null;
+                if (hitPoint.z >= 0f && hitPoint.z <= this.height)
+                {
+                    coneHit = new HitRecord(
+                                            this.transformation * hitPoint,
+                                            this.transformation * _coneNormal(hitPoint, ray.dir),
+                                            _conePointToUV(hitPoint),
+                                            firstHitT,
+                                            ray,
+                                            this);
+                }
             }
 
         NoConeHit:
@@ -1068,7 +1068,7 @@ namespace Trace
             if (hitBottom.HasValue)
             {
                 Point pointInt = hitBottom.Value.worldPoint;
-                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius)
+                if (pointInt.x * pointInt.x + pointInt.y * pointInt.y < this.radius * this.radius)
                     hits.Add(new HitRecord(
                                 wp: this.transformation * pointInt,
                                 nm: (this.transformation * this._coneNormal(pointInt, ray.dir)),
@@ -1097,12 +1097,7 @@ namespace Trace
             float delta = b * b - 4.0f * a * c;
             if (delta <= 0.0f)
             {
-                if (hits.Count == 0)
-                {
-                    hits.Add(null);
-                    return hits;
-                }
-                else return hits;
+                return hits;
             }
 
 
@@ -1120,45 +1115,40 @@ namespace Trace
                 tmax = (-b + sqrtDelta) / (2.0f * a);
             }
 
-            HitRecord? coneHit;
             if (tmin > invRay.tmin && tmin < invRay.tmax)
             {
                 Point hitPoint = invRay.at(tmin);
-                coneHit = new HitRecord(
-                                        this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir),
-                                        _conePointToUV(hitPoint),
-                                        tmin,
-                                        ray,
-                                        this);
-                if ((coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
-                    hits.Add(coneHit);
+                if (hitPoint.z >= 0f && hitPoint.z <= this.height)
+                {
+                    hits.Add(new HitRecord(
+                                            this.transformation * hitPoint,
+                                            this.transformation * _coneNormal(hitPoint, ray.dir),
+                                            _conePointToUV(hitPoint),
+                                            tmin,
+                                            ray,
+                                            this));
+                }
             }
             if (tmax > invRay.tmin && tmax < invRay.tmax)
             {
                 Point hitPoint = invRay.at(tmax);
-                coneHit = new HitRecord(
-                                        this.transformation * hitPoint,
-                                        this.transformation * _coneNormal(hitPoint, ray.dir),
-                                        _conePointToUV(hitPoint),
-                                        tmax,
-                                        ray,
-                                        this);
-                if ((coneHit?.surfacePoint.v >= 0f && coneHit?.surfacePoint.v <= 1f))
-                    hits.Add(coneHit);
+                if (hitPoint.z >= 0f && hitPoint.z <= this.height)
+                {
+                    hits.Add(new HitRecord(
+                                            this.transformation * hitPoint,
+                                            this.transformation * _coneNormal(hitPoint, ray.dir),
+                                            _conePointToUV(hitPoint),
+                                            tmax,
+                                            ray,
+                                            this));
+                }
             }
 
-            if (hits.Count == 0)
-            {
-                hits.Add(null);
-                return hits;
-            }
-            else
+            if (hits.Count != 0)
             {
                 hits.Sort();
-                return hits;
             }
-
+            return hits;
         }
         public override bool isPointInside(Point a)
         {

@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 #nullable enable
 using System;
+using System.IO;
 using Trace;
 using System.Globalization;
 
@@ -44,9 +45,13 @@ namespace NM4PIG
         public static float factor = 0.9f; //0.18f;
         public static float gamma = 2.0f; //1.0f;
 
+        //Render
+        public static string file = "";
+
         //General
         public static string pfmFile = "demoImage.pfm";
         public static string ldrFile = "demoImage.jpg";
+
     }
 
     /// <summary>
@@ -66,6 +71,7 @@ namespace NM4PIG
         public int scene;
         public int spp;
         public char render;
+        public string file;
 
         public Parameters()
         {
@@ -81,6 +87,7 @@ namespace NM4PIG
             this.scene = Default.scene;
             this.spp = Default.spp;
             this.render = Default.render;
+            this.file = Default.file;
         }
 
         /// <summary>
@@ -214,17 +221,19 @@ namespace NM4PIG
                 }
             }
 
-            if (SPP != null) 
+            if (SPP != null)
             {
-                try {
+                try
+                {
                     int TEMP_SPP = Int32.Parse(SPP);
                     this.spp = (int)Math.Pow((int)Math.Sqrt(TEMP_SPP), 2);
                 }
-                catch { 
+                catch
+                {
                     throw new CommandLineException("Samples per pixel: argument passed is not an integer");
                 }
             }
-            if (rend!=null) 
+            if (rend != null)
             {
                 if (rend == "o" | rend == "p" | rend == "f" | rend == "r")
                 {
@@ -240,6 +249,30 @@ namespace NM4PIG
                 else throw new CommandLineException("Render type: argument passed is not a valid char");
             }
 
+        }
+
+        /// <summary>
+        ///  Parse parameters from the command line in 'render' mode
+        /// </summary>
+        /// <param name="file"> File that describes the scene </param>
+        /// <param name="width"> Width of the image</param>
+        /// <param name="height"> Height of the image</param>
+        /// <param name="angledeg"> Field of view angle in degrees</param>
+        /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
+        /// <param name="pfmfile"> Name of the fm output file</param>
+        /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
+        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend)
+        {
+            if (file == null) throw new CommandLineException("Insert a scene to render!");
+            try
+            {
+                using (FileStream inputStream = File.OpenRead(file)) { }
+            }
+            catch
+            {
+                throw new CommandLineException($"File {file} not found!");
+            }
+            this.file = file;
         }
     } //Parameters class
 
