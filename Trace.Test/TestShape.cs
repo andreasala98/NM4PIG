@@ -340,7 +340,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 0.5f),
                                             new Normal(0.0f, 0.0f, 1.0f),
-                                            new Vec2D(0.75f, 0.75f),
+                                            new Vec2D(0.875f, 0.875f),
                                             9.5f,
                                             ray2
                                         );
@@ -393,6 +393,11 @@ namespace Trace.Test
         {
             Cone cone = new Cone(r: 1f, h: 1f);
 
+            Cone coneHigh = new Cone(r: 1f, h: 1f, transformation: Transformation.Translation(0f, 0f, 2f));
+            Ray ray = new Ray(origin: new Point(-5f, 0f, 0f), dir: Constant.VEC_X);
+            HitRecord? intersection = coneHigh.rayIntersection(ray);
+            Assert.True(intersection == null, "TestHitCone failed! - Assert 1/5");
+
             Ray ray1 = new Ray(origin: new Point(1.5f, 0f, 0.5f), dir: -Constant.VEC_X);
             HitRecord? intersection1 = cone.rayIntersection(ray1);
             Assert.True(intersection1 != null, "TestHitCone failed! - Assert 1/5");
@@ -412,7 +417,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                 new Point(0.0f, 0.0f, 0.0f),
                 new Normal(0.0f, 0.0f, -1.0f),
-                new Vec2D(0.25f, 0.5f),
+                new Vec2D(0.25f, 0.25f),
                 1.0f,
                 ray2
             );
@@ -440,7 +445,7 @@ namespace Trace.Test
             HitRecord hit4 = new HitRecord(
                 new Point(0f, 6f, 0f),
                 new Normal(0f, 0f, -1f),
-                new Vec2D(0.25f, 1f),
+                new Vec2D(0.25f, 0.5f),
                 0.5f,
                 ray4
             );
