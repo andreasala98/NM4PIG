@@ -37,7 +37,8 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.5f) * Tsf.RotationY(Utility.DegToRad(15));
+            // var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.5f) * Tsf.RotationY(Utility.DegToRad(15));
+            var cameraTransf = Transformation.Translation(-2.0f, 0.0f, 0.0f);
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
@@ -74,17 +75,19 @@ namespace NM4PIG
 
                 case 2:
                     HdrImage img = new HdrImage();
-                    string inputpfm = "Texture/Coketexture.pfm";
+                    string inputpfm = "Texture/r_coke.pfm";
                     using (FileStream inputStream = File.OpenRead(inputpfm))
                     {
                         img.readPfm(inputStream);
                         Console.WriteLine($"Texture {inputpfm} has been correctly read from disk.");
                     }
+                     Material groundM = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.Orange)), new UniformPigment(CC.Black));
 
                     world.addShape(CC.SKY);
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -2f), groundM));
                     world.addShape(
                                     new Cylinder(
-                                            transformation: Transformation.Scaling(1.0f),
+                                            transformation: Tsf.Translation(0f,0f,-1f)*Transformation.Scaling(.6f,0.6f,1.3f)*Tsf.RotationX(Constant.PI) ,
                                             material: new Material(
                                                                 Brdf: new DiffuseBRDF(new ImagePigment(img)),
                                                                 EmittedRadiance: new UniformPigment(Constant.Black)

@@ -797,7 +797,7 @@ namespace Trace
 
             else
             {
-                 Console.WriteLine("Lateral face " + point.ToString());
+                 //Console.WriteLine("Lateral face " + point.ToString());
                 u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
                 v = (point.z + 0.5f) / 2f;
             }
