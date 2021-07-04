@@ -53,6 +53,8 @@ namespace NM4PIG
                 var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
                 var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel", CommandOptionType.SingleValue);
                 var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r)", CommandOptionType.SingleValue);
+                var declareFloat = command.Option("--declare-float|-d", "Declare a variable. The syntax is «--declare-float VAR:VALUE». Example: --declare-float clock:150 --declare-float dummy=5.6 ...", CommandOptionType.MultipleValue);
+
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
                 {
@@ -68,7 +70,8 @@ namespace NM4PIG
                                                         pfmfile.Value(),
                                                         ldrfile.Value(),
                                                         spp.Value(),
-                                                        rendType.Value()
+                                                        rendType.Value(),
+                                                        declareFloat.Values
                                                             );
                     }
                     catch (CommandLineException e)
@@ -84,7 +87,8 @@ namespace NM4PIG
                         readParam.pfmFile,
                         readParam.ldrFile,
                         readParam.spp,
-                        readParam.render
+                        readParam.render,
+                        readParam.variables
                     );
                     return 0;
                 });

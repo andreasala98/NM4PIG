@@ -55,8 +55,8 @@ namespace Trace
     public enum KeywordEnum
     {
 
-        New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection, 
-        CSGDifference, Box,  Diffuse, Specular, Uniform, Checkered,
+        New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection,
+        CSGDifference, Box, Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
         Camera, Orthogonal, Perspective, Float, String, Wikishape
 
@@ -84,9 +84,9 @@ namespace Trace
             {  "image" , KeywordEnum.Image},
             {  "identity" , KeywordEnum.Identity},
             {  "translation" , KeywordEnum.Translation},
-            {  "rotationX" , KeywordEnum.RotationX},
-            {  "rotationY" , KeywordEnum.RotationY},
-            {  "rotationZ" , KeywordEnum.RotationZ},
+            {  "rotation_x" , KeywordEnum.RotationX},
+            {  "rotation_y" , KeywordEnum.RotationY},
+            {  "rotation_z" , KeywordEnum.RotationZ},
             {  "scaling" , KeywordEnum.Scaling},
             {  "camera" , KeywordEnum.Camera},
             {  "orthogonal" , KeywordEnum.Orthogonal},

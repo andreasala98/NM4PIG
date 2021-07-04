@@ -319,14 +319,14 @@ namespace Trace
             return ((StringToken)token).str;
         }
 
-        public string expectIdentifier() 
+        public string expectIdentifier()
         {
             Token token = this.readToken();
             if (!(token is IdentifierToken))
                 throw new GrammarError(token.sourceLoc, $"got {token}, instead of an Identifier");
             return ((IdentifierToken)token).id;
         }
-        
+
 
         public void unreadToken(Token token)
         {

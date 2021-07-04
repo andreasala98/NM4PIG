@@ -341,9 +341,8 @@ namespace Trace
         /// <returns> Vec2D with u and v as coordinates</returns>
         private static Vec2D _stdPlanePointToUV(Point point)
         {
-            float u = point.x - (int)(point.x);
-            float v = point.y - (int)(point.y);
-
+            float u = point.x - MathF.Floor(point.x);
+            float v = point.y - MathF.Floor(point.y);
             return new Vec2D(u, v);
         }
 
