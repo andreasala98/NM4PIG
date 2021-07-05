@@ -327,7 +327,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-1.0f, 0.0f, 0.0f),
                                             new Normal(-1f, 0.0f, 0.0f),
-                                            new Vec2D(0.5f, 0.25f),
+                                            new Vec2D(0.5f, 0.75f),
                                             4.0f,
                                             ray1
                                         );
@@ -340,7 +340,7 @@ namespace Trace.Test
             HitRecord hit2 = new HitRecord(
                                             new Point(0.0f, 0.0f, 0.5f),
                                             new Normal(0.0f, 0.0f, 1.0f),
-                                            new Vec2D(0.875f, 0.875f),
+                                            new Vec2D(0.75f, 0.25f),
                                             9.5f,
                                             ray2
                                         );
@@ -369,7 +369,7 @@ namespace Trace.Test
             HitRecord hit1 = new HitRecord(
                                             new Point(-2.179451f, 4.5f, 2.4f),
                                             new Normal(-0.017435608f, 0.036000002f, 0.0f),
-                                            new Vec2D(0.32178319f, 0.49f),
+                                            new Vec2D(0.32178319f, 0.51f),
                                             7.820549f,
                                             ray1
                                         );
