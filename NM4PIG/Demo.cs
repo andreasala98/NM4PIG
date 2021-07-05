@@ -81,8 +81,9 @@ namespace NM4PIG
                         Console.WriteLine($"Texture {inputpfm} has been correctly read from disk.");
                     }
                     Material groundM = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.Orange)), new UniformPigment(CC.Black));
-
-                    world.addShape(CC.SKY);
+                    
+                    //world.addShape(CC.SKY);
+                    world.addShape( CC.SKY);
                     world.addShape(new Plane(Tsf.Translation(0f, 0f, -3f), groundM));
                     world.addShape(
                                     new Cylinder(

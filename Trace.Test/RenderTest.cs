@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 namespace Trace.Test
 {
-    public class Render
+    public class RenderTest
     {
         [Fact]
         public void TestOnOffRender()
@@ -80,6 +80,7 @@ namespace Trace.Test
 
         [Fact]
         public void TestPathTracer()
+        // "Test della fornace"
         {
             PCG pcg = new PCG();
 
