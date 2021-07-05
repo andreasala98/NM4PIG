@@ -767,7 +767,7 @@ namespace Trace
 
 
         // U, V mapping for cylinder
-        // (0,1)     (0.5, 1)         (1,1)
+        // (0,0)     (0.5, 0)         (1,0)
         // +---------------------------+
         // |             |             |
         // |    bottom   |     top     |
@@ -779,26 +779,24 @@ namespace Trace
         // |                           |
         // |                           |
         // +---------------------------+
-        // (0,0)                        (1,0)
+        // (0,1)                        (1,1)
         private Vec2D _cylinderPointToUV(Point point)
         {
             float u, v;
             if (Utility.areClose(point.z, 0.5f))
             {
-                u = 0.75f + (point.x + 1f) / 8f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/8 in [0,0.25]
-                v = 0.75f + (point.y + 1f) / 8f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/8 in [0,0.25]
+                u = 0.5f + (point.x + 1f) / 4f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/4 in [0,0.5]
+                v = (point.y + 1f) / 4f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/4 in [0,0.5]
             }
             else if (Utility.areClose(point.z, -0.5f))
             {
-                u = 0.25f + (point.x + 1f) / 8f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/8 in [0,0.25]
-                v = 0.75f + (point.y + 1f) / 8f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/8 in [0,0.25]
+                u = (point.x + 1f) / 4f;        // x in [-1,1] -> x+1 in [0,2] -> (x+1)/4 in [0,0.5]
+                v = (point.y + 1f) / 4f;        // y in [-1,1] -> y+1 in [0,2] -> (y+1)/4 in [0,0.5]
             }
-
             else
             {
-                 //Console.WriteLine("Lateral face " + point.ToString());
                 u = (((float)Math.Atan2(point.y, point.x) + (2f * Constant.PI)) % (2f * Constant.PI)) / (2.0f * Constant.PI);
-                v = (point.z + 0.5f) / 2f;
+                v = 1f - (point.z + 0.5f) / 2f;
             }
 
             return new Vec2D(u, v);

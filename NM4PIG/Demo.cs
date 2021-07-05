@@ -74,26 +74,34 @@ namespace NM4PIG
 
                 case 2:
                     HdrImage img = new HdrImage();
-                    string inputpfm = "Texture/r_coke.pfm";
+                    string inputpfm = "Texture/CokeTexture.pfm";
                     using (FileStream inputStream = File.OpenRead(inputpfm))
                     {
                         img.readPfm(inputStream);
                         Console.WriteLine($"Texture {inputpfm} has been correctly read from disk.");
                     }
-                     Material groundM = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.Orange)), new UniformPigment(CC.Black));
+                    Material groundM = new Material(new DiffuseBRDF(new CheckeredPigment(CC.Black, CC.Orange)), new UniformPigment(CC.Black));
 
                     world.addShape(CC.SKY);
-                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -2f), groundM));
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -3f), groundM));
                     world.addShape(
                                     new Cylinder(
-                                            transformation: Tsf.Translation(0f,0f,-1f)*Transformation.Scaling(.6f,0.6f,1.3f)*Tsf.RotationX(Constant.PI) ,
+                                            transformation: Tsf.Translation(.5f, -1f, -1f) * Transformation.Scaling(.6f, 0.6f, 1.3f) * Tsf.RotationY(Utility.DegToRad(45)),
                                             material: new Material(
-                                                                Brdf: new DiffuseBRDF(new ImagePigment(img)),
-                                                                EmittedRadiance: new UniformPigment(Constant.Black)
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img))
+                                                                //EmittedRadiance: new UniformPigment(CC.Red)// new ImagePigment(img)
                                                                 )
                                 )
                                 );
-
+                    world.addShape(
+                                    new Cylinder(
+                                            transformation: Tsf.Translation(.5f, 1f, -1f) * Transformation.Scaling(.6f, 0.6f, 1.3f) * Tsf.RotationY(Utility.DegToRad(-45)),
+                                            material: new Material(
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img))
+                                                                //EmittedRadiance: new UniformPigment(CC.Red)// new ImagePigment(img)
+                                                                )
+                                )
+                                );
                     break;
 
                 case 3:
