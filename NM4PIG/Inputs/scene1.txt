@@ -1,0 +1,72 @@
+# Welcome to our first scene! :)
+
+# We will go together step by step in this first instruction file.
+# As you probably noticed, all lines starting with a 'hash' symbol
+# are considered comments, hence they are skipped by the compiler.
+
+
+### MATERIALS ###
+# the declaration of materials is intuitive. Just follow along:
+
+material skyMat(               # this is just the name of the variable
+    diffuse(                   # here we specify the BRDF type (namely diffuse or specular)
+            uniform(           # here we specify the diffusive pigment type (uniform, checkered or image)
+                   <0,0,0>     # diffusive color (colors need ANGULAR BRACKETS!)
+                    )
+            ),  
+    uniform(                   # another pigment to specify emitted radiance
+        <0.529, 0.808, 0.922> # emitted color
+        ) 
+)
+
+# Ok, we have defined out first material. Now we define another one, but with a checkered pigment!
+
+material groundMat(
+    diffuse(checkered(<0.3, 0.5, 0.1>, # first color
+                      <0.1, 0.2, 0.5>, # second color
+                       4)),            # number of 'iterations' of the ckeckered pattern
+    uniform(<0,0,0>)                   # the ground does not radiate light 
+)
+
+# Let's go with another one. Just remember that any material requires a BRDF and a Pigment
+
+material sphereMat(
+    specular(uniform(<0.8, 0.1, 0.1>)),
+    uniform(<0,0,0>)
+)
+
+### TRANSFORMATIONS ###
+
+# The transformations available are scalings, rotations and translations.
+# Each one of them takes a vector in input: a vector is defined between square brackets.
+# Transformations are to be passed to shapes when declaring them.
+
+### SHAPES ###
+
+# We need to add the shapes to the scene. We can add many different kind of shapes,
+# but we will start with a simple sphere and a plane
+# the generic constructor for basic shapes is
+# shape shapeName (material, transformation)
+
+# Let's declare the "sky"
+sphere(
+        skyMat,  # Using pre-declared variables comes in handy!
+        scaling([250,250,250])  # This is a composition of transformations!
+      )
+
+# Now it's time for the checkered ground:
+plane ( groundMat, identity) #identity means 'no transformation'
+
+sphere(sphereMat, scaling([2,2,2])*translation([-0.8,0, 0.25]))
+
+### CAMERA ###
+# For each scene, you must define one (and only one!) camera. 
+# It can either be perspective or orthogonal, and you can associate a transformation to the camera
+# The syntax for cameras is 
+# camera cameraName ( type, transf, aspect ratio, screen distance)
+
+camera(perspective, translation([-4, 0, 1]), 1.0, 1.0)
+
+# We've declared everything we needed! We are now ready to execute the program with
+# dotnet run -- render --file Files/scene1.txt --ldr Examples/scene1.jpg --render-type f --spp 4
+# The result can be seen in Examples/scene1.jpg

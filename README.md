@@ -5,7 +5,8 @@
  [![DocFX Build and Publish](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml/badge.svg?branch=master)](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml)
  [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/andreasala98/NM4PIG/blob/master/LICENSE)
 
-This is a rayTracer library called NM4PIG written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano (A.Y. 2020-2021).
+Welocome to NM4PIG!
+This is a raytracing library written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano (A.Y. 2020-2021).
 
 The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] and [Andrea Sala][4].
 
@@ -13,6 +14,10 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
+    - [Render mode](#rendermode)
+    - [How to create input files](#inputfiles)
+    - [Demo mode](#demo)
+    - [Convert mode](#convert)
 - [Documentation](#documentation)
 - [License](#license)
 
@@ -36,6 +41,23 @@ In order to use the library you can clone the repository:
 To check that the code works as expected, you can run a set of tests using the following command (from the NM4PIG/Trace.Test directory):
 
     dotnet test
+
+### Render mode
+
+Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions from the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use the render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
+
+    dotnet run -- render --file Files/dummy.txt -ldr dummy.jpg
+
+This command will read the instructions present in the file ```dummy.txt``` and generate an image called ```dummy.jpg```. Feel free to use your preferred editor to visualize the image generated. If you want to explore all the settable parameters, you can run
+
+    dotnet run -- render --help
+
+
+### How to create input files
+
+This Section is being written. Please be patient.
+
+
 
 ### Demo mode
 

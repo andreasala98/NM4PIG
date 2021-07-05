@@ -5,7 +5,6 @@ using Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Tsf = Trace.Transformation;
 using CC = Trace.Constant;
 
 namespace NM4PIG
@@ -21,8 +20,8 @@ namespace NM4PIG
             Console.WriteLine($"Image size: {width}x{height}");
             Console.WriteLine($"Output PFM-file: {pfmFile}");
             Console.WriteLine($"Output LDR-file: {ldrFile}");
-            Console.WriteLine($"Samples-per-pixels (antialiasing): {spp}");
-            Console.WriteLine("User-defined variables");
+            Console.WriteLine($"Samples-per-pixel (antialiasing): {spp}");
+            Console.WriteLine("User-defined overridden variables");
             if (variables.Count == 0) Console.WriteLine("    - No Variables");
             foreach (var item in variables)
             {
