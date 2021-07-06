@@ -109,7 +109,7 @@ namespace Trace.Test
             Assert.True(scene.world.shapes[1] is Plane, "TestParser failed! Assert 26");
             Assert.True(scene.world.shapes[2] is Sphere, "TestParser failed! Assert 27");
 
-            Transformation tr1 = Transformation.Translation(new Vec(0f, 0f, 100f)) * Transformation.RotationY(150);
+            Transformation tr1 = Transformation.Translation(new Vec(0f, 0f, 100f)) * Transformation.RotationY(Utility.DegToRad(150));
             Transformation tr2 = Transformation.Translation(new Vec(0f, 0f, 1f));
 
             Assert.True(scene.world.shapes[0].transformation.isClose(tr1),
@@ -120,7 +120,7 @@ namespace Trace.Test
             // Camera
 
             Assert.True(scene.camera is PerspectiveCamera, "TestParser failed! Assert 31");
-            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(30) * Transformation.Translation(new Vec(-4f, 0f, 1f))), "TestParser failed! Assert 32");
+            Assert.True(scene.camera.transformation.isClose(Transformation.RotationZ(Utility.DegToRad(30)) * Transformation.Translation(new Vec(-4f, 0f, 1f))), "TestParser failed! Assert 32");
             Assert.True(Utility.areClose(scene.camera.aspectRatio, 1f), "TestParser failed! Assert 33");
             Assert.True(Utility.areClose(((PerspectiveCamera)scene.camera).screenDistance, 2f), "TestParser failed! Assert 34");
         }
