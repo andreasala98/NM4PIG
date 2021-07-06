@@ -33,9 +33,7 @@ namespace Trace
         public Camera? camera = null;
         public Dictionary<string, Material> materials = new Dictionary<string, Material>();
         public Dictionary<string, float> floatVariables = new Dictionary<string, float>();
-        public string[] overriddenVariables = new string[] { };
-
-
+        public HashSet<string> overriddenVariables = new HashSet<string>();
 
 
         public static Vec parseVector(InputStream inputFile, Scene scene)
@@ -168,19 +166,19 @@ namespace Trace
                 else if (key == KeywordEnum.RotationX)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationX(inputFile.expectNumber(scene));
+                    result = result * Transformation.RotationX(Utility.DegToRad((int)inputFile.expectNumber(scene)));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.RotationY)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationY(inputFile.expectNumber(scene));
+                    result = result * Transformation.RotationY(Utility.DegToRad((int)inputFile.expectNumber(scene)));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.RotationZ)
                 {
                     inputFile.expectSymbol("(");
-                    result = result * Transformation.RotationZ(inputFile.expectNumber(scene));
+                    result = result * Transformation.RotationZ(Utility.DegToRad((int)inputFile.expectNumber(scene)));
                     inputFile.expectSymbol(")");
                 }
                 else if (key == KeywordEnum.Scaling)
@@ -251,7 +249,6 @@ namespace Trace
 
         public static Box parseBox(InputStream inputFile, Scene scene)
         {
-            // cylinder(material, transformation)
             inputFile.expectSymbol("(");
             string matName = inputFile.expectIdentifier();
             if (!scene.materials.ContainsKey(matName)) throw new GrammarError(inputFile.location, $"{matName} is unknown material");
@@ -561,14 +558,16 @@ namespace Trace
         {
             Scene scene = new Scene();
             scene.floatVariables = variables;
-            scene.floatVariables.Keys.CopyTo(scene.overriddenVariables, 0);
+            scene.overriddenVariables = scene.floatVariables.Keys.ToHashSet();
+
 
             while (true)
             {
                 Token tok = inputFile.readToken();
                 string varName = "";
 
-                if (tok is StopToken) break;
+                if (tok is StopToken) {Console.WriteLine("StopToken encountered");  break; }
+
                 if (tok is not KeywordToken) throw new GrammarError(inputFile.location, $"Expected keyword, got {tok} instead");
 
                 if (((KeywordToken)tok).keyword == KeywordEnum.Float)
@@ -630,7 +629,6 @@ namespace Trace
                     {
                         throw new GrammarError(inputFile.location, "You cannot define more than one camera! :'(");
                     }
-
                     scene.camera = parseCamera(inputFile, scene);
                 }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Material)
@@ -638,10 +636,10 @@ namespace Trace
                     Tuple<string, Material> t = parseMaterial(inputFile, scene);
                     scene.materials[t.Item1] = t.Item2;
                 }
+                if (tok is KeywordToken)
+                Console.WriteLine("Correctly parsed "  + ((KeywordToken)tok).keyword);
             }
-
             return scene;
         }
-
     }
 }

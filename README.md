@@ -75,13 +75,16 @@ It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in o
 
 ##### Available shapes
 
-The program can be executed in `demo` mode, adding any of the following shapes to the environment:
+It is allowed to add any of the following shapes to the environment:
 - Spheres
 - Planes
-- Axis-Aligned Boxes (AAB)
+- Boxes
+- Cones
+- Cylinders
 - Constructive Solid Geometry (CSG): Union, Intersection and Difference of any pair of shapes of the ones mentioned above
+- [Wikishape](https://upload.wikimedia.org/wikipedia/commons/8/8b/Csg_tree.png) (a particular case of CSG mixtures)
 
-Each shape can be transformed upon creation with a composition of scaling, translations and rotation around any of the three axes.
+Each shape can be transformed upon creation with a composition of scaling, translations and rotations around any of the three axes.
 
 ### Convert mode
 
@@ -89,7 +92,7 @@ To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the follow
  
     dotnet run -- convert -f <FACTOR> -g <GAMMA>
     
-To clean NM4PIG directory from generated `.png` and `.jpg` samples, type  `./clean.sh` . If you want to keep an image, make sure to add a 'G' before the format (e.g. SampleG.jpg). This will prevent your image from being deleted.
+To clean NM4PIG directory from generated `.png` and `.jpg` samples, type  `./clean.sh`. If you want to keep an image, make sure to move it to another folder. This will prevent your image from being deleted.
 
 ## Documentation
 

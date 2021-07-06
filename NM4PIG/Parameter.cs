@@ -43,8 +43,8 @@ namespace NM4PIG
         public static char render = 'r';
 
         //Convert
-        public static float factor = 0.9f; //0.18f;
-        public static float gamma = 2.0f; //1.0f;
+        public static float factor = 0.6f; //0.18f;
+        public static float gamma = 1.7f; //1.0f;
 
         //Render
         public static string file = "";

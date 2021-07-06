@@ -1,0 +1,49 @@
+# This is our final tutorial!
+# We will show some of the most advanced things our code can do
+
+# After this, you are free to create your own images with the tools
+# you learned in this 3 simple instructive files!
+
+# I will not add any instructions for commands we have already seen before
+
+
+# First of all, let's declare a float - it will be useful later
+
+float angle(5)
+
+# Then, we define materials exactly like in example 1
+
+material skyMat(
+    diffuse(uniform(<0,0,0>)),
+    uniform(<0.8,0.8,0.8>)
+)
+
+material groundMat(
+    diffuse(checkered(<0.9, 0.9, 0.1>, 
+                      <0.1, 0.1, 0.1>, 
+                       10)),            
+    uniform(<0,0,0>)                   
+)
+
+material sphereMat(
+    specular(uniform(<0.1, 0.1, 0.8>)),
+    uniform(<0,0,0>)
+)
+
+material cokeMat(
+    diffuse(image("Texture/Coketexture.pfm")),
+    uniform(<0,0,0>)
+)
+
+material basicMat (diffuse(uniform(<0.2,0.7,0.2>)), uniform(<0,0,0>))
+material basicMat2 (diffuse(uniform(<0.2,0.2,0.7>)), uniform(<0,0,0>))
+
+# We now define usual shapes with materials and transformations
+
+sphere(  skyMat, scaling([250,250,250]) ) 
+plane ( groundMat, identity ) 
+cylinder (cokeMat, translation([0, 1, 0.1])*scaling([0.3, 0.3, 2]))
+
+
+
+camera(perspective, translation([-1, 0, 1])*rotation_z(angle), 1.7, 1.0)

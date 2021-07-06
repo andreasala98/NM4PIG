@@ -77,6 +77,13 @@ namespace Trace
             {  "material", KeywordEnum.Material },
             {  "plane" , KeywordEnum.Plane},
             {  "sphere" , KeywordEnum.Sphere},
+            {  "cone" , KeywordEnum.Cone},
+            {  "cylinder" , KeywordEnum.Cylinder},
+            {  "box" , KeywordEnum.Box},
+            {  "CSGunion", KeywordEnum.CSGUnion},
+            {  "CSGdifference", KeywordEnum.CSGDifference},
+            {  "CSGintersection", KeywordEnum.CSGIntersection},
+            {  "wikishape", KeywordEnum.Wikishape},
             {  "diffuse" , KeywordEnum.Diffuse},
             {  "specular" , KeywordEnum.Specular},
             {  "uniform" , KeywordEnum.Uniform},
@@ -93,6 +100,7 @@ namespace Trace
             {  "perspective" , KeywordEnum.Perspective},
             {  "float" , KeywordEnum.Float},
             {  "string", KeywordEnum.String}
+            
         };
 
 

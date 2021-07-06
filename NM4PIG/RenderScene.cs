@@ -29,6 +29,7 @@ namespace NM4PIG
             }
 
             Scene scene = new Scene();
+            
             using (FileStream inputSceneStream = File.OpenRead(file))
             {
                 try
