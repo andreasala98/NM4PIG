@@ -38,30 +38,45 @@ In order to use the library you can clone the repository:
 
     git clone git@github.com:andreasala98/NM4PIG.git
 
-To check that the code works as expected, you can run a set of tests using the following command (from the NM4PIG/Trace.Test directory):
+To check that the code works as expected, you can run a set of tests using the following command:
 
     dotnet test
 
 ### Render mode
 
-Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions from the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use the render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
+Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions for the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
 
-    dotnet run -- render --file Files/dummy.txt -ldr dummy.jpg
+    dotnet run -- render --file Examples/Inputs/dummy.txt -ldr Examples/dummy.jpg
 
 This command will read the instructions present in the file ```dummy.txt``` and generate an image called ```dummy.jpg```. Feel free to use your preferred editor to visualize the image generated. If you want to explore all the settable parameters, you can run
 
-    dotnet run -- render --help
-
+    dotnet run -- render -?
+    
+The complete list of settable parameters is:
+- `--file| <FILENAME>` : name (path) of the input file with instructions. Default is `dummy.txt`
+- `--width|-W <WIDTH>` and `--height|-H <HEIGHT>` : set the dimensions of the generated image. Default is 640x480
+- `--pfmfile|-pfm <FILENAME>` : name (path) of the `.pfm` output file. This file can be used as input in [Convert mode](#convert-mode) Default is `demoImage.pfm`
+- `--ldrfile|-ldr <FILENAME>`: name (path) of the `.png` or `.jpg` output file. Default is `demoImage.jpg`
+- `--samples-per-pixel|-spp <SAMPLES>` : number of extracted samples per pixel (to perform antialiasing). Default is 4
+- `--render-type|-rnd <CHAR>` : rendering algorithm to be used 
+  (On-Off renderer: 'o', Flat renderer: 'f', Pointlight renderer: 'p', Path tracer: 'r'). Default is 'r'
+- `--declare-float|-d ` : Override a variable value from the command line. The syntax is `--declare-float VAR:VALUE`
 
 ### How to create input files
 
-This Section is being written. Please be patient.
+Input files must be written according to specific syntactic rules.
+We prepared three tutorial files to explain how these input files should be created:
 
+- [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt)
+- [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt)
+- [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt)
+
+Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
 
 ### Demo mode
 
-<img align="right" src="/Examples/DemoAnimation/spheres-perspective.gif" width="300"/>
+<img align="right" src="./NM4PIG/Examples/Animations/spheres-perspective.gif" width="300"/>
 
 To run the application and visualize a simple image, use the following command (from the NM4PIG/NM4PIG directory):
 
@@ -69,9 +84,9 @@ To run the application and visualize a simple image, use the following command (
 
 The command uses some default parmaeters. Feel free to explore all the possible options and to use the most suitable for you
 
-    dotnet run -- demo --help
+    dotnet run -- demo -?
 
-It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in order to obtain something like the image shown (see `Examples/DemoAnimation/`)
+It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in order to obtain something like the image shown (see `Examples/Animations/`)
 
 ##### Available shapes
 
