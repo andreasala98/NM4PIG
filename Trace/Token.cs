@@ -58,7 +58,7 @@ namespace Trace
         New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection,
         CSGDifference, Box, Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
-        Camera, Orthogonal, Perspective, Float, String, Wikishape, Color
+        Camera, Orthogonal, Perspective, Float, String, Wikishape, Color, Pointlight
 
     }
 
@@ -99,8 +99,9 @@ namespace Trace
             {  "orthogonal" , KeywordEnum.Orthogonal},
             {  "perspective" , KeywordEnum.Perspective},
             {  "float" , KeywordEnum.Float},
-            {  "string", KeywordEnum.String}
-            
+            {  "string", KeywordEnum.String},
+            {  "pointlight", KeywordEnum.Pointlight}
+
         };
 
 

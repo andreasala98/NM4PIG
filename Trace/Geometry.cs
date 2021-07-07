@@ -286,6 +286,11 @@ namespace Trace
             return new List<Vec>() { e1, e2, e3 };
         }
 
+        public Point ToPoint()
+        {
+            return new Point(this.x, this.y, this.z);
+        }
+
     }
 
 

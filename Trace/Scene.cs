@@ -530,6 +530,19 @@ namespace Trace
 
         }
 
+        public static PointLight parsePointlight(InputStream inputFIle, Scene scene)
+        {
+            // pointlight()
+            inputFIle.expectSymbol("(");
+            Point p = parseVector(inputFIle, scene).ToPoint();
+            inputFIle.expectSymbol(",");
+            Color col = parseColor(inputFIle, scene);
+            inputFIle.expectSymbol(")");
+
+            return new PointLight(p, col);
+
+        }
+
         public static Camera parseCamera(InputStream inputFile, Scene scene)
         {
 
@@ -622,6 +635,10 @@ namespace Trace
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Wikishape)
                 {
                     scene.world.addShape(parseWikiShape(inputFile, scene));
+                }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Pointlight)
+                {
+                    scene.world.addPointLight(parsePointlight(inputFile, scene));
                 }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Camera)
                 {
