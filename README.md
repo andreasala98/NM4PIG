@@ -4,6 +4,11 @@
  [![Unit tests](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml/badge.svg)](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml)
  [![DocFX Build and Publish](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml/badge.svg?branch=master)](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml)
  [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+ [![GitHub contributors](https://img.shields.io/github/contributors/andreasala98/NM4PIG?color=lightblue&style=flat)](https://GitHub.com/andreasala98/NM4PIG/graphs/contributors/)
+[![Maintenance](https://img.shields.io/github/commit-activity/m/andreasala98/NM4PIG?color=yellow)](https://GitHub.com/andreasala98/NM4PIG/graphs/commit-activity)
+
+
+
 
 Welocome to NM4PIG!
 This is a raytracing library written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano (A.Y. 2020-2021).
