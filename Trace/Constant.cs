@@ -71,7 +71,11 @@ namespace Trace
         public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(255f / 255, 0f / 255, 0f / 255))));
         public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(Blue)));
 
-
+        /// <summary>
+        ///  An interesting case of Constructive SOlid Geometry
+        /// </summary>
+        /// <param name="transf"> A <see cref="Transformation"/> object associated to the shape.</param>
+        /// <returns></returns>
         public static Shape wikiShape(Transformation? transf = null)
         {
 
@@ -88,30 +92,10 @@ namespace Trace
             return tot;
         }
 
-        public static Shape Pig(Transformation? transf = null)
-        {
-
-            Shape C1 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_X, greenMat);
-            Shape C2 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_Y, greenMat);
-            Shape C3 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_Z, greenMat);
-
-            Shape S1 = new Sphere(Transformation.Scaling(1.4f), blueMat);
-            Shape B1 = new Box(material: redMat);
-
-            Shape tot = (S1 * B1) - ((C1 + C2) + C3);
-
-            if (transf.HasValue) tot.transformation = transf.Value;
-            return tot;
-        }
-
-
+        /// <summary>
+        /// An emissive sphere representing the sky.
+        /// </summary>
         public static Sphere SKY = new Sphere(Transformation.Scaling(500f), skyMat);
-
-        public static Shape Body = new Sphere(Transformation.Translation(1f, 0f, 0f) * Transformation.RotationZ(10) * Transformation.Scaling(1f, 1.6f, 1f),
-                                                new Material(new DiffuseBRDF(new UniformPigment(PiggyPink)),
-                                                                            new UniformPigment(new Color(0f, 0f, 0f))));
-
-
 
 
     }

@@ -42,7 +42,7 @@ namespace Trace
         /// </summary>
         public Vec2D surfacePoint;
         /// <summary>
-        /// a floating-point value specifying the distance from the origin of the <see cref="Ray"> where the hit happened
+        /// A floating-point value specifying the distance from the origin of the <see cref="Ray"> where the hit happened
         /// </summary>
         public float t;
         /// <summary>
@@ -51,7 +51,7 @@ namespace Trace
         public Ray ray;
 
         /// <summary>
-        /// The <see cref="Shape"> intersected by the Ray
+        /// The possible <see cref="Shape"> intersected by the Ray
         /// </summary>
         public Shape? shape;
 
@@ -66,6 +66,11 @@ namespace Trace
             this.shape = shape;
         }
 
+        /// <summary>
+        /// Check if two <see cref="HitRecord"/> objects are approximately equal
+        /// </summary>
+        /// <param name="other"> The other Hit Record</param>
+        /// <returns>True if thwe hit records are equal</returns>
         public bool isClose(HitRecord? other)
         {
             if (other == null) return false;
@@ -77,8 +82,9 @@ namespace Trace
         }
 
 
-
-        // Nested class to do descending sort on year property.
+        /// <summary>
+        /// Nested class to do descending sort on year property.
+        /// </summary>
       private class sortHelper: IComparer
       {
          int IComparer.Compare(object? a1, object? b1)
@@ -109,17 +115,19 @@ namespace Trace
         /// Default method to compare two HitRecord objects. 
         /// One HitRecord is "bigger" than another one if its t parameter is bigger.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+        /// <param name="a"> The other hit record</param>
+        /// <returns> +1, 0 or -1 depending on the order of the two records</returns>
         public int CompareTo(HitRecord a)
         {
             return this.t.CompareTo(a.t);
         }
 
-
+        /// <summary>
+        /// Print a <see cref="HitRecord"/> object
+        /// </summary>
+        /// <returns> The printed record on a string</returns>
         public override string ToString()
         {
-
             string Cons = "wPoint: " + this.worldPoint.ToString() + "\n"
                          + "Normal: " + this.normal.ToString() + "\n"
                          + "sPoint: " + this.surfacePoint.ToString() + "\n"
@@ -131,9 +139,9 @@ namespace Trace
         /// Method that compares two HitRecord object by the t parameter.
         /// It returns the lesser one.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">First HR</param>
+        /// <param name="b">Second HR</param>
+        /// <returns> The "smaller" hit record</returns>
         public static HitRecord lesserComparison (HitRecord a, HitRecord b)
         {
             if (a.t < b.t)

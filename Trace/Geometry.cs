@@ -270,9 +270,19 @@ namespace Trace
         public bool isClose(Vec vector)
             => Utility.areClose(this.x, vector.x) && Utility.areClose(this.y, vector.y) && Utility.areClose(this.z, vector.z);
 
+        /// <summary>
+        /// Transform a <see cref="Vec"/> object into a list of three floating point values.
+        /// </summary>
+        /// <returns></returns>
         public List<float> ToList()
             => new List<float>() { this.x, this.y, this.z };
 
+        /// <summary>
+        /// This method creates an orthonormal base given a <see cref="Vec"/> object.
+        /// The given Vec is normalized and it counts as the "z" element of the base.
+        /// The other two memebers of the base are calculated via cross product.
+        /// </summary>
+         /// <returns> A list of <see cref="Vec"/> objects</returns>
         public List<Vec> createONBfromZ()
         {
             Vec e3 = this.Normalize();
@@ -286,6 +296,11 @@ namespace Trace
             return new List<Vec>() { e1, e2, e3 };
         }
 
+        /// <summary>
+        /// Transform a <see cref="Vec"/> object into the corresponding 
+        /// <see cref="Point" object/>.
+        /// </summary>
+        /// <returns> A Point.</returns>
         public Point ToPoint()
         {
             return new Point(this.x, this.y, this.z);
@@ -300,17 +315,36 @@ namespace Trace
     /// </summary>
     public struct Vec2D
     {
+        /// <summary>
+        ///  Coordinates of the 2D vector.
+        /// </summary>
         public float u, v;
 
-        public Vec2D(float a, float b)
+        /// <summary>
+        ///  Basic contructor for <see cref="Vec2D"/>
+        /// </summary>
+        /// <param name="u_temp"> First coordinate</param>
+        /// <param name="v_temp"> Second coordinate</param>
+        public Vec2D(float u_temp, float v_temp)
         {
-            this.u = a;
-            this.v = b;
+            this.u = u_temp;
+            this.v = v_temp;
         }
 
+        /// <summary>
+        /// Method that checks if two <see cref="Vec2D"/> objects
+        /// are approximately equal.
+        /// </summary>
+        /// <param name="vector"> The Vec2D to be compared to</param>
+        /// <returns> True if the two vecs are equal</returns>
         public bool isClose(Vec2D vector)
            => Utility.areClose(this.u, vector.u) && Utility.areClose(this.v, vector.v);
 
+
+        /// <summary>
+        /// Print a <see cref="Vec2D"/> object.
+        /// </summary>
+        /// <returns> A string with information about the Vector. </returns>
         public override string ToString()
         {
             return "Vec2D :(" + this.u + ", " + this.v + ")";
@@ -422,7 +456,12 @@ namespace Trace
         public Vec ToVec()
             => new Vec(this.x, this.y, this.z);
 
-
+        /// <summary>
+        /// This method creates an orthonormal base given a <see cref="Normal"/> object.
+        /// The given Normal is normalized and it counts as the "z" element of the base.
+        /// The other two memebers of the base are calculated via cross product.
+        /// </summary>
+        /// <returns> A list of <see cref="Vec"/> objects</returns>
         public List<Vec> createONBfromZ()
         {
             Vec e3 = this.toVec().Normalize();
@@ -509,7 +548,13 @@ namespace Trace
             => new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
                                     Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
-
+        /// <summary>
+        /// A <see cref="Transformation"/> object encoding a translation.
+        /// </summary>
+        /// <param name="ax"> x component of the translation </param>
+        /// <param name="ay"> y component of the translation </param>
+        /// <param name="az"> z component of the translation </param>
+        /// <returns> The translation</returns>
         public static Transformation Translation(float ax, float ay, float az)
         {
             Vec a = new Vec(ax, ay, az);

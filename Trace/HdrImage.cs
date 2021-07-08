@@ -70,7 +70,7 @@ namespace Trace
 
         /// <summary>
         /// Load image from a Stream. Import a PFM file from either a 
-        /// memory or file stream.
+        /// memory stream or file stream.
         /// </summary>
         /// <param name="inputStream">Stream pointing to a .pfm file</param>
         public HdrImage(Stream inputStream) : this()
@@ -93,7 +93,7 @@ namespace Trace
 
 
 
-        // Boolean method to check if (x,y) is in range.
+        // Boolean method to check if (x,y) is in the allowed pixel range.
         public bool validCoords(int x, int y)
         {
             return (x >= 0) & (x < this.width) & (y >= 0) & (y < this.height);
@@ -109,8 +109,8 @@ namespace Trace
         /// <summary>
         /// It outputs a pixel with given coordinates (x,y).
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x"> x coordinate of the pixel</param>
+        /// <param name="y"> y coordinate of the pixel</param>
         /// <returns> The selected pixel. </returns>
         public Color getPixel(int x, int y)
         {
@@ -145,8 +145,6 @@ namespace Trace
             outputStream.Write(header);
             var img = new HdrImage(7, 4);
 
-
-
             for (int x = 0; x < this.height; x++)
             {
                 for (int y = 0; y < this.width; y++)
@@ -161,6 +159,11 @@ namespace Trace
             return;
         }
 
+        /// <summary>
+        ///  Write a floating point number onto a stream after converting to binary.
+        /// </summary>
+        /// <param name="outputStream"> File or Memory stream where you are writing the float</param>
+        /// <param name="rgb"> Float to be written</param>
         private static void _writeFloat(Stream outputStream, float rgb)
         {
             var buffer = BitConverter.GetBytes(rgb);
@@ -223,10 +226,10 @@ namespace Trace
         }
 
         /// <summary>
-        /// Read a  4 byte sequence from a stream corresponding and convert to floating-point.
+        /// Read a 32bit sequence from a stream and convert it to floating-point number.
         /// </summary>
         /// <param name="inputStream"> The input stream</param>
-        /// <param name="lEnd"> Put <see cref="True"/> if the image is little-endian.</param>
+        /// <param name="lEnd"> True if the image is little-endian.</param>
         /// <returns> Float value corresponding to 4-byte sequence</returns>
         public static float readFloat(Stream inputStream, bool lEnd)
         {
@@ -235,11 +238,7 @@ namespace Trace
 
             try
             {
-                bytes[0] = (byte)inputStream.ReadByte();
-                bytes[1] = (byte)inputStream.ReadByte();
-                bytes[2] = (byte)inputStream.ReadByte();
-                bytes[3] = (byte)inputStream.ReadByte();
-
+                foreach (int i in Enumerable.Range(1, 4)) bytes[i] = (byte)inputStream.ReadByte();
             }
             catch
             {
@@ -251,7 +250,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Read the size of a .pfm image
+        /// Read the size (width x height) of a .pfm image
         /// </summary>
         /// <param name="line"> The third line of a .pfm file</param>
         /// <returns>List containing image width and height.</returns>
@@ -311,10 +310,9 @@ namespace Trace
         /// </summary>
         /// <param name="Delta"> Optional offset </param>
         /// <returns>Average luminosity in floating-point format.</returns>
-        public float averageLumi(double? Delta = null)
+        public float averageLumi(double delta = 1e-10)
         {
 
-            double delta = Delta ?? 1e-10;
             double av = 0.0;
 
             for (int i = 0; i < width; i++)
@@ -326,8 +324,6 @@ namespace Trace
             }
 
             return (float)Math.Pow(10, av / (width * height));
-
-
 
         }
 
@@ -384,7 +380,6 @@ namespace Trace
                     bitmap[x, y] = new Rgb24(Convert.ToByte(red), Convert.ToByte(green), Convert.ToByte(blue));
                 }
             }
-
 
             using (Stream fileStream = File.OpenWrite(outputFile))
             {
