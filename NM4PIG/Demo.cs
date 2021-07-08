@@ -125,7 +125,8 @@ namespace NM4PIG
                     world.addShape(CC.SKY);
                     world.addShape(new Plane(Tsf.Scaling(-3f, 0f, 0f) * Tsf.RotationY(Utility.DegToRad(270)), mat));
 
-                    world.addShape(CC.wikiShape(Tsf.Scaling(0.75f)));
+                    world.addShape(CC.wikiShape(Tsf.RotationZ(Utility.DegToRad(23))));
+                    // world.addShape(CC.wikiShape(Tsf.RotationZ(Utility.DegToRad(45))));
 
                     break;
                 case 5:

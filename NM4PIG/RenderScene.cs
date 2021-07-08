@@ -13,7 +13,8 @@ namespace NM4PIG
     class RenderScene
     {
         public static void ExecuteRender(string file, int width, int height, string pfmFile,
-                                string ldrFile, int spp, char rend, Dictionary<string, float> variables)
+                                string ldrFile, int spp, char rend, Dictionary<string, float> variables,
+                                float factor, float gamma)
         {
 
             Console.WriteLine($"File describing the scene: {file}");
@@ -29,7 +30,7 @@ namespace NM4PIG
             }
 
             Scene scene = new Scene();
-            
+
             using (FileStream inputSceneStream = File.OpenRead(file))
             {
                 try
@@ -88,7 +89,7 @@ namespace NM4PIG
                 Console.WriteLine($"Image saved in {pfmFile}");
             }
 
-            Convert.ExecuteConvert(pfmFile, ldrFile, Default.factor, Default.gamma, null);
+            Convert.ExecuteConvert(pfmFile, ldrFile, factor, gamma, null);
 
             sw.Stop();
             TimeSpan ts = sw.Elapsed;

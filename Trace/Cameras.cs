@@ -209,7 +209,7 @@ namespace Trace
                 {
                     for (int j = 0; j < image.width; j++)
                     {
-                       // Console.WriteLine($"i={i},j={j}");
+                        // Console.WriteLine($"i={i},j={j}");
                         Color appo = Constant.Black;
                         if (this.samplesPerSide > 0)
                         {

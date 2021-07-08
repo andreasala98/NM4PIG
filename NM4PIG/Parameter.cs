@@ -151,7 +151,7 @@ namespace NM4PIG
         /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
         /// <param name="pfmfile"> Name of the fm output file</param>
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
-        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend, List<string> declareFloat)
+        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend, List<string> declareFloat, string? factor, string? gamma)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -161,6 +161,8 @@ namespace NM4PIG
             _readSPP(SPP);
             _readRend(rend);
             _readFloat(declareFloat);
+            _readFactor(factor);
+            _readGamma(gamma);
         }
 
         private void _readWidth(string? width)

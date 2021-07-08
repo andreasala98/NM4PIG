@@ -191,8 +191,7 @@ namespace Trace
         /// 
         public override HitRecord? rayIntersection(Ray ray)
         {
-            Ray invRay = ray.Transform(this.transformation.getInverse());
-            List<HitRecord?> intersections = rayIntersectionList(invRay);
+            List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
@@ -374,8 +373,7 @@ namespace Trace
         /// 
         public override HitRecord? rayIntersection(Ray ray)
         {
-            Ray invRay = ray.Transform(this.transformation.getInverse());
-            List<HitRecord?> intersections = rayIntersectionList(invRay);
+            List<HitRecord?> intersections = rayIntersectionList(ray);
             if (intersections.Count == 0) return null;
             return intersections[0];
         }
