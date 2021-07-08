@@ -4,6 +4,11 @@
  [![Unit tests](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml/badge.svg)](https://github.com/andreasala98/NM4PIG/actions/workflows/test.yml)
  [![DocFX Build and Publish](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml/badge.svg?branch=master)](https://github.com/andreasala98/NM4PIG/actions/workflows/docfx-build-publish.yml)
  [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+ [![GitHub contributors](https://img.shields.io/github/contributors/andreasala98/NM4PIG?color=lightblue&style=flat)](https://GitHub.com/andreasala98/NM4PIG/graphs/contributors/)
+[![Maintenance](https://img.shields.io/github/commit-activity/m/andreasala98/NM4PIG?color=yellow)](https://GitHub.com/andreasala98/NM4PIG/graphs/commit-activity)
+
+
+
 
 Welocome to NM4PIG!
 This is a raytracing library written in C#. It was developed for the course _Numerical Methods for Photorealistic Image Generation_ held by Prof. [Maurizio Tomasi][1] at Università degli Studi di Milano (A.Y. 2020-2021).
@@ -12,17 +17,28 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
-    - [Render mode](#rendermode)
-    - [How to create input files](#inputfiles)
-    - [Demo mode](#demo)
-    - [Convert mode](#convert)
+    - [Render mode](#render-mode)
+    - [How to create input files](#how-to-create-input-files)
+    - [Demo mode](#demo-mode)
+    - [Convert mode](#convert-mode)
 - [Documentation](#documentation)
 - [License](#license)
 
+## Overview
+👀
+
+The main funcitonality of this library is to produce photorealistic images from input files describing a certain scene. 
+The scene is made of geometric shapes (see the [list](#available-shapes 📐)), each one defined by its coordinates and its material. Our code offers the possibility to choose between a diffusive, emissive or reflective material. 
+The code implements four different _backwards ray tracing_ algorithms to simulate how light rays propagate. A camera (perspective or orthogonal) representing the observer will see the world through a 2D screen placed ahead of it and it is defined by its position, the distance from the screen and the aspect ratio.
+
+Once everything (shapes and observer) is defined and in place, the code solves the rendering equation (with different assunptions, depending on the chosen algorithm) and produces an HDR image (in `.pfm` format). Later, the HDR image is converted into LDR formats such as `.jpg`and `.png`.
+
 
 ## Prerequisites
+💻
 
 This library has been developed and tested with .NET version 5.0.x. It is possible to download the latest version [here](https://dotnet.microsoft.com/download).
 
@@ -32,7 +48,8 @@ This library uses some external libraries. The user should not worry as .NET aut
 - [CommandLineUtils][8] to handle Command Line Interface
 - [ShellProgressBar][9] to show a nice progress bar while rendering
 
-## Usage 
+## Usage
+⚙️
 
 In order to use the library you can clone the repository:
 
@@ -42,7 +59,8 @@ To check that the code works as expected, you can run a set of tests using the f
 
     dotnet test
 
-### Render mode ✨
+### Render mode
+✨
 
 <img align="right" src="./NM4PIG/Examples/Animations/worldWikiShape.gif" width="300"/>
 
@@ -64,19 +82,20 @@ The complete list of settable parameters is:
   (On-Off renderer: 'o', Flat renderer: 'f', Pointlight renderer: 'p', Path tracer: 'r'). Default is 'r'
 - `--declare-float|-d ` : Override a variable value from the command line. The syntax is `--declare-float VAR:VALUE`
 
-### How to create input files 🎯
+### How to create input files
 
 Input files must be written according to specific syntactic rules.
 We prepared three tutorial files to explain how these input files should be created:
 
 - [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene1.jpg))
-- [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene2.jpg))
-- [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene3.jpg))
+- [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_2/scene2.jpg))
+- [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3.jpg))
 
 Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
 
-### Demo mode 🎮
+### Demo mode
+🎮
 
 <img align="right" src="./NM4PIG/Examples/Animations/spheres-perspective.gif" width="300"/>
 
@@ -90,7 +109,7 @@ The command uses some default parmaeters. Feel free to explore all the possible 
 
 It is also possible to vary the angle of the camera in degrees (-a <ANGLE>) in order to obtain something like the image shown (see `Examples/Animations/`)
 
-##### Available shapes 📐
+##### Available shapes
 
 It is allowed to add any of the following shapes to the environment:
 - Spheres 🏀
@@ -103,7 +122,8 @@ It is allowed to add any of the following shapes to the environment:
 
 Each shape can be transformed upon creation with a composition of scaling, translations and rotations around any of the three axes.
 
-### Convert mode 🔁
+### Convert mode
+🔁
 
 To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the following command (if no arguments are passed some default values are used):
  
@@ -111,12 +131,14 @@ To convert an existing `.pfm` file into a `.png` or `.jpg` file, type the follow
     
 To clean NM4PIG directory from generated `.png` and `.jpg` samples, type  `./clean.sh`. If you want to keep an image, make sure to move it to another folder. This will prevent your image from being deleted.
 
-## Documentation 📑
+## Documentation
+📑
 
 A webpage with all the documentation is available at [this link][7]. This webpage is generated with DocFX. [Learn more][6]. Any suggestion to improve the documentation website is welcome!
 
 
-## License ⚖️
+## License
+⚖️
 
 The code is released under a MIT license. See the file [LICENSE](./LICENSE)
 
