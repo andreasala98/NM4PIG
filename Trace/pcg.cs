@@ -20,12 +20,12 @@ using System;
 namespace Trace
 {
     /// <summary>
-    /// PCG Uniform Pseudo-random Number Generator
+    /// PCG Uniform Pseudo-Random Number Generator
     /// </summary>
     public class PCG
     {
-        public ulong state { get; set; } = 0ul;
-        public ulong inc { get; set; } = 0ul;
+        public ulong state {get; set;} = 0ul;
+        public ulong inc {get; set;} = 0ul;
 
         public PCG(ulong initState = 42, ulong initSeq = 54)
         {

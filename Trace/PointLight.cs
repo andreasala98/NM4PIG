@@ -43,6 +43,14 @@ namespace Trace
         /// </summary>
         public float linearRadius;
 
+        /// <summary>
+        ///  Basic contructor for the class.
+        /// </summary>
+        /// <param name="position"> Position of the light source</param>
+        /// <param name="color"> Emitted <see cref<="Color"/></param>
+        /// <param name="linearRadius"> Hypothetical radius of the light source. This can be implemented because
+        /// radiance scales as (r/d)^2 in far-field approximation. By applying a linear radius to the light source, 
+        /// luminosity will decrease with distance. </param>
         public PointLight(Point position, Color color, float? linearRadius = null)
         {
             this.position = position;

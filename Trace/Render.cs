@@ -35,7 +35,7 @@ namespace Trace
         public World world;
 
         /// <summary>
-        /// <see cref="Color"> of the background. Default is black.
+        /// <see cref="Color"> of the background. Default is black (0,0,0).
         /// </summary>
         public Color backgroundColor;
 
@@ -46,7 +46,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Estimate the radiance along a ray
+        /// Estimate the radiance brought by a <see cref="Ray"/>.
         /// </summary>
         public abstract Color computeRadiance(Ray r);
     }
@@ -68,6 +68,12 @@ namespace Trace
             this.color = color ?? Constant.White;
         }
 
+        /// <summary>
+        /// Radiance computing algorithm. If there is any intersection, the output color is white,
+        /// otherwise it is the background color.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public override Color computeRadiance(Ray r)
             => this.world.rayIntersection(r) != null ? this.color : this.backgroundColor;
     }
@@ -80,12 +86,26 @@ namespace Trace
     /// </summary>
     public class FlatRender : Render
     {
+        /// <summary>
+        ///  Basic constructor for the class. It is fully inherited by the <see cref="Render"/> class.
+        /// </summary>
+        /// <param name="world">World to be rendered</param>
+        /// <param name="background">Background color</param>
         public FlatRender(World world, Color? background = null) : base(world, background) { }
 
+
+        /// <summary>
+        ///  Radiance computing algorithm for the flat renderer.
+        ///  It calculates the radiance brought by a <see cef="Ray"/>, but it actually
+        ///  takes the color of the last shape the ray encountered.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public override Color computeRadiance(Ray r)
         {
             HitRecord? hit = this.world.rayIntersection(r);
             if (hit == null) return backgroundColor;
+
             Material mat = hit.Value.shape?.material!;
             return mat.brdf.pigment.getColor(hit.Value.surfacePoint) + mat.emittedRadiance.getColor(hit.Value.surfacePoint);
         }
@@ -93,27 +113,59 @@ namespace Trace
     }
 
     /// <summary>
-    /// A simple path-tracing renderer
+    /// A path-tracing renderer
     /// The algorithm implemented here allows the caller to tune number of rays thrown at each iteration, as well as the
-    /// maximum depth.It implements Russian roulette, so in principle it will take a finite time to complete the
-    /// calculation even if you set max_depth to `math.inf`.
+    /// maximum depth. It implements Russian roulette, so in principle it will take a finite time to complete the
+    /// calculation even if you set max_depth to infinity.
     /// </summary>
     public class PathTracer : Render
     {
 
+
+        /// <summary>
+        /// Random number generator
+        /// </summary>
         public PCG pcg;
+
+        /// <summary>
+        /// Number of rays to be fired at each iteration
+        /// </summary>
         public int numOfRays;
+
+        /// <summary>
+        /// Maximum number of reflections for any <see cref="Ray"/>
+        /// </summary>
         public int maxDepth;
+
+        /// <summary>
+        /// Minimum number of reflections for the Russian Roulette algorith to start.
+        /// </summary>
         public int russianRouletteLimit;
 
-        public PathTracer(World world, Color? background = null, PCG? pcg = null, int numOfRays = 10, int maxDepth = 2, int russianRouletteLimit = 3) : base(world, background)
+
+        /// <summary>
+        /// Basic contructor for the class. It inherits the constructor of the <see cref="Render"/> class.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="bkg"></param>
+        /// <param name="pcg"></param>
+        /// <param name="nRays"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="rrLim"></param>
+        public PathTracer(World world, Color? bkg = null, PCG? pcg = null, int nRays = 10, int maxDepth = 5, int rrLim = 3) : base(world, bkg)
         {
             this.pcg = pcg ?? new PCG();
-            this.numOfRays = numOfRays;
+            this.numOfRays = nRays;
             this.maxDepth = maxDepth;
-            this.russianRouletteLimit = russianRouletteLimit;
+            this.russianRouletteLimit = rrLim;
         }
 
+        /// <summary>
+        ///  Radiance computing algortihm. This is the fundamental algorithm for the whole library.
+        ///  It calculates the radiance brought by a <see cref="Ray"/> object when it hits the screen.
+        /// </summary>
+        /// <param name="ray"> The travelling Ray.</param>
+        /// <returns> The computed rafiance in form of a <see cref="Color"/> object.</returns>
         public override Color computeRadiance(Ray ray)
         {
             if (ray.depth > this.maxDepth)
@@ -160,17 +212,29 @@ namespace Trace
     }
 
     /// <summary>
-    /// Class that implements a Point Light renderer.
+    /// Class that implements a Point Light renderer. The solid angle integral of the rendering equations
+    /// can be simplified, because the integrand contains some localized Dirac deltas
     /// </summary>
     public class PointLightRender : Render
     {
         public Color ambientColor;
 
+        /// <summary>
+        /// Basic constructor for the class.
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="background"></param>
+        /// <param name="ambient"></param>
         public PointLightRender(World world, Color? background = null, Color? ambient = null) : base(world, background)
         {
             this.ambientColor = ambient ?? new Color(0.1f, 0.1f, 0.1f);
         }
 
+        /// <summary>
+        /// Radiance computing algorith for the Point Light renderer.
+        /// </summary>
+        /// <param name="ray"> Travelling <see cref="Ray"/></param>
+        /// <returns> THe computed radiance, in form of a <see cref="Color"/> object</returns>
         public override Color computeRadiance(Ray ray)
         {
             HitRecord? hitRecord = this.world.rayIntersection(ray);
@@ -180,7 +244,7 @@ namespace Trace
 
             Color resultColor = this.ambientColor;
 
-            foreach (var curLight in world.lightSources)
+            foreach (PointLight curLight in world.lightSources)
             {
                 if (this.world.isPointVisible(curLight.position, (Point)hitRecord?.worldPoint!))
                 {

@@ -20,7 +20,7 @@ namespace Trace
 {
 
     /// <summary>
-    /// An efficient value type representing a ray to be fired.
+    /// An efficient value type representing a ray travelling across the environment.
     /// </summary>
     public struct Ray
     {

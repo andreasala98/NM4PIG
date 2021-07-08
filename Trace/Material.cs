@@ -276,16 +276,35 @@ namespace Trace
 
 
     /// <summary>
-    /// A class representing an ideal mirror BRDF
+    /// A class representing an ideal specular BRDF. This BRDF completely reflects every ray coming 
+    /// along its direction 
     /// </summary>
     public class SpecularBRDF : BRDF
     {
+
+        /// <summary>
+        /// Angle (in radians) beyonds which rays are not reflected
+        /// </summary>
         public float thresholdAngleRad;
+
+        /// <summary>
+        ///  Basic contrusctor for the class. 
+        /// </summary>
+        /// <param name="pigment"> Pigment to cover the surface with.</param>
+        /// <param name="thresholdAngleRad"> Threshold angle. Default is 1/10 of a degree</param>
         public SpecularBRDF(IPigment? pigment = null, float? thresholdAngleRad = null) : base(pigment)
         {
             this.thresholdAngleRad = thresholdAngleRad ?? Constant.PI / 1800.0f;
         }
 
+        /// <summary>
+        /// Evaluate the BRDF as three floating point numbers, i.e. sa <see cref="Color">.
+        /// </summary>
+        /// <param name="normal"> <see cref="Normal"/> to the surface</param>
+        /// <param name="inDir"> Incoming direction</param>
+        /// <param name="outDir"> Outgoing direction</param>
+        /// <param name="uv"> Point located on the surface</param>
+        /// <returns> The computed Color</returns>
         public override Color Eval(Normal normal, Vec inDir, Vec outDir, Vec2D uv)
         {
             float thetaIn = MathF.Acos(Utility.NormalizedDot(normal.ToVec(), inDir));
@@ -296,6 +315,16 @@ namespace Trace
             else
                 return new Color(0f, 0f, 0f);
         }
+
+        /// <summary>
+        /// Reflect a <see cref="Ray"/> coming into a surface. This class is reimplemented in concrete subclasses
+        /// </summary>
+        /// <param name="pcg"></param>
+        /// <param name="incomingDir"></param>
+        /// <param name="interactionPoint"></param>
+        /// <param name="normal"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
 
         public override Ray scatterRay(PCG r, Vec incomingDir, Point interactionPoint, Normal normal, int depth)
         {
@@ -314,7 +343,8 @@ namespace Trace
 
     }
     /// <summary>
-    /// A class that implements a material
+    /// A class that implements a material and that contains all the information
+    /// about how a shape interacts with a ray.
     /// </summary>
 
     public class Material
@@ -330,7 +360,7 @@ namespace Trace
         public IPigment emittedRadiance;
 
         /// <summary>
-        /// Constructor
+        /// Basic constructor
         /// </summary>
         /// <param name="Brdf">A <see cref="BRDF"/> object, default is DiffuseBRDF()</param>
         /// <param name="EmittedRadiance">A <see cref="Pigment"/> object, default is UniformPigment(Constant.Black)</param>
