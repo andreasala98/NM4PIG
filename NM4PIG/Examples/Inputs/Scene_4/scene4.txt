@@ -1,0 +1,49 @@
+# So here we are on our fourth example.
+
+# We will generate a scene using the Point-light renderer, which is quite fast 
+# and works when you want a point-like source of light in your scene.
+
+# Let's try to do an image of the Earth in space.
+
+
+# Let's begin with the Materials. We need one for space and one for the Earth.
+
+material spaceMat(diffuse(uniform(<0,0,0>)), uniform(<0,0,0>)) 		
+# outer space is dark!
+
+
+material earthMat(diffuse(uniform(<0, 0, 0>)),image("Texture/world.pfm"))  
+# as used in other examples, this command use the image "Texture/world.pfm" 
+# to generate the Material for our Earth.
+
+
+# Now let's put a Sphere Shape in the center of the picture. It will be made of earthMat.
+
+sphere(earthMat, translation([4,0,0]))
+# even though the universe is not geocentric, let's pretend for a moment it is!
+
+# And now the space, which will be' modeled as a huge sphere.
+sphere(spaceMat, scaling([250,250,250]))
+
+# Now it's time to add the Sun. It's very far from the earth, and we'll pretend that it will be' a point-like light source.
+# We have to add a 'pointlight' object: we need to specify where (a Vector) it is and the color of the light it emits (and a Color).
+
+pointlight( [4, 200, 200],    # the sun is far far away (not in a galaxy far far away though)
+	    <1, 0.878, 0.063> 	  # I found a nice bright yellow for the Sun's light.
+)
+
+pointlight( [4, 200, 200], <1, 0.878, 0.063>)
+pointlight( [4, 200, 200], <1, 0.878, 0.063>)
+pointlight( [4, 200, 200], <1, 0.878, 0.063>)
+
+
+# and now we conclude with the mandatory camera declaration:
+
+camera(perspective, identity, 1.0, 1.0)
+
+# We've declared everything we needed! We are now ready to execute the program!
+# move to the NM4PIG/NM4PIG folder and the launch
+# dotnet run -- render --file Examples/Inputs/Scene1/scene1.txt --width 1000 --height 700 --ldr Examples/Inputs/Scene1/scene1.jpg --spp 4
+
+# We wil go deeper into the arguments passed in the following tutorials!
+# For now, enjoy the image you've just created :)
