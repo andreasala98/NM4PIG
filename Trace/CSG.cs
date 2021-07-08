@@ -26,6 +26,9 @@ namespace Trace
     /// A 3D Shape created by the union 
     /// of two Shapes (Constructive Solid Geometry).
     /// 
+    /// Given a <see cref="Ray"/>, it calculates all intersection of the ray with
+    /// the two shapes, and it returns only the closest one.
+    /// 
     /// Datamembers: Shape firstsShape, Shape secondShape.
     /// </summary>
     public class CSGUnion : Shape
@@ -40,7 +43,7 @@ namespace Trace
         public Shape secondShape;
 
         /// <summary>
-        /// Basic consturctor of the class
+        /// Basic constructor of the class
         /// </summary>
         /// <param name="a">First Shape</param>
         /// <param name="b">Second Shape</param>
@@ -78,6 +81,7 @@ namespace Trace
 
         /// <summary>
         /// This method checks if a Ray intersects with the CSG Union shape.
+        /// It simply return true if there is any intersection.
         /// </summary>
         public override bool quickRayIntersection(Ray ray)
         {
@@ -91,12 +95,12 @@ namespace Trace
         }
 
         /// <summary>
-        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
-        /// The HitRecord are than order by the t datamember, in crescent order.
-        ///It's overriden from the abstract Shape class. 
+        /// Method that creates a list of all the legal intersections (in form of a <see cref="HitRecord"/> list) with a given Ray.
+        /// The HitRecord are then ordered by the t datamember, in ascending order.
+        /// It is overriden from the abstract Shape class. 
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The fired <see cref="Ray"/> object. </param>
+        /// <returns> A List of all legal <see cref="HitRecord"/>s.</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -139,8 +143,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Method that computes whether a Point is inside the Shape.
-        /// 
+        /// Method that computes whether a Point is inside the CSG Union.
         /// It's overriden from the abstract Shape class.
         /// </summary>
         /// <param name="a"></param>
@@ -155,7 +158,7 @@ namespace Trace
     /// <summary>
     /// A 3D Shape created by the difference 
     /// of two Shapes (Constructive Solid Geometry).
-    /// You subtract FORM the first Shape the second Shape.
+    /// You subtract the second Shape from the first Shape.
     /// 
     /// Datamembers: Shape firstShape, Shape secondShape.
     /// </summary>
@@ -183,12 +186,11 @@ namespace Trace
         }
 
         /// <summary>
-        /// Checks if a Ray intersects the new CSGDifference Shape.
+        /// Checks if a Ray intersects the new CSGUnion Shape.
         /// It is an override from the abstract class <see cref="Shape"/>
         /// </summary>
         /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
         /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
-        /// 
         public override HitRecord? rayIntersection(Ray ray)
         {
             List<HitRecord?> intersections = rayIntersectionList(ray);
@@ -198,11 +200,12 @@ namespace Trace
 
 
         /// <summary>
-        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
-        /// It's overriden from the abstract Shape class. 
+        /// Method that creates a list of all the legal intersections (in form of a <see cref="HitRecord"/> list) with a given Ray.
+        /// The HitRecord are then ordered by the t datamember, in ascending order.
+        /// It is overriden from the abstract Shape class. 
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The fired <see cref="Ray"/> object. </param>
+        /// <returns> A List of all legal <see cref="HitRecord"/>s.</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -240,7 +243,7 @@ namespace Trace
         }
 
         /// <summary>
-        /// Method that computes whether a Point is inside the Shape.
+        /// Method that computes whether a Point is inside the CSG Difference.
         /// 
         /// It's overriden from the abstract Shape class.
         /// </summary>
@@ -254,8 +257,8 @@ namespace Trace
         /// <summary>
         /// This method checks if a Ray intersects with the CSG Difference shape.
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The fired <see cref="Ray"/> object</param>
+        /// <returns> True if there is any intersection</returns>
         public override bool quickRayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -312,21 +315,14 @@ namespace Trace
             this.secondShape = b;
         }
 
-        /// <summary>
-        /// Checks if a Ray intersects the new CSGIntersection Shape.
-        /// It is an override from the abstract class <see cref="Shape"/>
-        /// </summary>
-        /// <param name="ray"> The intersecting <see cref="Ray"/> object</param>
-        /// <returns> A <see cref="HitRecord"/> if there is an intersection, otherwise null</returns>
-
 
         /// <summary>
-        /// Method that creates a list of all the legal intersections (in form of a HitRecord object) with a given Ray.
-        /// The HitRecord are than order by the t datamember, in crescent order.
-        ///It's overriden from the abstract Shape class. 
+        /// Method that creates a list of all the legal intersections (in form of a <see cref="HitRecord"/> list) with a given Ray.
+        /// The HitRecord are then ordered by the t datamember, in ascending order.
+        /// It is overriden from the abstract Shape class. 
         /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
+        /// <param name="ray"> The fired <see cref="Ray"/> object. </param>
+        /// <returns> A List of all legal <see cref="HitRecord"/>s.</returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -383,8 +379,8 @@ namespace Trace
         /// 
         /// It's overriden from the abstract Shape class.
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+        /// <param name="a"> The point possibly inside the Shape.</param>
+        /// <returns> True if there is any intersecction.</returns>
         public override bool isPointInside(Point a)
         {
             return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
@@ -392,7 +388,7 @@ namespace Trace
 
 
         /// <summary>
-        /// This method checks if a Ray intersects with the CSG Difference shape.
+        /// This method checks if a Ray intersects the CSG Intersection shape.
         /// </summary>
         /// <param name="ray"></param>
         /// <returns></returns>

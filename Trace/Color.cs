@@ -22,6 +22,7 @@ namespace Trace
 {
     /// <summary>
     ///  A very simple struct: three floats r,g,b to represent a color.
+    ///  This value type is fundamental to implement more complex structures and classes.
     /// </summary>
     public struct Color
     {

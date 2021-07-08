@@ -42,7 +42,7 @@ namespace Trace
 
     /// <summary>
     /// Exception CommandLineException. This Exception is intended to be raised whenever the user
-    /// passes meaningless argouments while running the executable.
+    /// passes meaningless arguments while running the executable.
     /// </summary>
     [Serializable]
     public class CommandLineException : Exception
@@ -59,6 +59,11 @@ namespace Trace
         public CommandLineException(string Message) : base(Message) { }
     }
 
+    /// <summary>
+    /// Esception GrammarError. This exception is intended to be raised whenever there is an error while
+    /// parsing the scene file into the program in render mode. It is a compiling error, therefore it has to print the exact source
+    /// location of the bug.
+    /// </summary>
     [Serializable]
     public class GrammarError : Exception
     {
