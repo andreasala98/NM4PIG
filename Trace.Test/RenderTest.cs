@@ -130,15 +130,15 @@ namespace Trace.Test
             PointLightRender renderer = new PointLightRender(world);
             tracer.fireAllRays(renderer);
 
-            Assert.True(image.getPixel(0, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 1/9");
-            Assert.True(image.getPixel(1, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 2/9");
-            Assert.True(image.getPixel(2, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 3/9");
-            Assert.True(image.getPixel(0, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 4/9");
-            Assert.True(image.getPixel(1, 1).isClose(renderer.ambientColor),    "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 5/9");
-            Assert.True(image.getPixel(2, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 6/9");
-            Assert.True(image.getPixel(0, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 7/9");
-            Assert.True(image.getPixel(1, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 8/9");
-            Assert.True(image.getPixel(2, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light soruce shielded by a sphere) - Assert 9/9");
+            Assert.True(image.getPixel(0, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 1/9");
+            Assert.True(image.getPixel(1, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 2/9");
+            Assert.True(image.getPixel(2, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 3/9");
+            Assert.True(image.getPixel(0, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 4/9");
+            Assert.True(image.getPixel(1, 1).isClose(renderer.ambientColor),    "TestPointLight rendered failed (light source shielded by a sphere) - Assert 5/9");
+            Assert.True(image.getPixel(2, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 6/9");
+            Assert.True(image.getPixel(0, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 7/9");
+            Assert.True(image.getPixel(1, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 8/9");
+            Assert.True(image.getPixel(2, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 9/9");
 
         }
 

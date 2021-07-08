@@ -74,7 +74,7 @@ namespace NM4PIG
                                                         declareFloat.Values
                                                             );
                     }
-                    catch (CommandLineException e)
+                    catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
                         return 0;
@@ -205,7 +205,18 @@ namespace NM4PIG
                 return 0;
             }
             );
-            CLI.Execute(args);
+
+            try
+            {
+                CLI.Execute(args);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+                Console.WriteLine(exc.GetType());
+                Console.WriteLine(">>> Exiting from the program. ");
+                return;
+            }
 
             return;
 

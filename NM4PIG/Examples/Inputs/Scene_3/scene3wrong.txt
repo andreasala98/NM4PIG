@@ -1,0 +1,73 @@
+# This is our third tutorial!
+# We will show some of the most advanced things our code can do
+
+# After this, you are free to create your own images with the tools
+# you learned in this 3 simple instructive files!
+
+# I will not add any instructions for commands we have already seen before
+
+
+float angle(5)
+
+# we add a textured pigment to the background sphere!
+material BKG(
+    diffuse(uniform(<0,0,0>)),
+    image("Texture/tri.pfm")
+)
+
+material GRND(
+    diffuse(checkered(<0.9, 0.9, 0.3>, 
+                      <0.1, 0.1, 0.1>, 
+                       4)),            
+    uniform(<0,0,0>)                   
+)
+
+# this is an emissive material, we will create some "lamps"
+material LUM(
+    diffuse(uniform(<0, 0, 0>)),
+    uniform(<0.8, 0.8, 1>)
+)
+
+# this is an interesting texture material
+# (CR7 does not approve)
+material COKE(
+    diffuse(image("Texture/Coketexture.pfm")),
+    uniform(<0,0,0>)
+)
+
+material SPEC(
+    specular(uniform(<0.5,0.3,0.3>)),
+    uniform(<0,0,0>)
+)
+
+material DICE(
+    diffuse(image("Texture/darkdice.pfm")),
+    uniform(<0,0,0>)
+)
+
+material BASE(
+    diffuse(uniform(<0.2, 0.2, 0.8>)),
+    uniform(<0, 0, 0>)
+)
+
+# We now define usual shapes with materials and transformations
+
+sphere(  BKG, scaling([250,250,250]) ) 
+plane ( GRND, translation([0,0,-1]) ) 
+plane ( LUM, translation([-3,0,0])*rotation_y(90))
+cylinder (COKE, translation([0, 1.7, 0.3])*scaling([0.3, 0.3, 2]))
+box (DICE, translation([0,-1,1.7])*rotation_z(24)*scaling([0.3,0.3,0.3]))
+cone (BASE, translation([0.4,0.6,0.9])*scaling([0.7,0.7,1.5]))
+sphere(SPEC, translation([0.4, -2.5, 0]))
+
+# we add some lamps around the room to lighten it up
+sphere(LUM, translation([-2,-1,0]))
+sphere(LUM, translation([-1.5,-3,0.3]))
+sphere(LUM, translation([-1,5,2]))
+sphere(LUM, translation([-2.5, 1.5, 1.5])*scaling([0.4,0.4,0.4]))
+
+
+camera(perspective, translation([-1, 0, 1])*rotation_z(angle), 1.7, 1.0)
+
+
+# dotnet run -- render --file Examples/Inputs/Scene_3/scene3.txt -ldr Examples/Inputs/Scene_3/scene3.jpg -spp 4 -W 1000 -H 700

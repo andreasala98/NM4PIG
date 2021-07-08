@@ -279,7 +279,7 @@ namespace Trace
             Token token = this.readToken();
             if (!(token is SymbolToken) || ((SymbolToken)token).symbol != symbol)
             {
-                throw new GrammarError(token.sourceLoc, $"got{token} insted of {symbol}");
+                throw new GrammarError(token.sourceLoc, $"I was expecting {symbol} but i got {token}");
             }
         }
 
