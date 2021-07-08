@@ -44,6 +44,8 @@ To check that the code works as expected, you can run a set of tests using the f
 
 ### Render mode ✨
 
+<img align="right" src="./NM4PIG/Examples/Animations/worldWikiShape.gif" width="300"/>
+
 Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions for the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
 
     dotnet run -- render --file Examples/Inputs/dummy.txt -ldr Examples/dummy.jpg
