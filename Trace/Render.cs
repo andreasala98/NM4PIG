@@ -149,15 +149,15 @@ namespace Trace
         /// <param name="world"></param>
         /// <param name="bkg"></param>
         /// <param name="pcg"></param>
-        /// <param name="nRays"></param>
+        /// <param name="numOfRays"></param>
         /// <param name="maxDepth"></param>
-        /// <param name="rrLim"></param>
-        public PathTracer(World world, Color? bkg = null, PCG? pcg = null, int nRays = 10, int maxDepth = 5, int rrLim = 3) : base(world, bkg)
+        /// <param name="russianRouletteLimit"></param>
+        public PathTracer(World world, Color? bkg = null, PCG? pcg = null, int numOfRays = 10, int maxDepth = 5, int russianRouletteLimit = 3) : base(world, bkg)
         {
             this.pcg = pcg ?? new PCG();
-            this.numOfRays = nRays;
+            this.numOfRays = numOfRays;
             this.maxDepth = maxDepth;
-            this.russianRouletteLimit = rrLim;
+            this.russianRouletteLimit = russianRouletteLimit;
         }
 
         /// <summary>

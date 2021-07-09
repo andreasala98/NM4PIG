@@ -238,8 +238,14 @@ namespace Trace
 
             try
             {
-                foreach (int i in Enumerable.Range(1, 4)) bytes[i] = (byte)inputStream.ReadByte();
+
+                bytes[0] = (byte)inputStream.ReadByte();
+                bytes[1] = (byte)inputStream.ReadByte();
+                bytes[2] = (byte)inputStream.ReadByte();
+                bytes[3] = (byte)inputStream.ReadByte();
+
             }
+
             catch
             {
                 throw new InvalidPfmFileFormat("Unable to read float!");
