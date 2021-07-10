@@ -25,17 +25,20 @@ namespace Trace
 {
     /// <summary>
     /// Abstract class that implements a generic shape. This class is used to generate
-    /// some basic shapes such as sphere and plane.
+    /// some basic shapes such as sphere and plane. Use only concrete subclasses
     /// </summary>
     public abstract class Shape
     {
         // Fields 
 
         /// <summary>
-        /// <see cref="Transformation associated to the shape">
+        /// <see cref="Transformation"/> associated to the shape">
         /// </summary>
         public Transformation transformation;
 
+        /// <summary>
+        ///  The shape's <see ref="Material"/>
+        /// </summary>
         public Material material;
         // Methods
 
@@ -55,9 +58,21 @@ namespace Trace
         /// Compute the intersection between a ray and this shape. This method has to be redefined in
         /// derived classes
         /// </summary>
+        /// <param name=ray> The intersecting <see cref="Ray"/></param>
         public abstract HitRecord? rayIntersection(Ray ray);
+
+        /// <summary>
+        /// Compute the list of all intersections between a ray and this shape. This method has to be redefined in
+        /// derived classes
+        /// </summary>
+        /// <param name=ray> The intersecting <see cref="Ray"/></param>
         public abstract List<HitRecord?> rayIntersectionList(Ray ray);
 
+        /// <summary>
+        ///  Calculate whether there is any intersection between the shape and a ray.
+        /// </summary>
+        /// <param name="ray">The intersecting <see cref="Ray"/></param>
+        /// <returns>True if there is at least one intersection</returns>
         public abstract bool quickRayIntersection(Ray ray);
 
         /// <summary>
@@ -66,11 +81,30 @@ namespace Trace
         /// <param name="a"></param>
         public abstract bool isPointInside(Point a);
 
+        /// <summary>
+        /// Operator to compute CSG Difference between two Shapes
+        /// </summary>
+        /// <param name="left">first shape</param>
+        /// <param name="right">second shape</param>
+        /// <returns>A new CSGDifference</returns>
         public static CSGDifference operator -(Shape left, Shape right)
             => new CSGDifference(left, right);
+
+        /// <summary>
+        /// Operator to compute CSG Union between two Shapes
+        /// </summary>
+        /// <param name="left">first shape</param>
+        /// <param name="right">second shape</param>
+        /// <returns>A new CSGUnion</returns>           
         public static CSGUnion operator +(Shape left, Shape right)
             => new CSGUnion(left, right);
 
+        /// <summary>
+        /// Operator to compute CSG Intersetion between two shapes
+        /// </summary>
+        /// <param name="left">first shape</param>
+        /// <param name="right">second shape</param>
+        /// <returns>A new CSGIntersection</returns>
         public static CSGIntersection operator *(Shape left, Shape right)
             => new CSGIntersection(left, right);
     }
@@ -481,6 +515,11 @@ namespace Trace
             return new Vec2D(u, v);
         }
 
+        /// <summary>
+        /// Method that checks if a Ray intersects a Box. Overridden from abstract class <see cref="Shape"/>
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -569,16 +608,10 @@ namespace Trace
             return hits;
         }
 
-        /// <summary>
-        /// Method that checks if a Ray intersects the box
-        /// </summary>
-        /// <param name="ray"></param>
-        /// <returns></returns>
-
     } // end of box
 
     /// <summary>
-    /// Represent a cylinder. If no transformation is passed, it is a cylinder with axis aligned along z, -0.5 < z < 0.5 and radius 1
+    /// Concrete class to represent a cylinder. If no transformation is passed, it is a cylinder with axis aligned along z, -0.5 < z < 0.5 and radius 1
     /// </summary>
     public class Cylinder : Shape
     {
@@ -599,6 +632,11 @@ namespace Trace
             this.transformation = translation * rotation * scaling;
         }
 
+        /// <summary>
+        /// Method that checks if a ray intersects a cylinder
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -656,6 +694,12 @@ namespace Trace
             return false;
         }
 
+        /// <summary>
+        /// Overridden method from class <see cref="Shape"/>. It calculates the closest
+        /// intersection between a <see cref="Ray"/> and the Cylinder
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             List<HitRecord?> intersections = rayIntersectionList(ray);
@@ -663,6 +707,12 @@ namespace Trace
             return intersections[0];
         }
 
+
+        /// <summary>
+        /// Overridden method that calculates every intersection between a Cylinder and a Ray.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -749,6 +799,14 @@ namespace Trace
             return hits.OrderBy(hit => hit?.t).ToList();
         }
 
+
+        /// <summary>
+        /// Calculate the <see cref="Normal"/> to the Cylinder at a certain point of intersection with a <see cref="Ray"/>.
+        /// The normal is calculated so that its scalar product with the direction of the ray is negative
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="rayDir"></param>
+        /// <returns></returns>
         private Normal _cylinderNormal(Point point, Vec rayDir)
         {
             Point invPoint = this.transformation.getInverse() * point;
@@ -765,21 +823,22 @@ namespace Trace
             return result;
         }
 
-
-        // U, V mapping for cylinder
-        // (0,0)     (0.5, 0)         (1,0)
-        // +---------------------------+
-        // |             |             |
-        // |    bottom   |     top     |
-        // |             |             |
-        // |             |             |
-        // +---------------------------+ (1, 0.5)
-        // |                           |
-        // |        lateral face       |
-        // |                           |
-        // |                           |
-        // +---------------------------+
-        // (0,1)                        (1,1)
+        /// <summary>
+        /// U, V mapping for cylinder
+        /// (0,0)     (0.5, 0)         (1,0)
+        /// +---------------------------+
+        /// |             |             |
+        /// |    bottom   |     top     |
+        /// |             |             |
+        /// |             |             |
+        /// +---------------------------+ (1, 0.5)
+        /// |                           |
+        /// |        lateral face       |
+        /// |                           |
+        /// |                           |
+        /// +---------------------------+
+        /// (0,1)                        (1,1)
+        /// </summary>
         private Vec2D _cylinderPointToUV(Point point)
         {
             float u, v;
@@ -835,18 +894,19 @@ namespace Trace
 
         /// <summary>
         /// Convert a 3D point on the surface of the cone into a (u, v) 2D point
+        /// +-----------------------------+
+        /// |              |              |
+        /// |     bottom   |    lateral   |
+        /// |     face     |              |
+        /// |--------------|     face     |
+        /// |              |              |
+        /// |   nothing    |              |
+        /// |              |              |
+        /// +-----------------------------+
         /// </summary>
         /// <param name="point">3D <see cref="Point"/></param>
         /// <returns><see cref="Vec2D"/></returns>
-        // +-----------------------------+
-        // |              |              |
-        // |     bottom   |    lateral   |
-        // |     face     |              |
-        // |--------------|     face     |
-        // |              |              |
-        // |   nothing    |              |
-        // |              |              |
-        // +-----------------------------+
+
         private Vec2D _conePointToUV(Point point)
         {
             float u = 0f, v = 0f;
@@ -896,6 +956,11 @@ namespace Trace
             return result;
         }
 
+        /// <summary>
+        /// Checks whether a Ray intersects a Cone
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override bool quickRayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -951,6 +1016,12 @@ namespace Trace
             return false;
 
         }
+
+        /// <summary>
+        /// Calculates the closest intersection between a Ray and the cone.
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override HitRecord? rayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
@@ -1054,6 +1125,12 @@ namespace Trace
                 return HitRecord.lesserComparison((HitRecord)planeHit, (HitRecord)coneHit);
         }
 
+
+        /// <summary>
+        /// Calculates every intersection between a Ray and the cone
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns></returns>
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> hits = new List<HitRecord?>();
@@ -1147,6 +1224,12 @@ namespace Trace
             }
             return hits;
         }
+
+        /// <summary>
+        /// Checks whether a point is inside the cone
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public override bool isPointInside(Point a)
         {
             Point invPoint = this.transformation.getInverse() * a;

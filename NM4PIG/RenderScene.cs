@@ -65,11 +65,15 @@ namespace NM4PIG
             {
                 Console.WriteLine("Using a path tracer");
                 renderer = new PathTracer(world: scene.world);
+                Console.WriteLine($">> Max depth: {((PathTracer)renderer).maxDepth}");
+                Console.WriteLine($">> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
+                Console.WriteLine($">> Number of rays: {((PathTracer)renderer).numOfRays}");
             }
             else if (rend == 'p')
             {
                 Console.WriteLine("Using a point-light tracer");
                 renderer = new PointLightRender(world: scene.world, background: CC.Black);
+                Console.WriteLine($">> Ambient color: {((PointLightRender)renderer).ambientColor}");
             }
             else
             {

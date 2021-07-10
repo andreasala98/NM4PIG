@@ -60,3 +60,6 @@ sphere(LUM, translation([-2.5, 1.5, 1.5])*scaling([0.4,0.4,0.4]))
 float angle(5)
 
 camera(perspective, translation([-1, 0, 1])*rotation_z(angle), 1.7, 1.0)
+
+
+# dotnet run -- render --scene Examples/Inputs/Scene_3/scene3.txt -ldr Examples/Inputs/Scene_3/scene3.jpg -W 800 -H 800 -spp 4

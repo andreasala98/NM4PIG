@@ -130,17 +130,17 @@ namespace Trace
         /// <summary>
         /// Number of rays to be fired at each iteration
         /// </summary>
-        public int numOfRays;
+        public int numOfRays { get; set; }
 
         /// <summary>
         /// Maximum number of reflections for any <see cref="Ray"/>
         /// </summary>
-        public int maxDepth;
+        public int maxDepth { get; set; }
 
         /// <summary>
         /// Minimum number of reflections for the Russian Roulette algorith to start.
         /// </summary>
-        public int russianRouletteLimit;
+        public int russianRouletteLimit { get; set; }
 
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Trace
         /// <param name="numOfRays"></param>
         /// <param name="maxDepth"></param>
         /// <param name="russianRouletteLimit"></param>
-        public PathTracer(World world, Color? bkg = null, PCG? pcg = null, int numOfRays = 10, int maxDepth = 5, int russianRouletteLimit = 3) : base(world, bkg)
+        public PathTracer(World world, Color? bkg = null, PCG? pcg = null, int numOfRays = 10, int maxDepth = 3, int russianRouletteLimit = 2) : base(world, bkg)
         {
             this.pcg = pcg ?? new PCG();
             this.numOfRays = numOfRays;

@@ -25,7 +25,7 @@ using System.Linq;
 namespace Trace
 {
     /// <summary>
-    /// A scene read from a scene file
+    /// A scene read from a scene file through the scene language interpreter
     /// </summary>
     public class Scene
     {
@@ -36,6 +36,12 @@ namespace Trace
         public HashSet<string> overriddenVariables = new HashSet<string>();
 
 
+        /// <summary>
+        ///  Parse a <see cref="Vec"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Vec"/>.</returns>
         public static Vec parseVector(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("[");
@@ -50,6 +56,13 @@ namespace Trace
         }
 
 
+        /// <summary>
+        ///  Parse a <see cref="Color"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Color"/>.</returns>
+
         public static Color parseColor(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("<");
@@ -63,6 +76,12 @@ namespace Trace
             return new Color(r, g, b);
         }
 
+        /// <summary>
+        ///  Parse a <see cref="Pigment"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Pigment"/>.</returns>
 
         public static IPigment parsePigment(InputStream inputFile, Scene scene)
         {
@@ -109,6 +128,13 @@ namespace Trace
         }
 
 
+        /// <summary>
+        ///  Parse a <see cref="BRDF"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="BRDF"/>.</returns>
+
         public static BRDF parseBRDF(InputStream inputFile, Scene scene)
         {
             BRDF result;
@@ -130,6 +156,13 @@ namespace Trace
         }
 
 
+        /// <summary>
+        ///  Parse a <see cref="Material"/> object and its name from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Material"/> and its name stored in a Tuple.</returns>
+
         public static Tuple<string, Material> parseMaterial(InputStream inputFile, Scene scene)
         {
             string name = inputFile.expectIdentifier();
@@ -143,6 +176,13 @@ namespace Trace
             return new Tuple<string, Material>(name, new Material(brdf, emRad));
         }
 
+
+        /// <summary>
+        ///  Parse a <see cref="Transformation"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Transformation"/>.</returns>
 
         public static Transformation parseTransformation(InputStream inputFile, Scene scene)
         {
@@ -202,6 +242,13 @@ namespace Trace
             return result;
         } //parseTranformation
 
+        /// <summary>
+        ///  Parse a <see cref="Sphere"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Sphere"/>.</returns>
+
         public static Sphere parseSphere(InputStream inputFile, Scene scene)
         {
 
@@ -218,6 +265,13 @@ namespace Trace
         }
 
 
+        /// <summary>
+        ///  Parse a <see cref="Plane"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Plane"/>.</returns>
+
         public static Plane parsePlane(InputStream inputFile, Scene scene)
         {
 
@@ -233,6 +287,14 @@ namespace Trace
             return new Plane(tr, scene.materials[matName]);
         }
 
+
+        /// <summary>
+        ///  Parse a <see cref="Cylinder"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Cylinder"/>.</returns>
+
         public static Cylinder parseCylinder(InputStream inputFile, Scene scene)
         {
             // cylinder(material, transformation)
@@ -247,6 +309,14 @@ namespace Trace
             return new Cylinder(tr, scene.materials[matName]);
         }
 
+
+        /// <summary>
+        ///  Parse a <see cref="Box"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Box"/>.</returns>
+
         public static Box parseBox(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("(");
@@ -260,6 +330,13 @@ namespace Trace
             return new Box(new Point(-1f, -1f, -1f), new Point(1f, 1f, 1f), tr, scene.materials[matName]);
         }
 
+        /// <summary>
+        ///  Parse a <see cref="Cone"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Cone"/>.</returns>
+
         public static Cone parseCone(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("(");
@@ -272,6 +349,14 @@ namespace Trace
 
             return new Cone(1f, 1f, tr, scene.materials[matName]);
         }
+
+
+        /// <summary>
+        ///  Parse a <see cref="CSGUnion"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="CSGUnion"/>.</returns>
 
         public static CSGUnion parseCSGUnion(InputStream inputFile, Scene scene)
         {
@@ -355,6 +440,14 @@ namespace Trace
             return new CSGUnion(lShape, rShape, tr);
         }
 
+
+        /// <summary>
+        ///  Parse a <see cref="CSGDifference"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="CSGDifference"/>.</returns>
+
         public static CSGDifference parseCSGDifference(InputStream inputFile, Scene scene)
         {
             List<KeywordEnum> allowedKeys = new List<KeywordEnum>(){ KeywordEnum.Plane, KeywordEnum.Sphere,
@@ -436,6 +529,14 @@ namespace Trace
 
             return new CSGDifference(lShape, rShape, tr);
         }
+
+
+        /// <summary>
+        ///  Parse a <see cref="CSGIntersection"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="CSGIntersection"/>.</returns>
 
         public static CSGIntersection parseCSGIntersection(InputStream inputFile, Scene scene)
         {
@@ -519,6 +620,14 @@ namespace Trace
             return new CSGIntersection(lShape, rShape, tr);
         }
 
+
+        /// <summary>
+        ///  Parse a "Wikishape" object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed shape.</returns>
+
         public static Shape parseWikiShape(InputStream inputFile, Scene scene)
         {
             inputFile.expectSymbol("(");
@@ -529,6 +638,13 @@ namespace Trace
             return result;
 
         }
+
+        /// <summary>
+        ///  Parse a <see cref="PointLight"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="PointLight"/>.</returns>
 
         public static PointLight parsePointlight(InputStream inputFIle, Scene scene)
         {
@@ -542,6 +658,13 @@ namespace Trace
             return new PointLight(p, col);
 
         }
+
+        /// <summary>
+        ///  Parse a <see cref="Camera"/> object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed <see cref="Camera"/>.</returns>
 
         public static Camera parseCamera(InputStream inputFile, Scene scene)
         {
@@ -566,6 +689,14 @@ namespace Trace
             return result;
         }
 
+
+        /// <summary>
+        ///  Parse a complete <see cref="Scene"/>. This merhod uses all the above methods to construct
+        ///  a full scene
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> List of declared variables</param>
+        /// <returns> The parsed scene.</returns>
 
         public static Scene parseScene(InputStream inputFile, Dictionary<string, float> variables)
         {

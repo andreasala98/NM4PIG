@@ -47,18 +47,48 @@ namespace Trace
                areClose(a.M31, b.M31) && areClose(a.M32, b.M32) && areClose(a.M33, b.M33) && areClose(a.M34, b.M34) &&
                areClose(a.M41, b.M41) && areClose(a.M42, b.M42) && areClose(a.M43, b.M43) && areClose(a.M44, b.M44);
 
+        /// <summary>
+        /// Convert an angle from degrees to radians
+        /// </summary>
+        /// <param name="deg"> Angle in degrees</param>
+        /// <returns> Angle in radians</returns>
         public static float DegToRad(int deg)
             => (float)deg * Constant.PI / 180f;
 
+        /// <summary>
+        /// Convert an angle from radians to degrees
+        /// </summary>
+        /// <param name="deg"> Angle in radians</param>
+        /// <returns> Angle in degrees</returns>
         public static float RadToDeg(int rad)
             => (float)rad * 180f / Constant.PI;
 
+        /// <summary>
+        /// Minimum between three floats
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static float Min(float a, float b, float c)
             => Math.Min(a, Math.Min(b, c));
 
+        /// <summary>
+        /// Maximum between three floats
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static float Max(float a, float b, float c)
             => Math.Max(a, Math.Max(b, c));
 
+        /// <summary>
+        /// Dot product between two normalized <see cref="Vec"/>s.
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        /// <returns></returns>
         public static float NormalizedDot(Vec v1, Vec v2)
             => v1.Normalize() * v2.Normalize();
     }

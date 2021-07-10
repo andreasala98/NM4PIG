@@ -25,6 +25,7 @@ namespace Trace
 
     /// <summary>
     ///  A lexical token, used when parsing a scene file.
+    ///  This is the most generic Token class, and it has many children subclasses.
     /// </summary>
     public class Token
     {
@@ -46,31 +47,39 @@ namespace Trace
     /// </summary>
     public class StopToken : Token
     {
-
         public StopToken(SourceLocation sourceLoc) : base(sourceLoc) { }
 
     } //StopToken
 
 
+    /// <summary>
+    /// Enumeration of all possible keywords encountered in a Scene File
+    /// </summary>
     public enum KeywordEnum
     {
 
         New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection,
         CSGDifference, Box, Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
-        Camera, Orthogonal, Perspective, Float, String, Wikishape, Color, Pointlight
+        Camera, Orthogonal, Perspective, Float, String, Wikishape, Pointlight
 
     }
 
+    /// <summary>
+    /// A token containing a keyword
+    /// </summary>
 
     public class KeywordToken : Token
     {
+      
         /// <summary>
-        /// A token containing a keyword
+        /// The related keyword
         /// </summary>
-
         public KeywordEnum keyword;
 
+        /// <summary>
+        ///  Dictionary linking the keyword to its string identifier.
+        /// </summary>
         public static Dictionary<string, KeywordEnum> dict = new Dictionary<string, KeywordEnum>(){
 
             {  "new", KeywordEnum.New },
@@ -105,11 +114,20 @@ namespace Trace
         };
 
 
+        /// <summary>
+        /// Basic contructor for KeywordToken.
+        /// </summary>
+        /// <param name="sourceLoc"></param>
+        /// <param name="key"></param>
         public KeywordToken(SourceLocation sourceLoc, KeywordEnum key) : base(sourceLoc)
         {
             this.keyword = key;
         }
 
+        /// <summary>
+        /// Prints a KeywordToken
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             if (!dict.ContainsValue(this.keyword)) throw new ArgumentException("Keyword not found");
@@ -119,13 +137,15 @@ namespace Trace
     } //KeywordToken
 
 
+        /// <summary>
+        /// A token containing an identifier
+        /// </summary>
     public class IdentifierToken : Token
     {
 
         /// <summary>
-        /// A token containing an identifier
+        /// The identifier itself
         /// </summary>
-
         public string id;
 
         public IdentifierToken(SourceLocation sourceLoc, string s) : base(sourceLoc)
@@ -134,6 +154,10 @@ namespace Trace
         }
 
 
+        /// <summary>
+        /// Prints the IdentifierToken
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.id;
@@ -148,8 +172,16 @@ namespace Trace
     public class StringToken : Token
     {
 
+        /// <summary>
+        /// The literal string
+        /// </summary>
         public string str;
 
+        /// <summary>
+        /// Basic contructor for StringToken
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="sL"></param>
         public StringToken(string s, SourceLocation sL) : base(sL)
         {
 
@@ -157,6 +189,10 @@ namespace Trace
 
         }
 
+        /// <summary>
+        /// Prints a string token
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.str;
@@ -165,12 +201,21 @@ namespace Trace
     }
 
     /// <summary>
-    /// A token containing a literal number
+    /// A token containing a literal number (floating point)
     /// </summary>
     public class LiteralNumberToken : Token
     {
+
+        /// <summary>
+        /// The value of the number
+        /// </summary>
         public float value;
 
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        /// <param name="sL"></param>
+        /// <param name="val"></param>
         public LiteralNumberToken(SourceLocation sL, float val) : base(sL)
         {
 
@@ -178,6 +223,10 @@ namespace Trace
 
         }
 
+        /// <summary>
+        /// Prints a literal number token
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.value.ToString();
@@ -185,10 +234,22 @@ namespace Trace
 
     }
 
+
+    /// <summary>
+    /// A token containing a symbol 
+    /// </summary>
     public class SymbolToken : Token
     {
+        /// <summary>
+        /// The symbol itself
+        /// </summary>
         public string symbol;
 
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        /// <param name="sL"></param>
+        /// <param name="sym"></param>
         public SymbolToken(SourceLocation sL, string sym) : base(sL)
         {
             this.symbol = sym;

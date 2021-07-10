@@ -21,6 +21,10 @@ using System.Collections.Generic;
 
 namespace Trace
 {
+
+    /// <summary>
+    /// Class that represents a world. It is the variable to which we add the shapes.
+    /// </summary>
     public class World
     {
 
@@ -35,6 +39,9 @@ namespace Trace
         /// </summary>
         public List<Trace.PointLight> lightSources;
 
+        /// <summary>
+        /// Basic constructor for World. It does not add any shapes nor light sources.
+        /// </summary>
         public World()
         {
             this.shapes = new List<Shape>();
@@ -69,15 +76,23 @@ namespace Trace
             this.addPointLight(pl);
         }
 
+        /// <summary>
+        /// Add a <see cref="Shape"/> to the list of shapes present in the world.
+        /// </summary>
+        /// <param name="sh"></param>
         public void addShape(Shape sh)
           => shapes.Add(sh);
 
+        /// <summary>
+        /// Add a <see cref="PointLight"/> to the list of light sources present in the world.
+        /// </summary>
+        /// <param name="pl"></param>
         public void addPointLight(PointLight pl) 
           => lightSources.Add(pl); 
 
 
         /// <summary>
-        /// It calculates all intersections between shapes and a ray,
+        /// It calculates all intersections between all the shapes and a ray,
         /// and it outputs the hit record of the closest object.
         /// </summary>
         /// <param name="intRay"> <see cref="Ray"/> object potentially intersecating

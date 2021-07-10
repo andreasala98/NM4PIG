@@ -29,7 +29,9 @@ namespace Trace
     public class InvalidPfmFileFormat : Exception
     {
         /// <summary>
-        /// Constructor for InvalidPfmFileFormat exception. This raises a generic exception, i.e. does not contain an error message.
+        /// Constructor for InvalidPfmFileFormat exception. 
+        /// This raises a generic exception, i.e. does not contain an error message.
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public InvalidPfmFileFormat() : base() { }
 
@@ -48,7 +50,9 @@ namespace Trace
     public class CommandLineException : Exception
     {
         /// <summary>
-        /// Constructor for CommandLineException exception. This raises a generic exception, i.e. does not contain an error message
+        /// Constructor for CommandLineException exception. 
+        /// This raises a generic exception, i.e. does not contain an error message
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public CommandLineException() : base() { }
 
@@ -70,7 +74,9 @@ namespace Trace
         public SourceLocation sourceLocation;
 
         /// <summary>
-        /// Constructor for GrammarError exception. This raises a generic exception, i.e. does not contain an error message
+        /// Constructor for GrammarError exception. 
+        /// This raises a generic exception, i.e. does not contain an error message
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public GrammarError(SourceLocation location) : base()
         {

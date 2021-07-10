@@ -62,7 +62,7 @@ CSGintersection(
 camera(perspective, translation([-1, 0, 1])*rotation_z(angle), 1.7, 1.0)
 
 # We are ready to go! We use the path tracer exactly like before
-# dotnet run -- render --file Examples/Inputs/Scene_2/scene2.txt -ldr Examples/Inputs/Scene_2/scene2.jpg --width 1400 --height 800 --render-type r
+# dotnet run -- render --scene Examples/Inputs/Scene_2/scene2.txt -ldr Examples/Inputs/Scene_2/scene2.jpg --width 1400 --height 800 --render-type r
 
 # Important feature: 
 # We can vary the value of the variable "angle" at runtime! This will produce different views of the scene.

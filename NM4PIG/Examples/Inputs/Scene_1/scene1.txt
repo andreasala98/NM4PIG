@@ -73,7 +73,7 @@ camera(perspective, translation([-4, 0, 1]), 1.0, 1.0)
 
 # We've declared everything we needed! We are now ready to execute the program!
 # move to the NM4PIG/NM4PIG folder and the launch
-# dotnet run -- render --file Examples/Inputs/Scene1/scene1.txt --width 1000 --height 700 --ldr Examples/Inputs/Scene1/scene1.jpg --spp 4
+# dotnet run -- render --scene Examples/Inputs/Scene1/scene1.txt --width 1000 --height 700 --ldr Examples/Inputs/Scene1/scene1.jpg --spp 4
 
 # We wil go deeper into the arguments passed in the following tutorials!
 # For now, enjoy the image you've just created :)

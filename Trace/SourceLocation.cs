@@ -37,6 +37,12 @@ namespace Trace
         /// </summary>
         public int colNum = 0;
 
+        /// <summary>
+        /// Basic contructor for the class
+        /// </summary>
+        /// <param name="fileName"> Name of the source file</param>
+        /// <param name="line"> Line of the location</param>
+        /// <param name="col"> Column of the location</param>
         public SourceLocation(string fileName, int line = 1, int col = 1)
         {
             this.fileName = fileName;
@@ -44,11 +50,19 @@ namespace Trace
             this.colNum = col;
         }
 
+        /// <summary>
+        /// Copy constructor for the class.
+        /// </summary>
+        /// <returns></returns>
         public SourceLocation shallowCopy()
         {
             return (SourceLocation)this.MemberwiseClone();
         }
 
+        /// <summary>
+        /// Print a source location
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"({lineNum}, {colNum})";

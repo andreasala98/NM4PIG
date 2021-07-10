@@ -124,6 +124,11 @@ namespace Trace
         public float Luminosity()
             => (float)(Math.Max(Math.Max(r, b), g) + Math.Min(Math.Min(r, b), g)) / 2;
 
+
+        /// <summary>
+        /// Method useful for debugging. It prints out RGB components of a color.
+        /// </summary>
+        /// <returns> Printed color</returns>
         public override string ToString()
         {
             return $"Red: {this.r}, Green: {this.g}, Blue: {this.b}";
