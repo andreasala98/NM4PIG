@@ -9,7 +9,6 @@ using CC = Trace.Constant;
 
 namespace NM4PIG
 {
-
     class RenderScene
     {
         public static void ExecuteRender(string file, int width, int height, string pfmFile,
@@ -64,10 +63,10 @@ namespace NM4PIG
             else if (rend == 'r')
             {
                 Console.WriteLine("Using a path tracer");
-                renderer = new PathTracer(world: scene.world);
-                Console.WriteLine($">> Max depth: {((PathTracer)renderer).maxDepth}");
-                Console.WriteLine($">> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
-                Console.WriteLine($">> Number of rays: {((PathTracer)renderer).numOfRays}");
+                renderer = new PathTracer(world: scene.world, numOfRays: 3, maxDepth: 8, russianRouletteLimit: 4);
+                //Console.WriteLine($">> Max depth: {((PathTracer)renderer).maxDepth}");
+                //Console.WriteLine($">> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
+                //Console.WriteLine($">> Number of rays: {((PathTracer)renderer).numOfRays}");
             }
             else if (rend == 'p')
             {

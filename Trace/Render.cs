@@ -183,16 +183,18 @@ namespace Trace
 
             // Russian roulette
             if (ray.depth >= this.russianRouletteLimit)
+            {
                 if (this.pcg.randomFloat() > hitColorLum)
                     // Keep the recursion going, but compensate for other potentially discarded rays
                     hitColor *= 1.0f / (1.0f - hitColorLum);
                 else
                     // Terminate prematurely
                     return emittedRadiance;
+            }
 
             Color cumRadiance = new Color(0f, 0f, 0f);
             if (hitColorLum > 0f)
-            { // Only do costly recursions if it's worth it
+            { // Only do costly recursions if it's worth it -- it's not (most of the times)
                 for (int rayIndex = 0; rayIndex < this.numOfRays; rayIndex++)
                 {
                     Ray newRay = hitMaterial.brdf.scatterRay(
@@ -227,7 +229,7 @@ namespace Trace
         /// <param name="ambient"></param>
         public PointLightRender(World world, Color? background = null, Color? ambient = null) : base(world, background)
         {
-            this.ambientColor = ambient ?? new Color(0.1f, 0.1f, 0.1f);
+            this.ambientColor = ambient ?? new Color(0.0f, 0.0f, 0.0f);
         }
 
         /// <summary>

@@ -237,35 +237,47 @@ namespace Trace
             };
             using (var pbar = new ProgressBar(totalTicks, "", options))
             {
-                Parallel.For(0, image.height, i =>
+
+                //var opt = new ParallelOptions();
+                //opt.MaxDegreeOfParallelism = 4;
+
+                try
                 {
-                    for (int j = 0; j < image.width; j++)
+                    Parallel.For(0, image.height, i =>
+                    //for (int i = 0; i < image.height; i++)
                     {
-                        // Console.WriteLine($"i={i},j={j}");
-                        Color appo = Constant.Black;
-                        if (this.samplesPerSide > 0)
+                        for (int j = 0; j < image.width; j++)
                         {
-                            for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
+                            // Console.WriteLine($"i={i},j={j}");
+                            Color appo = Constant.Black;
+                            if (this.samplesPerSide > 0)
                             {
-                                for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                                for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
                                 {
-                                    float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
-                                    float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
-                                    Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
-                                    appo += rend.computeRadiance(rr);
+                                    for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                                    {
+                                        float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
+                                        float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
+                                        Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
+                                        appo += rend.computeRadiance(rr);
+                                    }
                                 }
+                                this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
                             }
-                            this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
+                            else
+                            {
+                                Ray raggio = this.fireRay(j, i);
+                                Color colore = rend.computeRadiance(raggio);
+                                this.image.setPixel(j, i, colore);
+                            }
                         }
-                        else
-                        {
-                            Ray raggio = this.fireRay(j, i);
-                            Color colore = rend.computeRadiance(raggio);
-                            this.image.setPixel(j, i, colore);
-                        }
-                    }
-                    pbar.Tick();
-                });
+                        pbar.Tick();
+                    });
+                }
+                catch (AggregateException) { 
+                    //lol
+                }
+                
             }
         }
 
@@ -278,7 +290,8 @@ namespace Trace
         /// <param name="fun"> The delegate function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
         public void fireAllRays(PFunction fun)
         {
-            Parallel.For(0, image.height, i =>
+            //Parallel.For(0, image.height, i =>
+            for (int i = 0; i < image.height; i++)
             {
                 for (int j = 0; j < image.width; j++)
                 {
@@ -313,8 +326,7 @@ namespace Trace
                 // if (i % 50 == 0 && i != 0)
                 //     Console.Write(((float)i / image.height).ToString("0.00") + " of rendering completed\r");
 
-            });
-
+            }
         }
     }
 }
