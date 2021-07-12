@@ -31,10 +31,10 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 👀
 
 The main funcitonality of this library is to produce photorealistic images from input files describing a certain scene. 
-The scene is made of geometric shapes (see the [list](#available-shapes 📐)), each one defined by its coordinates and its material. Our code offers the possibility to choose between a diffusive, emissive or reflective material. 
+The scene is made of geometric shapes (see the list of available shapes), each one defined by its coordinates and its material. Our code offers the possibility to choose between a diffusive, emissive or reflective material. 
 The code implements four different _backwards ray tracing_ algorithms to simulate how light rays propagate. A camera (perspective or orthogonal) representing the observer will see the world through a 2D screen placed ahead of it and it is defined by its position, the distance from the screen and the aspect ratio.
 
-Once everything (shapes and observer) is defined and in place, the code solves the rendering equation (with different assunptions, depending on the chosen algorithm) and produces an HDR image (in `.pfm` format). Later, the HDR image is converted into LDR formats such as `.jpg`and `.png`.
+Once everything (shapes and observer) is defined and in place, the code solves the rendering equation (with different assumptions, depending on the chosen algorithm) and produces an HDR image (in `.pfm` format). Later, the HDR image is converted into LDR formats such as `.jpg`and `.png`.
 
 
 ## Prerequisites
@@ -66,7 +66,7 @@ To check that the code works as expected, you can run a set of tests using the f
 
 Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions for the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
 
-    dotnet run -- render --file Examples/Inputs/dummy.txt -ldr Examples/dummy.jpg
+    dotnet run -- render --scene Examples/Inputs/dummy.txt -ldr Examples/dummy.jpg
 
 This command will read the instructions present in the file ```dummy.txt``` and generate an image called ```dummy.jpg```. Feel free to use your preferred editor to visualize the image generated. If you want to explore all the settable parameters, you can run
 
@@ -85,11 +85,12 @@ The complete list of settable parameters is:
 ### How to create input files
 
 Input files must be written according to specific syntactic rules.
-We prepared three tutorial files to explain how these input files should be created:
+We prepared some tutorial files to explain how these input files should be created:
 
 - [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene1.jpg))
 - [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_2/scene2.jpg))
 - [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3.jpg))
+- [Tutorial 4](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
 
 Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
