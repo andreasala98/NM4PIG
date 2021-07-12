@@ -52,17 +52,17 @@ namespace NM4PIG
             Render renderer;
             if (rend == 'o')
             {
-                Console.WriteLine("Using on/off renderer");
+                Console.WriteLine("\nUsing on/off renderer:");
                 renderer = new OnOffRender(world: scene.world, background: CC.Black);
             }
             else if (rend == 'f')
             {
-                Console.WriteLine("Using flat renderer");
+                Console.WriteLine("\nUsing flat renderer:");
                 renderer = new FlatRender(world: scene.world, background: CC.Black);
             }
             else if (rend == 'r')
             {
-                Console.WriteLine("Using a path tracer");
+                Console.WriteLine("\nUsing a path tracer:");
                 renderer = new PathTracer(world: scene.world, numOfRays: 3, maxDepth: 8, russianRouletteLimit: 4);
                 //Console.WriteLine($">> Max depth: {((PathTracer)renderer).maxDepth}");
                 //Console.WriteLine($">> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
@@ -70,7 +70,7 @@ namespace NM4PIG
             }
             else if (rend == 'p')
             {
-                Console.WriteLine("Using a point-light tracer");
+                Console.WriteLine("\nUsing a point-light tracer: ");
                 renderer = new PointLightRender(world: scene.world, background: CC.Black);
                 Console.WriteLine($">> Ambient color: {((PointLightRender)renderer).ambientColor}");
             }
@@ -97,7 +97,9 @@ namespace NM4PIG
             sw.Stop();
             TimeSpan ts = sw.Elapsed;
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime);
+            Console.WriteLine("\nRun Time: " + elapsedTime);
+
+            Console.WriteLine("See you next time!\n");
         } //RenderScene
 
     } //Main Funcs

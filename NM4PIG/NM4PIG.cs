@@ -46,16 +46,16 @@ namespace NM4PIG
             {
                 command.FullName = "\nThis is render mode and it is the core functionality of the program.";
                 command.Description = "Enter render mode and generate a complex image";
-                var file = command.Option("--scene|-s <FILENAME>", "File that contains the description of the scene", CommandOptionType.SingleValue);
+                var file = command.Option("--scene|-s <FILENAME>", "File that contains the description of the scene. Default is Examples/Inputs/dummy.txt", CommandOptionType.SingleValue);
                 var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
                 var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
-                var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file", CommandOptionType.SingleValue);
-                var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file", CommandOptionType.SingleValue);
-                var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel", CommandOptionType.SingleValue);
-                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r)", CommandOptionType.SingleValue);
+                var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file. Default is demoImage.pfm", CommandOptionType.SingleValue);
+                var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file. Default is demoImage.jpg", CommandOptionType.SingleValue);
+                var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel. Default is 4", CommandOptionType.SingleValue);
+                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r). Default is r (path tracer)", CommandOptionType.SingleValue);
                 var declareFloat = command.Option("--declare-float|-d", "Declare a variable. The syntax is «--declare-float VAR:VALUE». Example: --declare-float clock:150 --declare-float dummy:5.6 ...", CommandOptionType.MultipleValue);
-                var factor = command.Option("--factor|-f <FACTOR>", "scaling factor", CommandOptionType.SingleValue);
-                var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction", CommandOptionType.SingleValue);
+                var factor = command.Option("--factor|-f <FACTOR>", "scaling factor. Deafult is 0.6", CommandOptionType.SingleValue);
+                var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction. Default is 1.7", CommandOptionType.SingleValue);
 
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
@@ -76,7 +76,7 @@ namespace NM4PIG
                                                         declareFloat.Values,
                                                         factor.Value(),
                                                         gamma.Value()
-                                                            );
+                                                        );
                     }
                     catch (Exception e)
                     {

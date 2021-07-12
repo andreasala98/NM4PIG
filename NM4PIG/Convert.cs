@@ -48,15 +48,15 @@ namespace NM4PIG
             Console.WriteLine("Starting Tone Mapping...");
             try
             {
-                Console.WriteLine("Normalizing image...");
+                Console.WriteLine(">>>> Normalizing image...");
 
                 if (luminosity.HasValue) myImg.normalizeImage(factor, luminosity.Value);
                 else myImg.normalizeImage(factor);
 
-                Console.WriteLine("Clamping image...");
+                Console.WriteLine(">>>> Clamping image...");
                 myImg.clampImage();
 
-                Console.WriteLine("Saving LDR image...");
+                Console.WriteLine(">>>> Saving LDR image...");
                 myImg.writeLdrImage(outputldr, fmt, gamma);
 
                 Console.WriteLine($"File {outputldr} has been correctly written to disk.");
