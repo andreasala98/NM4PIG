@@ -27,6 +27,7 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 - [Documentation](#documentation)
 - [License](#license)
 - [Gallery](#gallery)
+- [Issue tracking](#issue-tracking)
 
 ## Overview
 👀
@@ -167,6 +168,15 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
 </p>
  
  
+ 
+Now it's time to build your own! Have fun!
+ 
+ 
+## Issue tracking
+ 
+If you happen to find any issue or bug with our code, you're more than welcome to let us know. Either contacts us via email or raise an issue with the apposite issue tracker. We guarantee maintenance up until September 2021.
+ 
+
  
 
 
