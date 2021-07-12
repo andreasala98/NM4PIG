@@ -174,7 +174,7 @@ Now it's time to build your own! Have fun!
  
 ## Issue tracking
  
-If you happen to find any issue or bug with our code, you're more than welcome to let us know. Either contacts us via email or raise an issue with the apposite issue tracker. We guarantee maintenance up until September 2021.
+If you happen to find any issue or bug with our code, you're more than welcome to let us know. Either [contact us via email](mailto:andrea.sala98@gmail.com,tommaso.armadillo@studenti.unimi.it,pietro.klausner@studenti.unimi.it) or raise an issue with the apposite issue tracker. We guarantee maintenance up until September 2021.
  
 
  
