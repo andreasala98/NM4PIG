@@ -27,6 +27,7 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
 - [Documentation](#documentation)
 - [License](#license)
 - [Gallery](#gallery)
+- [Issue tracking](#issue-tracking)
 
 ## Overview
 👀
@@ -90,8 +91,8 @@ We prepared some tutorial files to explain how these input files should be creat
 
 - [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene1.jpg))
 - [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_2/scene2.jpg))
-- [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3.jpg))
-- [Tutorial 4](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
+- [Tutorial 3 (flat renderer)](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.jpg))
+- [Tutorial 4 (point light renderer)](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
 
 Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
@@ -149,7 +150,34 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
  
  Here is a small gallery of some images generated with NM4PIG:
  
- ![1](./NM4PIG/Examples/Inputs/Other/boxSphere.jpg)
+ <p float="center">
+  <img src="./NM4PIG/Examples/Inputs/Other/boxSphere.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Inputs/Other/ortho.jpg" height="200" /> 
+  <img src="./NM4PIG/Examples/Inputs/Other/icecream.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Inputs/Other/coke_world.png" height="200" />
+</p>
+ 
+  <p float="center">
+  <img src="./NM4PIG/Examples/Demo/demoAntiAliasing.png" height="200" />
+  <img src="./NM4PIG/Examples/Demo/doubleCokeCan.jpg" height="200" /> 
+  </p>
+ 
+ <p float="center">
+  <img src="./NM4PIG/Examples/Inputs/Other/redblue.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Demo/minecraftCube.jpg" height="200" />
+</p>
+ 
+ 
+ 
+Now it's time to build your own! Have fun!
+ 
+ 
+## Issue tracking
+ 
+If you happen to find any issue or bug with our code, you're more than welcome to let us know. Either [contact us via email](mailto:andrea.sala98@gmail.com,tommaso.armadillo@studenti.unimi.it,pietro.klausner@studenti.unimi.it) or raise an issue with the apposite issue tracker. We guarantee maintenance up until September 2021.
+ 
+
+ 
 
 
 
