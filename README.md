@@ -90,8 +90,8 @@ We prepared some tutorial files to explain how these input files should be creat
 
 - [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene1.jpg))
 - [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_2/scene2.jpg))
-- [Tutorial 3](./NM4PIG/Examples/Inputs/Scene_3/scene3.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3.jpg))
-- [Tutorial 4](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
+- [Tutorial 3 (flat renderer)](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.jpg))
+- [Tutorial 4 (point light renderer)](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
 
 Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
