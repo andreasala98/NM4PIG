@@ -149,7 +149,25 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
  
  Here is a small gallery of some images generated with NM4PIG:
  
- ![1](./NM4PIG/Examples/Inputs/Other/boxSphere.jpg)
+ <p float="center">
+  <img src="./NM4PIG/Examples/Inputs/Other/boxSphere.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Inputs/Other/ortho.jpg" height="200" /> 
+  <img src="./NM4PIG/Examples/Inputs/Other/icecream.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Inputs/Other/coke_world.png" height="200" />
+</p>
+ 
+  <p float="center">
+  <img src="./NM4PIG/Examples/Demo/demoAntiAliasing.png" height="200" />
+  <img src="./NM4PIG/Examples/Demo/doubleCokeCan.jpg" height="200" /> 
+  </p>
+ 
+ <p float="center">
+  <img src="./NM4PIG/Examples/Inputs/Other/redblue.jpg" height="200" />
+  <img src="./NM4PIG/Examples/Demo/minecraftCube.jpg" height="200" />
+</p>
+ 
+ 
+ 
 
 
 
