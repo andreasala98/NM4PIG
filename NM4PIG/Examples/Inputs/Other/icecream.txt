@@ -1,0 +1,29 @@
+material CONE (diffuse(uniform(<0,0,0>)),
+		image("Texture/biscuit.pfm")		
+		)
+
+material SKY (diffuse(uniform(<0,0,0>)), uniform(<0.7, 0.89, 0.89>))
+
+material BALL1 (diffuse(image("Texture/ice1.pfm")), uniform(<0,0,0>))
+material BALL2 (diffuse(image("Texture/ice2.pfm")), uniform(<0,0,0>))
+material BALL3 (diffuse(image("Texture/ice3.pfm")), uniform(<0,0,0>))
+
+
+sphere (SKY, scaling([15,15,15]))
+
+CSGunion(
+	CSGunion(
+		CSGunion(
+		 sphere(BALL1, translation([1,0.1,1.3])*scaling([0.2,0.2,0.2])),
+		 sphere(BALL2, translation([1,-0.2, 1.3])*scaling([0.2,0.2,0.2])),
+		 translation([-0.2,0,-1])*scaling([1.1,1.1,1.1])	
+		),
+		sphere(BALL3, translation([1,-0.05,0.7])*scaling([0.22,0.22,0.22])),
+		identity
+	),
+	cone (CONE, translation([1.3,-0.05,0.3])*rotation_x(180)*scaling([0.25,0.25,1.8])),
+	translation([-0.2,0,-1.3])*scaling([3,3,2.8])*rotation_z(0)
+)
+
+
+camera (perspective, translation([-1,0,0])*rotation_y(10),0.9,1)

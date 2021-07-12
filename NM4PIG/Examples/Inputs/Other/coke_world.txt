@@ -29,6 +29,15 @@ material COKE(
     uniform(<0,0,0>)
 )
 
+material CN(
+	diffuse(image("Texture/sky.pfm")),
+   uniform(<0,0,0>)
+)
+
+#################################
+
+float ang(5)
+
 #################################
 
 cylinder (BKG, 
