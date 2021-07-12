@@ -26,6 +26,7 @@ The contibutors to the project are [Tommaso Armadillo][2], [Pietro Klausner][3] 
     - [Convert mode](#convert-mode)
 - [Documentation](#documentation)
 - [License](#license)
+- [Gallery](#gallery)
 
 ## Overview
 👀
@@ -142,6 +143,14 @@ A webpage with all the documentation is available at [this link][7]. This webpag
 ⚖️
 
 The code is released under a MIT license. See the file [LICENSE](./LICENSE)
+ 
+ 
+ ## Gallery
+ 
+ Here is a small gallery of some images generated with NM4PIG:
+ 
+ ![1](./NM4PIG/Examples/Inputs/Other/boxSphere.jpg)
+
 
 
 [1]: https://github.com/ziotom78
