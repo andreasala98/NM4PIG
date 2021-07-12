@@ -548,13 +548,7 @@ namespace Trace
             => new Transformation(Matrix4x4.Transpose(Matrix4x4.CreateTranslation(a.x, a.y, a.z)),
                                     Matrix4x4.Transpose(Matrix4x4.CreateTranslation(-a.x, -a.y, -a.z)));
 
-        /// <summary>
-        /// A <see cref="Transformation"/> object encoding a translation.
-        /// </summary>
-        /// <param name="ax"> x component of the translation </param>
-        /// <param name="ay"> y component of the translation </param>
-        /// <param name="az"> z component of the translation </param>
-        /// <returns> The translation</returns>
+
         public static Transformation Translation(float ax, float ay, float az)
         {
             Vec a = new Vec(ax, ay, az);
@@ -680,6 +674,8 @@ namespace Trace
 
 
     } // end of Transformation
+
+
 
 
 } // end of Geometry

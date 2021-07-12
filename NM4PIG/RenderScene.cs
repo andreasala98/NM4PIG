@@ -63,7 +63,7 @@ namespace NM4PIG
             else if (rend == 'r')
             {
                 Console.WriteLine("\nUsing a path tracer:");
-                renderer = new PathTracer(world: scene.world, numOfRays: 3, maxDepth: 8, russianRouletteLimit: 4);
+                renderer = new PathTracer(world: scene.world, numOfRays: 10, maxDepth: 3, russianRouletteLimit: 2);
                 //Console.WriteLine($">> Max depth: {((PathTracer)renderer).maxDepth}");
                 //Console.WriteLine($">> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
                 //Console.WriteLine($">> Number of rays: {((PathTracer)renderer).numOfRays}");
