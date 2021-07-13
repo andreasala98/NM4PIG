@@ -179,7 +179,7 @@ namespace Trace
             Color hitColor = hitMaterial.brdf.pigment.getColor(hitRecord.Value.surfacePoint);
             Color emittedRadiance = hitMaterial.emittedRadiance.getColor(hitRecord.Value.surfacePoint);
 
-            float hitColorLum = MathF.Max(hitColor.r, MathF.Max(hitColor.g, hitColor.b));
+            float hitColorLum = MathF.Max(hitColor.r, MathF.Max(hitColor.g, hitColor.b)); // "q" for roulette
 
             // Russian roulette
             if (ray.depth >= this.russianRouletteLimit)

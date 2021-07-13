@@ -230,16 +230,14 @@ namespace Trace
             int totalTicks = image.height;
             var options = new ProgressBarOptions
             {
-                ProgressCharacter = '─',
+                ProgressCharacter = '#',
                 ForegroundColor = ConsoleColor.Yellow,
                 ForegroundColorDone = ConsoleColor.Green,
-                ProgressBarOnBottom = true
-            };
+                BackgroundColor = ConsoleColor.DarkBlue,
+                ProgressBarOnBottom = true,
+        };
             using (var pbar = new ProgressBar(totalTicks, "", options))
             {
-
-                //var opt = new ParallelOptions();
-                //opt.MaxDegreeOfParallelism = 4;
 
                 try
                 {
@@ -266,9 +264,9 @@ namespace Trace
                             }
                             else
                             {
-                                Ray raggio = this.fireRay(j, i);
-                                Color colore = rend.computeRadiance(raggio);
-                                this.image.setPixel(j, i, colore);
+                                Ray charles = this.fireRay(j, i);
+                                Color me_in = rend.computeRadiance(charles);
+                                this.image.setPixel(j, i, me_in);
                             }
                         }
                         pbar.Tick();
