@@ -100,7 +100,10 @@ namespace NM4PIG
                         readParam.render,
                         readParam.variables,
                         readParam.factor,
-                        readParam.gamma
+                        readParam.gamma,
+                        readParam.maxDepth,
+                        readParam.nRays,
+                        readParam.rrLimit
                     );
                     return 0;
                 });
