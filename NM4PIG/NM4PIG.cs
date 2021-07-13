@@ -56,6 +56,9 @@ namespace NM4PIG
                 var declareFloat = command.Option("--declare-float|-d", "Declare a variable. The syntax is «--declare-float VAR:VALUE». Example: --declare-float clock:150 --declare-float dummy:5.6 ...", CommandOptionType.MultipleValue);
                 var factor = command.Option("--factor|-f <FACTOR>", "scaling factor. Deafult is 0.6", CommandOptionType.SingleValue);
                 var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction. Default is 1.7", CommandOptionType.SingleValue);
+                var maxDpth = command.Option("--max-depth|-md <INT>", "max number of reflections for each ray", CommandOptionType.SingleValue);
+                var nOfRays = command.Option("--n-rays|-n <INT>", "number of rays sampled at each reflection", CommandOptionType.SingleValue);
+                var rrLim = command.Option("--russian-roulette|-rr <INT>", "Number of reflection beyond which Russian Roulette is used", CommandOptionType.SingleValue);
 
                 command.HelpOption("-?|-h|--help");
                 command.OnExecute(() =>
@@ -75,7 +78,10 @@ namespace NM4PIG
                                                         rendType.Value(),
                                                         declareFloat.Values,
                                                         factor.Value(),
-                                                        gamma.Value()
+                                                        gamma.Value(),
+                                                        maxDpth.Value(),
+                                                        nOfRays.Value(),
+                                                        rrLim.Value()
                                                         );
                     }
                     catch (Exception e)

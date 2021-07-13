@@ -13,7 +13,7 @@ namespace NM4PIG
     {
         public static void ExecuteRender(string file, int width, int height, string pfmFile,
                                 string ldrFile, int spp, char rend, Dictionary<string, float> variables,
-                                float factor, float gamma)
+                                float factor, float gamma, int maxDepth, int nRays, int rrLimit)
         {
 
             Console.WriteLine($"File describing the scene: {file}");
@@ -21,6 +21,9 @@ namespace NM4PIG
             Console.WriteLine($"Output PFM-file: {pfmFile}");
             Console.WriteLine($"Output LDR-file: {ldrFile}");
             Console.WriteLine($"Samples-per-pixel (antialiasing): {spp}");
+            Console.WriteLine($"Maximum ray depth: {maxDepth}");
+            Console.WriteLine($"Number of sampled rays: {nRays}");
+            Console.WriteLine($"Russian Roulette Lower Limit: {rrLimit}");
             Console.WriteLine("User-defined overridden variables");
             if (variables.Count == 0) Console.WriteLine("    - No Variables");
             foreach (var item in variables)
@@ -63,7 +66,7 @@ namespace NM4PIG
             else if (rend == 'r')
             {
                 Console.WriteLine("\nUsing a path tracer:");
-                renderer = new PathTracer(world: scene.world, numOfRays: 8, maxDepth: 6, russianRouletteLimit: 2);
+                renderer = new PathTracer(world: scene.world, numOfRays: nRays, maxDepth: maxDepth, russianRouletteLimit: rrLimit);
                 Console.WriteLine($">>>> Max depth: {((PathTracer)renderer).maxDepth}");
                 Console.WriteLine($">>>> Russian Roulette Limit: {((PathTracer)renderer).russianRouletteLimit}");
                 Console.WriteLine($">>>> Number of rays: {((PathTracer)renderer).numOfRays}");

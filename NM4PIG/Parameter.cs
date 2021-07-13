@@ -48,6 +48,9 @@ namespace NM4PIG
 
         //Render
         public static string file = "";
+        public static int maxDepth = 3;
+        public static int rrLimit = 2;
+        public static int nRays = 10;
 
         //General
         public static string pfmFile = "demoImage.pfm";
@@ -73,6 +76,10 @@ namespace NM4PIG
         public int spp;
         public char render;
         public string file;
+        public int maxDepth;
+        public int rrLimit;
+        public int nRays;
+
         public Dictionary<string, float> variables;
 
         public Parameters()
@@ -91,6 +98,10 @@ namespace NM4PIG
             this.render = Default.render;
             this.file = Default.file;
             this.variables = new Dictionary<string, float>();
+            this.maxDepth = Default.maxDepth;
+            this.rrLimit = Default.rrLimit;
+            this.nRays = Default.nRays;
+
         }
 
         /// <summary>
@@ -151,7 +162,9 @@ namespace NM4PIG
         /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
         /// <param name="pfmfile"> Name of the fm output file</param>
         /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
-        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile, string? SPP, string? rend, List<string> declareFloat, string? factor, string? gamma)
+        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile,
+                                             string? SPP,  string? rend, List<string> declareFloat, string? factor,
+                                              string? gamma, string? maxDep, string? nRay, string? rrL)
         {
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
@@ -163,6 +176,9 @@ namespace NM4PIG
             _readFloat(declareFloat);
             _readFactor(factor);
             _readGamma(gamma);
+            _readMaxDepth(maxDep);
+            _readNRays(nRay);
+            _readRussian(rrL);
         }
 
         private void _readWidth(string? width)
@@ -320,6 +336,52 @@ namespace NM4PIG
             this.file = file;
         }
 
+        private void _readMaxDepth(string? mD) 
+        {
+            if (mD != null) 
+            {
+                try 
+                {
+                    this.maxDepth = Int32.Parse(mD);
+                }
+                catch
+                {
+                    throw new CommandLineException("maxDepth is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readNRays(string? nR) 
+        {
+            if (nR != null) 
+            {
+                try 
+                {
+                    this.nRays = Int32.Parse(nR);
+                }
+                catch
+                {
+                    throw new CommandLineException("nRays is not an int. Please enter an integer");
+                }
+            }
+        }
+
+
+        private void _readRussian(string? RR) 
+        {
+            if (RR != null) 
+            {
+                try 
+                {
+                    this.rrLimit = Int32.Parse(RR);
+                }
+                catch
+                {
+                    throw new CommandLineException("RussianRouletteLowerLimit is not an int. Please enter an integer");
+                }
+            }
+        }
+        
         private void _readFloat(List<string> declareFloat)
         {
             Dictionary<string, float> variables = new Dictionary<string, float>();
