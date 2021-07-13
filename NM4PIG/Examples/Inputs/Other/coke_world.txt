@@ -50,7 +50,7 @@ sphere(WORLD,
 	rotation_y(-10)*translation([0, 0, 0.8])*scaling([0.8,0.8,0.8])
 )
 
-cone(LUM, 
+cone(GROUND, 
 	translation([1, -2, 2.6])*scaling([0.6,0.6,0.6])
 )
 
