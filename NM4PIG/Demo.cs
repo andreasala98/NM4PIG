@@ -18,7 +18,6 @@ namespace NM4PIG
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            int sqSpp = (int)Math.Pow((int)Math.Sqrt(spp), 2);
 
             Console.WriteLine("Starting Demo with these parameters:\n");
 
@@ -28,7 +27,7 @@ namespace NM4PIG
             Console.WriteLine(orthogonal ? "Orthogonal Camera" : "Perspective Camera");
             Console.WriteLine("pfmFile: " + pfmFile);
             Console.WriteLine("ldrFile: " + ldrFile);
-            Console.WriteLine("Samples per pixel: " + sqSpp);
+            Console.WriteLine("Samples per pixel: " + spp);
             Console.WriteLine("Render type: " + dictRend[rendType]);
 
             Console.WriteLine("\n");
@@ -37,7 +36,8 @@ namespace NM4PIG
 
             // Camera initialization
             Console.WriteLine("Creating the camera...");
-            var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.0f);
+            // var cameraTransf = Transformation.RotationZ(Utility.DegToRad(angle)) * Transformation.Translation(-2.0f, 0.0f, 0.5f) * Tsf.RotationY(Utility.DegToRad(15));
+            var cameraTransf = Transformation.Translation(-2.0f, 0.0f, 0.0f);
             Camera camera;
             if (orthogonal) { camera = new OrthogonalCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
             else { camera = new PerspectiveCamera(aspectRatio: (float)width / height, transformation: cameraTransf); }
@@ -74,23 +74,34 @@ namespace NM4PIG
 
                 case 2:
                     HdrImage img = new HdrImage();
-                    string inputpfm = "Texture/minecraft.pfm";
+                    string inputpfm = "Texture/CokeTexture.pfm";
                     using (FileStream inputStream = File.OpenRead(inputpfm))
                     {
                         img.readPfm(inputStream);
                         Console.WriteLine($"Texture {inputpfm} has been correctly read from disk.");
                     }
+                    Material groundM = new Material(new DiffuseBRDF(new CheckeredPigment(CC.BrightGreen, CC.Orange, 4)), new UniformPigment(CC.Black));
 
+                    world.addShape(CC.SKY);
+                    world.addShape(new Plane(Tsf.Translation(0f, 0f, -3f), groundM));
                     world.addShape(
-                                    new Box(
-                                            transformation: Transformation.Scaling(0.5f),
+                                    new Cylinder(
+                                            transformation: Tsf.Translation(.5f, -1f, -1f) * Transformation.Scaling(.6f, 0.6f, 1.3f) * Tsf.RotationY(Utility.DegToRad(45)),
                                             material: new Material(
-                                                                Brdf: new DiffuseBRDF(new ImagePigment(img)),
-                                                                EmittedRadiance: new UniformPigment(Constant.Black)
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img))
+                                                                //EmittedRadiance: new UniformPigment(CC.Red)// new ImagePigment(img)
                                                                 )
                                 )
                                 );
-
+                    world.addShape(
+                                    new Cylinder(
+                                            transformation: Tsf.Translation(.5f, 1f, -1f) * Transformation.Scaling(.6f, 0.6f, 1.3f) * Tsf.RotationY(Utility.DegToRad(-45)),
+                                            material: new Material(
+                                                                Brdf: new DiffuseBRDF(new ImagePigment(img))
+                                                                //EmittedRadiance: new UniformPigment(CC.Red)// new ImagePigment(img)
+                                                                )
+                                )
+                                );
                     break;
 
                 case 3:
@@ -110,11 +121,12 @@ namespace NM4PIG
 
                     break;
                 case 4:
-
+                    Material mat = new Material(null, new UniformPigment(new Color(10f, 10f, 10f)));
                     world.addShape(CC.SKY);
-                    world.addShape(new Plane(Tsf.Scaling(0f, 0f, -1f), CC.groundMat));
+                    world.addShape(new Plane(Tsf.Scaling(-3f, 0f, 0f) * Tsf.RotationY(Utility.DegToRad(270)), mat));
 
-                    world.addShape(CC.wikiShape());
+                    world.addShape(CC.wikiShape(Tsf.RotationZ(Utility.DegToRad(23))));
+                    // world.addShape(CC.wikiShape(Tsf.RotationZ(Utility.DegToRad(45))));
 
                     break;
                 case 5:
@@ -124,7 +136,8 @@ namespace NM4PIG
 
 
                     world.addShape(new Sphere(Tsf.Scaling(500f), skyM));
-                    world.addShape(new Cone(r: 0.5f, material: checkered, transformation: Tsf.Translation(new Vec(0f, 0f, -0.5f))));
+                    world.addShape(new Cylinder(Tsf.Translation(0f, 2f, -0.5f) * Tsf.Scaling(0.5f), checkered));
+                    world.addShape(new Cone(r: 0.5f, material: checkered));
                     world.addShape(new Plane(Tsf.Translation(0f, 0f, -1f), ground));
 
                     break;
@@ -141,9 +154,9 @@ namespace NM4PIG
                 case 'f':
                     renderer = new FlatRender(world);
                     break;
-                //case 'p':
-                // renderer = new PointLightTracer(world);
-                //break;
+                case 'p':
+                    renderer = new PointLightRender(world);
+                    break;
                 case 'r':
                     renderer = new PathTracer(world, CC.Black, new PCG());
                     break;
@@ -153,7 +166,7 @@ namespace NM4PIG
 
             // Ray tracing
             Console.WriteLine("Rendering the scene...");
-            var rayTracer = new ImageTracer(image, camera, (int)Math.Sqrt(sqSpp));
+            var rayTracer = new ImageTracer(image, camera, (int)Math.Sqrt(spp));
 
             if (renderer == null) renderer = new OnOffRender(world);
 

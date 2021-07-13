@@ -41,6 +41,74 @@ namespace NM4PIG
                 Name = "dotnet run"
             };
 
+            CLI.Command("render",
+            command =>
+            {
+                command.FullName = "\nThis is render mode and it is the core functionality of the program.";
+                command.Description = "Enter render mode and generate a complex image";
+                var file = command.Option("--scene|-s <FILENAME>", "File that contains the description of the scene. Default is Examples/Inputs/dummy.txt", CommandOptionType.SingleValue);
+                var width = command.Option("--width|-W <WIDTH>", "width of the generated image, default is 640", CommandOptionType.SingleValue);
+                var height = command.Option("--height|-H <HEIGHT>", "height of the generated image, default is 480", CommandOptionType.SingleValue);
+                var pfmfile = command.Option("--pfmfile|-pfm <FILENAME>", "name of .pfm output file. Default is demoImage.pfm", CommandOptionType.SingleValue);
+                var ldrfile = command.Option("--ldrfile|-ldr <FILENAME>", "name of .png/.jpg output file. Default is demoImage.jpg", CommandOptionType.SingleValue);
+                var spp = command.Option("--samples-per-pixel|-spp <SAMPLES>", "number of extracted samples per pixel. Default is 4", CommandOptionType.SingleValue);
+                var rendType = command.Option("--render-type|-rnd <CHAR>", "Type of rendering - choose among (o,f,p,r). Default is r (path tracer)", CommandOptionType.SingleValue);
+                var declareFloat = command.Option("--declare-float|-d", "Declare a variable. The syntax is «--declare-float VAR:VALUE». Example: --declare-float clock:150 --declare-float dummy:5.6 ...", CommandOptionType.MultipleValue);
+                var factor = command.Option("--factor|-f <FACTOR>", "scaling factor. Deafult is 0.6", CommandOptionType.SingleValue);
+                var gamma = command.Option("--gamma|-g <GAMMA>", "gamma correction. Default is 1.7", CommandOptionType.SingleValue);
+                var maxDpth = command.Option("--max-depth|-md <INT>", "max number of reflections for each ray", CommandOptionType.SingleValue);
+                var nOfRays = command.Option("--n-rays|-n <INT>", "number of rays sampled at each reflection", CommandOptionType.SingleValue);
+                var rrLim = command.Option("--russian-roulette|-rr <INT>", "Number of reflection beyond which Russian Roulette is used", CommandOptionType.SingleValue);
+
+                command.HelpOption("-?|-h|--help");
+                command.OnExecute(() =>
+                {
+
+                    Console.WriteLine(CLI.FullName);
+                    Parameters readParam = new Parameters();
+                    try
+                    {
+                        readParam.parseCommandLineRender(
+                                                        file.Value(),
+                                                        width.Value(),
+                                                        height.Value(),
+                                                        pfmfile.Value(),
+                                                        ldrfile.Value(),
+                                                        spp.Value(),
+                                                        rendType.Value(),
+                                                        declareFloat.Values,
+                                                        factor.Value(),
+                                                        gamma.Value(),
+                                                        maxDpth.Value(),
+                                                        nOfRays.Value(),
+                                                        rrLim.Value()
+                                                        );
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        return 0;
+                    }
+
+                    RenderScene.ExecuteRender(
+                        readParam.file,
+                        readParam.width,
+                        readParam.height,
+                        readParam.pfmFile,
+                        readParam.ldrFile,
+                        readParam.spp,
+                        readParam.render,
+                        readParam.variables,
+                        readParam.factor,
+                        readParam.gamma,
+                        readParam.maxDepth,
+                        readParam.nRays,
+                        readParam.rrLimit
+                    );
+                    return 0;
+                });
+            });
+
             CLI.Command("demo",
             command =>
             {
@@ -152,7 +220,18 @@ namespace NM4PIG
                 return 0;
             }
             );
-            CLI.Execute(args);
+
+            try
+            {
+                CLI.Execute(args);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+                Console.WriteLine(exc.GetType());
+                Console.WriteLine(">>> Exiting from the program. ");
+                return;
+            }
 
             return;
 

@@ -1,0 +1,69 @@
+material LUM(
+    diffuse(uniform(<0, 0, 0>)),
+    uniform(<0.6, 0.8, 1>)
+)
+
+material GROUND(
+    diffuse(uniform(<0.99, 0.4, 0.4>)),
+    uniform(<0, 0, 0>)
+)
+
+material WORLD(
+   # diffuse(uniform(<0.8, 0.2, 0.5>)),
+   diffuse(uniform(<0,0,0>)),
+    image("Texture/world.pfm")
+)
+
+material SPEC(
+    specular(uniform(<0.5, 0.3, 0.3>)),
+    uniform(<0, 0, 0>)
+)
+
+material BKG(
+    diffuse(uniform(<0, 0, 0>)),
+    checkered(<.1, .1, .1>,<0.6,0.6,0>,40)
+)
+
+material COKE(
+    diffuse(image("Texture/Coketexture.pfm")),
+    uniform(<0,0,0>)
+)
+
+material CN(
+	diffuse(image("Texture/sky.pfm")),
+   uniform(<0,0,0>)
+)
+
+#################################
+
+float ang(5)
+
+#################################
+
+cylinder (BKG, 
+	scaling([100,100,200])
+)
+
+plane (GROUND, identity)
+
+sphere(WORLD, 
+	rotation_y(-10)*translation([0, 0, 0.8])*scaling([0.8,0.8,0.8])
+)
+
+cone(GROUND, 
+	translation([1, -2, 2.6])*scaling([0.6,0.6,0.6])
+)
+
+sphere(SPEC, 
+	translation([1, 2.5, 0.])
+)
+
+cylinder(COKE,
+    translation([0.2, -1.5, 0.7])*scaling([0.3,0.3,1.6])
+)
+
+sphere(LUM,
+    translation([-3.7,-1.5,0.7]))
+
+
+camera(perspective, rotation_z(ang) * translation([-1, 0, 1]), 1.333, 1.)

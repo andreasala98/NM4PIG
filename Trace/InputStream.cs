@@ -33,7 +33,6 @@ namespace Trace
     /// </summary>
     public class InputStream
     {
-
         /// <summary>
         /// stream we read from
         /// </summary>
@@ -43,7 +42,7 @@ namespace Trace
         /// </summary>
         public SourceLocation location;
         /// <summary>
-        /// Char read, so that is possible to unread the char
+        /// Char we just read, so that is possible to unread the char
         /// </summary>
         public char savedChar;
         /// <summary>
@@ -51,7 +50,7 @@ namespace Trace
         /// </summary>
         public SourceLocation savedLocation;
         /// <summary>
-        /// number of spaces equivalent to tab, default is 4
+        /// Number of spaces equivalent to tab, default is 4
         /// </summary>
         public int tabulations;
         /// <summary>
@@ -59,6 +58,12 @@ namespace Trace
         /// </summary>
         public Token? savedToken;
 
+        /// <summary>
+        /// Basic contructor for the class.
+        /// </summary>
+        /// <param name="stream">Stream pointing to the file we want to read</param>
+        /// <param name="fileName">Name of the file</param>
+        /// <param name="tabulations"> How many spaces in a tab</param>
         public InputStream(Stream stream, string fileName = "", int tabulations = 4)
         {
             this.stream = stream;
@@ -69,6 +74,11 @@ namespace Trace
             this.savedToken = null;
         }
 
+        /// <summary>
+        /// Shift the cursor one position ahead. It also saves the last position into the 
+        /// "old" data members
+        /// </summary>
+        /// <param name="ch"> The new character to be inserted</param>
         private void _updatePosition(char ch)
         {
             if (ch == '\0')
@@ -143,6 +153,11 @@ namespace Trace
             return;
         }
 
+        /// <summary>
+        /// Read a <see cref="StringToken"/> in a given location
+        /// </summary>
+        /// <param name="tokenLocation"> The location in the file</param>
+        /// <returns> The <see cref="StringToken"/> we just read.</returns>
         private StringToken _parseStringToken(SourceLocation tokenLocation)
         {
             string token = "";
@@ -156,10 +171,14 @@ namespace Trace
 
                 token += ch;
             }
-
             return new StringToken(token, tokenLocation);
         }
 
+        /// <summary>
+        /// Read a <see cref="LiteralNumberToken"/> in a given location
+        /// </summary>
+        /// <param name="firstChar"> The first character of the token</param>
+        /// <returns> The <see cref="LiteralNumberToken"/> we just read.</returns>
         private LiteralNumberToken _parseFloatToken(char firstChar, SourceLocation tokenLocation)
         {
             string token = firstChar.ToString();
@@ -186,10 +205,14 @@ namespace Trace
                 throw new GrammarError(tokenLocation, $"'{token}' is an invalid floating-point number");
             }
 
-
             return new LiteralNumberToken(tokenLocation, value);
         }
 
+        /// <summary>
+        /// Read either a <see cref="KeywordToken"/> or a <see cref="IdentifierToken"/> in a given location
+        /// </summary>
+        /// <param name="char"> The first characterof the Token</param>
+        /// <returns> The <see cref="Token"/> we just read.</returns>
         private Token _parseKeywordOrIdentifierToken(char firstChar, SourceLocation tokenLocation)
         {
             string token = firstChar.ToString();
@@ -202,7 +225,6 @@ namespace Trace
                     this.unreadChar(ch);
                     break;
                 }
-
                 token += ch;
             }
 
@@ -214,8 +236,6 @@ namespace Trace
             {
                 return new IdentifierToken(tokenLocation, token);
             }
-
-
 
         }
 
@@ -254,8 +274,8 @@ namespace Trace
 
 
         /// <summary>
-        /// Read a token from input_file and check that it is one of the keywords in keywords.
-        /// Return the keyword as a Class KeywordEnum object.
+        /// Read a token from input file and check that it is one of the keywords in keywords.
+        /// Return the keyword as a  <see cref="KeywordEnum"/> object.
         /// </summary>
         /// <param name="keywords"> The list of accepted keywords</param>
         /// <returns> The parsed keyword in KeywordEnum format</returns>
@@ -285,7 +305,7 @@ namespace Trace
             Token token = this.readToken();
             if (!(token is SymbolToken) || ((SymbolToken)token).symbol != symbol)
             {
-                throw new GrammarError(token.sourceLoc, $"got{token} insted of {symbol}");
+                throw new GrammarError(token.sourceLoc, $"I was expecting {symbol} but i got {token}");
             }
         }
 
@@ -294,7 +314,7 @@ namespace Trace
         /// Return the number as a float.
         /// </summary>
         /// <param name="scene"> The scene to be analysed</param>
-        /// <returns></returns>
+        /// <returns> The float correpsonding to the variable OR the float we just read.</returns>
         public float expectNumber(Scene scene)
         {
             Token token = this.readToken();
@@ -309,7 +329,6 @@ namespace Trace
 
                 return scene.floatVariables[variableName];
             }
-
             throw new GrammarError(token.sourceLoc, $"got {token} instead of a number");
         }
 
@@ -317,7 +336,7 @@ namespace Trace
         /// Read a token from inputFile and check that it is a literal string.
         /// Return the value of the string (a string).
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The parsed string</returns>
         public string expectString()
         {
             Token token = this.readToken();
@@ -326,22 +345,28 @@ namespace Trace
             return ((StringToken)token).str;
         }
 
-        public string expectIdentifier() 
+        /// <summary>
+        /// Read a token from inputFile and check that it is an identifier token.
+        /// Return the value of the string (a string).
+        /// </summary>
+        /// <returns> The parsed identifier in string format</returns>
+        public string expectIdentifier()
         {
             Token token = this.readToken();
             if (!(token is IdentifierToken))
                 throw new GrammarError(token.sourceLoc, $"got {token}, instead of an Identifier");
             return ((IdentifierToken)token).id;
         }
-        
 
+        /// <summary>
+        /// Put a <see cref="Token"/> back in place
+        /// </summary>
+        /// <param name="token"> The token to unread</param>
         public void unreadToken(Token token)
         {
             this.savedToken = token;
         }
     }
-
-
 
 }
 

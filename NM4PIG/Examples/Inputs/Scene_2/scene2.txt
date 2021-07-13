@@ -1,0 +1,70 @@
+# Welcome back! :)
+
+# If you've made it this far, you are really into photorealistic rendering!
+# We will reward you with some medium-advanced features of the library
+
+# First of all, let's declare a float - it will be useful later
+
+float angle(5)
+
+# Then, we define materials exactly like in example 1
+
+material skyMat(
+    diffuse(uniform(<0,0,0>)),
+    uniform(<0.5,0.8,0.9>)
+)
+
+material groundMat(
+    diffuse(checkered(<0.9, 0.9, 0.1>, 
+                      <0.1, 0.2, 0.8>, 
+                       10)),            
+    uniform(<0,0,0>)                   
+)
+
+material sphereMat(
+    specular(uniform(<0.8, 0.1, 0.1>)),
+    uniform(<0,0,0>)
+)
+
+# This following material has a new feature: we can coat a shape
+# with an image pigment. We just need to retrieve a .pfm file
+# with the desired texture (in this case, a minecraft cube)
+
+material texMat(
+    diffuse(image("Texture/minecraft.pfm")),
+    uniform(<0,0,0>)
+)
+
+material basicMat (diffuse(uniform(<0.2,0.7,0.2>)), uniform(<0,0,0>))
+material basicMat2 (diffuse(uniform(<0.2,0.2,0.7>)), uniform(<0,0,0>))
+
+# We now define usual shapes with materials and transformations
+
+sphere(  skyMat, scaling([250,250,250]) ) # sky
+plane ( groundMat, identity ) # ground
+box( texMat, translation([1.1 ,0, 2]) * rotation_z(0) * scaling([0.5,0.5,0.5])) #minecraft cube
+sphere   (  sphereMat,  translation([0.5,-1.5,0.7])) # specular red sphere
+
+# Now we come across a new family of shape: Constructive Solid Geometry
+# In this case, we define the CSG intersection between two shapes:
+
+CSGintersection(
+                    sphere( basicMat, translation([0, 0.4, 0])),
+                    sphere( basicMat2, identity),
+                    translation([0, 1.1, 1]) * scaling([0.8,0.8,0.8]) * rotation_z(10)
+)
+
+# The result is the subset of points included in both shapes
+
+# We define the camera: note that we have used thw float "angle" 
+# to set the roation of the camera!
+
+camera(perspective, translation([-1, 0, 1])*rotation_z(angle), 1.7, 1.0)
+
+# We are ready to go! We use the path tracer exactly like before
+# dotnet run -- render --scene Examples/Inputs/Scene_2/scene2.txt -ldr Examples/Inputs/Scene_2/scene2.jpg --width 1400 --height 800 --render-type r
+
+# Important feature: 
+# We can vary the value of the variable "angle" at runtime! This will produce different views of the scene.
+# In order to do this, we shall pass the additional command (e.g. for a 20 degree angle)
+#  --declare-float angle:20

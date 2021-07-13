@@ -29,14 +29,14 @@ namespace Trace
     public abstract class Camera
     {
         /// <summary>
-        /// This parameter defines how larger than the height is the image. For fullscreen
+        /// This parameter defines how larger than the height is the width. For fullscreen
         /// images, you should probably set `aspect_ratio` to 16/9, as this is the most used aspect ratio
-        /// used in modern monitors.
+        /// in modern monitors.
         /// </summary>
         public float aspectRatio;
 
         /// <summary>
-        /// It is an instance of the struct <see cref="Transformation"/>.
+        /// It is an instance of the struct <see cref="Transformation"/>. It represents the transformation of the camera
         /// </summary>
         public Transformation transformation;
 
@@ -61,6 +61,7 @@ namespace Trace
     /// <summary>
     /// A camera implementing an orthogonal 3D → 2D projection
     /// This class implements an observer seeing the world through an orthogonal projection.
+    /// Parallel lines remain parallel, even at distance.
     /// </summary>
     public class OrthogonalCamera : Camera
     {
@@ -77,11 +78,17 @@ namespace Trace
         /// Shoot a ray through the camera's screen <br/>
         /// The coordinates(u, v) specify the point on the screen where the ray crosses it. Coordinates(0f, 0f) represent
         /// the bottom-left corner, (0f, 1f) the top-left corner, (1f, 0f) the bottom-right corner, and (1f, 1f) the top-right
-        /// corner
+        /// corner.
+        /// (0f,1f) -------------- (1f,1f)
+        ///         |            |
+        ///         |            |
+        /// (0f,0f) -------------- (1f,0f)
+        /// 
+        /// 
         /// </summary>
         /// <param name="u">x coordinate of the screen. 0.0f represent left edge, 1.0f represent right edge.</param>
         /// <param name="v">y coordinate of the screen. 0.0f represent bottom edge, 1.0f represent upper edge.</param>
-        /// <returns>A <see cref="Trace.Ray"/> object.</returns>
+        /// <returns>A <see cref="Trace.Ray"/> object just fired in a certain direction.</returns>
         public override Ray fireRay(float u, float v)
         {
             Point origin = new Point(-1f, (1f - 2f * u) * this.aspectRatio, 2f * v - 1f);
@@ -93,6 +100,8 @@ namespace Trace
     /// <summary>
     /// A camera implementing a perspective 3D → 2D projection<br/>
     /// This class implements an observer seeing the world through a perspective projection.
+    /// Parallel lines do not appear parallel if distant - this is a more realistic type
+    /// of rendering
     /// </summary>
     public class PerspectiveCamera : Camera
     {
@@ -118,6 +127,12 @@ namespace Trace
         /// The coordinates(u, v) specify the point on the screen where the ray crosses it.Coordinates(0, 0) represent
         /// the bottom-left corner, (0, 1) the top-left corner, (1, 0) the bottom-right corner, and (1, 1) the top-right
         /// corner, as in the following diagram::
+        /// 
+        /// (0f,1f) -------------- (1f,1f)
+        ///         |            |
+        ///         |            |
+        /// (0f,0f) -------------- (1f,0f)
+        /// 
         /// </summary>
         /// <param name="u">x coordinate of the screen. 0.0f represent left edge, 1.0f represent right edge.</param>
         /// <param name="v">y coordinate of the screen. 0.0f represent bottom edge, 1.0f represent upper edge.</param>
@@ -134,23 +149,33 @@ namespace Trace
         /// The aperture is the angle of the field-of-view along the horizontal direction (Y axis)
         /// </summary>
         /// <returns> The aperture angle, measured in degrees</returns>
-        public float apertureDeg()
+        private float apertureDeg()
             => 2.0f * (float)Math.Atan(this.screenDistance / this.aspectRatio) * 180.0f / Constant.PI;
     }
 
     /// <summary>
-    /// A class that links a <see cref="Camera"/> object to a <see cref="HdrImage"/> object to create
+    /// A class that links a <see cref="Camera"/> object to a <see cref="HdrImage"/> object by creating
     /// a matrix of pixel after solving the rendering equation. <br/>
     /// Public data members: <see cref="HdrImage"/>, <see cref="Camera"/>.
     /// </summary>
     public class ImageTracer
     {
+        /// <summary>
+        /// The <see cref="HdrImage"/> object that will be written after solving
+        /// the rendering equation (i.e. computing radiance) 
+        /// </summary>
         public HdrImage image;
         /// <summary>
         /// A <see cref="Camera"/> object (=observer) that can be either Orthogonal or Perspective.
         /// </summary>
         public Camera camera;
+        /// <summary>
+        /// How many rays to be fired for each pixel side (necessary for antialiasing)
+        /// </summary> 
         int samplesPerSide;
+        /// <summary>
+        /// A <see cref="PCG"/> random numver generator
+        /// </summary>
         PCG pcg;
 
 
@@ -169,7 +194,8 @@ namespace Trace
         /// <summary>
         /// Method that generates a <see cref="Ray"/> object on the virtual screen
         /// at the coordinates (col + uPixel),(row + vPixel), both normalized
-        /// to the <see cref="HdrImage"/> scale.
+        /// to the <see cref="HdrImage"/> scale. This is the overriding of the fireRay method
+        /// in case antialising option is ON.
         /// </summary>
         /// <param name="col"> Column number (starts fom 0)</param>
         /// <param name="row"> Row number (starts from 0) </param>
@@ -183,62 +209,87 @@ namespace Trace
             return this.camera.fireRay(u, v);
         }
 
+        /// <summary>
+        ///  Function that can be passed in input in the method that computes
+        ///  radiance for a given <see cref="ray"/>.
+        /// </summary>
+        /// <param name="r"> The <see cref="Ray"/> object</param>
+        /// <returns> The computed <see cref="Color"/> for a specific pixel</returns>
         public delegate Color PFunction(Ray r);
 
 
         /// <summary>
-        /// Method that calculates all pixels of the <see cref="HdrImage"/>
+        /// Method that calculates the color of all pixels of the <see cref="HdrImage"/>
         /// datamember according to the rendering equation,
-        /// specified by a <see cref="myFunction"/> object. It also implements
+        /// specified by a <see cref="Render"/> object. It also implements
         /// antialiasing to avoid Moirè fringes effects.
         /// </summary>
-        /// <param name="Func"> The function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
+        /// <param name="rend"> The type of renderer that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
         public void fireAllRays(Render rend)
         {
             int totalTicks = image.height;
             var options = new ProgressBarOptions
             {
-                ProgressCharacter = '─',
+                ProgressCharacter = '#',
                 ForegroundColor = ConsoleColor.Yellow,
                 ForegroundColorDone = ConsoleColor.Green,
-                ProgressBarOnBottom = true
-            };
+                BackgroundColor = ConsoleColor.DarkBlue,
+                ProgressBarOnBottom = true,
+        };
             using (var pbar = new ProgressBar(totalTicks, "", options))
             {
-                Parallel.For(0, image.height, i =>
+
+                try
                 {
-                    for (int j = 0; j < image.width; j++)
+                    Parallel.For(0, image.height, i =>
+                    //for (int i = 0; i < image.height; i++)
                     {
-                        Color appo = Constant.Black;
-                        if (this.samplesPerSide > 0)
+                        for (int j = 0; j < image.width; j++)
                         {
-                            for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
+                            // Console.WriteLine($"i={i},j={j}");
+                            Color appo = Constant.Black;
+                            if (this.samplesPerSide > 0)
                             {
-                                for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                                for (int iPixRow = 0; iPixRow < samplesPerSide; iPixRow++)
                                 {
-                                    float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
-                                    float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
-                                    Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
-                                    appo += rend.computeRadiance(rr);
+                                    for (int iPixCol = 0; iPixCol < samplesPerSide; iPixCol++)
+                                    {
+                                        float uPix = (iPixCol + pcg.randomFloat()) / (float)samplesPerSide;
+                                        float vPix = (iPixRow + pcg.randomFloat()) / (float)samplesPerSide;
+                                        Ray rr = this.fireRay(col: j, row: i, uPixel: uPix, vPixel: vPix);
+                                        appo += rend.computeRadiance(rr);
+                                    }
                                 }
+                                this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
                             }
-                            this.image.setPixel(j, i, appo * (1.0f / (float)Math.Pow(samplesPerSide, 2)));
+                            else
+                            {
+                                Ray charles = this.fireRay(j, i);
+                                Color me_in = rend.computeRadiance(charles);
+                                this.image.setPixel(j, i, me_in);
+                            }
                         }
-                        else
-                        {
-                            Ray raggio = this.fireRay(j, i);
-                            Color colore = rend.computeRadiance(raggio);
-                            this.image.setPixel(j, i, colore);
-                        }
-                    }
-                    pbar.Tick();
-                });
+                        pbar.Tick();
+                    });
+                }
+                catch (AggregateException) { 
+                    //lol
+                }
+                
             }
         }
 
+        /// <summary>
+        /// Method that calculates the color of all pixels of the <see cref="HdrImage"/>
+        /// datamember according to the rendering equation,
+        /// specified by a <see cref="PFunction"/> object. It also implements
+        /// antialiasing to avoid Moirè fringes effects.
+        /// </summary>
+        /// <param name="fun"> The delegate function that transforms a <see cref="Ray"/> into a <see cref="Color"/>.</param>
         public void fireAllRays(PFunction fun)
         {
-            Parallel.For(0, image.height, i =>
+            //Parallel.For(0, image.height, i =>
+            for (int i = 0; i < image.height; i++)
             {
                 for (int j = 0; j < image.width; j++)
                 {
@@ -273,8 +324,7 @@ namespace Trace
                 // if (i % 50 == 0 && i != 0)
                 //     Console.Write(((float)i / image.height).ToString("0.00") + " of rendering completed\r");
 
-            });
-
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Trace
 {
- /// <summary>
+    /// <summary>
     /// A class that contains some useful constants, which are used many times inside the library.
     /// </summary>
     public class Constant
@@ -66,32 +66,36 @@ namespace Trace
         public static Material groundMat = new Material(new DiffuseBRDF(), new CheckeredPigment(BrightGreen, BlueChill));
         public static Material BWgroundMat = new Material(new DiffuseBRDF(), new CheckeredPigment(White, Black));
         public static Material refMat = new Material(new SpecularBRDF(new UniformPigment(BroomYellow)));
-        public static Material greenMat = new Material(new DiffuseBRDF(new UniformPigment(BrightGreen)));
-        public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(170f / 255, 1f / 255, 20f / 255))));
-        public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(0f, 78f / 255, 255f / 255))));
+        public static Material greenMat = new Material(new DiffuseBRDF(new UniformPigment(Green)));
+        public static Material yellowMat = new Material(new DiffuseBRDF(new UniformPigment(Yellow)));
+        public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(255f / 255, 0f / 255, 0f / 255))));
+        public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(Blue)));
 
+        /// <summary>
+        ///  An interesting case of Constructive SOlid Geometry
+        /// </summary>
+        /// <param name="transf"> A <see cref="Transformation"/> object associated to the shape.</param>
+        /// <returns></returns>
+        public static Shape wikiShape(Transformation? transf = null)
+        {
 
-        public static Shape wikiShape() { 
+            Shape C1 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_X, yellowMat);
+            Shape C2 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_Y, yellowMat);
+            Shape C3 = new Cylinder(Origin, radius: 0.7f, height: 2.5f, Constant.VEC_Z, yellowMat);
 
-            Shape C1 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_X, greenMat);
-            Shape C2 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_Y, greenMat);
-            Shape C3 = new Cylinder(Origin, radius: 0.8f, height: 2.5f, Constant.VEC_Z, greenMat);
-
-            Shape S1 = new Sphere(Transformation.Scaling(1.4f), blueMat);
+            Shape S1 = new Sphere(Transformation.Scaling(1.35f), blueMat);
             Shape B1 = new Box(material: redMat);
 
             Shape tot = (S1 * B1) - ((C1 + C2) + C3);
 
+            if (transf.HasValue) tot.transformation = transf.Value;
             return tot;
         }
 
+        /// <summary>
+        /// An emissive sphere representing the sky.
+        /// </summary>
         public static Sphere SKY = new Sphere(Transformation.Scaling(500f), skyMat);
-
-        public static Shape Body = new Sphere(Transformation.Translation(1f, 0f, 0f) * Transformation.RotationZ(10) * Transformation.Scaling(1f, 1.6f, 1f),
-                                                new Material(new DiffuseBRDF(new UniformPigment(PiggyPink)),
-                                                                            new UniformPigment(new Color(0f, 0f, 0f))));
-
-
 
 
     }

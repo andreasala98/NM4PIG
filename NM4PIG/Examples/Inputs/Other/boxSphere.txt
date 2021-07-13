@@ -1,0 +1,53 @@
+material SKY(
+	diffuse(uniform(<0,0,0>)),
+	uniform(<1,1,1>)
+)
+
+material GREEN (
+	diffuse(uniform(<0,1,0>)),
+	uniform(<0,0,0>)
+)
+
+material RED (
+	diffuse(uniform(<0,0,0>)),
+	uniform(<1,0,0>)
+)
+
+material LUM(
+	diffuse(uniform(<0,0,0>)),
+	uniform(<1,1,1>)
+
+)
+
+
+
+##################################
+
+float margin(0.8)
+
+
+sphere(SKY, scaling([20,20,20]))
+
+sphere(LUM, translation([0.5,-2,0]))
+
+CSGunion(
+	sphere(RED, scaling([0.91,0.91,0.91])),
+	CSGdifference(
+		CSGdifference(
+			CSGdifference(
+				box(GREEN, scaling([1,1,1])),
+				box (GREEN, scaling([2,margin,margin])),
+				identity
+			),
+			box(GREEN, scaling([margin,2,margin])),
+			identity
+		),
+		box(GREEN, scaling([margin,margin,2])),
+		rotation_y(15)*rotation_z(45)*rotation_x(30)
+	),
+	identity
+)
+
+##################################
+
+camera(perspective, translation([-2,0,0]), 1, 1)

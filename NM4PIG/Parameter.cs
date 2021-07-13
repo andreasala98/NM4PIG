@@ -18,8 +18,10 @@ IN THE SOFTWARE.
 
 #nullable enable
 using System;
-using Trace;
+using System.IO;
+using System.Collections.Generic;
 using System.Globalization;
+using Trace;
 
 namespace NM4PIG
 {
@@ -41,12 +43,19 @@ namespace NM4PIG
         public static char render = 'r';
 
         //Convert
-        public static float factor = 0.9f; //0.18f;
-        public static float gamma = 2.0f; //1.0f;
+        public static float factor = 0.6f; //0.18f;
+        public static float gamma = 1.7f; //1.0f;
+
+        //Render
+        public static string file = "";
+        public static int maxDepth = 3;
+        public static int rrLimit = 2;
+        public static int nRays = 10;
 
         //General
         public static string pfmFile = "demoImage.pfm";
         public static string ldrFile = "demoImage.jpg";
+
     }
 
     /// <summary>
@@ -66,6 +75,12 @@ namespace NM4PIG
         public int scene;
         public int spp;
         public char render;
+        public string file;
+        public int maxDepth;
+        public int rrLimit;
+        public int nRays;
+
+        public Dictionary<string, float> variables;
 
         public Parameters()
         {
@@ -81,6 +96,12 @@ namespace NM4PIG
             this.scene = Default.scene;
             this.spp = Default.spp;
             this.render = Default.render;
+            this.file = Default.file;
+            this.variables = new Dictionary<string, float>();
+            this.maxDepth = Default.maxDepth;
+            this.rrLimit = Default.rrLimit;
+            this.nRays = Default.nRays;
+
         }
 
         /// <summary>
@@ -99,41 +120,9 @@ namespace NM4PIG
             if (pfmfile != null) this.pfmFile = pfmfile;
             if (ldrfile != null) this.ldrFile = ldrfile;
 
-            if (factor != null)
-            {
-                try
-                {
-                    this.factor = float.Parse(factor, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Factor argument is not a float. Please enter floating-point numbers");
-                }
-            }
-
-            if (gamma != null)
-            {
-                try
-                {
-                    this.gamma = float.Parse(gamma, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Gamma argument is not a float. Please enter floating-point numbers");
-                }
-            }
-
-            if (luminosity != null)
-            {
-                try
-                {
-                    this.luminosity = float.Parse(luminosity, CultureInfo.InvariantCulture);
-                }
-                catch
-                {
-                    throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
-                }
-            }
+            _readFactor(factor);
+            _readGamma(gamma);
+            _readLuminosity(luminosity);
 
         } //parseCommandLineConvert
 
@@ -154,6 +143,46 @@ namespace NM4PIG
             if (ldrfile != null) this.ldrFile = ldrfile;
             if (orthogonal != null) this.orthogonal = true;
 
+            _readWidth(width);
+            _readHeight(height);
+            _readScene(scene);
+            _readAngleDeg(angledeg);
+            _readLuminosity(luminosity);
+            _readSPP(SPP);
+            _readRend(rend);
+        }
+
+        /// <summary>
+        ///  Parse parameters from the command line in 'render' mode
+        /// </summary>
+        /// <param name="file"> File that describes the scene </param>
+        /// <param name="width"> Width of the image</param>
+        /// <param name="height"> Height of the image</param>
+        /// <param name="angledeg"> Field of view angle in degrees</param>
+        /// <param name="orthogonal"> Boolean to switch between orthogonal and perspectivecamera types.</param>
+        /// <param name="pfmfile"> Name of the fm output file</param>
+        /// <param name="ldrfile"> Name of the .png/.jpg output file</param>
+        public void parseCommandLineRender(string? file, string? width, string? height, string? pfmfile, string? ldrfile,
+                                             string? SPP,  string? rend, List<string> declareFloat, string? factor,
+                                              string? gamma, string? maxDep, string? nRay, string? rrL)
+        {
+            if (pfmfile != null) this.pfmFile = pfmfile;
+            if (ldrfile != null) this.ldrFile = ldrfile;
+            _readFile(file);
+            _readWidth(width);
+            _readHeight(height);
+            _readSPP(SPP);
+            _readRend(rend);
+            _readFloat(declareFloat);
+            _readFactor(factor);
+            _readGamma(gamma);
+            _readMaxDepth(maxDep);
+            _readNRays(nRay);
+            _readRussian(rrL);
+        }
+
+        private void _readWidth(string? width)
+        {
             if (width != null)
             {
                 try
@@ -165,43 +194,40 @@ namespace NM4PIG
                     throw new CommandLineException("Width argument is not an int. Please enter an integer");
                 }
             }
+        }
 
-            if (scene != null)
+        private void _readFactor(string? factor)
+        {
+            if (factor != null)
             {
                 try
                 {
-                    this.scene = Int32.Parse(scene);
+                    this.factor = float.Parse(factor, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
-                    throw new CommandLineException("Scene argument is not an int. Please enter an integer");
+                    throw new CommandLineException("Factor argument is not a float. Please enter floating-point numbers");
                 }
             }
+        }
 
-            if (height != null)
+        private void _readGamma(string? gamma)
+        {
+            if (gamma != null)
             {
                 try
                 {
-                    this.height = Int32.Parse(height);
+                    this.gamma = float.Parse(gamma, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
-                    throw new CommandLineException("Height argument is not an int. Please enter an integer");
+                    throw new CommandLineException("Gamma argument is not a float. Please enter floating-point numbers");
                 }
             }
+        }
 
-            if (angledeg != null)
-            {
-                try
-                {
-                    this.angledeg = Int32.Parse(angledeg);
-                }
-                catch
-                {
-                    throw new CommandLineException("Angle argument is not an int. Please enter an integer");
-                }
-            }
-
+        private void _readLuminosity(string? luminosity)
+        {
             if (luminosity != null)
             {
                 try
@@ -213,18 +239,73 @@ namespace NM4PIG
                     throw new CommandLineException("Luminosity argument is not a float. Please enter a float");
                 }
             }
+        }
 
-            if (SPP != null) 
+        private void _readScene(string? scene)
+        {
+            if (scene != null)
             {
-                try {
+                try
+                {
+                    this.scene = Int32.Parse(scene);
+                }
+                catch
+                {
+                    throw new CommandLineException("Scene argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readHeight(string? height)
+        {
+            if (height != null)
+            {
+                try
+                {
+                    this.height = Int32.Parse(height);
+                }
+                catch
+                {
+                    throw new CommandLineException("Height argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readAngleDeg(string? angledeg)
+        {
+            if (angledeg != null)
+            {
+                try
+                {
+                    this.angledeg = Int32.Parse(angledeg);
+                }
+                catch
+                {
+                    throw new CommandLineException("Angle argument is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readSPP(string? SPP)
+        {
+            if (SPP != null)
+            {
+                try
+                {
                     int TEMP_SPP = Int32.Parse(SPP);
                     this.spp = (int)Math.Pow((int)Math.Sqrt(TEMP_SPP), 2);
+                    if (TEMP_SPP != this.spp) Console.WriteLine($"The number of samples per pixel ({TEMP_SPP}) must be a perfect square. It has been corrected to {this.spp}");
                 }
-                catch { 
+                catch
+                {
                     throw new CommandLineException("Samples per pixel: argument passed is not an integer");
                 }
             }
-            if (rend!=null) 
+        }
+
+        private void _readRend(string? rend)
+        {
+            if (rend != null)
             {
                 if (rend == "o" | rend == "p" | rend == "f" | rend == "r")
                 {
@@ -239,7 +320,88 @@ namespace NM4PIG
                 }
                 else throw new CommandLineException("Render type: argument passed is not a valid char");
             }
+        }
 
+        private void _readFile(string? file)
+        {
+            if (file == null) throw new CommandLineException("Insert a scene to render!");
+            try
+            {
+                using (FileStream inputStream = File.OpenRead(file)) { }
+            }
+            catch
+            {
+                throw new CommandLineException($"File {file} not found!");
+            }
+            this.file = file;
+        }
+
+        private void _readMaxDepth(string? mD) 
+        {
+            if (mD != null) 
+            {
+                try 
+                {
+                    this.maxDepth = Int32.Parse(mD);
+                }
+                catch
+                {
+                    throw new CommandLineException("maxDepth is not an int. Please enter an integer");
+                }
+            }
+        }
+
+        private void _readNRays(string? nR) 
+        {
+            if (nR != null) 
+            {
+                try 
+                {
+                    this.nRays = Int32.Parse(nR);
+                }
+                catch
+                {
+                    throw new CommandLineException("nRays is not an int. Please enter an integer");
+                }
+            }
+        }
+
+
+        private void _readRussian(string? RR) 
+        {
+            if (RR != null) 
+            {
+                try 
+                {
+                    this.rrLimit = Int32.Parse(RR);
+                }
+                catch
+                {
+                    throw new CommandLineException("RussianRouletteLowerLimit is not an int. Please enter an integer");
+                }
+            }
+        }
+        
+        private void _readFloat(List<string> declareFloat)
+        {
+            Dictionary<string, float> variables = new Dictionary<string, float>();
+            foreach (string declaration in declareFloat)
+            {
+                string[] tmp = declaration.Split(':', 2);
+                if (tmp.Length != 2) throw new CommandLineException($"error, the definition «{ declaration }» does not follow the pattern NAME:VALUE");
+                string name = tmp[0];
+                float value;
+                try
+                {
+                    value = float.Parse(tmp[1], CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    throw new CommandLineException($"Value for variable {name} is not a float ({tmp[0]}). Please enter a float");
+                }
+                variables.Add(name, value);
+            }
+            this.variables = variables;
         }
     } //Parameters class
 

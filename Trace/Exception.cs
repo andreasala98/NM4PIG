@@ -29,7 +29,9 @@ namespace Trace
     public class InvalidPfmFileFormat : Exception
     {
         /// <summary>
-        /// Constructor for InvalidPfmFileFormat exception. This raises a generic exception, i.e. does not contain an error message.
+        /// Constructor for InvalidPfmFileFormat exception. 
+        /// This raises a generic exception, i.e. does not contain an error message.
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public InvalidPfmFileFormat() : base() { }
 
@@ -42,13 +44,15 @@ namespace Trace
 
     /// <summary>
     /// Exception CommandLineException. This Exception is intended to be raised whenever the user
-    /// passes meaningless argouments while running the executable.
+    /// passes meaningless arguments while running the executable.
     /// </summary>
     [Serializable]
     public class CommandLineException : Exception
     {
         /// <summary>
-        /// Constructor for CommandLineException exception. This raises a generic exception, i.e. does not contain an error message
+        /// Constructor for CommandLineException exception. 
+        /// This raises a generic exception, i.e. does not contain an error message
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public CommandLineException() : base() { }
 
@@ -59,13 +63,20 @@ namespace Trace
         public CommandLineException(string Message) : base(Message) { }
     }
 
+    /// <summary>
+    /// Esception GrammarError. This exception is intended to be raised whenever there is an error while
+    /// parsing the scene file into the program in render mode. It is a compiling error, therefore it has to print the exact source
+    /// location of the bug.
+    /// </summary>
     [Serializable]
     public class GrammarError : Exception
     {
         public SourceLocation sourceLocation;
 
         /// <summary>
-        /// Constructor for GrammarError exception. This raises a generic exception, i.e. does not contain an error message
+        /// Constructor for GrammarError exception. 
+        /// This raises a generic exception, i.e. does not contain an error message
+        /// It is inherited from the <see cref="Exception"/> base constructor.
         /// </summary>
         public GrammarError(SourceLocation location) : base()
         {
@@ -80,22 +91,6 @@ namespace Trace
         {
             this.sourceLocation = location;
         }
-    }
-
-    [Serializable]
-    public class ParsingError : Exception
-    {
-        /// <summary>
-        /// Constructor for ParsingError exception. This raises a generic exception, i.e. does not contain an error message
-        /// </summary>
-        public ParsingError() : base() { }
-
-        /// <summary>
-        /// /// Constructor for ParsingError exception. This raises an exception with an error message
-        /// </summary>
-        /// <param name="Message">The error message</param>
-        public ParsingError(string Message) : base(Message) { }
-
     }
 
     /*
