@@ -1,0 +1,776 @@
+{
+  "homepages": [],
+  "source_base_path": "/github/workspace/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.BRDF.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.BRDF.html",
+          "hash": "NJ4c+cNRuMEYHvA7jk0oYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Box.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Box.html",
+          "hash": "wN7wKGOocyVKJj3IxYeB5Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.CSGDifference.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.CSGDifference.html",
+          "hash": "PJBs6TmAPIQY5Rwycye27A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.CSGIntersection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.CSGIntersection.html",
+          "hash": "yNlZKFVZvShNRIYRQ/sFvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.CSGUnion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.CSGUnion.html",
+          "hash": "ieVzOhY+ovmk0gTCoYzJPw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Camera.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Camera.html",
+          "hash": "5Y3MhOWuiNWStSYK+H58OA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.CheckeredPigment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.CheckeredPigment.html",
+          "hash": "62aWIaqqpvWfAWbR18OOWw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Color.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Color.html",
+          "hash": "WGk6Wus699jfwFFAhXUrhg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.CommandLineException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.CommandLineException.html",
+          "hash": "+qsvWLu8DneViFE425G/Sw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Cone.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Cone.html",
+          "hash": "XJKHObkLaJ1pxgqPrbPpJA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Constant.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Constant.html",
+          "hash": "EPtVhv3bnMIlT1594aED0w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Cylinder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Cylinder.html",
+          "hash": "pTyHkVHmtz+1ZOqHbv6O4A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.DiffuseBRDF.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.DiffuseBRDF.html",
+          "hash": "s0ZL7KTVzRRFDLjceVkSnA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.FlatRender.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.FlatRender.html",
+          "hash": "WRZnRk+w9bH/zguFBhCxnQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.GrammarError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.GrammarError.html",
+          "hash": "fCykXRLDZpSV5Cj3SYJUeQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.HdrImage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.HdrImage.html",
+          "hash": "mTG2kc5EUcZu69WWNVLxqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.HitRecord.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.HitRecord.html",
+          "hash": "0jtVoCv9V98jJfurFyQCWA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.IPigment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.IPigment.html",
+          "hash": "kKgdISuIaAn/T7QtSwZfZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.IdentifierToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.IdentifierToken.html",
+          "hash": "yQY9f21QeXvf2rMXXldSkw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.ImagePigment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.ImagePigment.html",
+          "hash": "OrGHk3dXtsMNYhqRFkXrTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.ImageTracer.PFunction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.ImageTracer.PFunction.html",
+          "hash": "2ijW1uZkYal3eARDUV9TSg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.ImageTracer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.ImageTracer.html",
+          "hash": "YqITqebTZenPXjwwro54xQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.InputStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.InputStream.html",
+          "hash": "knzRaDerb+C5+cMf4Si5+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.InvalidPfmFileFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.InvalidPfmFileFormat.html",
+          "hash": "9hvDBw9E2IPvAHOSm18+lw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.KeywordEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.KeywordEnum.html",
+          "hash": "TFb7+8+MHhKQwQgeLrsFAw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.KeywordToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.KeywordToken.html",
+          "hash": "K++nXLaDNO5mKqWc+DQh7g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.LiteralNumberToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.LiteralNumberToken.html",
+          "hash": "d4FxjCn4A5ksoBfzk1qtnA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Material.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Material.html",
+          "hash": "o/71wEy7m6DNUhC5+q92Fw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Normal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Normal.html",
+          "hash": "5mj4d/z8XsEGHZs3LFQeIw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.OnOffRender.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.OnOffRender.html",
+          "hash": "vv4i1bIVWA2GJD1/DYYFOw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.OrthogonalCamera.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.OrthogonalCamera.html",
+          "hash": "3RDK2vllO+uTxKeROcGT6A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.PCG.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.PCG.html",
+          "hash": "scEiMOsFlJ3sXuHYjl7CLw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.PathTracer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.PathTracer.html",
+          "hash": "jJT4lZt57D6uXWEd2ptsiQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.PerspectiveCamera.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.PerspectiveCamera.html",
+          "hash": "JId8scKieQjy+rkRXkOYhA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Plane.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Plane.html",
+          "hash": "sytcEvsp6k2XdO3EIoG4nQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Point.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Point.html",
+          "hash": "5HQ0eyv/X/hmf+DKBNu/7A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.PointLight.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.PointLight.html",
+          "hash": "sqF3EHyB7r3Ahf+CO+/UPw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.PointLightRender.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.PointLightRender.html",
+          "hash": "/ClNM/jDJDVHlLKIcUJxDg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Ray.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Ray.html",
+          "hash": "y38yxHya0k06JJmykB5iQg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Render.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Render.html",
+          "hash": "tfUv1x/ANUL8/OljZ7pRvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Scene.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Scene.html",
+          "hash": "V/Tg38YjwsFhbzEAPBlhjA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Shape.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Shape.html",
+          "hash": "uugRH1yV7zcjjB5OXPp2+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.SourceLocation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.SourceLocation.html",
+          "hash": "UgFVMwoLQvyKP41lvhwntg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.SpecularBRDF.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.SpecularBRDF.html",
+          "hash": "3Waf9mZH2rALXXS2C5MqJA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Sphere.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Sphere.html",
+          "hash": "Uw2/6O2hG+mVYEw9FZ7Dcw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.StopToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.StopToken.html",
+          "hash": "ViDNba0+j0/fTiB9aNTOmw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.StringToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.StringToken.html",
+          "hash": "+2jtWlcxXHIgZmpfdj97vA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.SymbolToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.SymbolToken.html",
+          "hash": "rNsDdheiywLq77ONK7qlBA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Token.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Token.html",
+          "hash": "OqFrUTNJ5FAFNXQHdm2GZA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Transformation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Transformation.html",
+          "hash": "cmcJ5CEnx+v5x4toPoMAZg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.UniformPigment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.UniformPigment.html",
+          "hash": "MYlq7Y739AtSrO2xVWFLmQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Utility.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Utility.html",
+          "hash": "Rd0mVtTygA8qWbOZAqel9g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Vec.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Vec.html",
+          "hash": "VapCWNmmy8bmVCbCwFDUyg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.Vec2D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.Vec2D.html",
+          "hash": "FaLCQLTMWTx2KhFMmfqgRQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.World.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.World.html",
+          "hash": "gStTHUdRWGdi3NiGav0cKw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Trace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Trace.html",
+          "hash": "sH+IN1yLnAg0RXGv5XzwKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "o/2bRWjnTkhS2j4izX86Mw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "FpaY4KmMaJeL5PFyVeimrg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "eFFBsLm+0DtCNv0Fki7V5w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "EIhwD2+o19OxxQFCB6JJTg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 2,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 56,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
