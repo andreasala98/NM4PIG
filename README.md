@@ -172,9 +172,8 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
  <p float="center">
   <img src="./NM4PIG/Examples/Inputs/Other/redblue.jpg" height="200" />
   <img src="./NM4PIG/Examples/Demo/minecraftCube.jpg" height="200" />
+   <img src="./NM4PIG/Examples/Inputs/Other/reflection.jpg" height="200" />
 </p>
- 
- 
  
 Now it's time to build your own! Have fun!
  
