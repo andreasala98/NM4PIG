@@ -21,9 +21,9 @@ namespace NM4PIG
             Console.WriteLine($"Output PFM-file: {pfmFile}");
             Console.WriteLine($"Output LDR-file: {ldrFile}");
             Console.WriteLine($"Samples-per-pixel (antialiasing): {spp}");
-            Console.WriteLine($"Maximum ray depth: {maxDepth}");
-            Console.WriteLine($"Number of sampled rays: {nRays}");
-            Console.WriteLine($"Russian Roulette Lower Limit: {rrLimit}");
+            // Console.WriteLine($"Maximum ray depth: {maxDepth}");
+            // Console.WriteLine($"Number of sampled rays: {nRays}");
+            // Console.WriteLine($"Russian Roulette Lower Limit: {rrLimit}");
             Console.WriteLine("User-defined overridden variables");
             if (variables.Count == 0) Console.WriteLine("    - No Variables");
             foreach (var item in variables)

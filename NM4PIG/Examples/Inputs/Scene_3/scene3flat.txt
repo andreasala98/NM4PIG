@@ -33,7 +33,8 @@ material DICE(
 )
 
 material BASE(
-    diffuse(uniform(<0.2, 0.2, 0.8>)),
+    #diffuse(image("Texture/tri.pfm")),
+    diffuse(uniform(<0.2,0.8,0.8>)),
     uniform(<0, 0, 0>)
 )
 
@@ -42,7 +43,7 @@ plane ( GRND, translation([0,0,-1]) )
 
 cylinder (COKE, translation([0, 1.7, 0.3])*scaling([0.3, 0.3, 2]))
 box (DICE, translation([0,-1,1.7])*rotation_z(24)*scaling([0.3,0.3,0.3]))
-cone (BASE, translation([0.4,0.6,1.9])*scaling([0.7,0.7,1.5])*rotation_x(180))
+cone (BASE, translation([2.4,0.6,0.2])*scaling([1.4,1.4,3])*rotation_x(180))
 sphere(EARTH, translation([0.4, -2.5, 0])*rotation_z(45))
 
 
@@ -50,5 +51,5 @@ camera(perspective, translation([-1, 0, 1])*rotation_z(5), 2, 1.0)
 
 #this time we'll use a flat renderer. Te command to visualize the image is 
 
-# dotnet run -- render --scene Examples/Inputs/Scene_3/scene3flat.txt -ldr scene3flat.jpg --render-type f -W 2000 -H 1000 
+# dotnet run -- render --scene Examples/Inputs/Scene_3/scene3flat.txt -ldr Examples/Inputs/Scene_3/scene3flat.jpg --render-type f -W 2000 -H 1000 
 
