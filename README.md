@@ -84,7 +84,7 @@ The complete list of settable parameters is:
   (On-Off renderer: 'o', Flat renderer: 'f', Pointlight renderer: 'p', Path tracer: 'r'). Default is 'r'
 - `--declare-float|-d ` : Override a variable value from the command line. The syntax is `--declare-float VAR:VALUE`
 
-⚠️ The following three parameters are advanced parameters. Change them only if you knwo what you are doing! A wrong settage of these parameters could cause the execution to be extremely long!
+⚠️ The following three parameters are advanced parameters. Change them only if you know what you are doing! A wrong settage of these parameters could cause the execution to be extremely long!
 
 - `--max-depth|-md <INT>` : max number of reflections for each ray. Default is 3
 - `--n-rays|-n <INT>` : number of rays sampled at each reflection. Default is 10
