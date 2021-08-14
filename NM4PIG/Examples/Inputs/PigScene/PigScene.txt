@@ -1,0 +1,56 @@
+# Note: to create this image you can use
+# dotnet run -- render --scene Examples/Inputs/PigScene/PigScene.txt --pfmfile Examples/Inputs/PigScene/PigScene.pfm --ldrfile Examples/Inputs/PigScene/PigScene.jpg --render-type r
+
+# Firstly we define some materials in order to construct the Cornell's box
+
+material GREEN_MATERIAL(               
+    diffuse( uniform(<0.196 , 0.804, 0.196>) ),  
+    uniform(<0, 0, 0>) 
+)
+
+material RED_MATERIAL(               
+    diffuse( uniform(<1,0,0>) ),  
+    uniform(<0, 0, 0>) 
+)
+
+material WHITE_MATERIAL(               
+    diffuse( uniform(<1,1,1>) ),  
+    uniform(<0, 0, 0>) 
+)
+
+material SPECULAR_MATERIAL(               
+    specular( uniform(<1,1,1>) ),  
+    uniform(<0, 0, 0>) 
+)
+
+material LIGHT_MATERIAL(               
+    diffuse( uniform(<1,1,1>) ),  
+    uniform(<1, 1, 1>) 
+)
+
+# Cornell's box
+box(WHITE_MATERIAL, translation([0, 0, 1.5]) * scaling([7,5,7]))
+box(RED_MATERIAL, translation([0, -9.5, 1.5]) * scaling([7,5,7]))
+box(GREEN_MATERIAL, translation([0, 9.5, 1.5]) * scaling([7,5,7]))
+
+# This is an escamotage for creating a finite plane
+# Define the lamp
+CSGintersection(
+    box( LIGHT_MATERIAL , identity),
+    plane(LIGHT_MATERIAL, identity),
+    translation([0,0,8.45])*scaling([4.5,3,1])
+)
+
+# Define the mirror
+CSGintersection(
+    box( SPECULAR_MATERIAL , identity),
+    plane(SPECULAR_MATERIAL, identity),
+    translation([5.5, 3.5, 0]) * rotation_z(45) * rotation_y(90) * scaling([7,1.6,1])
+)
+
+# Pig object
+# Pig is a built-in shape representing a... pig! (hard to predict 😅)
+pig(translation([0,0,-1.6]) * rotation_z(225) * scaling([0.9, 0.9, 0.9]))
+
+# Lastly we position the camera
+camera(perspective, translation([-4, 0, 1.5]), 1.0, 1.0)

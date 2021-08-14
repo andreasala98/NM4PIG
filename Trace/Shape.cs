@@ -342,8 +342,9 @@ namespace Trace
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> hitList = new List<HitRecord?>();
-            hitList.Add(this.rayIntersection(ray));
-            return hitList;
+            HitRecord? possibleHit = this.rayIntersection(ray);
+            if (possibleHit.HasValue) return new List<HitRecord?>() { possibleHit };
+            return new List<HitRecord?>();
         }
 
 

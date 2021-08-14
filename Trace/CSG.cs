@@ -346,15 +346,15 @@ namespace Trace
                 }
             }
 
+
+            for (int i = 0; i < b.Count; i++)
             {
-                for (int i = 0; i < b.Count; i++)
+                if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
                 {
-                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
-                    {
-                        legalHits.Add(b[i]);
-                    }
+                    legalHits.Add(b[i]);
                 }
             }
+
 
             legalHits.Sort();
             return legalHits;

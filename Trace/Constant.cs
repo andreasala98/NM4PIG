@@ -70,6 +70,9 @@ namespace Trace
         public static Material yellowMat = new Material(new DiffuseBRDF(new UniformPigment(Yellow)));
         public static Material redMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(255f / 255, 0f / 255, 0f / 255))));
         public static Material blueMat = new Material(new DiffuseBRDF(new UniformPigment(Blue)));
+        public static Material pigMat = new Material(new DiffuseBRDF(new UniformPigment(new Color(240f / 255, 144f / 255, 137f / 255))));
+        public static Material blackMat = new Material(new DiffuseBRDF(new UniformPigment(Black)));
+        public static Material whiteMat = new Material(new DiffuseBRDF(new UniformPigment(White)));
 
         /// <summary>
         ///  An interesting case of Constructive SOlid Geometry
@@ -98,5 +101,43 @@ namespace Trace
         public static Sphere SKY = new Sphere(Transformation.Scaling(500f), skyMat);
 
 
+        /// <summary>
+        /// A complete pig constructed with CSG
+        /// </summary>
+        /// <param name="transf">A <see cref="Transformation"/> object associated to the shape.</param>
+        /// <returns></returns>
+        public static Shape pig(Transformation? transf = null)
+        {
+            // Body
+            Shape leg1 = new Cylinder(new Point(x: 1f, y: 0.5f, z: 0.4f), radius: 0.25f, height: 2f, direction: Constant.VEC_Z, material: pigMat);
+            Shape leg2 = new Cylinder(new Point(x: 1f, y: -0.5f, z: 0.4f), radius: 0.25f, height: 2f, direction: Constant.VEC_Z, material: pigMat);
+            Shape leg3 = new Cylinder(new Point(x: -1f, y: 0.5f, z: 0.4f), radius: 0.25f, height: 2f, direction: Constant.VEC_Z, material: pigMat);
+            Shape leg4 = new Cylinder(new Point(x: -1f, y: -0.5f, z: 0.4f), radius: 0.25f, height: 2f, direction: Constant.VEC_Z, material: pigMat);
+            Shape torso = new Sphere(transformation: Transformation.Translation(0f, 0f, 1.1f) * Transformation.Scaling(1.85f, 1.05f, 1.05f), material: pigMat);
+
+            Shape body = torso + leg1 + leg2 + leg3 + leg4;
+
+            // Head 
+            Shape ball = new Sphere(transformation: Transformation.Translation(-2.1f, 0f, 1.85f) * Transformation.Scaling(0.76f), material: pigMat);
+            Shape nose = new Cylinder(new Point(-2.8f, 0f, 1.8f), 0.25f, 0.3f, Constant.VEC_X, pigMat);
+            Shape nostril1 = new Sphere(Transformation.Translation(-2.95f, 0.1f, 1.8f) * Transformation.Scaling(0.05f, 0.05f, 0.1f), blackMat);
+            Shape nostril2 = new Sphere(Transformation.Translation(-2.95f, -0.1f, 1.8f) * Transformation.Scaling(0.05f, 0.05f, 0.1f), blackMat);
+            Shape eye1 = new Sphere(Transformation.Translation(-2.65f, 0.22f, 2.35f) * Transformation.Scaling(0.165f), whiteMat);
+            Shape eye2 = new Sphere(Transformation.Translation(-2.65f, -0.22f, 2.35f) * Transformation.Scaling(0.165f), whiteMat);
+            Shape pupil1 = new Sphere(Transformation.Translation(-2.76f, 0.2f, 2.3f) * Transformation.Scaling(0.06f), blackMat);
+            Shape pupil2 = new Sphere(Transformation.Translation(-2.76f, -0.2f, 2.3f) * Transformation.Scaling(0.06f), blackMat);
+            Shape eyebrow1 = new Cylinder(new Point(-2.65f, 0.22f, 2.57f), 0.03f, 0.32f, new Vec(0f, 1f, -0.1f), blackMat);
+            Shape eyebrow2 = new Cylinder(new Point(-2.65f, -0.24f, 2.57f), 0.03f, 0.3f, new Vec(0f, 1f, 0.4f), blackMat);
+            Shape mouth = new Sphere(Transformation.Translation(-2.6f, 0f, 1.4f) * Transformation.Scaling(0.2f), blackMat);
+
+            Shape head = ball + nose - nostril1 - nostril2 + eye1 + eye2 + pupil1 + pupil2 + eyebrow1 + eyebrow2 - mouth;
+
+            // Construct Pig
+            Shape pig = body + head;
+
+            // Global Transformation
+            if (transf.HasValue) pig.transformation = transf.Value;
+            return pig;
+        }
     }
 }
