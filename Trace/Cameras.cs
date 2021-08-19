@@ -235,18 +235,17 @@ namespace Trace
                 ForegroundColorDone = ConsoleColor.Green,
                 BackgroundColor = ConsoleColor.DarkBlue,
                 ProgressBarOnBottom = true,
-        };
+            };
             using (var pbar = new ProgressBar(totalTicks, "", options))
             {
 
                 try
                 {
+                    int rowCompleted = 0;
                     Parallel.For(0, image.height, i =>
-                    //for (int i = 0; i < image.height; i++)
                     {
                         for (int j = 0; j < image.width; j++)
                         {
-                            // Console.WriteLine($"i={i},j={j}");
                             Color appo = Constant.Black;
                             if (this.samplesPerSide > 0)
                             {
@@ -269,13 +268,15 @@ namespace Trace
                                 this.image.setPixel(j, i, me_in);
                             }
                         }
-                        pbar.Tick();
+                        rowCompleted++;
+                        pbar.Tick($"Completed {rowCompleted}/{totalTicks} rows of the image");
                     });
                 }
-                catch (AggregateException) { 
+                catch (AggregateException)
+                {
                     //lol
                 }
-                
+
             }
         }
 

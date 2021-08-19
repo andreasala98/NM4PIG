@@ -1,5 +1,5 @@
 # Note: to create this image you can use
-# dotnet run -- render --scene Examples/Inputs/PigScene/PigScene.txt --pfmfile Examples/Inputs/PigScene/PigScene.pfm --ldrfile Examples/Inputs/PigScene/PigScene.jpg --render-type r
+# dotnet run -- render --scene Examples/Inputs/PigScene/PigScene.txt --pfmfile Examples/Inputs/PigScene/PigScene.pfm --ldrfile Examples/Inputs/PigScene/PigScene.jpg --render-type r --height 480 --width 480
 
 # Firstly we define some materials in order to construct the Cornell's box
 
