@@ -64,17 +64,19 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
 
-            HitRecord? a = this.firstShape.rayIntersection(invRay);
-            HitRecord? b = this.secondShape.rayIntersection(invRay);
+            HitRecord? a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersection(invRay), this.transformation);
+            HitRecord? b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersection(invRay), this.transformation);
 
             if (a == null) return b;
             else if (b == null) return a;
             else // a!=null, b!=null
             {
+                Point invPointA = this.transformation.getInverse() * a.Value.worldPoint;
+                Point invPointB = this.transformation.getInverse() * b.Value.worldPoint;
                 // second condition is needed when the Ray originates inside the Shape
-                if (a?.t < b?.t && !(this.secondShape.isPointInside((Point)a?.worldPoint))) return a;
-                else if (a?.t < b?.t && (this.secondShape.isPointInside((Point)a?.worldPoint))) return b;
-                else if (b?.t < a?.t && !(this.firstShape.isPointInside((Point)b?.worldPoint))) return b;
+                if (a?.t < b?.t && !(this.secondShape.isPointInside(invPointA))) return a;
+                else if (a?.t < b?.t && (this.secondShape.isPointInside(invPointA))) return b;
+                else if (b?.t < a?.t && !(this.firstShape.isPointInside(invPointB))) return b;
                 else return a;
             }
         }
@@ -87,8 +89,8 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
 
-            HitRecord? a = this.firstShape.rayIntersection(invRay);
-            HitRecord? b = this.secondShape.rayIntersection(invRay);
+            HitRecord? a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersection(invRay), this.transformation);
+            HitRecord? b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersection(invRay), this.transformation);
 
             if (a == null && b == null) return false;
             return true;
@@ -105,9 +107,8 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
 
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
-
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
+            List<HitRecord?> a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersectionList(invRay), this.transformation);
+            List<HitRecord?> b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersectionList(invRay), this.transformation);
 
             List<HitRecord?> hits = new List<HitRecord?>();
 
@@ -115,7 +116,8 @@ namespace Trace
             {
                 for (int i = 0; i < a.Count; i++)
                 {
-                    if (!(this.secondShape.isPointInside((Point)a[i]?.worldPoint)))
+                    Point invPoint = this.transformation.getInverse() * a[i].Value.worldPoint;
+                    if (!(this.secondShape.isPointInside(invPoint)))
                     {
                         hits.Add(a[i]);
                     }
@@ -126,7 +128,8 @@ namespace Trace
             {
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (!(this.firstShape.isPointInside((Point)b[i]?.worldPoint)))
+                    Point invPoint = this.transformation.getInverse() * b[i].Value.worldPoint;
+                    if (!(this.firstShape.isPointInside(invPoint)))
                     {
                         hits.Add(b[i]);
                     }
@@ -150,7 +153,8 @@ namespace Trace
         /// <returns></returns>
         public override bool isPointInside(Point a)
         {
-            return firstShape.isPointInside(a) || secondShape.isPointInside(a);
+            Point invPoint = this.transformation.getInverse() * a;
+            return firstShape.isPointInside(invPoint) || secondShape.isPointInside(invPoint);
         }
 
     }
@@ -210,17 +214,18 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+            List<HitRecord?> a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersectionList(invRay), this.transformation);
             if (a.Count == 0)
             {
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
+            List<HitRecord?> b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersectionList(invRay), this.transformation);
 
             for (int i = 0; i < a.Count; i++)
             {
                 // Keep only the intersection points not inside the second shape
-                if (!this.secondShape.isPointInside(a[i].Value.worldPoint))
+                Point invPoint = this.transformation.getInverse() * a[i].Value.worldPoint;
+                if (!this.secondShape.isPointInside(invPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -231,7 +236,8 @@ namespace Trace
                 // Keep only the intersection inside the first shape
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside(b[i].Value.worldPoint))
+                    Point invPoint = this.transformation.getInverse() * b[i].Value.worldPoint;
+                    if (this.firstShape.isPointInside(invPoint))
                     {
                         legalHits.Add(b[i]);
                     }
@@ -251,7 +257,8 @@ namespace Trace
         /// <returns></returns>
         public override bool isPointInside(Point a)
         {
-            return this.firstShape.isPointInside(a) && !this.secondShape.isPointInside(a);
+            Point invPoint = this.transformation.getInverse() * a;
+            return this.firstShape.isPointInside(invPoint) && !this.secondShape.isPointInside(invPoint);
         }
 
         /// <summary>
@@ -263,17 +270,18 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+            List<HitRecord?> a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersectionList(invRay), this.transformation);
             if (a.Count == 0)
             {
                 return false;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
+            List<HitRecord?> b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersectionList(invRay), this.transformation);
 
             for (int i = 0; i < a.Count; i++)
             {
                 // Keep only the intersection points not inside the second shape
-                if (!this.secondShape.isPointInside(a[i].Value.worldPoint))
+                Point invPoint = this.transformation.getInverse() * a[i].Value.worldPoint;
+                if (!this.secondShape.isPointInside(invPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -284,7 +292,8 @@ namespace Trace
                 // Keep only the intersection inside the first shape
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside(b[i].Value.worldPoint))
+                    Point invPoint = this.transformation.getInverse() * b[i].Value.worldPoint;
+                    if (this.firstShape.isPointInside(invPoint))
                     {
                         legalHits.Add(b[i]);
                     }
@@ -327,12 +336,12 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+            List<HitRecord?> a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersectionList(invRay), this.transformation);
             if (a.Count == 0)
             {
                 return legalHits;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
+            List<HitRecord?> b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersectionList(invRay), this.transformation);
             if (b.Count == 0)
             {
                 return legalHits;
@@ -340,7 +349,8 @@ namespace Trace
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
+                Point invPoint = this.transformation.getInverse() * a[i].Value.worldPoint;
+                if (this.secondShape.isPointInside(invPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -349,7 +359,8 @@ namespace Trace
 
             for (int i = 0; i < b.Count; i++)
             {
-                if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                Point invPoint = this.transformation.getInverse() * b[i].Value.worldPoint;
+                if (this.firstShape.isPointInside(invPoint))
                 {
                     legalHits.Add(b[i]);
                 }
@@ -383,7 +394,8 @@ namespace Trace
         /// <returns> True if there is any intersecction.</returns>
         public override bool isPointInside(Point a)
         {
-            return this.firstShape.isPointInside(a) && this.secondShape.isPointInside(a);
+            Point invPoint = this.transformation.getInverse() * a;
+            return this.firstShape.isPointInside(invPoint) && this.secondShape.isPointInside(invPoint);
         }
 
 
@@ -396,12 +408,12 @@ namespace Trace
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
             List<HitRecord?> legalHits = new List<HitRecord?>();
-            List<HitRecord?> a = this.firstShape.rayIntersectionList(invRay);
+            List<HitRecord?> a = Utility.CorrectInvRayEffect(this.firstShape.rayIntersectionList(invRay), this.transformation);
             if (a.Count == 0)
             {
                 return false;
             }
-            List<HitRecord?> b = this.secondShape.rayIntersectionList(invRay);
+            List<HitRecord?> b = Utility.CorrectInvRayEffect(this.secondShape.rayIntersectionList(invRay), this.transformation);
             if (b.Count == 0)
             {
                 return false;
@@ -409,7 +421,8 @@ namespace Trace
 
             for (int i = 0; i < a.Count; i++)
             {
-                if (this.secondShape.isPointInside((Point)a[i]?.worldPoint))
+                Point invPoint = this.transformation.getInverse() * a[i].Value.worldPoint;
+                if (this.secondShape.isPointInside(invPoint))
                 {
                     legalHits.Add(a[i]);
                 }
@@ -418,7 +431,8 @@ namespace Trace
             {
                 for (int i = 0; i < b.Count; i++)
                 {
-                    if (this.firstShape.isPointInside((Point)b[i]?.worldPoint))
+                    Point invPoint = this.transformation.getInverse() * b[i].Value.worldPoint;
+                    if (this.firstShape.isPointInside(invPoint))
                     {
                         legalHits.Add(b[i]);
                     }
