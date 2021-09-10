@@ -120,7 +120,7 @@ namespace Trace.Test
             // this part of the code is used to check which are the first, few, casual directions
             // so that a numeric test can be implemented.
 
-            // using (StreamWriter sw = File.AppendText("uniformSphere.txt"))
+            // using (StreamWriter sw = File.AppendText("./uniformSphere.txt"))
             // {
             //     for (int i = 0; i < 1000; i++)
             //     {
@@ -130,7 +130,7 @@ namespace Trace.Test
             //                                              new Normal(0f, 0f, 1f),
             //                                              1);
             //         HitRecord? hit = s.rayIntersection(ray);
-            //         sw.WriteLine(hit?.worldPoint.ToString());
+            //         sw.WriteLine(hit?.worldPoint.x + " " + hit?.worldPoint.y);
             //     }
             // }
 
@@ -149,7 +149,7 @@ namespace Trace.Test
                                                      new Point(0f, 0f, 0f),
                                                      new Normal(0f, 0f, 1f),
                                                      1);
-                Assert.True(ray.isClose(expectedRays[i]), $"Attention: ray number {i+1} has a problem - Test Failed");
+                Assert.True(ray.isClose(expectedRays[i]), $"Attention: ray number {i + 1} has a problem - Test Failed");
             }
 
         }

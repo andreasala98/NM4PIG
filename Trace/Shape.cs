@@ -311,7 +311,7 @@ namespace Trace
             Ray invRay = ray.Transform(this.transformation.getInverse());
             // Vec invRayOrigin = invRay.origin.toVec();
 
-            if (invRay.dir.z == 0) return null;
+            if (Utility.areClose(invRay.dir.z, 0f)) return null;
             else
             {
                 float tHit = -invRay.origin.z / invRay.dir.z;
@@ -342,8 +342,9 @@ namespace Trace
         public override List<HitRecord?> rayIntersectionList(Ray ray)
         {
             List<HitRecord?> hitList = new List<HitRecord?>();
-            hitList.Add(this.rayIntersection(ray));
-            return hitList;
+            HitRecord? possibleHit = this.rayIntersection(ray);
+            if (possibleHit.HasValue) return new List<HitRecord?>() { possibleHit };
+            return new List<HitRecord?>();
         }
 
 
@@ -401,7 +402,7 @@ namespace Trace
         public override bool quickRayIntersection(Ray ray)
         {
             Ray invRay = ray.Transform(this.transformation.getInverse());
-            if (invRay.dir.z == 0) return false;
+            if (Utility.areClose(invRay.dir.z, 0f)) return false;
 
             float tHit = -invRay.origin.z / invRay.dir.z;
             return (tHit > invRay.tmin && tHit < invRay.tmax);
@@ -479,7 +480,7 @@ namespace Trace
             else if (Utility.areClose(point.y, this.max.y)) result = Constant.VEC_Y_N;
             else if (Utility.areClose(point.z, this.min.z)) result = -Constant.VEC_Z_N;
             else if (Utility.areClose(point.z, this.max.z)) result = Constant.VEC_Z_N;
-            if (point.toVec() * rayDir > 0.0f)
+            if (result.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
         }
@@ -542,7 +543,7 @@ namespace Trace
                 if (t0 > t1) return false;
             }
 
-            if (t0 > 0f || t1 < 0f)
+            if (t0 > Utility.epsilon || t1 < Utility.epsilon)
                 return true;
 
             return false;
@@ -579,7 +580,7 @@ namespace Trace
 
             List<HitRecord?> hits = new List<HitRecord?>();
 
-            if (t0 > 0f)
+            if (t0 > Utility.epsilon)
             {
                 Point hitPoint0 = invRay.at(t0);
                 hits.Add(new HitRecord(
@@ -592,7 +593,7 @@ namespace Trace
             ));
             }
 
-            if (t1 > 0f)
+            if (t1 > Utility.epsilon)
             {
                 Point hitPoint1 = invRay.at(t1);
                 hits.Add(new HitRecord(
@@ -654,14 +655,14 @@ namespace Trace
                 t1 = (-b - MathF.Sqrt(delta)) / a;
                 t2 = (-b + MathF.Sqrt(delta)) / a;
 
-                if (t1 > 0f)
+                if (t1 > Utility.epsilon)
                 {
                     Point hitPoint = invRay.at(t1.Value);
                     if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
                         return true;
                 }
 
-                if (t2 > 0)
+                if (t2 > Utility.epsilon)
                 {
                     Point hitPoint = invRay.at(t2.Value);
                     if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
@@ -731,7 +732,7 @@ namespace Trace
                 t1 = (-b - MathF.Sqrt(delta)) / a;
                 t2 = (-b + MathF.Sqrt(delta)) / a;
 
-                if (t1 > 0f)
+                if (t1 > Utility.epsilon)
                 {
                     Point hitPoint = invRay.at(t1.Value);
                     if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
@@ -745,7 +746,7 @@ namespace Trace
                         ));
                 }
 
-                if (t2 > 0)
+                if (t2 > Utility.epsilon)
                 {
                     Point hitPoint = invRay.at(t2.Value);
                     if (hitPoint.z > -0.5 && hitPoint.z < 0.5f)
@@ -951,7 +952,7 @@ namespace Trace
                                     point.y / rad,
                                     this.radius / this.height).Normalize();
             }
-            if (point.toVec() * rayDir > 0.0f)
+            if (result.toVec() * rayDir > 0.0f)
                 result = -result;
             return result;
         }
@@ -999,7 +1000,7 @@ namespace Trace
             float tmin;
             float tmax;
             // needed if a ray has the same slope of the cone! (---> a would be 0)
-            if (a == 0)
+            if (Utility.areClose(a, 0f))
             {
                 tmin = -c / b;
                 tmax = Single.PositiveInfinity;
@@ -1070,7 +1071,7 @@ namespace Trace
             float tmin;
             float tmax;
             // needed if a ray has the same slope of the cone! (---> a would be 0)
-            if (a == 0)
+            if (Utility.areClose(a, 0f))
             {
                 tmin = -c / b;
                 tmax = Single.PositiveInfinity;
@@ -1178,7 +1179,7 @@ namespace Trace
             float sqrtDelta = MathF.Sqrt(delta);
             float tmin;
             float tmax;
-            if (a == 0)
+            if (Utility.areClose(a, 0f))
             {
                 tmin = -c / b;
                 tmax = Single.PositiveInfinity;

@@ -1,5 +1,7 @@
 # Version 1.0.0 - Latest release
 
+PR[#22] (https://github.com/andreasala98/NM4PIG/pull/16) Implemented Pig shape.
+Issue[#21] (https://github.com/andreasala98/NM4PIG/issues/21) Solved bug in computing normal to a box and cylinder.
 PR[#15] (https://github.com/andreasala98/NM4PIG/pull/15) Implemented Cones and Cylinder shapes.
 PR[#12] (https://github.com/andreasala98/NM4PIG/pull/12) Implemented an algorithm to parallelize the rendering of an image, to reduce computing times. We also added a progress bar to to monitor the progression of the rendering process.
 PR[#	10] (https://github.com/andreasala98/NM4PIG/pull/10) Implemented the Point-Light tracing, a quick rendering algorithm.

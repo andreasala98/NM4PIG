@@ -640,6 +640,22 @@ namespace Trace
         }
 
         /// <summary>
+        ///  Parse a "Pig" object from a file and store it into memory
+        /// </summary>
+        /// <param name="inputFile"> The input scene file</param>
+        /// <param name="scene"> The scene from which the vector is parsed.</param>
+        /// <returns> The parsed shape.</returns>
+        public static Shape parsePig(InputStream inputFile, Scene scene)
+        {
+            inputFile.expectSymbol("(");
+            Transformation tr = parseTransformation(inputFile, scene);
+            inputFile.expectSymbol(")");
+
+            Shape result = Constant.pig(tr);
+            return result;
+        }
+
+        /// <summary>
         ///  Parse a <see cref="PointLight"/> object from a file and store it into memory
         /// </summary>
         /// <param name="inputFile"> The input scene file</param>
@@ -710,7 +726,7 @@ namespace Trace
                 Token tok = inputFile.readToken();
                 string varName = "";
 
-                if (tok is StopToken) {Console.WriteLine("StopToken encountered");  break; }
+                if (tok is StopToken) { Console.WriteLine("StopToken encountered"); break; }
 
                 if (tok is not KeywordToken) throw new GrammarError(inputFile.location, $"Expected keyword, got {tok} instead");
 
@@ -767,6 +783,10 @@ namespace Trace
                 {
                     scene.world.addShape(parseWikiShape(inputFile, scene));
                 }
+                else if (((KeywordToken)tok).keyword == KeywordEnum.Pig)
+                {
+                    scene.world.addShape(parsePig(inputFile, scene));
+                }
                 else if (((KeywordToken)tok).keyword == KeywordEnum.Pointlight)
                 {
                     scene.world.addPointLight(parsePointlight(inputFile, scene));
@@ -785,7 +805,7 @@ namespace Trace
                     scene.materials[t.Item1] = t.Item2;
                 }
                 if (tok is KeywordToken)
-                Console.WriteLine("Correctly parsed "  + ((KeywordToken)tok).keyword);
+                    Console.WriteLine("Correctly parsed " + ((KeywordToken)tok).keyword);
             }
             return scene;
         }

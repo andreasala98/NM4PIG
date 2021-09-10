@@ -61,7 +61,7 @@ namespace Trace
         New = 1, Material, Plane, Sphere, Cylinder, Cone, CSGUnion, CSGIntersection,
         CSGDifference, Box, Diffuse, Specular, Uniform, Checkered,
         Image, Identity, Translation, RotationX, RotationY, RotationZ, Scaling,
-        Camera, Orthogonal, Perspective, Float, String, Wikishape, Pointlight
+        Camera, Orthogonal, Perspective, Float, String, Wikishape, Pointlight, Pig
 
     }
 
@@ -71,7 +71,7 @@ namespace Trace
 
     public class KeywordToken : Token
     {
-      
+
         /// <summary>
         /// The related keyword
         /// </summary>
@@ -109,7 +109,8 @@ namespace Trace
             {  "perspective" , KeywordEnum.Perspective},
             {  "float" , KeywordEnum.Float},
             {  "string", KeywordEnum.String},
-            {  "pointlight", KeywordEnum.Pointlight}
+            {  "pointlight", KeywordEnum.Pointlight},
+            {  "pig", KeywordEnum.Pig}
 
         };
 
@@ -137,9 +138,9 @@ namespace Trace
     } //KeywordToken
 
 
-        /// <summary>
-        /// A token containing an identifier
-        /// </summary>
+    /// <summary>
+    /// A token containing an identifier
+    /// </summary>
     public class IdentifierToken : Token
     {
 

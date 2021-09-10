@@ -71,7 +71,7 @@ namespace Trace.Test
             Assert.True(image.getPixel(1, 0).isClose(Constant.Black), "TestFlatRender failed - Assert 2/9");
             Assert.True(image.getPixel(2, 0).isClose(Constant.Black), "TestFlatRender failed - Assert 3/9");
             Assert.True(image.getPixel(0, 1).isClose(Constant.Black), "TestFlatRender failed - Assert 4/9");
-            Assert.True(image.getPixel(1, 1).isClose(sphereColor),    "TestFlatRender failed - Assert 5/9");
+            Assert.True(image.getPixel(1, 1).isClose(sphereColor), "TestFlatRender failed - Assert 5/9");
             Assert.True(image.getPixel(2, 1).isClose(Constant.Black), "TestFlatRender failed - Assert 6/9");
             Assert.True(image.getPixel(0, 2).isClose(Constant.Black), "TestFlatRender failed - Assert 7/9");
             Assert.True(image.getPixel(1, 2).isClose(Constant.Black), "TestFlatRender failed - Assert 8/9");
@@ -107,9 +107,9 @@ namespace Trace.Test
                 Ray ray = new Ray(origin: new Point(0f, 0f, 0f), dir: new Vec(1f, 0f, 0f));
                 Color color = pathTracer.computeRadiance(ray);
                 float expected = emittedRadiance / (1.0f - reflectance);
-                Assert.True(Utility.areClose(expected, color.r, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 1/3");
-                Assert.True(Utility.areClose(expected, color.g, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 2/3");
-                Assert.True(Utility.areClose(expected, color.b, epsilon: 1e-3f), $"TestPathTracer failed - Assert i={i}, 3/3");
+                Assert.True(Utility.areClose(expected, color.r, 1e-3f), $"TestPathTracer failed - Assert i={i}, 1/3");
+                Assert.True(Utility.areClose(expected, color.g, 1e-3f), $"TestPathTracer failed - Assert i={i}, 2/3");
+                Assert.True(Utility.areClose(expected, color.b, 1e-3f), $"TestPathTracer failed - Assert i={i}, 3/3");
             }
         }
 
@@ -134,7 +134,7 @@ namespace Trace.Test
             Assert.True(image.getPixel(1, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 2/9");
             Assert.True(image.getPixel(2, 0).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 3/9");
             Assert.True(image.getPixel(0, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 4/9");
-            Assert.True(image.getPixel(1, 1).isClose(renderer.ambientColor),    "TestPointLight rendered failed (light source shielded by a sphere) - Assert 5/9");
+            Assert.True(image.getPixel(1, 1).isClose(renderer.ambientColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 5/9");
             Assert.True(image.getPixel(2, 1).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 6/9");
             Assert.True(image.getPixel(0, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 7/9");
             Assert.True(image.getPixel(1, 2).isClose(renderer.backgroundColor), "TestPointLight rendered failed (light source shielded by a sphere) - Assert 8/9");

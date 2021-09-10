@@ -18,6 +18,7 @@ IN THE SOFTWARE.
 
 using System;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Trace
 {
@@ -26,14 +27,19 @@ namespace Trace
     /// </summary>
     public class Utility
     {
+        public static float epsilon = 1e-5f;
+
         /// <summary>
         /// Check if two floating-point numbers are closer than epsilon
         /// </summary>
         /// <param name="a"> First number</param>
         /// <param name="b">< Second number/<param>
         /// <param name="epsilon"> Max distance allowed (default: 1e-6)</param>
-        public static bool areClose(float a, float b, float? epsilon = 1e-5f)
-            => Math.Abs(a - b) < epsilon;
+        public static bool areClose(float a, float b, float? err = null)
+        {
+            err = err ?? Utility.epsilon;
+            return Math.Abs(a - b) < err;
+        }
 
         /// <summary>
         /// This function checks if all the elements of two Matrix4x4 are closer than epsilon
@@ -60,8 +66,8 @@ namespace Trace
         /// </summary>
         /// <param name="deg"> Angle in radians</param>
         /// <returns> Angle in degrees</returns>
-        public static float RadToDeg(int rad)
-            => (float)rad * 180f / Constant.PI;
+        public static float RadToDeg(float rad)
+            => rad * 180f / Constant.PI;
 
         /// <summary>
         /// Minimum between three floats
@@ -91,6 +97,29 @@ namespace Trace
         /// <returns></returns>
         public static float NormalizedDot(Vec v1, Vec v2)
             => v1.Normalize() * v2.Normalize();
+
+        public static HitRecord? CorrectInvRayEffect(HitRecord? hit, Transformation trans)
+        {
+            if (!hit.HasValue) return null;
+            return new HitRecord(
+                    wp: trans * hit.Value.worldPoint,
+                    nm: trans * hit.Value.normal,
+                    sp: hit.Value.surfacePoint,
+                    tt: hit.Value.t,
+                    r: hit.Value.ray.Transform(trans),
+                    shape: hit.Value.shape
+                );
+        }
+
+        public static List<HitRecord?> CorrectInvRayEffect(List<HitRecord?> hits, Transformation trans)
+        {
+            List<HitRecord?> correctedHits = new List<HitRecord?>();
+            foreach (HitRecord? hit in hits)
+            {
+                correctedHits.Add(CorrectInvRayEffect(hit, trans));
+            }
+            return correctedHits;
+        }
     }
 
 }
