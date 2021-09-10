@@ -128,7 +128,8 @@ It is allowed to add any of the following shapes to the environment:
 - Cones 🍦
 - Cylinders 🎩
 - Constructive Solid Geometry 💎(CSG): Union, Intersection and Difference of any pair of shapes of the ones mentioned above
-- [Wikishape](https://upload.wikimedia.org/wikipedia/commons/8/8b/Csg_tree.png) (a particular case of CSG mixtures)
+- [Wikishape](https://upload.wikimedia.org/wikipedia/commons/8/8b/Csg_tree.png) a particular case of CSG mixtures
+- [Pig](https://github.com/andreasala98/NM4PIG/pull/16) a built-in pig shape, constructed with CSG.
 
 Each shape can be transformed upon creation with a composition of scaling, translations and rotations around any of the three axes.
 
@@ -158,21 +159,22 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
  Here is a small gallery of some images generated with NM4PIG:
  
  <p float="center">
-  <img src="./NM4PIG/Examples/Inputs/Other/boxSphere.jpg" height="200" />
-  <img src="./NM4PIG/Examples/Inputs/Other/ortho.jpg" height="200" /> 
-  <img src="./NM4PIG/Examples/Inputs/Other/icecream.jpg" height="200" />
-  <img src="./NM4PIG/Examples/Inputs/Other/coke_world.png" height="200" />
+  <img src="./Examples/Inputs/Other/boxSphere.jpg" height="200" />
+  <img src="./Examples/Inputs/Other/ortho.jpg" height="200" /> 
+  <img src="./Examples/Inputs/Other/icecream.jpg" height="200" />
+  <img src="./Examples/Inputs/Other/coke_world.png" height="200" />
 </p>
  
   <p float="center">
-  <img src="./NM4PIG/Examples/Demo/demoAntiAliasing.png" height="200" />
-  <img src="./NM4PIG/Examples/Demo/doubleCokeCan.jpg" height="200" /> 
+  <img src="./Examples/Demo/demoAntiAliasing.png" height="200" />
+  <img src="./Examples/Demo/doubleCokeCan.jpg" height="200" /> 
   </p>
  
  <p float="center">
-  <img src="./NM4PIG/Examples/Inputs/Other/redblue.jpg" height="200" />
-  <img src="./NM4PIG/Examples/Demo/minecraftCube.jpg" height="200" />
-   <img src="./NM4PIG/Examples/Inputs/Other/reflection.jpg" height="200" />
+  <img src="./Examples/Inputs/Other/redblue.jpg" height="200" />
+  <img src="./Examples/Demo/minecraftCube.jpg" height="200" />
+   <img src="./Examples/Inputs/Other/reflection.jpg" height="200" />
+   <img src="./Examples/Inputs/PigScene/PigScene.jpg" height="200" />
 </p>
  
 Now it's time to build your own! Have fun!
