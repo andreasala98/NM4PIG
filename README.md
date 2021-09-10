@@ -64,7 +64,7 @@ To check that the code works as expected, you can run a set of tests using the f
 ### Render mode
 ✨
 
-<img align="right" src="./NM4PIG/Examples/Animations/worldWikiShape.gif" width="300"/>
+<img align="right" src="./Examples/Animations/worldWikiShape.gif" width="300"/>
 
 Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions for the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
 
@@ -107,7 +107,7 @@ Each file has in the same directory the image produced. Once you've learned how 
 ### Demo mode
 🎮
 
-<img align="right" src="./NM4PIG/Examples/Animations/spheres-perspective.gif" width="300"/>
+<img align="right" src="./Examples/Animations/spheres-perspective.gif" width="300"/>
 
 To run the application and visualize a simple image, use the following command (from the NM4PIG/NM4PIG directory):
 
@@ -168,13 +168,13 @@ The code is released under a MIT license. See the file [LICENSE](./LICENSE)
   <p float="center">
   <img src="./Examples/Demo/demoAntiAliasing.png" height="200" />
   <img src="./Examples/Demo/doubleCokeCan.jpg" height="200" /> 
+  <img src="./Examples/Inputs/PigScene/PigScene.jpg" height="200" />
   </p>
  
  <p float="center">
   <img src="./Examples/Inputs/Other/redblue.jpg" height="200" />
   <img src="./Examples/Demo/minecraftCube.jpg" height="200" />
    <img src="./Examples/Inputs/Other/reflection.jpg" height="200" />
-   <img src="./Examples/Inputs/PigScene/PigScene.jpg" height="200" />
 </p>
  
 Now it's time to build your own! Have fun!
