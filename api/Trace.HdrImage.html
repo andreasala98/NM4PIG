@@ -1,0 +1,969 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Struct HdrImage
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Struct HdrImage
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Trace.HdrImage">
+  
+  
+  <h1 id="Trace_HdrImage" data-uid="Trace.HdrImage" class="text-break">Struct HdrImage
+  </h1>
+  <div class="markdown level0 summary"><p>Value type used to handle images in HDR format.
+This means every pixel is associated with three floating-point vlaues.
+Use this struct to read a PFM file, perform tone mapping,
+gamma correction, and convert the image to png/jpg.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Trace.html">Trace</a></h6>
+  <h6><strong>Assembly</strong>: Trace.dll</h6>
+  <h5 id="Trace_HdrImage_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public struct HdrImage</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage__ctor_Stream_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.%23ctor(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L76">View Source</a>
+  </span>
+  <a id="Trace_HdrImage__ctor_" data-uid="Trace.HdrImage.#ctor*"></a>
+  <h4 id="Trace_HdrImage__ctor_Stream_" data-uid="Trace.HdrImage.#ctor(Stream)">HdrImage(Stream)</h4>
+  <div class="markdown level1 summary"><p>Load image from a Stream. Import a PFM file from either a
+memory stream or file stream.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public HdrImage(Stream inputStream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">inputStream</span></td>
+        <td><p>Stream pointing to a .pfm file</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage__ctor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.%23ctor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L59">View Source</a>
+  </span>
+  <a id="Trace_HdrImage__ctor_" data-uid="Trace.HdrImage.#ctor*"></a>
+  <h4 id="Trace_HdrImage__ctor_System_Int32_System_Int32_" data-uid="Trace.HdrImage.#ctor(System.Int32,System.Int32)">HdrImage(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructor with the width and heigth of the image.
+It sets all the pixels to black, i.e. RGB=(0,0,0)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public HdrImage(int x, int y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td><p>Width of the image</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td><p>Height of the image</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage__ctor_System_String_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L86">View Source</a>
+  </span>
+  <a id="Trace_HdrImage__ctor_" data-uid="Trace.HdrImage.#ctor*"></a>
+  <h4 id="Trace_HdrImage__ctor_System_String_" data-uid="Trace.HdrImage.#ctor(System.String)">HdrImage(String)</h4>
+  <div class="markdown level1 summary"><p>Load image from a file. It takes as input a string
+with the name of the file you want to open.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public HdrImage(string fileName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fileName</span></td>
+        <td><p>String of the name of the pfm file you want to open.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_height.md&amp;value=---%0Auid%3A%20Trace.HdrImage.height%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L46">View Source</a>
+  </span>
+  <h4 id="Trace_HdrImage_height" data-uid="Trace.HdrImage.height">height</h4>
+  <div class="markdown level1 summary"><p>Height of the image (number of pixels)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int height</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_pixel.md&amp;value=---%0Auid%3A%20Trace.HdrImage.pixel%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L51">View Source</a>
+  </span>
+  <h4 id="Trace_HdrImage_pixel" data-uid="Trace.HdrImage.pixel">pixel</h4>
+  <div class="markdown level1 summary"><p>List of (width * height) pixels</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;Color&gt; pixel</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="Trace.Color.html">Color</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_width.md&amp;value=---%0Auid%3A%20Trace.HdrImage.width%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L41">View Source</a>
+  </span>
+  <h4 id="Trace_HdrImage_width" data-uid="Trace.HdrImage.width">width</h4>
+  <div class="markdown level1 summary"><p>Widht of the image (number of pixels)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int width</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_averageLumi_System_Double_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.averageLumi(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L319">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_averageLumi_" data-uid="Trace.HdrImage.averageLumi*"></a>
+  <h4 id="Trace_HdrImage_averageLumi_System_Double_" data-uid="Trace.HdrImage.averageLumi(System.Double)">averageLumi(Double)</h4>
+  <div class="markdown level1 summary"><p>Returns average luminosity of the image (logarithmic average)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float averageLumi(double delta = 1E-10)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">delta</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><p>Average luminosity in floating-point format.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_clampImage.md&amp;value=---%0Auid%3A%20Trace.HdrImage.clampImage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L358">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_clampImage_" data-uid="Trace.HdrImage.clampImage*"></a>
+  <h4 id="Trace_HdrImage_clampImage" data-uid="Trace.HdrImage.clampImage">clampImage()</h4>
+  <div class="markdown level1 summary"><p>Apply tone mapping to the image by clamping every pixel</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void clampImage()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_getPixel_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.getPixel(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L115">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_getPixel_" data-uid="Trace.HdrImage.getPixel*"></a>
+  <h4 id="Trace_HdrImage_getPixel_System_Int32_System_Int32_" data-uid="Trace.HdrImage.getPixel(System.Int32,System.Int32)">getPixel(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>It outputs a pixel with given coordinates (x,y).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Color getPixel(int x, int y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td><p>x coordinate of the pixel</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td><p>y coordinate of the pixel</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Color.html">Color</a></td>
+        <td><p>The selected pixel.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_isLittleEndian_System_String_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.isLittleEndian(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L207">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_isLittleEndian_" data-uid="Trace.HdrImage.isLittleEndian*"></a>
+  <h4 id="Trace_HdrImage_isLittleEndian_System_String_" data-uid="Trace.HdrImage.isLittleEndian(System.String)">isLittleEndian(String)</h4>
+  <div class="markdown level1 summary"><p>Check if the image is encoded in little endian.
+This function makes advantage of the InvariantCulture method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool isLittleEndian(string line)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line</span></td>
+        <td><p>The 'endianness line' of a .pfm file</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the image is encoded with little-endianness.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_normalizeImage_System_Single_System_Nullable_System_Single__.md&amp;value=---%0Auid%3A%20Trace.HdrImage.normalizeImage(System.Single%2CSystem.Nullable%7BSystem.Single%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L341">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_normalizeImage_" data-uid="Trace.HdrImage.normalizeImage*"></a>
+  <h4 id="Trace_HdrImage_normalizeImage_System_Single_System_Nullable_System_Single__" data-uid="Trace.HdrImage.normalizeImage(System.Single,System.Nullable{System.Single})">normalizeImage(Single, Nullable&lt;Single&gt;)</h4>
+  <div class="markdown level1 summary"><p>Divide every pixel of the image by a factor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void normalizeImage(float factor, float? luminosity = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">factor</span></td>
+        <td><p>The scaling factor</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">luminosity</span></td>
+        <td><p>Average luminosity (optional)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_parseImageSize_System_String_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.parseImageSize(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L263">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_parseImageSize_" data-uid="Trace.HdrImage.parseImageSize*"></a>
+  <h4 id="Trace_HdrImage_parseImageSize_System_String_" data-uid="Trace.HdrImage.parseImageSize(System.String)">parseImageSize(String)</h4>
+  <div class="markdown level1 summary"><p>Read the size (width x height) of a .pfm image</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;int&gt; parseImageSize(string line)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">line</span></td>
+        <td><p>The third line of a .pfm file</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><p>List containing image width and height.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_pixelOffset_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.pixelOffset(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L104">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_pixelOffset_" data-uid="Trace.HdrImage.pixelOffset*"></a>
+  <h4 id="Trace_HdrImage_pixelOffset_System_Int32_System_Int32_" data-uid="Trace.HdrImage.pixelOffset(System.Int32,System.Int32)">pixelOffset(Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int pixelOffset(int x, int y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_readFloat_Stream_System_Boolean_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.readFloat(Stream%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L234">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_readFloat_" data-uid="Trace.HdrImage.readFloat*"></a>
+  <h4 id="Trace_HdrImage_readFloat_Stream_System_Boolean_" data-uid="Trace.HdrImage.readFloat(Stream,System.Boolean)">readFloat(Stream, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Read a 32bit sequence from a stream and convert it to floating-point number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float readFloat(Stream inputStream, bool lEnd)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">inputStream</span></td>
+        <td><p>The input stream</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">lEnd</span></td>
+        <td><p>True if the image is little-endian.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><p>Float value corresponding to 4-byte sequence</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_readLine_Stream_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.readLine(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L182">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_readLine_" data-uid="Trace.HdrImage.readLine*"></a>
+  <h4 id="Trace_HdrImage_readLine_Stream_" data-uid="Trace.HdrImage.readLine(Stream)">readLine(Stream)</h4>
+  <div class="markdown level1 summary"><p>Read a byte line from a stream and convert to string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string readLine(Stream s)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">s</span></td>
+        <td><p>The stream from which you want to read the line.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The line in <see cref="!:String"></see> format.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_readPfm_Stream_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.readPfm(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L288">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_readPfm_" data-uid="Trace.HdrImage.readPfm*"></a>
+  <h4 id="Trace_HdrImage_readPfm_Stream_" data-uid="Trace.HdrImage.readPfm(Stream)">readPfm(Stream)</h4>
+  <div class="markdown level1 summary"><p>Read an image from a stream pointing to a .pfm file</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void readPfm(Stream inputStream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">inputStream</span></td>
+        <td><p>A stream pointing to a .pfm file.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_savePfm_Stream_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.savePfm(Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L141">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_savePfm_" data-uid="Trace.HdrImage.savePfm*"></a>
+  <h4 id="Trace_HdrImage_savePfm_Stream_" data-uid="Trace.HdrImage.savePfm(Stream)">savePfm(Stream)</h4>
+  <div class="markdown level1 summary"><p>It saves the image in .pfm format into a stream</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void savePfm(Stream outputStream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Stream</span></td>
+        <td><span class="parametername">outputStream</span></td>
+        <td><p>Output Stream (either Memory- or FileStream).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_setPixel_System_Int32_System_Int32_Trace_Color_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.setPixel(System.Int32%2CSystem.Int32%2CTrace.Color)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L131">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_setPixel_" data-uid="Trace.HdrImage.setPixel*"></a>
+  <h4 id="Trace_HdrImage_setPixel_System_Int32_System_Int32_Trace_Color_" data-uid="Trace.HdrImage.setPixel(System.Int32,System.Int32,Trace.Color)">setPixel(Int32, Int32, Color)</h4>
+  <div class="markdown level1 summary"><p>Manually set the color of a single pixel by passing a <a class="xref" href="Trace.Color.html">Color</a> object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void setPixel(int x, int y, Color a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td><p>x coordinate of the pixel</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td><p>y coordinate of the pixel</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.Color.html">Color</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p><a class="xref" href="Trace.Color.html">Color</a> object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_validCoords_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.validCoords(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L97">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_validCoords_" data-uid="Trace.HdrImage.validCoords*"></a>
+  <h4 id="Trace_HdrImage_validCoords_System_Int32_System_Int32_" data-uid="Trace.HdrImage.validCoords(System.Int32,System.Int32)">validCoords(Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool validCoords(int x, int y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage_writeLdrImage_System_String_System_String_System_Single_.md&amp;value=---%0Auid%3A%20Trace.HdrImage.writeLdrImage(System.String%2CSystem.String%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L373">View Source</a>
+  </span>
+  <a id="Trace_HdrImage_writeLdrImage_" data-uid="Trace.HdrImage.writeLdrImage*"></a>
+  <h4 id="Trace_HdrImage_writeLdrImage_System_String_System_String_System_Single_" data-uid="Trace.HdrImage.writeLdrImage(System.String,System.String,System.Single)">writeLdrImage(String, String, Single)</h4>
+  <div class="markdown level1 summary"><p>Saves the image into a LDR file (png/jpg)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void writeLdrImage(string outputFile, string format, float gamma)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">outputFile</span></td>
+        <td><p>Output file name</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td><p>.png or .jpg (auto-recognised)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">gamma</span></td>
+        <td><p>gamma factor of your screen</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_HdrImage.md&amp;value=---%0Auid%3A%20Trace.HdrImage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/HdrImage.cs/#L36" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

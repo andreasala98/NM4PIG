@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Trace
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Trace
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Trace">
+  
+  <h1 id="Trace" data-uid="Trace" class="text-break">Namespace Trace
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Trace.Box.html">Box</a></h4>
+      <section><p>A 3D axis-aligned box (AAB)</p>
+</section>
+      <h4><a class="xref" href="Trace.BRDF.html">BRDF</a></h4>
+      <section><p>An abstract class representing a Bidirectional Reflectance Distribution Function.
+Use only derivate classes in the program (DiffuseBRDF, SPecularBRDF)</p>
+</section>
+      <h4><a class="xref" href="Trace.Camera.html">Camera</a></h4>
+      <section><p>An abstract class representing an observer <br>
+Concrete subclasses are <a class="xref" href="Trace.OrthogonalCamera.html">OrthogonalCamera</a> and <a class="xref" href="Trace.OrthogonalCamera.html">OrthogonalCamera</a>.</p>
+</section>
+      <h4><a class="xref" href="Trace.CheckeredPigment.html">CheckeredPigment</a></h4>
+      <section><p>A checkered Pigment. This class is derived form the <a class="xref" href="Trace.IPigment.html">IPigment</a> interface.
+The number of repetitions is tunable, but it must be the same for both directions</p>
+</section>
+      <h4><a class="xref" href="Trace.CommandLineException.html">CommandLineException</a></h4>
+      <section><p>Exception CommandLineException. This Exception is intended to be raised whenever the user
+passes meaningless arguments while running the executable.</p>
+</section>
+      <h4><a class="xref" href="Trace.Cone.html">Cone</a></h4>
+      <section><p>Class that implements a Cone shape.
+Its datamembars are (float) radius and (float) height</p>
+</section>
+      <h4><a class="xref" href="Trace.Constant.html">Constant</a></h4>
+      <section><p>A class that contains some useful constants, which are used many times inside the library.</p>
+</section>
+      <h4><a class="xref" href="Trace.CSGDifference.html">CSGDifference</a></h4>
+      <section><p>A 3D Shape created by the difference
+of two Shapes (Constructive Solid Geometry).
+You subtract the second Shape from the first Shape.</p>
+<p>Datamembers: Shape firstShape, Shape secondShape.</p>
+</section>
+      <h4><a class="xref" href="Trace.CSGIntersection.html">CSGIntersection</a></h4>
+      <section><p>A 3D Shape created by the intersection
+of two Shapes (Constructive Solid Geometry).</p>
+<p>Datamembers: Shape firstShape, Shape secondShape.</p>
+</section>
+      <h4><a class="xref" href="Trace.CSGUnion.html">CSGUnion</a></h4>
+      <section><p>A 3D Shape created by the union
+of two Shapes (Constructive Solid Geometry).</p>
+<p>Given a <a class="xref" href="Trace.Ray.html">Ray</a>, it calculates all intersection of the ray with
+the two shapes, and it returns only the closest one.</p>
+<p>Datamembers: Shape firstsShape, Shape secondShape.</p>
+</section>
+      <h4><a class="xref" href="Trace.Cylinder.html">Cylinder</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Trace.DiffuseBRDF.html">DiffuseBRDF</a></h4>
+      <section><p>A derivate class of BRDF representing an ideal diffusive BRDF (also called «Lambertian»)</p>
+</section>
+      <h4><a class="xref" href="Trace.FlatRender.html">FlatRender</a></h4>
+      <section><p>A «flat» renderer.<br>
+This renderer estimates the solution of the rendering equation by neglecting any contribution of the light.
+It just uses the pigment of each surface to determine how to compute the final radiance.</p>
+</section>
+      <h4><a class="xref" href="Trace.GrammarError.html">GrammarError</a></h4>
+      <section><p>Esception GrammarError. This exception is intended to be raised whenever there is an error while
+parsing the scene file into the program in render mode. It is a compiling error, therefore it has to print the exact source
+location of the bug.</p>
+</section>
+      <h4><a class="xref" href="Trace.IdentifierToken.html">IdentifierToken</a></h4>
+      <section><p>A token containing an identifier</p>
+</section>
+      <h4><a class="xref" href="Trace.ImagePigment.html">ImagePigment</a></h4>
+      <section><p>A pigment to project an Equirectangular projection (in form of a HdrImage) onto a shape.</p>
+</section>
+      <h4><a class="xref" href="Trace.ImageTracer.html">ImageTracer</a></h4>
+      <section><p>A class that links a <a class="xref" href="Trace.Camera.html">Camera</a> object to a <a class="xref" href="Trace.HdrImage.html">HdrImage</a> object by creating
+a matrix of pixel after solving the rendering equation. <br>
+Public data members: <a class="xref" href="Trace.HdrImage.html">HdrImage</a>, <a class="xref" href="Trace.Camera.html">Camera</a>.</p>
+</section>
+      <h4><a class="xref" href="Trace.InputStream.html">InputStream</a></h4>
+      <section><p>A high-level wrapper around a stream, used to parse scene files
+This class implements a wrapper around a stream, with the following additional capabilities:</p>
+<ul>
+<li>It tracks the line number and column number;</li>
+<li>It permits to 'un-read' characters and tokens.</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Trace.InvalidPfmFileFormat.html">InvalidPfmFileFormat</a></h4>
+      <section><p>Exception InvalidPfmFileFormat. This Exception is intended to be raised whenever there is something
+wrong while dealing with the <see cref="!:HDRImage"></see> struct.</p>
+</section>
+      <h4><a class="xref" href="Trace.KeywordToken.html">KeywordToken</a></h4>
+      <section><p>A token containing a keyword</p>
+</section>
+      <h4><a class="xref" href="Trace.LiteralNumberToken.html">LiteralNumberToken</a></h4>
+      <section><p>A token containing a literal number (floating point)</p>
+</section>
+      <h4><a class="xref" href="Trace.Material.html">Material</a></h4>
+      <section><p>A class that implements a material and that contains all the information
+about how a shape interacts with a ray.</p>
+</section>
+      <h4><a class="xref" href="Trace.OnOffRender.html">OnOffRender</a></h4>
+      <section><p>A on/off renderer<br>
+This renderer is mostly useful for debugging purposes, as it is really fast, but it produces boring images.</p>
+</section>
+      <h4><a class="xref" href="Trace.OrthogonalCamera.html">OrthogonalCamera</a></h4>
+      <section><p>A camera implementing an orthogonal 3D → 2D projection
+This class implements an observer seeing the world through an orthogonal projection.
+Parallel lines remain parallel, even at distance.</p>
+</section>
+      <h4><a class="xref" href="Trace.PathTracer.html">PathTracer</a></h4>
+      <section><p>A path-tracing renderer
+The algorithm implemented here allows the caller to tune number of rays thrown at each iteration, as well as the
+maximum depth. It implements Russian roulette, so in principle it will take a finite time to complete the
+calculation even if you set max_depth to infinity.</p>
+</section>
+      <h4><a class="xref" href="Trace.PCG.html">PCG</a></h4>
+      <section><p>PCG Uniform Pseudo-Random Number Generator</p>
+</section>
+      <h4><a class="xref" href="Trace.PerspectiveCamera.html">PerspectiveCamera</a></h4>
+      <section><p>A camera implementing a perspective 3D → 2D projection<br>
+This class implements an observer seeing the world through a perspective projection.
+Parallel lines do not appear parallel if distant - this is a more realistic type
+of rendering</p>
+</section>
+      <h4><a class="xref" href="Trace.Plane.html">Plane</a></h4>
+      <section><p>A 2D plane that you can put in the scene. Unless transformations are applied, the z=0 plane is constructed</p>
+</section>
+      <h4><a class="xref" href="Trace.PointLight.html">PointLight</a></h4>
+      <section><p>Class that holds information of a point light source, which in the rendering equation is
+equivalent to a Dirac's delta.
+Datamembers: Point position, Color color, float linearRadius.</p>
+</section>
+      <h4><a class="xref" href="Trace.PointLightRender.html">PointLightRender</a></h4>
+      <section><p>Class that implements a Point Light renderer. The solid angle integral of the rendering equations
+can be simplified, because the integrand contains some localized Dirac deltas</p>
+</section>
+      <h4><a class="xref" href="Trace.Render.html">Render</a></h4>
+      <section><p>A class implementing a solver of the rendering equation.
+This is an abstract class; you should use a derived concrete class.</p>
+</section>
+      <h4><a class="xref" href="Trace.Scene.html">Scene</a></h4>
+      <section><p>A scene read from a scene file through the scene language interpreter</p>
+</section>
+      <h4><a class="xref" href="Trace.Shape.html">Shape</a></h4>
+      <section><p>Abstract class that implements a generic shape. This class is used to generate
+some basic shapes such as sphere and plane. Use only concrete subclasses</p>
+</section>
+      <h4><a class="xref" href="Trace.SourceLocation.html">SourceLocation</a></h4>
+      <section><p>A specific position in a source file</p>
+</section>
+      <h4><a class="xref" href="Trace.SpecularBRDF.html">SpecularBRDF</a></h4>
+      <section><p>A class representing an ideal specular BRDF. This BRDF completely reflects every ray coming
+along its direction</p>
+</section>
+      <h4><a class="xref" href="Trace.Sphere.html">Sphere</a></h4>
+      <section><p>A 3D unit sphere centered on the origin of the axes.
+It is possible to apply transformations to the sphere</p>
+</section>
+      <h4><a class="xref" href="Trace.StopToken.html">StopToken</a></h4>
+      <section><p>A token representing the end of a file: this is its only use.</p>
+</section>
+      <h4><a class="xref" href="Trace.StringToken.html">StringToken</a></h4>
+      <section><p>A token containing a literal string</p>
+</section>
+      <h4><a class="xref" href="Trace.SymbolToken.html">SymbolToken</a></h4>
+      <section><p>A token containing a symbol</p>
+</section>
+      <h4><a class="xref" href="Trace.Token.html">Token</a></h4>
+      <section><p>A lexical token, used when parsing a scene file.
+This is the most generic Token class, and it has many children subclasses.</p>
+</section>
+      <h4><a class="xref" href="Trace.UniformPigment.html">UniformPigment</a></h4>
+      <section><p>A simple uniform pigment. It puts a uniform color over the whole shape.</p>
+</section>
+      <h4><a class="xref" href="Trace.Utility.html">Utility</a></h4>
+      <section><p>A class which contains useful functions used inside the library</p>
+</section>
+      <h4><a class="xref" href="Trace.World.html">World</a></h4>
+      <section><p>Class that represents a world. It is the variable to which we add the shapes.</p>
+</section>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="Trace.Color.html">Color</a></h4>
+      <section><p>A very simple struct: three floats r,g,b to represent a color.
+This value type is fundamental to implement more complex structures and classes.</p>
+</section>
+      <h4><a class="xref" href="Trace.HdrImage.html">HdrImage</a></h4>
+      <section><p>Value type used to handle images in HDR format.
+This means every pixel is associated with three floating-point vlaues.
+Use this struct to read a PFM file, perform tone mapping,
+gamma correction, and convert the image to png/jpg.</p>
+</section>
+      <h4><a class="xref" href="Trace.HitRecord.html">HitRecord</a></h4>
+      <section><p>A class holding information about a ray-shape intersection</p>
+</section>
+      <h4><a class="xref" href="Trace.Normal.html">Normal</a></h4>
+      <section><p>Value type represnting a Normal vector</p>
+</section>
+      <h4><a class="xref" href="Trace.Point.html">Point</a></h4>
+      <section><p>Value type to represent a point in 3D space.</p>
+</section>
+      <h4><a class="xref" href="Trace.Ray.html">Ray</a></h4>
+      <section><p>An efficient value type representing a ray travelling across the environment.</p>
+</section>
+      <h4><a class="xref" href="Trace.Transformation.html">Transformation</a></h4>
+      <section><p>Affine transformation. It is represented by a 4x4 matrix.
+It can be used to create translations, rotations and scalings.</p>
+</section>
+      <h4><a class="xref" href="Trace.Vec.html">Vec</a></h4>
+      <section><p>Value type to represent a vector in a 3D space.</p>
+</section>
+      <h4><a class="xref" href="Trace.Vec2D.html">Vec2D</a></h4>
+      <section><p>A 2D vector used to represent a point on a surface
+The fields are named <code>u</code> and <code>v</code> to distinguish them from the usual 3D coordinates <code>x</code>, <code>y</code>, <code>z</code>.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Trace.IPigment.html">IPigment</a></h4>
+      <section></section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="Trace.KeywordEnum.html">KeywordEnum</a></h4>
+      <section><p>Enumeration of all possible keywords encountered in a Scene File</p>
+</section>
+    <h3 id="delegates">Delegates
+  </h3>
+      <h4><a class="xref" href="Trace.ImageTracer.PFunction.html">ImageTracer.PFunction</a></h4>
+      <section><p>Function that can be passed in input in the method that computes
+radiance for a given <see cref="!:ray"></see>.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

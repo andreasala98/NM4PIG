@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PathTracer
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PathTracer
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Trace.PathTracer">
+  
+  
+  <h1 id="Trace_PathTracer" data-uid="Trace.PathTracer" class="text-break">Class PathTracer
+  </h1>
+  <div class="markdown level0 summary"><p>A path-tracing renderer
+The algorithm implemented here allows the caller to tune number of rays thrown at each iteration, as well as the
+maximum depth. It implements Russian roulette, so in principle it will take a finite time to complete the
+calculation even if you set max_depth to infinity.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Trace.Render.html">Render</a></div>
+    <div class="level2"><span class="xref">PathTracer</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Trace.Render.html#Trace_Render_world">Render.world</a>
+    </div>
+    <div>
+      <a class="xref" href="Trace.Render.html#Trace_Render_backgroundColor">Render.backgroundColor</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Trace.html">Trace</a></h6>
+  <h6><strong>Assembly</strong>: Trace.dll</h6>
+  <h5 id="Trace_PathTracer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class PathTracer : Render</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer__ctor_Trace_World_System_Nullable_Trace_Color__Trace_PCG_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.PathTracer.%23ctor(Trace.World%2CSystem.Nullable%7BTrace.Color%7D%2CTrace.PCG%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L155">View Source</a>
+  </span>
+  <a id="Trace_PathTracer__ctor_" data-uid="Trace.PathTracer.#ctor*"></a>
+  <h4 id="Trace_PathTracer__ctor_Trace_World_System_Nullable_Trace_Color__Trace_PCG_System_Int32_System_Int32_System_Int32_" data-uid="Trace.PathTracer.#ctor(Trace.World,System.Nullable{Trace.Color},Trace.PCG,System.Int32,System.Int32,System.Int32)">PathTracer(World, Nullable&lt;Color&gt;, PCG, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Basic contructor for the class. It inherits the constructor of the <a class="xref" href="Trace.Render.html">Render</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PathTracer(World world, Color? bkg = null, PCG pcg = null, int numOfRays = 10, int maxDepth = 3, int russianRouletteLimit = 2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.World.html">World</a></td>
+        <td><span class="parametername">world</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="Trace.Color.html">Color</a>&gt;</td>
+        <td><span class="parametername">bkg</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.PCG.html">PCG</a></td>
+        <td><span class="parametername">pcg</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numOfRays</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDepth</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">russianRouletteLimit</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer_pcg.md&amp;value=---%0Auid%3A%20Trace.PathTracer.pcg%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L128">View Source</a>
+  </span>
+  <h4 id="Trace_PathTracer_pcg" data-uid="Trace.PathTracer.pcg">pcg</h4>
+  <div class="markdown level1 summary"><p>Random number generator</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PCG pcg</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.PCG.html">PCG</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer_maxDepth.md&amp;value=---%0Auid%3A%20Trace.PathTracer.maxDepth%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L138">View Source</a>
+  </span>
+  <a id="Trace_PathTracer_maxDepth_" data-uid="Trace.PathTracer.maxDepth*"></a>
+  <h4 id="Trace_PathTracer_maxDepth" data-uid="Trace.PathTracer.maxDepth">maxDepth</h4>
+  <div class="markdown level1 summary"><p>Maximum number of reflections for any <a class="xref" href="Trace.Ray.html">Ray</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int maxDepth { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer_numOfRays.md&amp;value=---%0Auid%3A%20Trace.PathTracer.numOfRays%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L133">View Source</a>
+  </span>
+  <a id="Trace_PathTracer_numOfRays_" data-uid="Trace.PathTracer.numOfRays*"></a>
+  <h4 id="Trace_PathTracer_numOfRays" data-uid="Trace.PathTracer.numOfRays">numOfRays</h4>
+  <div class="markdown level1 summary"><p>Number of rays to be fired at each iteration</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int numOfRays { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer_russianRouletteLimit.md&amp;value=---%0Auid%3A%20Trace.PathTracer.russianRouletteLimit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L143">View Source</a>
+  </span>
+  <a id="Trace_PathTracer_russianRouletteLimit_" data-uid="Trace.PathTracer.russianRouletteLimit*"></a>
+  <h4 id="Trace_PathTracer_russianRouletteLimit" data-uid="Trace.PathTracer.russianRouletteLimit">russianRouletteLimit</h4>
+  <div class="markdown level1 summary"><p>Minimum number of reflections for the Russian Roulette algorith to start.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int russianRouletteLimit { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer_computeRadiance_Trace_Ray_.md&amp;value=---%0Auid%3A%20Trace.PathTracer.computeRadiance(Trace.Ray)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L169">View Source</a>
+  </span>
+  <a id="Trace_PathTracer_computeRadiance_" data-uid="Trace.PathTracer.computeRadiance*"></a>
+  <h4 id="Trace_PathTracer_computeRadiance_Trace_Ray_" data-uid="Trace.PathTracer.computeRadiance(Trace.Ray)">computeRadiance(Ray)</h4>
+  <div class="markdown level1 summary"><p>Radiance computing algortihm. This is the fundamental algorithm for the whole library.
+It calculates the radiance brought by a <a class="xref" href="Trace.Ray.html">Ray</a> object when it hits the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Color computeRadiance(Ray ray)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Ray.html">Ray</a></td>
+        <td><span class="parametername">ray</span></td>
+        <td><p>The travelling Ray.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Color.html">Color</a></td>
+        <td><p>The computed rafiance in form of a <a class="xref" href="Trace.Color.html">Color</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Trace.Render.html#Trace_Render_computeRadiance_Trace_Ray_">Render.computeRadiance(Ray)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PathTracer.md&amp;value=---%0Auid%3A%20Trace.PathTracer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Render.cs/#L121" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

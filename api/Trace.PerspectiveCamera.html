@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PerspectiveCamera
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PerspectiveCamera
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Trace.PerspectiveCamera">
+  
+  
+  <h1 id="Trace_PerspectiveCamera" data-uid="Trace.PerspectiveCamera" class="text-break">Class PerspectiveCamera
+  </h1>
+  <div class="markdown level0 summary"><p>A camera implementing a perspective 3D → 2D projection<br>
+This class implements an observer seeing the world through a perspective projection.
+Parallel lines do not appear parallel if distant - this is a more realistic type
+of rendering</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Trace.Camera.html">Camera</a></div>
+    <div class="level2"><span class="xref">PerspectiveCamera</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Trace.Camera.html#Trace_Camera_aspectRatio">Camera.aspectRatio</a>
+    </div>
+    <div>
+      <a class="xref" href="Trace.Camera.html#Trace_Camera_transformation">Camera.transformation</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Trace.html">Trace</a></h6>
+  <h6><strong>Assembly</strong>: Trace.dll</h6>
+  <h5 id="Trace_PerspectiveCamera_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class PerspectiveCamera : Camera</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PerspectiveCamera__ctor_System_Nullable_System_Single__System_Nullable_System_Single__System_Nullable_Trace_Transformation__.md&amp;value=---%0Auid%3A%20Trace.PerspectiveCamera.%23ctor(System.Nullable%7BSystem.Single%7D%2CSystem.Nullable%7BSystem.Single%7D%2CSystem.Nullable%7BTrace.Transformation%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Cameras.cs/#L123">View Source</a>
+  </span>
+  <a id="Trace_PerspectiveCamera__ctor_" data-uid="Trace.PerspectiveCamera.#ctor*"></a>
+  <h4 id="Trace_PerspectiveCamera__ctor_System_Nullable_System_Single__System_Nullable_System_Single__System_Nullable_Trace_Transformation__" data-uid="Trace.PerspectiveCamera.#ctor(System.Nullable{System.Single},System.Nullable{System.Single},System.Nullable{Trace.Transformation})">PerspectiveCamera(Nullable&lt;Single&gt;, Nullable&lt;Single&gt;, Nullable&lt;Transformation&gt;)</h4>
+  <div class="markdown level1 summary"><p>Create a new <a class="xref" href="Trace.PerspectiveCamera.html">PerspectiveCamera</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PerspectiveCamera(float? screenDistance = null, float? aspectRatio = null, Transformation? transformation = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">screenDistance</span></td>
+        <td><p>It tells how much far from the eye of the observer is the screen, and it influences the so-called «aperture» (the field-of-view angle along the horizontal direction).</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">aspectRatio</span></td>
+        <td><p>The parameter <code>aspect_ratio</code> defines how larger than the height is the image.For fullscreen
+images, you should probably set <code>aspect_ratio</code> to 16/9, as this is the most used aspect ratio
+used in modern monitors.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="Trace.Transformation.html">Transformation</a>&gt;</td>
+        <td><span class="parametername">transformation</span></td>
+        <td><p>It is an instance of the struct <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PerspectiveCamera_screenDistance.md&amp;value=---%0Auid%3A%20Trace.PerspectiveCamera.screenDistance%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Cameras.cs/#L113">View Source</a>
+  </span>
+  <h4 id="Trace_PerspectiveCamera_screenDistance" data-uid="Trace.PerspectiveCamera.screenDistance">screenDistance</h4>
+  <div class="markdown level1 summary"><p>It tells how much far from the eye of the observer is the screen,
+and it influences the so-called «aperture»
+(the field-of-view angle along the horizontal direction).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float screenDistance</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PerspectiveCamera_fireRay_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Trace.PerspectiveCamera.fireRay(System.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Cameras.cs/#L140">View Source</a>
+  </span>
+  <a id="Trace_PerspectiveCamera_fireRay_" data-uid="Trace.PerspectiveCamera.fireRay*"></a>
+  <h4 id="Trace_PerspectiveCamera_fireRay_System_Single_System_Single_" data-uid="Trace.PerspectiveCamera.fireRay(System.Single,System.Single)">fireRay(Single, Single)</h4>
+  <div class="markdown level1 summary"><p>Shoot a <a class="xref" href="Trace.Ray.html">Ray</a> through the camera's screen <br>
+The coordinates(u, v) specify the point on the screen where the ray crosses it.Coordinates(0, 0) represent
+the bottom-left corner, (0, 1) the top-left corner, (1, 0) the bottom-right corner, and (1, 1) the top-right
+corner, as in the following diagram::</p>
+<p>(0f,1f) -------------- (1f,1f)
+|            |
+|            |
+(0f,0f) -------------- (1f,0f)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Ray fireRay(float u, float v)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">u</span></td>
+        <td><p>x coordinate of the screen. 0.0f represent left edge, 1.0f represent right edge.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">v</span></td>
+        <td><p>y coordinate of the screen. 0.0f represent bottom edge, 1.0f represent upper edge.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Ray.html">Ray</a></td>
+        <td><p>A <a class="xref" href="Trace.Ray.html">Ray</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Trace.Camera.html#Trace_Camera_fireRay_System_Single_System_Single_">Camera.fireRay(Single, Single)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_PerspectiveCamera.md&amp;value=---%0Auid%3A%20Trace.PerspectiveCamera%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Cameras.cs/#L106" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

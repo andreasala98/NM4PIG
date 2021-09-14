@@ -1,0 +1,1028 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Struct Transformation
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Struct Transformation
+   ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Trace.Transformation">
+  
+  
+  <h1 id="Trace_Transformation" data-uid="Trace.Transformation" class="text-break">Struct Transformation
+  </h1>
+  <div class="markdown level0 summary"><p>Affine transformation. It is represented by a 4x4 matrix.
+It can be used to create translations, rotations and scalings.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Trace.html">Trace</a></h6>
+  <h6><strong>Assembly</strong>: Trace.dll</h6>
+  <h5 id="Trace_Transformation_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public struct Transformation</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation__ctor_Matrix4x4_Matrix4x4_.md&amp;value=---%0Auid%3A%20Trace.Transformation.%23ctor(Matrix4x4%2CMatrix4x4)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L513">View Source</a>
+  </span>
+  <a id="Trace_Transformation__ctor_" data-uid="Trace.Transformation.#ctor*"></a>
+  <h4 id="Trace_Transformation__ctor_Matrix4x4_Matrix4x4_" data-uid="Trace.Transformation.#ctor(Matrix4x4,Matrix4x4)">Transformation(Matrix4x4, Matrix4x4)</h4>
+  <div class="markdown level1 summary"><p>Constructor taking a <see cref="!:Matrix4x4"></see> and its inverse as inputs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Transformation(Matrix4x4 myMat, Matrix4x4 myInvMat)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td><span class="parametername">myMat</span></td>
+        <td><p>The <see cref="!:Matrix4x4"></see> representing the transformation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td><span class="parametername">myInvMat</span></td>
+        <td><p>The inverse <see cref="!:Matrix4x4"></see>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation__ctor_System_Int32_.md&amp;value=---%0Auid%3A%20Trace.Transformation.%23ctor(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L502">View Source</a>
+  </span>
+  <a id="Trace_Transformation__ctor_" data-uid="Trace.Transformation.#ctor*"></a>
+  <h4 id="Trace_Transformation__ctor_System_Int32_" data-uid="Trace.Transformation.#ctor(System.Int32)">Transformation(Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructor for Identity transformation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Transformation(int a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>Any integer is fine.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_M.md&amp;value=---%0Auid%3A%20Trace.Transformation.M%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L491">View Source</a>
+  </span>
+  <h4 id="Trace_Transformation_M" data-uid="Trace.Transformation.M">M</h4>
+  <div class="markdown level1 summary"><p><see cref="!:Matrix4x4"></see> representing the transformation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Matrix4x4 M</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Minv.md&amp;value=---%0Auid%3A%20Trace.Transformation.Minv%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L496">View Source</a>
+  </span>
+  <h4 id="Trace_Transformation_Minv" data-uid="Trace.Transformation.Minv">Minv</h4>
+  <div class="markdown level1 summary"><p><see cref="!:Matrix4x4"></see> representing the inverse transformation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Matrix4x4 Minv</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Matrix4x4</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_getInverse.md&amp;value=---%0Auid%3A%20Trace.Transformation.getInverse%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L523">View Source</a>
+  </span>
+  <a id="Trace_Transformation_getInverse_" data-uid="Trace.Transformation.getInverse*"></a>
+  <h4 id="Trace_Transformation_getInverse" data-uid="Trace.Transformation.getInverse">getInverse()</h4>
+  <div class="markdown level1 summary"><p>Switches the M and Minv fields. Practically, inverts the transformation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Transformation getInverse()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The inverse <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_isClose_Trace_Transformation_.md&amp;value=---%0Auid%3A%20Trace.Transformation.isClose(Trace.Transformation)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L531">View Source</a>
+  </span>
+  <a id="Trace_Transformation_isClose_" data-uid="Trace.Transformation.isClose*"></a>
+  <h4 id="Trace_Transformation_isClose_Trace_Transformation_" data-uid="Trace.Transformation.isClose(Trace.Transformation)">isClose(Transformation)</h4>
+  <div class="markdown level1 summary"><p>Method to check if a <a class="xref" href="Trace.Transformation.html">Transformation</a> and a <see cref="!:Matrix4x4"></see> are close.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool isClose(Transformation a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The <see cref="!:Matrix4x4"></see> to be compared with.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if Transformation and Matrix are close</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_isConsistent.md&amp;value=---%0Auid%3A%20Trace.Transformation.isConsistent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L538">View Source</a>
+  </span>
+  <a id="Trace_Transformation_isConsistent_" data-uid="Trace.Transformation.isConsistent*"></a>
+  <h4 id="Trace_Transformation_isConsistent" data-uid="Trace.Transformation.isConsistent">isConsistent()</h4>
+  <div class="markdown level1 summary"><p>Method to check if the Minv field actually contains the inverse matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool isConsistent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if Minv is the inverse matrix of M</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_RotationX_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.RotationX(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L599">View Source</a>
+  </span>
+  <a id="Trace_Transformation_RotationX_" data-uid="Trace.Transformation.RotationX*"></a>
+  <h4 id="Trace_Transformation_RotationX_System_Single_" data-uid="Trace.Transformation.RotationX(System.Single)">RotationX(Single)</h4>
+  <div class="markdown level1 summary"><p>Rotation along the x axis.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation RotationX(float theta)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">theta</span></td>
+        <td><p>The rotation angle in radians</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The rotation <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_RotationY_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.RotationY(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L609">View Source</a>
+  </span>
+  <a id="Trace_Transformation_RotationY_" data-uid="Trace.Transformation.RotationY*"></a>
+  <h4 id="Trace_Transformation_RotationY_System_Single_" data-uid="Trace.Transformation.RotationY(System.Single)">RotationY(Single)</h4>
+  <div class="markdown level1 summary"><p>Rotation along the y axis.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation RotationY(float theta)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">theta</span></td>
+        <td><p>The rotation angle in radians</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The rotation <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_RotationZ_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.RotationZ(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L619">View Source</a>
+  </span>
+  <a id="Trace_Transformation_RotationZ_" data-uid="Trace.Transformation.RotationZ*"></a>
+  <h4 id="Trace_Transformation_RotationZ_System_Single_" data-uid="Trace.Transformation.RotationZ(System.Single)">RotationZ(Single)</h4>
+  <div class="markdown level1 summary"><p>Rotation along the z axis.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation RotationZ(float theta)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">theta</span></td>
+        <td><p>The rotation angle in radians</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The rotation <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Scaling_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.Scaling(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L588">View Source</a>
+  </span>
+  <a id="Trace_Transformation_Scaling_" data-uid="Trace.Transformation.Scaling*"></a>
+  <h4 id="Trace_Transformation_Scaling_System_Single_" data-uid="Trace.Transformation.Scaling(System.Single)">Scaling(Single)</h4>
+  <div class="markdown level1 summary"><p>Scale an object isotropically.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation Scaling(float a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>Saling factor in all directions</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The scaling transformation</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Scaling_System_Single_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.Scaling(System.Single%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L578">View Source</a>
+  </span>
+  <a id="Trace_Transformation_Scaling_" data-uid="Trace.Transformation.Scaling*"></a>
+  <h4 id="Trace_Transformation_Scaling_System_Single_System_Single_System_Single_" data-uid="Trace.Transformation.Scaling(System.Single,System.Single,System.Single)">Scaling(Single, Single, Single)</h4>
+  <div class="markdown level1 summary"><p>Create a sclaing transformation by passing three floats, representing the
+scaling in the tree directions x, y, z.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation Scaling(float ax, float ay, float az)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">ax</span></td>
+        <td><p>X scaling</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">ay</span></td>
+        <td><p>Y scaling</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">az</span></td>
+        <td><p>Z scaling</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>A scaling transformation</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Scaling_Trace_Vec_.md&amp;value=---%0Auid%3A%20Trace.Transformation.Scaling(Trace.Vec)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L564">View Source</a>
+  </span>
+  <a id="Trace_Transformation_Scaling_" data-uid="Trace.Transformation.Scaling*"></a>
+  <h4 id="Trace_Transformation_Scaling_Trace_Vec_" data-uid="Trace.Transformation.Scaling(Trace.Vec)">Scaling(Vec)</h4>
+  <div class="markdown level1 summary"><p>Return a <a class="xref" href="Trace.Transformation.html">Transformation</a> object encoding a scaling</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation Scaling(Vec a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Vec.html">Vec</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The <a class="xref" href="Trace.Vec.html">Vec</a> generating the scaling.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The scaling <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Translation_System_Single_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Trace.Transformation.Translation(System.Single%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L552">View Source</a>
+  </span>
+  <a id="Trace_Transformation_Translation_" data-uid="Trace.Transformation.Translation*"></a>
+  <h4 id="Trace_Transformation_Translation_System_Single_System_Single_System_Single_" data-uid="Trace.Transformation.Translation(System.Single,System.Single,System.Single)">Translation(Single, Single, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation Translation(float ax, float ay, float az)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">ax</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">ay</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">az</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_Translation_Trace_Vec_.md&amp;value=---%0Auid%3A%20Trace.Transformation.Translation(Trace.Vec)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L547">View Source</a>
+  </span>
+  <a id="Trace_Transformation_Translation_" data-uid="Trace.Transformation.Translation*"></a>
+  <h4 id="Trace_Transformation_Translation_Trace_Vec_" data-uid="Trace.Transformation.Translation(Trace.Vec)">Translation(Vec)</h4>
+  <div class="markdown level1 summary"><p>Translate a <a class="xref" href="Trace.Vec.html">Vec</a> in 3D</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation Translation(Vec a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Vec.html">Vec</a></td>
+        <td><span class="parametername">a</span></td>
+        <td><p>The <a class="xref" href="Trace.Vec.html">Vec</a> generating the translation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The translation <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="operators">Operators
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Normal_.md&amp;value=---%0Auid%3A%20Trace.Transformation.op_Multiply(Trace.Transformation%2CTrace.Normal)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L669">View Source</a>
+  </span>
+  <a id="Trace_Transformation_op_Multiply_" data-uid="Trace.Transformation.op_Multiply*"></a>
+  <h4 id="Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Normal_" data-uid="Trace.Transformation.op_Multiply(Trace.Transformation,Trace.Normal)">Multiply(Transformation, Normal)</h4>
+  <div class="markdown level1 summary"><p>Apply <a class="xref" href="Trace.Transformation.html">Transformation</a> to a <a class="xref" href="Trace.Normal.html">Normal</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Normal operator *(Transformation A, Normal p)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">A</span></td>
+        <td><p><a class="xref" href="Trace.Transformation.html">Transformation</a> object</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.Normal.html">Normal</a></td>
+        <td><span class="parametername">p</span></td>
+        <td><p><a class="xref" href="Trace.Normal.html">Normal</a> object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Normal.html">Normal</a></td>
+        <td><p>The tranformed <a class="xref" href="Trace.Normal.html">Normal</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Point_.md&amp;value=---%0Auid%3A%20Trace.Transformation.op_Multiply(Trace.Transformation%2CTrace.Point)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L640">View Source</a>
+  </span>
+  <a id="Trace_Transformation_op_Multiply_" data-uid="Trace.Transformation.op_Multiply*"></a>
+  <h4 id="Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Point_" data-uid="Trace.Transformation.op_Multiply(Trace.Transformation,Trace.Point)">Multiply(Transformation, Point)</h4>
+  <div class="markdown level1 summary"><p>Apply <a class="xref" href="Trace.Transformation.html">Transformation</a> to a <a class="xref" href="Trace.Point.html">Point</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Point operator *(Transformation A, Point p)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">A</span></td>
+        <td><p><a class="xref" href="Trace.Transformation.html">Transformation</a> object</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.Point.html">Point</a></td>
+        <td><span class="parametername">p</span></td>
+        <td><p><a class="xref" href="Trace.Point.html">Point</a> object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Point.html">Point</a></td>
+        <td><p>The tranformed <a class="xref" href="Trace.Point.html">Point</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Transformation_.md&amp;value=---%0Auid%3A%20Trace.Transformation.op_Multiply(Trace.Transformation%2CTrace.Transformation)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L630">View Source</a>
+  </span>
+  <a id="Trace_Transformation_op_Multiply_" data-uid="Trace.Transformation.op_Multiply*"></a>
+  <h4 id="Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Transformation_" data-uid="Trace.Transformation.op_Multiply(Trace.Transformation,Trace.Transformation)">Multiply(Transformation, Transformation)</h4>
+  <div class="markdown level1 summary"><p>Composition of transformations</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Transformation operator *(Transformation A, Transformation B)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">A</span></td>
+        <td><p>left-side <a class="xref" href="Trace.Transformation.html">Transformation</a></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">B</span></td>
+        <td><p>right-side <a class="xref" href="Trace.Transformation.html">Transformation</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><p>The composed <a class="xref" href="Trace.Transformation.html">Transformation</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Vec_.md&amp;value=---%0Auid%3A%20Trace.Transformation.op_Multiply(Trace.Transformation%2CTrace.Vec)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L658">View Source</a>
+  </span>
+  <a id="Trace_Transformation_op_Multiply_" data-uid="Trace.Transformation.op_Multiply*"></a>
+  <h4 id="Trace_Transformation_op_Multiply_Trace_Transformation_Trace_Vec_" data-uid="Trace.Transformation.op_Multiply(Trace.Transformation,Trace.Vec)">Multiply(Transformation, Vec)</h4>
+  <div class="markdown level1 summary"><p>Apply <a class="xref" href="Trace.Transformation.html">Transformation</a> to a <a class="xref" href="Trace.Vec.html">Vec</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vec operator *(Transformation A, Vec p)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Transformation.html">Transformation</a></td>
+        <td><span class="parametername">A</span></td>
+        <td><p><a class="xref" href="Trace.Transformation.html">Transformation</a> object</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Trace.Vec.html">Vec</a></td>
+        <td><span class="parametername">p</span></td>
+        <td><p><a class="xref" href="Trace.Vec.html">Vec</a> object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Trace.Vec.html">Vec</a></td>
+        <td><p>The tranformed <a class="xref" href="Trace.Vec.html">Vec</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/new/c94b19e0fc0b7adcad867abf61d298b6871f091a/apiSpec/new?filename=Trace_Transformation.md&amp;value=---%0Auid%3A%20Trace.Transformation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/andreasala98/NM4PIG/blob/c94b19e0fc0b7adcad867abf61d298b6871f091a/Trace/Geometry.cs/#L486" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
