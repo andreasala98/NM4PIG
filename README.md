@@ -68,7 +68,7 @@ To check that the code works as expected, you can run a set of tests using the f
 
 Our program is developed to be used mainly in _render_ mode. This mode reads an external file with instructions for the scene, and then performs photorealistic ray tracing according to the specified parameters. In order to use render mode, you can run the following command (from the NM4PIG/NM4PIG folder):
 
-    dotnet run -- render --scene Examples/Inputs/dummy.txt -ldr Examples/dummy.jpg
+    dotnet run -- render --scene ../Examples/Inputs/dummy.txt -ldr ../Examples/dummy.jpg
 
 This command will read the instructions present in the file ```dummy.txt``` and generate an image called ```dummy.jpg```. Feel free to use your preferred editor to visualize the image generated. If you want to explore all the settable parameters, you can run
 
@@ -96,10 +96,10 @@ The complete list of settable parameters is:
 Input files must be written according to specific syntactic rules.
 We prepared some tutorial files to explain how these input files should be created:
 
-- [Tutorial 1](./NM4PIG/Examples/Inputs/Scene_1/scene1.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_1/scene1.jpg))
-- [Tutorial 2](./NM4PIG/Examples/Inputs/Scene_2/scene2.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_2/scene2.jpg))
-- [Tutorial 3 (flat renderer)](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_3/scene3flat.jpg))
-- [Tutorial 4 (point light renderer)](./NM4PIG/Examples/Inputs/Scene_4/scene4.txt) ([Result](./NM4PIG/Examples/Inputs/Scene_4/scene4.jpg))
+- [Tutorial 1](./Examples/Inputs/Scene_1/scene1.txt) ([Result](./Examples/Inputs/Scene_1/scene1.jpg))
+- [Tutorial 2](./Examples/Inputs/Scene_2/scene2.txt) ([Result](./Examples/Inputs/Scene_2/scene2.jpg))
+- [Tutorial 3 (flat renderer)](./Examples/Inputs/Scene_3/scene3flat.txt) ([Result](./Examples/Inputs/Scene_3/scene3flat.jpg))
+- [Tutorial 4 (point light renderer)](./Examples/Inputs/Scene_4/scene4.txt) ([Result](./Examples/Inputs/Scene_4/scene4.jpg))
 
 Each file has in the same directory the image produced. Once you've learned how to write an input file, you can start creating your own images!
 
@@ -129,7 +129,7 @@ It is allowed to add any of the following shapes to the environment:
 - Cylinders 🎩
 - Constructive Solid Geometry 💎(CSG): Union, Intersection and Difference of any pair of shapes of the ones mentioned above
 - [Wikishape](https://upload.wikimedia.org/wikipedia/commons/8/8b/Csg_tree.png) a particular case of CSG mixtures
-- [Pig](https://github.com/andreasala98/NM4PIG/pull/16) a built-in pig shape, constructed with CSG.
+- [Pig](https://github.com/andreasala98/NM4PIG/pull/16) 🐷 a built-in pig shape, constructed with CSG.
 
 Each shape can be transformed upon creation with a composition of scaling, translations and rotations around any of the three axes.
 
